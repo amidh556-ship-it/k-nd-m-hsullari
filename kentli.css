@@ -1,0 +1,203 @@
+:root{
+    --aramaKutusu-boyut:40px;
+    --aramaKutusu-uzunluk:70px
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    background: none;
+
+}
+
+.aramaKutusu{
+    position: absolute;
+    top: 7%;
+    left: 35%;
+    transform: translate(-50%,-50%);
+    background: none;
+    height: var(--aramaKutusu-boyut);
+    border-radius: var(--aramaKutusu-boyut);
+    padding: none;
+    width: auto;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0,5);
+}
+
+.aramaKutusu a{
+    color: black;
+    width: var(--aramaKutusu-boyut);
+    height: var(--aramaKutusu-boyut);
+    background: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 150%;
+}
+
+.aramaKutusu input{
+    border: none;
+    background: none;
+    outline: none;
+    color: white;
+    font-size: 200%;
+    font-weight: 500;
+    padding: 6px 10px; 
+}
+
+
+
+.login{
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    font-size: 30px;
+    text-decoration: none;
+    background: none;
+    color: black;
+    bottom: none;
+}
+
+.qiraq-h2{
+    margin-left: 2%;
+    margin-top: -70px;
+}
+
+.messii-input::placeholder{
+    font-size: 25px;
+}
+
+.chat-button {
+    position: fixed;
+    bottom: 574px;
+    right: 170px;
+    background: none;
+    color: black;
+    width: 40px;
+    height: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    font-size: 30px;
+}
+
+.chat-button:hover{
+    transform: scale(1.1);
+}
+.lisi-h2{
+ margin-left: 1200px;
+    margin-top: 20px;
+    font-size: 15px;
+    position: fixed;
+    bottom: 570px;
+    right: 20px;
+}
+.lisa-h2{
+    margin-left: 1200px;
+    margin-top: 20px;
+    font-size: 15px;
+    position: fixed;
+    bottom: 580px;
+    right: 120px;
+}
+
+#profileMenu{
+    display: none;
+    position: absolute;
+    right: -100px;
+    top: 25px;
+    background: white;
+    width: 200px;
+    padding: 20px;
+    box-shadow: 0 0 10px gray;
+}
+
+.profile-area{
+    position: relative;
+}
+
+.profile-area:hover #profileMenu{
+    display: block;
+}
+#profileMenu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#profileMenu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#profileMenu li{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#profileMenu li {
+    font-size: 22px;
+}
+
+#profileMenu li a{
+    font-size: 18px;
+    text-decoration: none;
+    color: #333;
+}
+ 
+.googleUser{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-position: center;
+}
+
+.googleUser i {
+    display: none ! important;
+}
+
+.topbar{
+width:100%;
+background:white;
+padding:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:fixed;
+top:0;
+left:0;
+z-index:999;
+}
+
+#userInfo{
+display:flex;
+align-items:center;
+}
+
+#userPhoto{
+width:40px;
+height:40px;
+border-radius:50%;
+margin-right:8px;
+}
+
+body{
+padding-top:60px;
+}

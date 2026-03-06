@@ -1,0 +1,16 @@
+.menu{
+width:200px;
+float:left;
+}
+
+.content{
+margin-left:210px;
+}
+
+.page{
+display:none;
+}
+
+.active{
+display:block;
+}
