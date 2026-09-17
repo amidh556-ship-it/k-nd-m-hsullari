@@ -60,7 +60,7 @@ body{
 .login{
     position: fixed;
     top: 20px;
-    right: 80px;
+    right: 100px;
     font-size: 30px;
     text-decoration: none;
     background: none;
@@ -70,7 +70,7 @@ body{
 
 .qiraq-h2{
     margin-left: 2%;
-    margin-top: -50px;
+    margin-top: -70px;
 }
 
 .messii-input::placeholder{
@@ -100,26 +100,26 @@ body{
 }
 .lisi-h2{
  margin-left: 1200px;
-    margin-top: 20px;
+    margin-top: 40px;
     font-size: 15px;
     position: fixed;
-    bottom: 580px;
-    right: 20px;
+    bottom: 888px;
+    right: 40px;
 }
 .lisa-h2{
     margin-left: 1200px;
     margin-top: 20px;
     font-size: 15px;
     position: fixed;
-    bottom: 999px;
-    right: 120px;
+    bottom: 892px;
+    right: 150px;
 }
 
 #profileMenu{
     display: none;
     position: absolute;
     right: -100px;
-    top: 25px;
+    top: 0%;
     background: white;
     width: 200px;
     padding: 20px;
@@ -198,233 +198,7 @@ border-radius:50%;
 margin-right:8px;
 }
 
-<style>
-/* Bütün səhifə üçün */
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow-x: hidden;
-}
-
-/* Şəkillər ekranı aşmasın */
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Telefon üçün */
-@media screen and (max-width: 768px) {
-
-    body {
-        width: 100%;
-        font-size: 15px;
-    }
-
-    /* Bütün əsas bloklar ekrana uyğunlaşsın */
-    .container,
-    .content,
-    .main,
-    section {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    /* Sətirdə olan elementlər telefonda aşağı-yuxarı düzülür */
-    .row,
-    .cards,
-    .items,
-    .menu {
-        flex-wrap: wrap;
-    }
-
-    /* Uzun adlar bir-birinin üstünə düşməsin */
-    h1, h2, h3, h4, p, span, a {
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-    }
-
-    /* Düymələr və linklər */
-    button,
-    a {
-        max-width: 100%;
-    }
-}
-
-/* Çox kiçik telefonlar */
-@media screen and (max-width: 480px) {
-
-    body {
-        font-size: 14px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    h2 {
-        font-size: 20px;
-    }
-
-    h3 {
-        font-size: 18px;
-    }
-
-    button {
-        width: 100%;
-        margin-bottom: 8px;
-    }
-}
-</style>
-
 body{
 padding-top:60px;
 }
-/* ============================= */
-/* ÜMUMİ AYARLAR */
-/* ============================= */
 
-* {
-    box-sizing: border-box;
-}
-
-html {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-}
-
-/* Şəkillər ekranı keçməsin */
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Uzun yazılar bir-birinin üstünə düşməsin */
-h1, h2, h3, h4, h5, h6,
-p, span, a, div {
-    overflow-wrap: break-word;
-}
-
-
-/* ============================= */
-/* TELEFON */
-/* ============================= */
-
-@media screen and (max-width: 768px) {
-
-    body {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-    }
-
-    /* Əsas hissələr */
-    .container,
-    .content,
-    .main,
-    section {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    /* Flex elementlər telefonda aşağı keçsin */
-    .row,
-    .cards,
-    .items,
-    .menu,
-    .navbar,
-    .nav,
-    .header {
-        flex-wrap: wrap;
-    }
-
-    /* Menyudakı adlar */
-    .menu a,
-    .navbar a,
-    nav a {
-        white-space: normal;
-        word-break: break-word;
-    }
-
-    /* Kartlar */
-    .card {
-        width: 100%;
-        max-width: 100%;
-        margin-bottom: 15px;
-    }
-
-    /* Başlıqlar */
-    h1 {
-        font-size: 28px;
-        line-height: 1.2;
-    }
-
-    h2 {
-        font-size: 24px;
-        line-height: 1.25;
-    }
-
-    h3 {
-        font-size: 20px;
-        line-height: 1.3;
-    }
-
-    /* Düymələr */
-    button {
-        max-width: 100%;
-        white-space: normal;
-    }
-}
-
-
-/* ============================= */
-/* KİÇİK TELEFON */
-/* ============================= */
-
-@media screen and (max-width: 480px) {
-
-    body {
-        font-size: 14px;
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    h2 {
-        font-size: 21px;
-    }
-
-    h3 {
-        font-size: 18px;
-    }
-
-    /* Bütün elementlər ekran daxilində qalsın */
-    * {
-        max-width: 100%;
-    }
-
-    img {
-        width: auto;
-        max-width: 100%;
-    }
-
-    /* Link və yazılar */
-    a,
-    span,
-    p {
-        overflow-wrap: anywhere;
-    }
-}
