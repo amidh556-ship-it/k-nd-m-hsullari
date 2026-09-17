@@ -197,6 +197,20 @@ height:40px;
 border-radius:50%;
 margin-right:15px;
 }
+@media (max-width: 600px) {
+    h1 {
+        font-size: 30px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+    }
+}
 
 body{
 padding-top:60px;
