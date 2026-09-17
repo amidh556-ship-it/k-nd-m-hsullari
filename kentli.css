@@ -25,7 +25,7 @@ body{
     height: var(--aramaKutusu-boyut);
     border-radius: var(--aramaKutusu-boyut);
     padding: none;
-    width: 100px;
+    width: 50px;
     display: flex;
     align-items: center;
     box-shadow: 0 0 5px rgba(0, 0, 0,5);
