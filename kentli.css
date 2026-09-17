@@ -284,3 +284,147 @@ img {
 body{
 padding-top:60px;
 }
+/* ============================= */
+/* ÜMUMİ AYARLAR */
+/* ============================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Şəkillər ekranı keçməsin */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Uzun yazılar bir-birinin üstünə düşməsin */
+h1, h2, h3, h4, h5, h6,
+p, span, a, div {
+    overflow-wrap: break-word;
+}
+
+
+/* ============================= */
+/* TELEFON */
+/* ============================= */
+
+@media screen and (max-width: 768px) {
+
+    body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Əsas hissələr */
+    .container,
+    .content,
+    .main,
+    section {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Flex elementlər telefonda aşağı keçsin */
+    .row,
+    .cards,
+    .items,
+    .menu,
+    .navbar,
+    .nav,
+    .header {
+        flex-wrap: wrap;
+    }
+
+    /* Menyudakı adlar */
+    .menu a,
+    .navbar a,
+    nav a {
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    /* Kartlar */
+    .card {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+
+    /* Başlıqlar */
+    h1 {
+        font-size: 28px;
+        line-height: 1.2;
+    }
+
+    h2 {
+        font-size: 24px;
+        line-height: 1.25;
+    }
+
+    h3 {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    /* Düymələr */
+    button {
+        max-width: 100%;
+        white-space: normal;
+    }
+}
+
+
+/* ============================= */
+/* KİÇİK TELEFON */
+/* ============================= */
+
+@media screen and (max-width: 480px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 21px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    /* Bütün elementlər ekran daxilində qalsın */
+    * {
+        max-width: 100%;
+    }
+
+    img {
+        width: auto;
+        max-width: 100%;
+    }
+
+    /* Link və yazılar */
+    a,
+    span,
+    p {
+        overflow-wrap: anywhere;
+    }
+}
