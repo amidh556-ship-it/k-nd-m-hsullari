@@ -198,6 +198,89 @@ border-radius:50%;
 margin-right:8px;
 }
 
+<style>
+/* Bütün səhifə üçün */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Şəkillər ekranı aşmasın */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Telefon üçün */
+@media screen and (max-width: 768px) {
+
+    body {
+        width: 100%;
+        font-size: 15px;
+    }
+
+    /* Bütün əsas bloklar ekrana uyğunlaşsın */
+    .container,
+    .content,
+    .main,
+    section {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* Sətirdə olan elementlər telefonda aşağı-yuxarı düzülür */
+    .row,
+    .cards,
+    .items,
+    .menu {
+        flex-wrap: wrap;
+    }
+
+    /* Uzun adlar bir-birinin üstünə düşməsin */
+    h1, h2, h3, h4, p, span, a {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+
+    /* Düymələr və linklər */
+    button,
+    a {
+        max-width: 100%;
+    }
+}
+
+/* Çox kiçik telefonlar */
+@media screen and (max-width: 480px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+</style>
+
 body{
 padding-top:60px;
 }
