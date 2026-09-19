@@ -61,7 +61,7 @@ body{
 .login{
     position: fixed;
     top: 20px;
-    right: 90px;
+    right: 70px;
     font-size: 30px;
     text-decoration: none;
     background: none;
@@ -114,7 +114,7 @@ body{
     margin-top: 20px;
     font-size: 15px;
     position: fixed;
-    bottom: 300px;
+    bottom: 100px;
     right: 1600px;
 }
 
