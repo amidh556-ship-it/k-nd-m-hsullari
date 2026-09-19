@@ -70,10 +70,10 @@ body{
 }
 
 .qiraq-h2{
-    margin-left: 5%;
+    margin-left: -10%;
     margin-top: -70px;
     right:-30px ;
-    top: 30px ;
+    top: 10px ;
 }
 
 .messii-input::placeholder{
