@@ -111,11 +111,11 @@ body{
 }
 .lisa-h2{
     margin-left: 1200px;
-    margin-top: 20px;
-    font-size: 15px;
+    margin-top: 40px;
+    font-size: 20px;
     position: fixed;
     bottom: 90px;
-    right: 1600px;
+    right: 1300px;
 }
 
 #profileMenu{
