@@ -61,7 +61,7 @@ body{
 .login{
     position: fixed;
     top: 20px;
-    right: 40px;
+    right: 10px;
     font-size: 30px;
     text-decoration: none;
     background: none;
@@ -106,7 +106,7 @@ body{
     margin-top: 40px;
     font-size: 15px;
     position: fixed;
-    bottom: 500px;
+    bottom: 400px;
     right: 40px;
 }
 .lisa-h2{
@@ -114,7 +114,7 @@ body{
     margin-top: 20px;
     font-size: 15px;
     position: fixed;
-    bottom: 100px;
+    bottom: 90px;
     right: 1600px;
 }
 
