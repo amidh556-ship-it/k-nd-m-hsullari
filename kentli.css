@@ -103,11 +103,12 @@ body{
 }
 .lisi-i2{
     position: absolute;
-    right: 12px;
-    top: 50px;
-    width: -50px;
+    top: 195px;
+    right: 20px;
+    font-size: 14px;
+    width: 100px;
     text-align: center;
-    font-size: 20px;
+    text-transform: none;
 }
 .lisa-l2{
     margin-left: 1200px;
