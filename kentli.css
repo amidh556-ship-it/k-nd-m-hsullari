@@ -104,9 +104,9 @@ body{
 .lisi-i2{
     position: absolute;
     top: 205px;
-    right: 20px;
+    right: 100px;
     font-size: 14px;
-    width: 150px;
+    width: 120px;
     text-align: center;
     text-transform: none;
 }
