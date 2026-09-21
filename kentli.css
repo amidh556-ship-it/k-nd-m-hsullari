@@ -105,6 +105,8 @@ body{
     bottom: 90px;
     right: 900px;
     font-size: 20px;
+    margin-left: auto;
+    text-align: right;
 }
 .lisa-l2{
     margin-left: 1200px;
