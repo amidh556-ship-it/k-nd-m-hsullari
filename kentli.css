@@ -102,12 +102,7 @@ body{
     transform: scale(1.1);
 }
 .lisi-m2{
-    margin-left: 1200px;
-    margin-top: 15px;
-    font-size: 15px;
-    position: fixed;
-    bottom: 1800px;
-    right: 400px;
+    bottom: 90px;
 }
 .lisa-l2{
     margin-left: 1200px;
