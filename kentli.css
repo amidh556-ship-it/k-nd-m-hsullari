@@ -102,11 +102,11 @@ body{
     transform: scale(1.1);
 }
 .lisi-i2{
-    bottom: 90px;
-    right: 900px;
-    font-size: 20px;
-    margin-left: auto;
-    text-align: right;
+    position: absolute;
+    right: 20px;
+    top: 260px;
+    width: 120px;
+    text-align: center;
 }
 .lisa-l2{
     margin-left: 1200px;
