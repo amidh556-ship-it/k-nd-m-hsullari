@@ -221,3 +221,12 @@ body{
 padding-top:60px;
 }
 
+.mehsulSekli {
+    display: block !important;
+    width: 200px !important;
+    height: auto !important;
+    max-width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
