@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Məhsul</title>
+</head>
+
+<body>
+
+    <img src="foto.png" width="300">
+
+    <h2>Məhsulun adı</h2>
+    <p>10 AZN</p>
+
+    <button onclick="azalt()">−</button>
+
+    <span id="say">0</span>
+
+    <button onclick="artir()">+</button>
+
+    <script>
+        let say = 0;
+
+        function artir() {
+            say++;
+            document.getElementById("say").innerText = say;
+        }
+
+        function azalt() {
+            if (say > 0) {
+                say--;
+            }
+            document.getElementById("say").innerText = say;
+        }
+    </script>
+
+</body>
+</html>
