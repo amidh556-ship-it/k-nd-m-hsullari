@@ -4,36 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Məhsul</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .mehsul {
+            background: white;
+            padding: 15px;
+            min-height: 100vh;
+        }
+
+        .mehsul img {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .ad {
+            font-size: 20px;
+            margin-top: 15px;
+        }
+
+        .qiymet {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .saygac {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .saygac button {
+            width: 45px;
+            height: 45px;
+            font-size: 25px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+        }
+
+        #say {
+            font-size: 22px;
+            min-width: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
 
-    <img src="foto.png" width="300">
+<div class="mehsul">
 
-    <h2>Məhsulun adı</h2>
-    <p>10 AZN</p>
+    <img src="foto.png">
 
-    <button onclick="azalt()">−</button>
+    <div class="ad">Məhsulun adı</div>
 
-    <span id="say">0</span>
+    <div class="qiymet">10 AZN</div>
 
-    <button onclick="artir()">+</button>
+    <div class="saygac">
+        <button onclick="azalt()">−</button>
 
-    <script>
-        let say = 0;
+        <span id="say">0</span>
 
-        function artir() {
-            say++;
-            document.getElementById("say").innerText = say;
+        <button onclick="artir()">+</button>
+    </div>
+
+</div>
+
+<script>
+    let say = 0;
+
+    function artir() {
+        say++;
+        document.getElementById("say").innerText = say;
+    }
+
+    function azalt() {
+        if (say > 0) {
+            say--;
         }
-
-        function azalt() {
-            if (say > 0) {
-                say--;
-            }
-            document.getElementById("say").innerText = say;
-        }
-    </script>
+        document.getElementById("say").innerText = say;
+    }
+</script>
 
 </body>
 </html>
