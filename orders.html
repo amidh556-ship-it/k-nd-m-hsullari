@@ -1,3 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sifarişlərim</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            padding: 15px;
+        }
+
+        .sifaris {
+            background: white;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .sifaris img {
+            width: 150px;
+            border-radius: 10px;
+        }
+
+        .qiymet {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
 <h1>Sifarişlərim</h1>
 
 <div id="sifaris"></div>
@@ -10,10 +49,15 @@ let say = localStorage.getItem("mehsulSayi");
 
 if (sekil) {
     document.getElementById("sifaris").innerHTML = `
-        <img src="${sekil}" width="150">
-        <h2>${ad}</h2>
-        <p>${qiymet}</p>
-        <p>Say: ${say}</p>
+        <div class="sifaris">
+            <img src="${sekil}">
+            <h2>${ad}</h2>
+            <div class="qiymet">${qiymet}</div>
+            <p>Say: ${say}</p>
+        </div>
     `;
 }
 </script>
+
+</body>
+</html>
