@@ -1,1 +1,19 @@
-<h1>Sifarislerin</h1>
+<h1>Sifarişlərim</h1>
+
+<div id="sifaris"></div>
+
+<script>
+let sekil = localStorage.getItem("mehsulSekli");
+let ad = localStorage.getItem("mehsulAdi");
+let qiymet = localStorage.getItem("mehsulQiymeti");
+let say = localStorage.getItem("mehsulSayi");
+
+if (sekil) {
+    document.getElementById("sifaris").innerHTML = `
+        <img src="${sekil}" width="150">
+        <h2>${ad}</h2>
+        <p>${qiymet}</p>
+        <p>Say: ${say}</p>
+    `;
+}
+</script>
