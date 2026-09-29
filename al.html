@@ -82,9 +82,9 @@ body {
 
 <div class="mehsul">
 
-    <img id="mehsulSekli">
+    <img src="foto.png">
 
-    <div class="ad" id="mehsulAdi">Məhsulun adı</div>
+    <div class="ad">Məhsulun adı</div>
 
     <div class="qiymet">10 AZN</div>
 
@@ -104,8 +104,7 @@ body {
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id") || "mehsul";
+const id = new URLSearchParams(window.location.search).get("id") || "mehsul";
 
 const sayKey = "say_" + id;
 
