@@ -97,3 +97,4 @@ document.getElementById("userInfo").style.display = "flex";
   }
 
 }
+document.querySelector('a[href="al.html?id=masin"] img').style.width = "400px";
