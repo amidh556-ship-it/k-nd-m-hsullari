@@ -116,10 +116,13 @@ body {
 let say = 1;
 
 function al() {
-    document.getElementById("alBtn").style.display = "none";
-    document.getElementById("saygac").style.display = "flex";
-}
+    localStorage.setItem("mehsulSekli", "foto.png");
+    localStorage.setItem("mehsulAdi", "Məhsulun adı");
+    localStorage.setItem("mehsulQiymeti", "10 AZN");
+    localStorage.setItem("mehsulSayi", say);
 
+    window.location.href = "orders.html";
+}
 function artir() {
     say++;
     document.getElementById("say").innerText = say;
