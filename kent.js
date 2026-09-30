@@ -27,7 +27,7 @@ function login(e) {
     // OPERATOR
     if (email === "ttik66006@gmail.com") {
         localStorage.setItem("operator", "true");
-        window.location.href = "sebet.html";
+        window.location.href = "operator.html";
         return;
     }
 
@@ -56,7 +56,7 @@ function qeydiyyat(e) {
     // OPERATOR
     if (email === "ttik66006@gmail.com") {
         localStorage.setItem("operator", "true");
-        window.location.href = "sebet.html";
+        window.location.href = "operator.html";
         return;
     }
 
