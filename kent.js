@@ -25,7 +25,7 @@ function login(e) {
     localStorage.setItem("userEmail", email);
 
     // OPERATOR
-    if (email === "ttik66006@gmail.com") {
+    if (email === "ttik66006@gmail.com" && password === "a1m2i3d42006") {
         localStorage.setItem("operator", "true");
         window.location.href = "operator.html";
         return;
@@ -54,7 +54,7 @@ function qeydiyyat(e) {
     localStorage.setItem("login", "true");
 
     // OPERATOR
-    if (email === "ttik66006@gmail.com") {
+    if (email === "ttik66006@gmail.com" && password === "a1m2i3d42006") {
         localStorage.setItem("operator", "true");
         window.location.href = "operator.html";
         return;
