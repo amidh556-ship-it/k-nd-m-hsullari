@@ -8,38 +8,41 @@
 
 <body>
 
-  <div id="login">
-    <h2>Operator paneli</h2>
-    <p>Operator hesabına daxil olun.</p>
-    <button id="googleLogin">Google ilə daxil ol</button>
-  </div>
+<div id="login">
+  <h2>Operator paneli</h2>
+  <p>Operator hesabına daxil olun.</p>
+  <button id="googleLogin">Google ilə daxil ol</button>
+</div>
 
-  <div id="operatorPanel" style="display:none;">
-    <h2>Operator paneli açıldı ✅</h2>
-    <p id="operatorEmail"></p>
+<div id="operatorPanel" style="display:none;">
+  <h2>Operator paneli açıldı ✅</h2>
+  <p id="operatorEmail"></p>
 
-    <div id="messages"></div>
+  <hr>
 
-    <input id="messageInput" type="text" placeholder="Mesaj yaz...">
-    <button id="sendMessage">Göndər</button>
+  <div id="messages"></div>
 
-    <br><br>
-    <button id="logout">Çıxış</button>
-  </div>
+  <input id="messageInput" type="text" placeholder="Mesaj yaz...">
+  <button id="sendMessage">Göndər</button>
 
+  <br><br>
+
+  <button id="logout">Çıxış</button>
+</div>
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  onAuthStateChanged,
   signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
@@ -51,36 +54,25 @@ const firebaseConfig = {
   appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
 const provider = new GoogleAuthProvider();
 
 const login = document.getElementById("login");
 const panel = document.getElementById("operatorPanel");
 const emailText = document.getElementById("operatorEmail");
 
+
 document.getElementById("googleLogin").onclick = async () => {
 
   try {
 
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
 
-  } catch (error) {
+    const user = result.user;
 
-    console.error(error);
-    alert("Google girişində xəta oldu: " + error.message);
-
-  }
-
-};
-
-
-onAuthStateChanged(auth, (user) => {
-
-  if (user) {
-
-    console.log("Daxil olan hesab:", user.email);
+    console.log("Google hesabı:", user.email);
 
     if (user.email === "ttik66006@gmail.com") {
 
@@ -92,24 +84,35 @@ onAuthStateChanged(auth, (user) => {
 
     } else {
 
-      signOut(auth);
+      await signOut(auth);
 
       alert("Bu hesab operator hesabı deyil.");
 
     }
 
-  } else {
+  } catch (error) {
 
-    login.style.display = "block";
-    panel.style.display = "none";
+    console.error(error);
+
+    alert(
+      "Giriş xətası: " +
+      error.code +
+      "\n" +
+      error.message
+    );
 
   }
 
-});
+};
 
 
-document.getElementById("logout").onclick = () => {
-  signOut(auth);
+document.getElementById("logout").onclick = async () => {
+
+  await signOut(auth);
+
+  panel.style.display = "none";
+  login.style.display = "block";
+
 };
 
 </script>
