@@ -1,92 +1,141 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator paneli</title>
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
-}
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+        }
 
-#login {
-    text-align: center;
-    padding: 30px;
-}
+        .header {
+            background: #2196f3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
 
-#chat {
-    display: none;
-    max-width: 600px;
-    margin: auto;
-    height: 100vh;
-    background: white;
-}
+        #login {
+            text-align: center;
+            padding: 30px;
+        }
 
-#messages {
-    height: calc(100vh - 80px);
-    overflow-y: auto;
-    padding: 15px;
-}
+        #loginButton {
+            padding: 13px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #2196f3;
+            color: white;
+            font-size: 16px;
+        }
 
-.message {
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 10px;
-    max-width: 80%;
-}
+        #chat {
+            display: none;
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            height: calc(100vh - 65px);
+        }
 
-.customer {
-    background: #e5e5e5;
-}
+        #messages {
+            height: calc(100% - 75px);
+            overflow-y: auto;
+            padding: 15px;
+        }
 
-.agent {
-    background: #2196f3;
-    color: white;
-    margin-left: auto;
-}
+        .message {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
 
-.send {
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-}
+        .customer {
+            background: #e5e5e5;
+            margin-right: auto;
+        }
 
-#messageInput {
-    flex: 1;
-    padding: 12px;
-}
+        .agent {
+            background: #2196f3;
+            color: white;
+            margin-left: auto;
+        }
 
-#sendButton {
-    padding: 12px 18px;
-}
-</style>
+        .send {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        #sendButton {
+            margin-left: 8px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #2196f3;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
 
-<div id="login">
-    <h2>Operator</h2>
-    <p>Google hesabı yoxlanılır...</p>
+<div class="header">
+    <h2>Operator paneli</h2>
 </div>
+
+
+<div id="login">
+
+    <p>Operator hesabına daxil olun.</p>
+
+    <button id="loginButton">
+        Google ilə daxil ol
+    </button>
+
+</div>
+
 
 <div id="chat">
 
     <div id="messages"></div>
 
     <div class="send">
-        <input id="messageInput" placeholder="Mesaj yaz...">
-        <button id="sendButton">Göndər</button>
+
+        <input
+            id="messageInput"
+            type="text"
+            placeholder="Mesaj yaz..."
+        >
+
+        <button id="sendButton">
+            Göndər
+        </button>
+
     </div>
 
 </div>
 
+
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 
 import {
     getDatabase,
@@ -94,134 +143,298 @@ import {
     push,
     onChildAdded,
     set
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 
 import {
     getAuth,
+    GoogleAuthProvider,
+    signInWithRedirect,
+    getRedirectResult,
     onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 const firebaseConfig = {
+
     apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-    authDomain: "kendmehsullari-6a53d.firebaseapp.com",
-    databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-    projectId: "kendmehsullari-6a53d",
-    storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
-    messagingSenderId: "551607499773",
-    appId: "1:551607499773:web:a84aa63dc5b55c38687794"
+
+    authDomain:
+        "kendmehsullari-6a53d.firebaseapp.com",
+
+    databaseURL:
+        "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+
+    projectId:
+        "kendmehsullari-6a53d",
+
+    storageBucket:
+        "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+        "551607499773",
+
+    appId:
+        "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
 
-const OPERATOR_EMAIL = "ttik66006@gmail.com";
-
-const app = initializeApp(firebaseConfig);
-
-const db = getDatabase(app);
-
-const auth = getAuth(app);
-
-const login = document.getElementById("login");
-
-const chat = document.getElementById("chat");
-
-const messages = document.getElementById("messages");
-
-const input = document.getElementById("messageInput");
-
-const send = document.getElementById("sendButton");
+// YALNIZ BU HESAB OPERATORLADIR
+const OPERATOR_EMAIL =
+    "ttik66006@gmail.com";
 
 
-onAuthStateChanged(auth, async (user) => {
+const app =
+    initializeApp(firebaseConfig);
 
-    if (!user) {
 
-        login.innerHTML =
-            "<h2>Operator hesabına daxil ol</h2><p>Əvvəl Google hesabına daxil olmalısan.</p>";
+const db =
+    getDatabase(app);
 
+
+const auth =
+    getAuth(app);
+
+
+const provider =
+    new GoogleAuthProvider();
+
+
+const login =
+    document.getElementById("login");
+
+
+const chat =
+    document.getElementById("chat");
+
+
+const loginButton =
+    document.getElementById("loginButton");
+
+
+const messages =
+    document.getElementById("messages");
+
+
+const messageInput =
+    document.getElementById("messageInput");
+
+
+const sendButton =
+    document.getElementById("sendButton");
+
+
+/* GOOGLE İLƏ DAXİL OL */
+
+loginButton.onclick = async () => {
+
+    try {
+
+        await signInWithRedirect(
+            auth,
+            provider
+        );
+
+    } catch (error) {
+
+        alert(
+            "Giriş xətası: " +
+            error.message
+        );
+
+    }
+
+};
+
+
+/* REDIRECT NƏTİCƏSİNİ YOXLAYIR */
+
+try {
+
+    await getRedirectResult(auth);
+
+} catch (error) {
+
+    alert(
+        "Google giriş xətası: " +
+        error.message
+    );
+
+}
+
+
+/* HESAB DAXİL OLDUQDA */
+
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        if (!user) {
+
+            login.style.display =
+                "block";
+
+            chat.style.display =
+                "none";
+
+            return;
+        }
+
+
+        /* GMAIL YOXLAMASI */
+
+        if (
+            user.email &&
+            user.email.toLowerCase() ===
+            OPERATOR_EMAIL.toLowerCase()
+        ) {
+
+            /* LOGIN-I GİZLƏT */
+
+            login.style.display =
+                "none";
+
+
+            /* YAZIŞMA PANELİNİ AÇ */
+
+            chat.style.display =
+                "block";
+
+
+            /* OPERATOR ONLAYN */
+
+            await set(
+                ref(db, "operatorOnline"),
+                true
+            );
+
+
+            /* MESAJLARI GÖSTƏR */
+
+            onChildAdded(
+                ref(db, "messages"),
+                (snapshot) => {
+
+                    const data =
+                        snapshot.val();
+
+
+                    if (
+                        !data ||
+                        !data.message
+                    ) {
+                        return;
+                    }
+
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.classList.add(
+                        "message"
+                    );
+
+
+                    if (
+                        data.sender ===
+                        "agent"
+                    ) {
+
+                        div.classList.add(
+                            "agent"
+                        );
+
+                        div.textContent =
+                            "Siz: " +
+                            data.message;
+
+                    } else {
+
+                        div.classList.add(
+                            "customer"
+                        );
+
+                        div.textContent =
+                            "Müştəri: " +
+                            data.message;
+                    }
+
+
+                    messages.appendChild(
+                        div
+                    );
+
+
+                    messages.scrollTop =
+                        messages.scrollHeight;
+
+                }
+            );
+
+        } else {
+
+            login.innerHTML =
+                "<h3>Bu hesab operator deyil.</h3>";
+
+        }
+
+    }
+);
+
+
+/* OPERATOR MESAJ GÖNDƏRİR */
+
+async function sendMessage() {
+
+    const message =
+        messageInput.value.trim();
+
+
+    if (!message) {
         return;
     }
 
 
-    if (
-        user.email &&
-        user.email.toLowerCase() ===
-        OPERATOR_EMAIL.toLowerCase()
-    ) {
-
-        login.style.display = "none";
-
-        chat.style.display = "block";
-
-
-        await set(
-            ref(db, "operatorOnline"),
-            true
-        );
-
-
-        onChildAdded(
-            ref(db, "messages"),
-            (snapshot) => {
-
-                const data = snapshot.val();
-
-                if (!data || !data.message) return;
-
-                const div =
-                    document.createElement("div");
-
-                div.className =
-                    "message " +
-                    (data.sender === "agent"
-                        ? "agent"
-                        : "customer");
-
-                div.textContent =
-                    (data.sender === "agent"
-                        ? "Siz: "
-                        : "Müştəri: ")
-                    + data.message;
-
-                messages.appendChild(div);
-
-                messages.scrollTop =
-                    messages.scrollHeight;
-            }
-        );
-
-    } else {
-
-        login.innerHTML =
-            "<h2>Bu hesab operator deyil.</h2>";
-
-    }
-
-});
-
-
-send.onclick = async () => {
-
-    const message =
-        input.value.trim();
-
-    if (!message) return;
-
     await push(
         ref(db, "messages"),
         {
+
             message: message,
+
             sender: "agent",
+
             email: OPERATOR_EMAIL,
+
             time: Date.now()
+
         }
     );
 
-    input.value = "";
 
-};
+    messageInput.value = "";
+
+}
+
+
+sendButton.onclick =
+    sendMessage;
+
+
+messageInput.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (event.key === "Enter") {
+
+            sendMessage();
+
+        }
+
+    }
+);
 
 </script>
 
