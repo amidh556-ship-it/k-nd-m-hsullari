@@ -3,45 +3,208 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operator paneli</title>
+
+  <title>Operator Paneli</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+    }
+
+    #login {
+      max-width: 400px;
+      margin: 100px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    }
+
+    #login h2 {
+      margin-bottom: 10px;
+    }
+
+    #googleLogin {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #4285f4;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #operatorPanel {
+      max-width: 700px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    }
+
+    .header {
+      background: #111827;
+      color: white;
+      padding: 18px;
+    }
+
+    .header h2 {
+      margin: 0 0 5px;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 13px;
+      opacity: .8;
+    }
+
+    #messages {
+      height: 450px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f8fafc;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 10px 13px;
+      margin-bottom: 10px;
+      border-radius: 14px;
+      word-wrap: break-word;
+    }
+
+    .customer {
+      background: #e5e7eb;
+      margin-right: auto;
+    }
+
+    .agent {
+      background: #2563eb;
+      color: white;
+      margin-left: auto;
+    }
+
+    .sender {
+      font-size: 11px;
+      opacity: .7;
+      margin-bottom: 4px;
+    }
+
+    .bottom {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #ddd;
+    }
+
+    #messageInput {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    #sendMessage {
+      padding: 0 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+
+    #logout {
+      margin: 0 18px 18px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 9px;
+      background: #ef4444;
+      color: white;
+      cursor: pointer;
+    }
+
+    #status {
+      padding: 8px 15px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
 </head>
 
 <body>
 
-<div id="login">
-  <h2>Operator paneli</h2>
-  <p>Operator hesabına daxil olun.</p>
-  <button id="googleLogin">Google ilə daxil ol</button>
-</div>
+  <div id="login">
+    <h2>Operator paneli</h2>
+    <p>Operator hesabına daxil olun.</p>
+    <br>
+    <button id="googleLogin">Google ilə daxil ol</button>
+  </div>
 
-<div id="operatorPanel" style="display:none;">
-  <h2>Operator paneli açıldı ✅</h2>
-  <p id="operatorEmail"></p>
 
-  <hr>
+  <div id="operatorPanel" style="display:none;">
 
-  <div id="messages"></div>
+    <div class="header">
+      <h2>Operator 💬</h2>
+      <p id="operatorEmail"></p>
+    </div>
 
-  <input id="messageInput" type="text" placeholder="Mesaj yaz...">
-  <button id="sendMessage">Göndər</button>
+    <div id="status">
+      Yazışmalar yüklənir...
+    </div>
 
-  <br><br>
+    <div id="messages"></div>
 
-  <button id="logout">Çıxış</button>
-</div>
+    <div class="bottom">
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Mesajınızı yazın..."
+      >
+
+      <button id="sendMessage">
+        Göndər
+      </button>
+    </div>
+
+    <button id="logout">
+      Çıxış
+    </button>
+
+  </div>
+
 
 <script type="module">
 
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  signOut,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -56,13 +219,29 @@ const firebaseConfig = {
 
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
+const db = getDatabase(app);
+
 const provider = new GoogleAuthProvider();
+
 
 const login = document.getElementById("login");
 const panel = document.getElementById("operatorPanel");
+
 const emailText = document.getElementById("operatorEmail");
 
+const messages = document.getElementById("messages");
+
+const messageInput = document.getElementById("messageInput");
+
+const sendButton = document.getElementById("sendMessage");
+
+const status = document.getElementById("status");
+
+
+/* GOOGLE GİRİŞ */
 
 document.getElementById("googleLogin").onclick = async () => {
 
@@ -72,32 +251,30 @@ document.getElementById("googleLogin").onclick = async () => {
 
     const user = result.user;
 
-    console.log("Google hesabı:", user.email);
-
-    if (user.email === "ttik66006@gmail.com") {
-
-      login.style.display = "none";
-      panel.style.display = "block";
-
-      emailText.textContent =
-        "Operator hesabı: " + user.email;
-
-    } else {
+    if (user.email !== "ttik66006@gmail.com") {
 
       await signOut(auth);
 
       alert("Bu hesab operator hesabı deyil.");
 
+      return;
     }
+
+    login.style.display = "none";
+
+    panel.style.display = "block";
+
+    emailText.textContent =
+      "Operator: " + user.email;
+
+    loadMessages();
 
   } catch (error) {
 
     console.error(error);
 
     alert(
-      "Giriş xətası: " +
-      error.code +
-      "\n" +
+      "Giriş xətası:\n" +
       error.message
     );
 
@@ -106,14 +283,174 @@ document.getElementById("googleLogin").onclick = async () => {
 };
 
 
-document.getElementById("logout").onclick = async () => {
+/* MESAJLARI YÜKLƏ */
+
+let messagesLoaded = false;
+
+function loadMessages() {
+
+  if (messagesLoaded) return;
+
+  messagesLoaded = true;
+
+  const messagesRef = ref(db, "messages");
+
+  status.textContent = "Yazışmalar aktivdir";
+
+  onChildAdded(messagesRef, (snapshot) => {
+
+    const data = snapshot.val();
+
+    if (!data) return;
+
+    const message = document.createElement("div");
+
+    const isAgent =
+      data.sender === "agent";
+
+    message.className =
+      "message " +
+      (isAgent ? "agent" : "customer");
+
+    const sender =
+      document.createElement("div");
+
+    sender.className = "sender";
+
+    sender.textContent =
+      isAgent ? "Siz" : "Müştəri";
+
+    const text =
+      document.createElement("div");
+
+    text.textContent =
+      data.text || "";
+
+    message.appendChild(sender);
+
+    message.appendChild(text);
+
+    messages.appendChild(message);
+
+    messages.scrollTop =
+      messages.scrollHeight;
+
+  });
+
+}
+
+
+/* MESAJ GÖNDƏR */
+
+async function sendMessage() {
+
+  const text =
+    messageInput.value.trim();
+
+  if (!text) return;
+
+  try {
+
+    const messagesRef =
+      ref(db, "messages");
+
+    await push(messagesRef, {
+
+      text: text,
+
+      sender: "agent",
+
+      email: "ttik66006@gmail.com",
+
+      timestamp: Date.now()
+
+    });
+
+    messageInput.value = "";
+
+    messageInput.focus();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Mesaj göndərilmədi:\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+sendButton.onclick = sendMessage;
+
+
+/* ENTER İLƏ GÖNDƏR */
+
+messageInput.addEventListener(
+  "keydown",
+  (event) => {
+
+    if (event.key === "Enter") {
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* ÇIXIŞ */
+
+document.getElementById("logout").onclick =
+async () => {
 
   await signOut(auth);
 
   panel.style.display = "none";
+
   login.style.display = "block";
 
+  messages.innerHTML = "";
+
+  messagesLoaded = false;
+
 };
+
+
+/* LOGIN YOXLANIŞI */
+
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+
+    login.style.display = "block";
+
+    panel.style.display = "none";
+
+    return;
+
+  }
+
+  if (user.email === "ttik66006@gmail.com") {
+
+    login.style.display = "none";
+
+    panel.style.display = "block";
+
+    emailText.textContent =
+      "Operator: " + user.email;
+
+    loadMessages();
+
+  }
+
+});
 
 </script>
 
