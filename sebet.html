@@ -1,134 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="az">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Səbətim</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-}
-
-h1 {
-    padding: 15px;
-}
-
-.sifaris {
-    background: white;
-    margin: 15px;
-    padding: 15px;
-    border-radius: 12px;
-}
-
-.sifaris img {
-    width: 150px;
-    border-radius: 10px;
-}
-
-.qiymet {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.saygac {
-    display: flex;
-    align-items: center;
-    margin-top: 15px;
-}
-
-.saygac button {
-    width: 45px;
-    height: 40px;
-    border: 1px solid #ddd;
-    background: white;
-    font-size: 22px;
-}
-
-.say {
-    width: 45px;
-    text-align: center;
-    font-size: 18px;
-}
-
-.sil {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    background: #ff4d00;
-    color: white;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator</title>
 </head>
 
 <body>
 
-<h1>Səbətim</h1>
+<h2>Operator girişi</h2>
 
-<div id="sifarisler"></div>
+<input type="email" id="email" placeholder="Gmail yaz">
+<br><br>
+
+<button onclick="gir()">Daxil ol</button>
+
+<p id="mesaj"></p>
 
 <script>
+function gir() {
 
-let say = Number(localStorage.getItem("say_masin")) || 0;
+    let email = document.getElementById("email").value.trim();
 
-function goster() {
+    if (email === "ttik66006@gmail.com") {
 
-    if (say <= 0) {
-        document.getElementById("sifarisler").innerHTML =
-        "<p style='padding:15px'>Sifariş yoxdur.</p>";
-        return;
-    }
+        window.location.href = "sebet.html";
 
-    document.getElementById("sifarisler").innerHTML = `
-        <div class="sifaris">
+    } else {
 
-            <img src="foto.png">
+        document.getElementById("mesaj").innerText =
+        "Bu Gmail operator hesabı deyil.";
 
-            <h2>Məhsulun adı</h2>
-
-            <div class="qiymet">10 AZN</div>
-
-            <div class="saygac">
-
-                <button onclick="azalt()">−</button>
-
-                <span class="say">${say}</span>
-
-                <button onclick="artir()">+</button>
-
-            </div>
-
-            <button class="sil" onclick="sil()">Sil</button>
-
-        </div>
-    `;
-}
-
-function artir() {
-    say++;
-    localStorage.setItem("say_masin", say);
-    goster();
-}
-
-function azalt() {
-    if (say > 0) {
-        say--;
-        localStorage.setItem("say_masin", say);
-        goster();
     }
 }
-
-function sil() {
-    say = 0;
-    localStorage.removeItem("say_masin");
-    goster();
-}
-
-goster();
-
 </script>
 
 </body>
