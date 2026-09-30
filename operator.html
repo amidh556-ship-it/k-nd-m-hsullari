@@ -1,440 +1,116 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator paneli</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-        }
-
-        .header {
-            background: #2196f3;
-            color: white;
-            padding: 15px;
-            text-align: center;
-        }
-
-        #login {
-            text-align: center;
-            padding: 30px;
-        }
-
-        #loginButton {
-            padding: 13px 20px;
-            border: none;
-            border-radius: 8px;
-            background: #2196f3;
-            color: white;
-            font-size: 16px;
-        }
-
-        #chat {
-            display: none;
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            height: calc(100vh - 65px);
-        }
-
-        #messages {
-            height: calc(100% - 75px);
-            overflow-y: auto;
-            padding: 15px;
-        }
-
-        .message {
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 10px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .customer {
-            background: #e5e5e5;
-            margin-right: auto;
-        }
-
-        .agent {
-            background: #2196f3;
-            color: white;
-            margin-left: auto;
-        }
-
-        .send {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #ddd;
-        }
-
-        #messageInput {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        #sendButton {
-            margin-left: 8px;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 8px;
-            background: #2196f3;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator paneli</title>
 </head>
 
 <body>
 
-<div class="header">
+  <div id="login">
     <h2>Operator paneli</h2>
-</div>
-
-
-<div id="login">
-
     <p>Operator hesabına daxil olun.</p>
+    <button id="googleLogin">Google ilə daxil ol</button>
+  </div>
 
-    <button id="loginButton">
-        Google ilə daxil ol
-    </button>
-
-</div>
-
-
-<div id="chat">
+  <div id="operatorPanel" style="display:none;">
+    <h2>Operator paneli açıldı ✅</h2>
+    <p id="operatorEmail"></p>
 
     <div id="messages"></div>
 
-    <div class="send">
+    <input id="messageInput" type="text" placeholder="Mesaj yaz...">
+    <button id="sendMessage">Göndər</button>
 
-        <input
-            id="messageInput"
-            type="text"
-            placeholder="Mesaj yaz..."
-        >
-
-        <button id="sendButton">
-            Göndər
-        </button>
-
-    </div>
-
-</div>
+    <br><br>
+    <button id="logout">Çıxış</button>
+  </div>
 
 
 <script type="module">
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-    getDatabase,
-    ref,
-    push,
-    onChildAdded,
-    set
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithRedirect,
-    getRedirectResult,
-    onAuthStateChanged
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
 const firebaseConfig = {
-
-    apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-
-    authDomain:
-        "kendmehsullari-6a53d.firebaseapp.com",
-
-    databaseURL:
-        "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-
-    projectId:
-        "kendmehsullari-6a53d",
-
-    storageBucket:
-        "kendmehsullari-6a53d.firebasestorage.app",
-
-    messagingSenderId:
-        "551607499773",
-
-    appId:
-        "1:551607499773:web:a84aa63dc5b55c38687794"
+  apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+  authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+  databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+  projectId: "kendmehsullari-6a53d",
+  storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
+  messagingSenderId: "551607499773",
+  appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-// YALNIZ BU HESAB OPERATORLADIR
-const OPERATOR_EMAIL =
-    "ttik66006@gmail.com";
+const provider = new GoogleAuthProvider();
 
+const login = document.getElementById("login");
+const panel = document.getElementById("operatorPanel");
+const emailText = document.getElementById("operatorEmail");
 
-const app =
-    initializeApp(firebaseConfig);
+document.getElementById("googleLogin").onclick = async () => {
 
+  try {
 
-const db =
-    getDatabase(app);
+    await signInWithPopup(auth, provider);
 
+  } catch (error) {
 
-const auth =
-    getAuth(app);
+    console.error(error);
+    alert("Google girişində xəta oldu: " + error.message);
 
-
-const provider =
-    new GoogleAuthProvider();
-
-
-const login =
-    document.getElementById("login");
-
-
-const chat =
-    document.getElementById("chat");
-
-
-const loginButton =
-    document.getElementById("loginButton");
-
-
-const messages =
-    document.getElementById("messages");
-
-
-const messageInput =
-    document.getElementById("messageInput");
-
-
-const sendButton =
-    document.getElementById("sendButton");
-
-
-/* GOOGLE İLƏ DAXİL OL */
-
-loginButton.onclick = async () => {
-
-    try {
-
-        await signInWithRedirect(
-            auth,
-            provider
-        );
-
-    } catch (error) {
-
-        alert(
-            "Giriş xətası: " +
-            error.message
-        );
-
-    }
+  }
 
 };
 
 
-/* REDIRECT NƏTİCƏSİNİ YOXLAYIR */
+onAuthStateChanged(auth, (user) => {
 
-try {
+  if (user) {
 
-    await getRedirectResult(auth);
+    console.log("Daxil olan hesab:", user.email);
 
-} catch (error) {
+    if (user.email === "ttik66006@gmail.com") {
 
-    alert(
-        "Google giriş xətası: " +
-        error.message
-    );
+      login.style.display = "none";
+      panel.style.display = "block";
 
-}
+      emailText.textContent =
+        "Operator hesabı: " + user.email;
 
+    } else {
 
-/* HESAB DAXİL OLDUQDA */
+      signOut(auth);
 
-onAuthStateChanged(
-    auth,
-    async (user) => {
-
-        if (!user) {
-
-            login.style.display =
-                "block";
-
-            chat.style.display =
-                "none";
-
-            return;
-        }
-
-
-        /* GMAIL YOXLAMASI */
-
-        if (
-            user.email &&
-            user.email.toLowerCase() ===
-            OPERATOR_EMAIL.toLowerCase()
-        ) {
-
-            /* LOGIN-I GİZLƏT */
-
-            login.style.display =
-                "none";
-
-
-            /* YAZIŞMA PANELİNİ AÇ */
-
-            chat.style.display =
-                "block";
-
-
-            /* OPERATOR ONLAYN */
-
-            await set(
-                ref(db, "operatorOnline"),
-                true
-            );
-
-
-            /* MESAJLARI GÖSTƏR */
-
-            onChildAdded(
-                ref(db, "messages"),
-                (snapshot) => {
-
-                    const data =
-                        snapshot.val();
-
-
-                    if (
-                        !data ||
-                        !data.message
-                    ) {
-                        return;
-                    }
-
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    div.classList.add(
-                        "message"
-                    );
-
-
-                    if (
-                        data.sender ===
-                        "agent"
-                    ) {
-
-                        div.classList.add(
-                            "agent"
-                        );
-
-                        div.textContent =
-                            "Siz: " +
-                            data.message;
-
-                    } else {
-
-                        div.classList.add(
-                            "customer"
-                        );
-
-                        div.textContent =
-                            "Müştəri: " +
-                            data.message;
-                    }
-
-
-                    messages.appendChild(
-                        div
-                    );
-
-
-                    messages.scrollTop =
-                        messages.scrollHeight;
-
-                }
-            );
-
-        } else {
-
-            login.innerHTML =
-                "<h3>Bu hesab operator deyil.</h3>";
-
-        }
+      alert("Bu hesab operator hesabı deyil.");
 
     }
-);
+
+  } else {
+
+    login.style.display = "block";
+    panel.style.display = "none";
+
+  }
+
+});
 
 
-/* OPERATOR MESAJ GÖNDƏRİR */
-
-async function sendMessage() {
-
-    const message =
-        messageInput.value.trim();
-
-
-    if (!message) {
-        return;
-    }
-
-
-    await push(
-        ref(db, "messages"),
-        {
-
-            message: message,
-
-            sender: "agent",
-
-            email: OPERATOR_EMAIL,
-
-            time: Date.now()
-
-        }
-    );
-
-
-    messageInput.value = "";
-
-}
-
-
-sendButton.onclick =
-    sendMessage;
-
-
-messageInput.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (event.key === "Enter") {
-
-            sendMessage();
-
-        }
-
-    }
-);
+document.getElementById("logout").onclick = () => {
+  signOut(auth);
+};
 
 </script>
 
