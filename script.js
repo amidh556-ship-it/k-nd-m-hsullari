@@ -1,63 +1,138 @@
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+  authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+  databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+  projectId: "kendmehsullari-6a53d",
+  storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
+  messagingSenderId: "551607499773",
+  appId: "1:551607499773:web:a84aa63dc5b55c38687794",
+  measurementId: "G-2JZ105RRPH"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const messagesRef = ref(db, "messages");
+
+
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
 const chatBox = document.getElementById("chat-box");
 
+
 sendBtn.addEventListener("click", sendMessage);
+
 userInput.addEventListener("keypress", function(e) {
-  if (e.key === "Enter") sendMessage();
+  if (e.key === "Enter") {
+    sendMessage();
+  }
 });
- let selectedProduct = null
 
 
 function sendMessage() {
+
   const message = userInput.value.trim();
+
   if (message === "") return;
 
-  // istifadəçi mesajı
+
+  // Müştərinin mesajını ekranda göstər
   const userMsgDiv = document.createElement("div");
+
   userMsgDiv.className = "user-message";
+
   userMsgDiv.textContent = message;
+
   chatBox.appendChild(userMsgDiv);
 
+
+  // Firebase-ə göndər
+  push(messagesRef, {
+    message: message,
+    sender: "customer",
+    time: Date.now()
+  });
+
+
   userInput.value = "";
+
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  
- window.onload = function() {
 
-    const chatBox = document.getE(".chat-box");
+  // Botun avtomatik cavabı
+  setTimeout(function() {
 
     const botMsgDiv = document.createElement("div");
-    botMsgDiv.className = "bot-message message";
-    botMsgDiv.textContent = "Salam, mən Kənt məhsulunun botuyam 🤖 Sizə necə kömək olum?";
 
-    chatBox.appendChild(botMsgDiv);
-
-};
-
-  // bot cavabı
-  setTimeout(() => {
-    const botMsgDiv = document.createElement("div");
     botMsgDiv.className = "bot-message";
-   if (message.toLowerCase().includes("salam")) {
-      botMsgDiv.textContent = "salam xos glmisiz kend meshullara size nece komek ola bilerem hansisa mehsuunuz catmiyib?";
-    } else if (message.toLowerCase().includes("sen peysersen")) {
-      botMsgDiv.textContent = "eziz musderimiz bele soz demeyin men yapay zekayam sizin prablemleri hell etmek ucun yaranmisam ";
-    }
-    else if (message.toLowerCase().includes("bu nedi")) {
-      botMsgDiv.textContent = "ne nedi eziz musderimiz";
-    } else if (message.toLowerCase().includes("mehsulum niye gelmiyib")) {
-      botMsgDiv.textContent = "hansi mehsuldan danisirsiz ezi musderimiz kodu deyin zehmet olmasa ";
-    } else {
-      botMsgDiv.textContent = "Üzr istəyirəm, bunu başa düşmədim 😅";
-    }
-  else if (message.toLowerCase().includes("")) {
-      botMsgDiv.textContent = "Salam! Necəsən?";
-    } else if (message.toLowerCase().includes("necəsən")) {
-      botMsgDiv.textContent = "Mən yaxşıyam, sən necəsən?";
+
+
+    const text = message.toLowerCase();
+
+
+    if (text.includes("salam")) {
+
+      botMsgDiv.textContent =
+      "Salam, xoş gəlmisiniz! Sizə necə kömək edə bilərəm?";
+
     }
 
+    else if (text.includes("necəsən") || text.includes("necesen")) {
+
+      botMsgDiv.textContent =
+      "Mən yaxşıyam, təşəkkür edirəm! Sizə necə kömək edə bilərəm?";
+
+    }
+
+    else if (text.includes("bu nedi")) {
+
+      botMsgDiv.textContent =
+      "Əziz müştəri, zəhmət olmasa hansı məhsulu nəzərdə tutduğunuzu yazın.";
+
+    }
+
+    else if (
+      text.includes("mehsulum niye gelmiyib") ||
+      text.includes("məhsulum niyə gəlməyib")
+    ) {
+
+      botMsgDiv.textContent =
+      "Əziz müştəri, zəhmət olmasa sifariş kodunuzu yazın.";
+
+    }
+
+    else if (text.includes("sen peysersen")) {
+
+      botMsgDiv.textContent =
+      "Əziz müştəri, mən sizə kömək etmək üçün buradayam. 😊";
+
+    }
+
+    else {
+
+      botMsgDiv.textContent =
+      "Mesajınızı aldım. Operatorumuz sizə cavab verəcək.";
+
+    }
+
+
     chatBox.appendChild(botMsgDiv);
+
     chatBox.scrollTop = chatBox.scrollHeight;
+
   }, 500);
+
 }
