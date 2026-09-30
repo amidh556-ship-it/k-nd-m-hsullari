@@ -8,9 +8,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-// ===============================
+// =========================
 // FIREBASE
-// ===============================
+// =========================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
@@ -22,25 +22,24 @@ const firebaseConfig = {
   appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const messagesRef = ref(db, "messages");
 
 
-// ===============================
-// HTML ELEMENTLƏR
-// ===============================
+// =========================
+// HTML
+// =========================
 
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
 const chatBox = document.getElementById("chat-box");
 
 
-// ===============================
-// MESAJ GÖNDƏRMƏ
-// ===============================
+// =========================
+// MÜŞTƏRİ MESAJ GÖNDƏRİR
+// =========================
 
 sendBtn.addEventListener("click", sendMessage);
 
@@ -52,10 +51,6 @@ userInput.addEventListener("keypress", function(e) {
 
 });
 
-
-// ===============================
-// MÜŞTƏRİ MESAJI
-// ===============================
 
 function sendMessage() {
 
@@ -73,13 +68,11 @@ function sendMessage() {
   chatBox.appendChild(userMsgDiv);
 
 
-  // Firebase-ə müştəri kimi göndər
+  // Firebase-ə CUSTOMER kimi yaz
   push(messagesRef, {
-
     message: message,
     sender: "customer",
     time: Date.now()
-
   });
 
 
@@ -88,9 +81,9 @@ function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 
 
-  // ===============================
-  // BOTUN AVTOMATİK CAVABI
-  // ===============================
+  // =========================
+  // BOT CAVABI
+  // =========================
 
   setTimeout(function() {
 
@@ -135,30 +128,27 @@ function sendMessage() {
 }
 
 
-// ===============================
-// AGENTİN CAVABI
-// ===============================
+// =========================
+// AGENTİN MESAJINI GÖSTƏR
+// =========================
 
 onChildAdded(messagesRef, function(snapshot) {
 
   const data = snapshot.val();
-
 
   if (!data) return;
 
   if (!data.message) return;
 
 
-  // Yalnız agent mesajlarını göstər
+  // Yalnız AGENT mesajlarını qəbul et
   if (data.sender !== "agent") return;
 
 
   const agentMsgDiv = document.createElement("div");
 
   agentMsgDiv.className = "bot-message";
-
   agentMsgDiv.textContent = data.message;
-
 
   chatBox.appendChild(agentMsgDiv);
 
