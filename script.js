@@ -133,3 +133,18 @@ onChildAdded(messagesRef, function(snapshot) {
   }
 
 });
+onChildAdded(messagesRef, function(snapshot) {
+
+  const data = snapshot.val();
+
+  if (!data || data.sender !== "agent") return;
+
+  const agentMsgDiv = document.createElement("div");
+
+  agentMsgDiv.className = "bot-message";
+  agentMsgDiv.textContent = data.message;
+
+  chatBox.appendChild(agentMsgDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+});
