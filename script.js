@@ -8,6 +8,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
+// ===============================
+// FIREBASE
+// ===============================
+
 const firebaseConfig = {
   apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
   authDomain: "kendmehsullari-6a53d.firebaseapp.com",
@@ -25,19 +29,33 @@ const db = getDatabase(app);
 const messagesRef = ref(db, "messages");
 
 
+// ===============================
+// HTML ELEMENTLƏR
+// ===============================
+
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
 const chatBox = document.getElementById("chat-box");
 
 
+// ===============================
+// MESAJ GÖNDƏRMƏ
+// ===============================
+
 sendBtn.addEventListener("click", sendMessage);
 
 userInput.addEventListener("keypress", function(e) {
+
   if (e.key === "Enter") {
     sendMessage();
   }
+
 });
 
+
+// ===============================
+// MÜŞTƏRİ MESAJI
+// ===============================
 
 function sendMessage() {
 
@@ -46,19 +64,22 @@ function sendMessage() {
   if (message === "") return;
 
 
+  // Müştərinin mesajını ekranda göstər
   const userMsgDiv = document.createElement("div");
 
   userMsgDiv.className = "user-message";
-
   userMsgDiv.textContent = message;
 
   chatBox.appendChild(userMsgDiv);
 
 
+  // Firebase-ə müştəri kimi göndər
   push(messagesRef, {
+
     message: message,
     sender: "customer",
     time: Date.now()
+
   });
 
 
@@ -67,7 +88,9 @@ function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 
 
-  /* BOTUN AVTOMATİK CAVABI */
+  // ===============================
+  // BOTUN AVTOMATİK CAVABI
+  // ===============================
 
   setTimeout(function() {
 
@@ -83,7 +106,9 @@ function sendMessage() {
       botMsgDiv.textContent =
         "Salam, xoş gəlmisiniz! Sizə necə kömək edə bilərəm?";
 
-    } else if (
+    }
+
+    else if (
       text.includes("necəsən") ||
       text.includes("necesen")
     ) {
@@ -91,7 +116,9 @@ function sendMessage() {
       botMsgDiv.textContent =
         "Mən yaxşıyam, təşəkkür edirəm!";
 
-    } else {
+    }
+
+    else {
 
       botMsgDiv.textContent =
         "Mesajınızı aldım. Operatorumuz sizə cavab verəcək.";
@@ -104,47 +131,37 @@ function sendMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
 
   }, 500);
+
 }
 
 
-
-/* 🔥 AGENTİN CAVABINI MÜŞTƏRİYƏ GÖSTƏR */
+// ===============================
+// AGENTİN CAVABI
+// ===============================
 
 onChildAdded(messagesRef, function(snapshot) {
 
   const data = snapshot.val();
 
-  if (!data || !data.message) return;
+
+  if (!data) return;
+
+  if (!data.message) return;
 
 
-  /* Yalnız agentin mesajını göstər */
+  // Yalnız agent mesajlarını göstər
+  if (data.sender !== "agent") return;
 
-  if (data.sender === "agent") {
-
-    const agentMsgDiv = document.createElement("div");
-
-    agentMsgDiv.className = "bot-message";
-
-    agentMsgDiv.textContent = data.message;
-
-    chatBox.appendChild(agentMsgDiv);
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-});
-onChildAdded(messagesRef, function(snapshot) {
-
-  const data = snapshot.val();
-
-  if (!data || data.sender !== "agent") return;
 
   const agentMsgDiv = document.createElement("div");
 
   agentMsgDiv.className = "bot-message";
+
   agentMsgDiv.textContent = data.message;
 
+
   chatBox.appendChild(agentMsgDiv);
+
   chatBox.scrollTop = chatBox.scrollHeight;
 
 });
