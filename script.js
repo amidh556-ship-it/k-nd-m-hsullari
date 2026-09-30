@@ -1,4 +1,5 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getDatabase,
@@ -6,7 +7,8 @@ import {
   push,
   onChildAdded,
   onValue
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -36,41 +38,60 @@ let operatorOnline = false;
 let botReplied = false;
 
 
-/* OPERATOR STATUSU */
+/* OPERATOR ONLINE */
 
 onValue(operatorRef, (snapshot) => {
-  operatorOnline = snapshot.val() === true;
+
+  operatorOnline =
+    snapshot.val() === true;
+
 });
 
 
-/* MÜŞTƏRİ MESAJ GÖNDƏRİR */
+/* MESAJ GÖNDƏR */
 
-sendBtn.addEventListener("click", sendMessage);
+sendBtn.addEventListener(
+  "click",
+  sendMessage
+);
 
-userInput.addEventListener("keypress", function(e) {
 
-  if (e.key === "Enter") {
-    sendMessage();
+userInput.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
   }
-
-});
+);
 
 
 function sendMessage() {
 
-  const message = userInput.value.trim();
+  const message =
+    userInput.value.trim();
 
   if (message === "") return;
 
 
-  /* MÜŞTƏRİ MESAJINI EKRANDA GÖSTƏR */
+  /* MÜŞTƏRİNİN MESAJINI EKRANDA GÖSTƏR */
 
-  const userMsgDiv = document.createElement("div");
+  const div =
+    document.createElement("div");
 
-  userMsgDiv.className = "user-message";
-  userMsgDiv.textContent = message;
+  div.className =
+    "user-message";
 
-  chatBox.appendChild(userMsgDiv);
+  div.textContent =
+    message;
+
+  chatBox.appendChild(div);
 
 
   /* FIREBASE */
@@ -83,12 +104,23 @@ function sendMessage() {
 
     time: Date.now()
 
+  })
+  .catch((error) => {
+
+    console.error(error);
+
+    alert(
+      "Mesaj göndərilmədi: " +
+      error.message
+    );
+
   });
 
 
   userInput.value = "";
 
-  chatBox.scrollTop = chatBox.scrollHeight;
+  chatBox.scrollTop =
+    chatBox.scrollHeight;
 
 
   /* OPERATOR VARSA BOT SUSUR */
@@ -98,7 +130,7 @@ function sendMessage() {
   }
 
 
-  /* BOT 1 DƏFƏ CAVAB VERİR */
+  /* BOT YALNIZ BİR DƏFƏ */
 
   if (botReplied) {
     return;
@@ -107,93 +139,108 @@ function sendMessage() {
   botReplied = true;
 
 
-  setTimeout(function() {
+  setTimeout(() => {
 
     if (operatorOnline) {
       return;
     }
 
 
-    const botMsgDiv = document.createElement("div");
+    const bot =
+      document.createElement("div");
 
-    botMsgDiv.className = "bot-message";
+    bot.className =
+      "bot-message";
 
 
-    const text = message.toLowerCase();
+    const lower =
+      message.toLowerCase();
 
 
-    if (text.includes("salam")) {
+    if (lower.includes("salam")) {
 
-      botMsgDiv.textContent =
+      bot.textContent =
         "Salam, xoş gəlmisiniz! Sizə necə kömək edə bilərəm?";
 
     }
 
     else if (
-      text.includes("necəsən") ||
-      text.includes("necesen")
+      lower.includes("necəsən") ||
+      lower.includes("necesen")
     ) {
 
-      botMsgDiv.textContent =
+      bot.textContent =
         "Mən yaxşıyam, təşəkkür edirəm!";
 
     }
 
     else {
 
-      botMsgDiv.textContent =
+      bot.textContent =
         "Mesajınızı aldım. Operatorumuz sizə cavab verəcək.";
 
     }
 
 
-    chatBox.appendChild(botMsgDiv);
+    chatBox.appendChild(bot);
 
-    chatBox.scrollTop = chatBox.scrollHeight;
-
+    chatBox.scrollTop =
+      chatBox.scrollHeight;
 
   }, 500);
 
 }
 
 
-/* FIREBASE-DƏN MESAJLARI OXU */
+/* FIREBASE-DƏN OPERATOR MESAJLARINI OXU */
 
-onChildAdded(messagesRef, function(snapshot) {
+onChildAdded(
+  messagesRef,
+  (snapshot) => {
 
-  const data = snapshot.val();
+    const data =
+      snapshot.val();
 
-  if (!data) return;
-
-
-  /* MÜŞTƏRİNİN ÖZ MESAJINI TƏKRAR GÖSTƏRMƏ */
-
-  if (data.sender === "customer") {
-    return;
-  }
+    if (!data) return;
 
 
-  /* OPERATOR MESAJI */
+    /* YALNIZ OPERATOR MESAJI */
 
-  if (data.sender === "agent") {
+    if (data.sender !== "agent") {
+      return;
+    }
 
-    operatorOnline = true;
-    botReplied = true;
 
-
-    const agentMsgDiv = document.createElement("div");
-
-    agentMsgDiv.className = "bot-message";
-
-    agentMsgDiv.textContent =
+    const messageText =
       data.message || data.text || "";
 
 
-    chatBox.appendChild(agentMsgDiv);
+    if (messageText === "") {
+      return;
+    }
+
+
+    /* OPERATOR QOŞULUB */
+
+    operatorOnline = true;
+
+    botReplied = true;
+
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "bot-message";
+
+    div.textContent =
+      messageText;
+
+
+    chatBox.appendChild(div);
 
     chatBox.scrollTop =
       chatBox.scrollHeight;
 
   }
-
-});
+);
