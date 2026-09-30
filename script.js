@@ -5,8 +5,7 @@ import {
   ref,
   push,
   onChildAdded,
-  onValue,
-  set
+  onValue
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
@@ -37,25 +36,23 @@ let operatorOnline = false;
 let botReplied = false;
 
 
-// ============================
-// OPERATOR STATUSU
-// ============================
+/* OPERATOR STATUSU */
 
-onValue(operatorRef, function(snapshot) {
+onValue(operatorRef, (snapshot) => {
   operatorOnline = snapshot.val() === true;
 });
 
 
-// ============================
-// MÜŞTƏRİ MESAJ GÖNDƏRİR
-// ============================
+/* MÜŞTƏRİ MESAJ GÖNDƏRİR */
 
 sendBtn.addEventListener("click", sendMessage);
 
 userInput.addEventListener("keypress", function(e) {
+
   if (e.key === "Enter") {
     sendMessage();
   }
+
 });
 
 
@@ -66,7 +63,8 @@ function sendMessage() {
   if (message === "") return;
 
 
-  // MÜŞTƏRİ MESAJINI GÖSTƏR
+  /* MÜŞTƏRİ MESAJINI EKRANDA GÖSTƏR */
+
   const userMsgDiv = document.createElement("div");
 
   userMsgDiv.className = "user-message";
@@ -75,11 +73,16 @@ function sendMessage() {
   chatBox.appendChild(userMsgDiv);
 
 
-  // FIREBASE
+  /* FIREBASE */
+
   push(messagesRef, {
+
     message: message,
+
     sender: "customer",
+
     time: Date.now()
+
   });
 
 
@@ -88,24 +91,24 @@ function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 
 
-  // OPERATOR ARTİQ QOŞULUBSA BOT SUSUR
+  /* OPERATOR VARSA BOT SUSUR */
+
   if (operatorOnline) {
     return;
   }
 
 
-  // BOT SADECE 1 DƏFƏ CAVAB VERİR
+  /* BOT 1 DƏFƏ CAVAB VERİR */
+
   if (botReplied) {
     return;
   }
-
 
   botReplied = true;
 
 
   setTimeout(function() {
 
-    // 500 ms ərzində operator qoşulubsa bot cavab vermir
     if (operatorOnline) {
       return;
     }
@@ -148,43 +151,49 @@ function sendMessage() {
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
+
   }, 500);
 
 }
 
 
-// ============================
-// AGENTİN MESAJI
-// ============================
+/* FIREBASE-DƏN MESAJLARI OXU */
 
 onChildAdded(messagesRef, function(snapshot) {
 
   const data = snapshot.val();
 
-  if (!data || !data.message) return;
+  if (!data) return;
 
 
-  // YALNIZ AGENT MESAJI
-  if (data.sender !== "agent") {
+  /* MÜŞTƏRİNİN ÖZ MESAJINI TƏKRAR GÖSTƏRMƏ */
+
+  if (data.sender === "customer") {
     return;
   }
 
 
-  // OPERATOR QOŞULDU
-  operatorOnline = true;
+  /* OPERATOR MESAJI */
 
-  // BOT ARTİQ SUSUR
-  botReplied = true;
+  if (data.sender === "agent") {
+
+    operatorOnline = true;
+    botReplied = true;
 
 
-  // AGENT MESAJINI GÖSTƏR
-  const agentMsgDiv = document.createElement("div");
+    const agentMsgDiv = document.createElement("div");
 
-  agentMsgDiv.className = "bot-message";
-  agentMsgDiv.textContent = data.message;
+    agentMsgDiv.className = "bot-message";
 
-  chatBox.appendChild(agentMsgDiv);
+    agentMsgDiv.textContent =
+      data.message || data.text || "";
 
-  chatBox.scrollTop = chatBox.scrollHeight;
+
+    chatBox.appendChild(agentMsgDiv);
+
+    chatBox.scrollTop =
+      chatBox.scrollHeight;
+
+  }
 
 });
