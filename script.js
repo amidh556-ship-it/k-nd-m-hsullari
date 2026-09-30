@@ -1,13 +1,11 @@
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getDatabase,
   ref,
   push,
   onChildAdded
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -17,8 +15,7 @@ const firebaseConfig = {
   projectId: "kendmehsullari-6a53d",
   storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
   messagingSenderId: "551607499773",
-  appId: "1:551607499773:web:a84aa63dc5b55c38687794",
-  measurementId: "G-2JZ105RRPH"
+  appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
 
@@ -49,7 +46,6 @@ function sendMessage() {
   if (message === "") return;
 
 
-  // Müştərinin mesajını ekranda göstər
   const userMsgDiv = document.createElement("div");
 
   userMsgDiv.className = "user-message";
@@ -59,7 +55,6 @@ function sendMessage() {
   chatBox.appendChild(userMsgDiv);
 
 
-  // Firebase-ə göndər
   push(messagesRef, {
     message: message,
     sender: "customer",
@@ -72,13 +67,13 @@ function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 
 
-  // Botun avtomatik cavabı
+  /* BOTUN AVTOMATİK CAVABI */
+
   setTimeout(function() {
 
     const botMsgDiv = document.createElement("div");
 
     botMsgDiv.className = "bot-message";
-
 
     const text = message.toLowerCase();
 
@@ -86,45 +81,20 @@ function sendMessage() {
     if (text.includes("salam")) {
 
       botMsgDiv.textContent =
-      "Salam, xoş gəlmisiniz! Sizə necə kömək edə bilərəm?";
+        "Salam, xoş gəlmisiniz! Sizə necə kömək edə bilərəm?";
 
-    }
-
-    else if (text.includes("necəsən") || text.includes("necesen")) {
-
-      botMsgDiv.textContent =
-      "Mən yaxşıyam, təşəkkür edirəm! Sizə necə kömək edə bilərəm?";
-
-    }
-
-    else if (text.includes("bu nedi")) {
-
-      botMsgDiv.textContent =
-      "Əziz müştəri, zəhmət olmasa hansı məhsulu nəzərdə tutduğunuzu yazın.";
-
-    }
-
-    else if (
-      text.includes("mehsulum niye gelmiyib") ||
-      text.includes("məhsulum niyə gəlməyib")
+    } else if (
+      text.includes("necəsən") ||
+      text.includes("necesen")
     ) {
 
       botMsgDiv.textContent =
-      "Əziz müştəri, zəhmət olmasa sifariş kodunuzu yazın.";
+        "Mən yaxşıyam, təşəkkür edirəm!";
 
-    }
-
-    else if (text.includes("sen peysersen")) {
+    } else {
 
       botMsgDiv.textContent =
-      "Əziz müştəri, mən sizə kömək etmək üçün buradayam. 😊";
-
-    }
-
-    else {
-
-      botMsgDiv.textContent =
-      "Mesajınızı aldım. Operatorumuz sizə cavab verəcək.";
+        "Mesajınızı aldım. Operatorumuz sizə cavab verəcək.";
 
     }
 
@@ -134,5 +104,32 @@ function sendMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
 
   }, 500);
-
 }
+
+
+
+/* 🔥 AGENTİN CAVABINI MÜŞTƏRİYƏ GÖSTƏR */
+
+onChildAdded(messagesRef, function(snapshot) {
+
+  const data = snapshot.val();
+
+  if (!data || !data.message) return;
+
+
+  /* Yalnız agentin mesajını göstər */
+
+  if (data.sender === "agent") {
+
+    const agentMsgDiv = document.createElement("div");
+
+    agentMsgDiv.className = "bot-message";
+
+    agentMsgDiv.textContent = data.message;
+
+    chatBox.appendChild(agentMsgDiv);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+});
