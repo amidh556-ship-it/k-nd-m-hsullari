@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Paneli</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f2f2f2;
+    }
+
+    .header {
+      background: #222;
+      color: white;
+      padding: 18px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #messages {
+      padding: 15px;
+      height: 70vh;
+      overflow-y: auto;
+    }
+
+    .message {
+      background: white;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    .customer {
+      border-left: 4px solid #2196f3;
+    }
+
+    .agent {
+      border-left: 4px solid #4caf50;
+    }
+
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: white;
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    #reply {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+  🟢 Agent Paneli
+</div>
+
+<div id="messages"></div>
+
+<div class="bottom">
+
+  <input
+    id="reply"
+    type="text"
+    placeholder="Müştəriyə cavab yaz..."
+  >
+
+  <button onclick="sendReply()">
+    Göndər
+  </button>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+  authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+  databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+  projectId: "kendmehsullari-6a53d",
+  storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
+  messagingSenderId: "551607499773",
+  appId: "1:551607499773:web:a84aa63dc5b55c38687794"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+const messagesRef = ref(db, "messages");
+
+
+/* MESAJLARI GÖSTƏR */
+
+onChildAdded(messagesRef, (snapshot) => {
+
+  const data = snapshot.val();
+
+  if (!data || !data.message) return;
+
+  const div = document.createElement("div");
+
+  div.className = "message " +
+    (data.sender === "agent" ? "agent" : "customer");
+
+  div.textContent =
+    (data.sender === "agent" ? "Sən: " : "Müştəri: ")
+    + data.message;
+
+  document.getElementById("messages").appendChild(div);
+
+});
+
+
+/* CAVAB GÖNDƏR */
+
+window.sendReply = function() {
+
+  const input = document.getElementById("reply");
+
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  push(messagesRef, {
+
+    message: text,
+
+    sender: "agent",
+
+    time: Date.now()
+
+  });
+
+  input.value = "";
+
+};
+
+
+</script>
+
+</body>
+</html>
