@@ -4,13 +4,11 @@ import {
   getDatabase,
   ref,
   push,
-  onChildAdded
+  onChildAdded,
+  onValue,
+  set
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-
-// =========================
-// FIREBASE
-// =========================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
@@ -22,33 +20,42 @@ const firebaseConfig = {
   appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const messagesRef = ref(db, "messages");
+const operatorRef = ref(db, "operatorOnline");
 
-
-// =========================
-// HTML
-// =========================
 
 const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
 const chatBox = document.getElementById("chat-box");
 
 
-// =========================
+let operatorOnline = false;
+let botReplied = false;
+
+
+// ============================
+// OPERATOR STATUSU
+// ============================
+
+onValue(operatorRef, function(snapshot) {
+  operatorOnline = snapshot.val() === true;
+});
+
+
+// ============================
 // MÜŞTƏRİ MESAJ GÖNDƏRİR
-// =========================
+// ============================
 
 sendBtn.addEventListener("click", sendMessage);
 
 userInput.addEventListener("keypress", function(e) {
-
   if (e.key === "Enter") {
     sendMessage();
   }
-
 });
 
 
@@ -59,7 +66,7 @@ function sendMessage() {
   if (message === "") return;
 
 
-  // Müştərinin mesajını ekranda göstər
+  // MÜŞTƏRİ MESAJINI GÖSTƏR
   const userMsgDiv = document.createElement("div");
 
   userMsgDiv.className = "user-message";
@@ -68,7 +75,7 @@ function sendMessage() {
   chatBox.appendChild(userMsgDiv);
 
 
-  // Firebase-ə CUSTOMER kimi yaz
+  // FIREBASE
   push(messagesRef, {
     message: message,
     sender: "customer",
@@ -81,15 +88,33 @@ function sendMessage() {
   chatBox.scrollTop = chatBox.scrollHeight;
 
 
-  // =========================
-  // BOT CAVABI
-  // =========================
+  // OPERATOR ARTİQ QOŞULUBSA BOT SUSUR
+  if (operatorOnline) {
+    return;
+  }
+
+
+  // BOT SADECE 1 DƏFƏ CAVAB VERİR
+  if (botReplied) {
+    return;
+  }
+
+
+  botReplied = true;
+
 
   setTimeout(function() {
+
+    // 500 ms ərzində operator qoşulubsa bot cavab vermir
+    if (operatorOnline) {
+      return;
+    }
+
 
     const botMsgDiv = document.createElement("div");
 
     botMsgDiv.className = "bot-message";
+
 
     const text = message.toLowerCase();
 
@@ -128,23 +153,31 @@ function sendMessage() {
 }
 
 
-// =========================
-// AGENTİN MESAJINI GÖSTƏR
-// =========================
+// ============================
+// AGENTİN MESAJI
+// ============================
 
 onChildAdded(messagesRef, function(snapshot) {
 
   const data = snapshot.val();
 
-  if (!data) return;
-
-  if (!data.message) return;
+  if (!data || !data.message) return;
 
 
-  // Yalnız AGENT mesajlarını qəbul et
-  if (data.sender !== "agent") return;
+  // YALNIZ AGENT MESAJI
+  if (data.sender !== "agent") {
+    return;
+  }
 
 
+  // OPERATOR QOŞULDU
+  operatorOnline = true;
+
+  // BOT ARTİQ SUSUR
+  botReplied = true;
+
+
+  // AGENT MESAJINI GÖSTƏR
   const agentMsgDiv = document.createElement("div");
 
   agentMsgDiv.className = "bot-message";
