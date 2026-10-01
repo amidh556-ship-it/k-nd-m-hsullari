@@ -2,177 +2,196 @@
 <html lang="az">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Səbətim</title>
+<meta charset="UTF-8">
 
-    <style>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-        * {
-            box-sizing: border-box;
-        }
+<title>Səbətim</title>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            color: #222;
-        }
+<style>
 
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 15px;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        h1 {
-            background: white;
-            padding: 20px;
-            margin: 0 0 12px;
-            border-radius: 10px;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+}
 
-        .cart-item {
-            background: white;
-            margin-bottom: 10px;
-            padding: 12px;
-            border-radius: 10px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 15px;
+}
 
-        .cart-item img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
+h1 {
+    background: white;
+    padding: 20px;
+    margin: 0 0 12px;
+    border-radius: 10px;
+}
 
-        .info {
-            flex: 1;
-        }
+.cart-item {
+    background: white;
+    margin-bottom: 10px;
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
 
-        .name {
-            font-size: 17px;
-            font-weight: bold;
-        }
+.cart-item img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+}
 
-        .price {
-            margin-top: 6px;
-            color: #2e7d32;
-            font-weight: bold;
-        }
+.info {
+    flex: 1;
+}
 
-        .quantity {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
+.name {
+    font-size: 17px;
+    font-weight: bold;
+}
 
-        .quantity button {
-            width: 34px;
-            height: 34px;
-            border: none;
-            border-radius: 7px;
-            background: #eee;
-            font-size: 21px;
-        }
+.price {
+    margin-top: 6px;
+    color: #2e7d32;
+    font-weight: bold;
+}
 
-        .delete {
-            margin-top: 9px;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 7px;
-            background: #e53935;
-            color: white;
-        }
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-        .total {
-            background: white;
-            margin-top: 15px;
-            padding: 18px;
-            border-radius: 10px;
-            font-size: 20px;
-            font-weight: bold;
-        }
+.quantity button {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 7px;
+    background: #eee;
+    font-size: 21px;
+}
 
-        .order-button {
-            display: block;
-            width: 100%;
-            padding: 16px;
-            margin-top: 15px;
-            background: #2e7d32;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 9px;
-            font-weight: bold;
-            font-size: 17px;
-        }
+.delete {
+    margin-top: 9px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 7px;
+    background: #e53935;
+    color: white;
+}
 
-        .empty {
-            background: white;
-            padding: 35px 15px;
-            text-align: center;
-            border-radius: 10px;
-            font-size: 18px;
-        }
+.total {
+    background: white;
+    margin-top: 15px;
+    padding: 18px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
 
-        .back {
-            display: block;
-            text-align: center;
-            padding: 20px;
-            color: #222;
-            text-decoration: none;
-        }
+.order {
+    display: block;
+    background: #2e7d32;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    margin-top: 12px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-    </style>
+.empty {
+    background: white;
+    padding: 35px 15px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    padding: 20px;
+    color: #222;
+    text-decoration: none;
+}
+
+.login-warning {
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.login-warning a {
+    display: block;
+    margin-top: 15px;
+    padding: 14px;
+    background: #2e7d32;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+}
+
+</style>
 
 </head>
 
-
 <body>
-
 
 <div class="container">
 
-    <h1>
-        🛒 Səbətim
-    </h1>
+<h1>
+🛒 Səbətim
+</h1>
 
+<div id="cart"></div>
 
-    <div id="cart"></div>
+<div
+    class="total"
+    id="totalBox"
+>
 
+Ümumi:
+<span id="total">
+0.00
+</span>
+AZN
 
-    <div class="total">
+</div>
 
-        Ümumi:
-        <span id="total">0.00</span>
-        AZN
+<a
+    id="orderButton"
+    class="order"
+    href="sifariş.html"
+>
 
-    </div>
+📦 Sifariş et
 
+</a>
 
-    <!-- SİFARİŞ ET -->
+<a
+    class="back"
+    href="index.html"
+>
 
-    <a
-        id="orderButton"
-        class="order-button"
-        href="sifariş.html"
-    >
-        📦 Sifariş et
-    </a>
+← Alış-verişə qayıt
 
-
-    <a
-        class="back"
-        href="index.html"
-    >
-        ← Alış-verişə qayıt
-    </a>
+</a>
 
 </div>
 
@@ -181,15 +200,55 @@
 
 
 /* =========================
+   AKTİV HESAB
+========================= */
+
+function getAccountKey() {
+
+    const email =
+        localStorage.getItem("userEmail");
+
+
+    if (!email) {
+
+        return null;
+
+    }
+
+
+    return email
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g, "_");
+
+}
+
+
+/* =========================
    SƏBƏTİ GÖTÜR
 ========================= */
 
 function getCart() {
 
+    const key =
+        getAccountKey();
+
+
+    if (!key) {
+
+        return [];
+
+    }
+
+
     try {
 
         return JSON.parse(
-            localStorage.getItem("cart")
+
+            localStorage.getItem(
+                "cart_" + key
+            )
+
         ) || [];
 
     } catch (error) {
@@ -207,9 +266,23 @@ function getCart() {
 
 function saveCart(cart) {
 
+    const key =
+        getAccountKey();
+
+
+    if (!key) {
+
+        return;
+
+    }
+
+
     localStorage.setItem(
-        "cart",
+
+        "cart_" + key,
+
         JSON.stringify(cart)
+
     );
 
 }
@@ -221,26 +294,75 @@ function saveCart(cart) {
 
 function showCart() {
 
-    const cart =
-        getCart();
+    const email =
+        localStorage.getItem(
+            "userEmail"
+        );
+
 
     const box =
-        document.getElementById("cart");
+        document.getElementById(
+            "cart"
+        );
+
 
     const totalBox =
-        document.getElementById("total");
+        document.getElementById(
+            "total"
+        );
+
 
     const orderButton =
-        document.getElementById("orderButton");
+        document.getElementById(
+            "orderButton"
+        );
 
 
     box.innerHTML = "";
 
 
-    let total = 0;
+    /*
+       GİRİŞ EDİLMƏYİB
+    */
+
+    if (!email) {
+
+        box.innerHTML = `
+
+            <div class="login-warning">
+
+                🔐 Səbəti görmək üçün
+                əvvəlcə hesabına daxil ol.
+
+                <a href="login.html">
+                    Hesaba giriş et
+                </a>
+
+            </div>
+
+        `;
 
 
-    /* SƏBƏT BOŞDUR */
+        totalBox.innerText =
+            "0.00";
+
+
+        orderButton.style.display =
+            "none";
+
+
+        return;
+
+    }
+
+
+    const cart =
+        getCart();
+
+
+    /*
+       SƏBƏT BOŞDUR
+    */
 
     if (cart.length === 0) {
 
@@ -254,11 +376,14 @@ function showCart() {
 
         `;
 
+
         totalBox.innerText =
             "0.00";
 
+
         orderButton.style.display =
             "none";
+
 
         return;
 
@@ -269,95 +394,98 @@ function showCart() {
         "block";
 
 
-    /* MƏHSULLAR */
-
-    cart.forEach(function(item, index) {
+    let total = 0;
 
 
-        const quantity =
-            Number(item.quantity) || 1;
+    /*
+       MƏHSULLAR
+    */
+
+    cart.forEach(
+        function(item, index) {
 
 
-        const price =
-            Number(item.price) || 0;
+            const quantity =
+                Number(
+                    item.quantity
+                ) || 1;
 
 
-        const itemTotal =
-            price * quantity;
+            const price =
+                Number(
+                    item.price
+                ) || 0;
 
 
-        total += itemTotal;
+            total +=
+                price * quantity;
 
 
-        box.innerHTML += `
+            box.innerHTML += `
 
-            <div class="cart-item">
+                <div class="cart-item">
 
-
-                <img
-                    src="${item.image || ''}"
-                    alt="${item.name || 'Məhsul'}"
-                    onerror="this.style.display='none'"
-                >
-
-
-                <div class="info">
-
-
-                    <div class="name">
-
-                        ${item.name || 'Məhsul'}
-
-                    </div>
-
-
-                    <div class="price">
-
-                        ${price.toFixed(2)} AZN
-
-                    </div>
-
-
-                    <div class="quantity">
-
-
-                        <button
-                            onclick="minusItem(${index})"
-                        >
-                            −
-                        </button>
-
-
-                        <b>
-                            ${quantity}
-                        </b>
-
-
-                        <button
-                            onclick="plusItem(${index})"
-                        >
-                            +
-                        </button>
-
-
-                    </div>
-
-
-                    <button
-                        class="delete"
-                        onclick="deleteItem(${index})"
+                    <img
+                        src="${item.image || ''}"
+                        alt="${item.name || 'Məhsul'}"
                     >
-                        🗑️ Sil
-                    </button>
 
+                    <div class="info">
+
+                        <div class="name">
+
+                            ${item.name || "Məhsul"}
+
+                        </div>
+
+                        <div class="price">
+
+                            ${price.toFixed(2)}
+                            AZN
+
+                        </div>
+
+
+                        <div class="quantity">
+
+                            <button
+                                onclick="minusItem(${index})"
+                            >
+                                −
+                            </button>
+
+
+                            <b>
+                                ${quantity}
+                            </b>
+
+
+                            <button
+                                onclick="plusItem(${index})"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            class="delete"
+                            onclick="deleteItem(${index})"
+                        >
+
+                            🗑️ Sil
+
+                        </button>
+
+                    </div>
 
                 </div>
 
-            </div>
+            `;
 
-        `;
-
-    });
+        }
+    );
 
 
     totalBox.innerText =
@@ -377,12 +505,16 @@ function plusItem(index) {
 
 
     if (!cart[index]) {
+
         return;
+
     }
 
 
     cart[index].quantity =
-        (Number(cart[index].quantity) || 0) + 1;
+        (Number(
+            cart[index].quantity
+        ) || 0) + 1;
 
 
     saveCart(cart);
@@ -403,17 +535,26 @@ function minusItem(index) {
 
 
     if (!cart[index]) {
+
         return;
+
     }
 
 
     cart[index].quantity =
-        (Number(cart[index].quantity) || 1) - 1;
+        (Number(
+            cart[index].quantity
+        ) || 1) - 1;
 
 
-    if (cart[index].quantity <= 0) {
+    if (
+        cart[index].quantity <= 0
+    ) {
 
-        cart.splice(index, 1);
+        cart.splice(
+            index,
+            1
+        );
 
     }
 
@@ -426,7 +567,7 @@ function minusItem(index) {
 
 
 /* =========================
-   TAM SİL
+   SİL
 ========================= */
 
 function deleteItem(index) {
@@ -435,12 +576,10 @@ function deleteItem(index) {
         getCart();
 
 
-    if (!cart[index]) {
-        return;
-    }
-
-
-    cart.splice(index, 1);
+    cart.splice(
+        index,
+        1
+    );
 
 
     saveCart(cart);
@@ -458,6 +597,6 @@ showCart();
 
 </script>
 
-
 </body>
+
 </html>
