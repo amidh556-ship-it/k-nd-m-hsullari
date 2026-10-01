@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Kənd məhsulları</title>
+    <title>Məhsul - Kənd məhsulları</title>
 
     <style>
         * {
@@ -16,9 +16,10 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f5f5f5;
+            color: #222;
         }
 
-        .page {
+        .product-page {
             max-width: 600px;
             margin: auto;
             padding: 15px;
@@ -26,8 +27,8 @@
 
         .product {
             background: white;
-            padding: 15px;
             border-radius: 12px;
+            padding: 15px;
         }
 
         .product-image {
@@ -51,13 +52,14 @@
         }
 
         .description {
-            margin-top: 10px;
             color: #666;
+            margin-top: 10px;
+            line-height: 1.5;
         }
 
-        .add-button {
+        .cart-button {
             width: 100%;
-            padding: 16px;
+            padding: 15px;
             margin-top: 20px;
             border: none;
             border-radius: 9px;
@@ -70,16 +72,16 @@
         .cart-link {
             display: block;
             text-align: center;
-            margin-top: 10px;
-            padding: 15px;
+            margin-top: 15px;
+            padding: 14px;
             background: white;
             border-radius: 9px;
-            color: #222;
             text-decoration: none;
+            color: #222;
             font-weight: bold;
         }
 
-        .back {
+        .back-link {
             display: block;
             text-align: center;
             padding: 20px;
@@ -91,21 +93,28 @@
 
 <body>
 
-<div class="page">
+<div class="product-page">
 
     <div class="product">
 
         <img
             class="product-image"
+            id="productImage"
             src="foto.png"
-            alt="Kənd məhsulu"
+            alt="Məhsul"
         >
 
-        <div class="product-name">
+        <div
+            class="product-name"
+            id="productName"
+        >
             Kənd məhsulu
         </div>
 
-        <div class="product-price">
+        <div
+            class="product-price"
+            id="productPrice"
+        >
             10 AZN
         </div>
 
@@ -114,8 +123,8 @@
         </div>
 
         <button
-            class="add-button"
-            onclick="addToCart()"
+            class="cart-button"
+            onclick="addCurrentProduct()"
         >
             🛒 Səbətə əlavə et
         </button>
@@ -130,10 +139,10 @@
     </div>
 
     <a
-        class="back"
+        class="back-link"
         href="index.html"
     >
-        ← Geri qayıt
+        ← Alış-verişə qayıt
     </a>
 
 </div>
@@ -154,26 +163,20 @@ const product = {
 };
 
 
-function addToCart() {
+function addCurrentProduct() {
 
-    let cart = [];
-
-    try {
-
-        cart = JSON.parse(
+    let cart =
+        JSON.parse(
             localStorage.getItem("cart")
         ) || [];
 
-    } catch (e) {
 
-        cart = [];
+    let existing =
+        cart.find(function(item) {
 
-    }
+            return item.id === product.id;
 
-
-    const existing = cart.find(
-        item => item.id === product.id
-    );
+        });
 
 
     if (existing) {
@@ -206,7 +209,9 @@ function addToCart() {
     );
 
 
-    alert("✅ Məhsul səbətə əlavə edildi!");
+    alert(
+        "✅ Məhsul səbətə əlavə edildi!"
+    );
 
 }
 
