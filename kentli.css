@@ -68,7 +68,12 @@ body{
     color: black;
     bottom: none;
 }
+.chat-butto{ 
+    top: -80px;
+    right: -70px;
+    font-size: -30px;
 
+    
 .qiraq-h2{
     margin-left: -30%;
     margin-top: -70px;
