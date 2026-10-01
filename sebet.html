@@ -1,39 +1,453 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Operator</title>
+
+    <title>Səbətim</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        h1 {
+            background: white;
+            padding: 20px;
+            margin: 0 0 12px;
+            border-radius: 10px;
+        }
+
+        .cart-item {
+            background: white;
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .cart-item img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .info {
+            flex: 1;
+        }
+
+        .name {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .price {
+            margin-top: 6px;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quantity button {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 7px;
+            background: #eee;
+            font-size: 21px;
+        }
+
+        .delete {
+            margin-top: 9px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 7px;
+            background: #e53935;
+            color: white;
+        }
+
+        .total {
+            background: white;
+            margin-top: 15px;
+            padding: 18px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .empty {
+            background: white;
+            padding: 35px 15px;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            color: #222;
+            text-decoration: none;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h2>Operator girişi</h2>
+<div class="container">
 
-<input type="email" id="email" placeholder="Gmail yaz">
-<br><br>
+    <h1>
+        🛒 Səbətim
+    </h1>
 
-<button onclick="gir()">Daxil ol</button>
 
-<p id="mesaj"></p>
+    <div id="cart"></div>
+
+
+    <div class="total">
+
+        Ümumi:
+        <span id="total">
+            0
+        </span>
+        AZN
+
+    </div>
+
+
+    <a
+        class="back"
+        href="index.html"
+    >
+        ← Alış-verişə qayıt
+    </a>
+
+</div>
+
 
 <script>
-function gir() {
 
-    let email = document.getElementById("email").value.trim();
+/*
+================================
+SƏBƏTİ GÖTÜR
+================================
+*/
 
-    if (email === "ttik66006@gmail.com") {
+function getCart() {
 
-        window.location.href = "sebet.html";
+    try {
 
-    } else {
+        return JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
 
-        document.getElementById("mesaj").innerText =
-        "Bu Gmail operator hesabı deyil.";
+    } catch (error) {
+
+        return [];
 
     }
+
 }
+
+
+/*
+================================
+SƏBƏTİ YADDA SAXLA
+================================
+*/
+
+function saveCart(cart) {
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/*
+================================
+SƏBƏTİ GÖSTƏR
+================================
+*/
+
+function showCart() {
+
+    const cart =
+        getCart();
+
+
+    const box =
+        document.getElementById("cart");
+
+
+    const totalBox =
+        document.getElementById("total");
+
+
+    box.innerHTML = "";
+
+
+    let total = 0;
+
+
+    /*
+    SƏBƏT BOŞDUR
+    */
+
+    if (cart.length === 0) {
+
+        box.innerHTML = `
+
+            <div class="empty">
+
+                🛒 Səbətin boşdur
+
+            </div>
+
+        `;
+
+        totalBox.innerText = "0";
+
+        return;
+
+    }
+
+
+    /*
+    MƏHSULLARI GÖSTƏR
+    */
+
+    cart.forEach(function(item, index) {
+
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+
+        const price =
+            Number(item.price) || 0;
+
+
+        const itemTotal =
+            price * quantity;
+
+
+        total += itemTotal;
+
+
+        box.innerHTML += `
+
+            <div class="cart-item">
+
+
+                <img
+                    src="${item.image || ''}"
+                    alt="${item.name || 'Məhsul'}"
+                    onerror="this.style.display='none'"
+                >
+
+
+                <div class="info">
+
+
+                    <div class="name">
+
+                        ${item.name || 'Məhsul'}
+
+                    </div>
+
+
+                    <div class="price">
+
+                        ${price.toFixed(2)} AZN
+
+                    </div>
+
+
+                    <div class="quantity">
+
+
+                        <button
+                            onclick="minusItem(${index})"
+                        >
+                            −
+                        </button>
+
+
+                        <b>
+
+                            ${quantity}
+
+                        </b>
+
+
+                        <button
+                            onclick="plusItem(${index})"
+                        >
+                            +
+                        </button>
+
+
+                    </div>
+
+
+                    <button
+                        class="delete"
+                        onclick="deleteItem(${index})"
+                    >
+
+                        🗑️ Sil
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    totalBox.innerText =
+        total.toFixed(2);
+
+}
+
+
+/*
+================================
+MƏHSULU ARTIR
+================================
+*/
+
+function plusItem(index) {
+
+    const cart =
+        getCart();
+
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        (Number(cart[index].quantity) || 0) + 1;
+
+
+    saveCart(cart);
+
+    showCart();
+
+}
+
+
+/*
+================================
+MƏHSULU AZALT
+================================
+*/
+
+function minusItem(index) {
+
+    const cart =
+        getCart();
+
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    cart[index].quantity =
+        (Number(cart[index].quantity) || 1) - 1;
+
+
+    /*
+    SAY 0 OLARSA MƏHSUL SİLİNİR
+    */
+
+    if (
+        cart[index].quantity <= 0
+    ) {
+
+        cart.splice(index, 1);
+
+    }
+
+
+    saveCart(cart);
+
+    showCart();
+
+}
+
+
+/*
+================================
+MƏHSULU TAM SİL
+================================
+*/
+
+function deleteItem(index) {
+
+    const cart =
+        getCart();
+
+
+    cart.splice(index, 1);
+
+
+    saveCart(cart);
+
+    showCart();
+
+}
+
+
+/*
+================================
+SƏHİFƏ AÇILANDA
+================================
+*/
+
+showCart();
+
 </script>
 
+
 </body>
+
 </html>
