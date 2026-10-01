@@ -1,61 +1,154 @@
 <!DOCTYPE html>
-<!-- Coding by codingLab \\ www.codinglabwed.com-->
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title> Kənd məhsulları </title>
-        <link rel="stylesheet" href="kentt.css" />
-    </head>
-    <body>
-        <section class="wrapper">
-            <div class="form signup">
-                <header>Qeydiyyatdan kec</header>
-                <form onsubmit="qeydiyyat(event)">
-                    <input type="text" id="signupName" placeholder="Adınız" required />
-                    <input type="email" id="signupEmail" placeholder="gmail" required />
-                    <input type="password" id="signupPassword" placeholder="Parol" required />
-                    <div class="checkbox">
-                        <input type="checkbox" id="signupCheck"/>
-                        <label for="signupCheck"> butun sertleri qebul edirem</label>
-                    </div>
-                    <input type="submit" value="Kec"/>
-                </form>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kənd məhsulları</title>
+
+    <link rel="stylesheet" href="kentt.css">
+</head>
+
+<body>
+
+<section class="wrapper">
+
+    <!-- QEYDİYYAT -->
+    <div class="form signup">
+
+        <header>Qeydiyyatdan keç</header>
+
+        <form onsubmit="qeydiyyat(event)">
+
+            <input
+                type="text"
+                id="signupName"
+                placeholder="Adınız"
+                required
+            >
+
+            <input
+                type="email"
+                id="signupEmail"
+                placeholder="Gmail"
+                required
+            >
+
+            <input
+                type="password"
+                id="signupPassword"
+                placeholder="Parol"
+                required
+            >
+
+            <div class="checkbox">
+
+                <input
+                    type="checkbox"
+                    id="signupCheck"
+                    required
+                >
+
+                <label for="signupCheck">
+                    Bütün şərtləri qəbul edirəm
+                </label>
+
             </div>
-            <br><br>
 
-<div id="g_id_onload"
-    data-client_id="963716048047-vd8sav5opcts81kssk3jieo7qtsb0c77.apps.googleusercontent.com"
-     data-callback="handleCredentialResponse">
-</div>
+            <input type="submit" value="Qeydiyyatdan keç">
 
-<div class="g_id_signin"
-     data-type="standard">
-</div>
+        </form>
 
-<div id="userInfo">
-   <img id="userPhoto" width="40" height="40">
-   <span id="userName"></span>
-</div>
+    </div>
 
 
-            <div class="form login">
-                <header>Hesaba Gir </header>
-                <form onsubmit="login(event)">
-                    <input type="text" id="loginEmail" placeholder="Email" required>
-                    <input type="password" id="loginPassword" placeholder="Parol" required>
-                    <a href="#">Parolu unutdun?</a>
-                    <input type="submit" value="Giris et">
-                </form>
-            </div>
-        </section>
-       <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <br><br>
+
+
+    <!-- GOOGLE İLƏ GİRİŞ -->
+
+    <div id="g_id_onload"
+         data-client_id="963716048047-vd8sav5opcts81kssk3jieo7qtsb0c77.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse">
+    </div>
+
+
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="signin_with">
+    </div>
+
+
+    <!-- GOOGLE PROFİLİ -->
+
+    <div id="userInfo" style="display:none;">
+
+        <img
+            id="userPhoto"
+            width="60"
+            height="60"
+            style="border-radius:50%;"
+        >
+
+        <div>
+            <span id="userName"></span>
+            <br>
+            <span id="userEmail"></span>
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- HESABA GİRİŞ -->
+
+    <div class="form login">
+
+        <header>Hesaba daxil ol</header>
+
+        <form onsubmit="login(event)">
+
+            <input
+                type="text"
+                id="loginEmail"
+                placeholder="Email"
+                required
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Parol"
+                required
+            >
+
+            <a href="#">Parolu unutdun?</a>
+
+            <input
+                type="submit"
+                value="Giriş et"
+            >
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- GOOGLE GİRİŞ SİSTEMİ -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!-- JWT -->
 <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+<!-- SƏNİN JS FAYLIN -->
 <script src="kent.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-        <script src="kent.js" defer></script>
-        
-    </body>
+</body>
 </html>
