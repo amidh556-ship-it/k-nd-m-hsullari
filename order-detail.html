@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sifariş izləmə</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 15px;
+}
+
+.box {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    margin-top: 0;
+}
+
+.product {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.product img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 9px;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.tracking {
+    margin-top: 15px;
+    padding: 14px;
+    background: #f5f5f5;
+    border-radius: 9px;
+}
+
+.steps {
+    margin-top: 20px;
+}
+
+.step {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 22px;
+    align-items: flex-start;
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 50%;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.step.active .circle {
+    background: #2e7d32;
+    color: white;
+}
+
+.step-text {
+    padding-top: 5px;
+}
+
+.step-title {
+    font-weight: bold;
+}
+
+.step-date {
+    color: #777;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.total {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.back {
+    display: block;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #222;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="box">
+
+<h1>📦 Sifariş izləmə</h1>
+
+<div id="orderInfo"></div>
+
+</div>
+
+<a
+    class="back"
+    href="orders.html"
+>
+    ← Sifarişlərimə qayıt
+</a>
+
+</div>
+
+
+<script>
+
+function getOrders() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+const orders =
+    getOrders();
+
+
+const selectedIndex =
+    Number(
+        localStorage.getItem("selectedOrder")
+    );
+
+
+const order =
+    orders[selectedIndex];
+
+
+const box =
+    document.getElementById("orderInfo");
+
+
+if (!order) {
+
+    box.innerHTML = `
+        <p>
+            ❌ Sifariş tapılmadı.
+        </p>
+    `;
+
+} else {
+
+
+    let productsHTML = "";
+
+
+    if (
+        order.products &&
+        order.products.length
+    ) {
+
+        order.products.forEach(function(item) {
+
+            productsHTML += `
+
+                <div class="product">
+
+                    <img
+                        src="${item.image || ''}"
+                    >
+
+                    <div class="product-info">
+
+                        <b>
+                            ${item.name || "Məhsul"}
+                        </b>
+
+                        <br><br>
+
+                        Say:
+                        ${item.quantity || 1}
+
+                        <br>
+
+                        Qiymət:
+                        ${Number(item.price || 0).toFixed(2)}
+                        AZN
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+
+    /*
+       STATUSUN HANSI MƏRHƏLƏDƏ
+       OLDUĞUNU MÜƏYYƏN ET
+    */
+
+    const currentStep =
+        Number(order.step) || 1;
+
+
+    box.innerHTML = `
+
+        ${productsHTML}
+
+
+        <div class="tracking">
+
+            🚚 İzləmə kodu:
+
+            <b>
+                ${order.trackingCode || "Yoxdur"}
+            </b>
+
+            <br><br>
+
+            📦 Sifariş nömrəsi:
+
+            <b>
+                ${order.orderId || ""}
+            </b>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step ${currentStep >= 1 ? "active" : ""}">
+
+                <div class="circle">
+                    ✓
+                </div>
+
+                <div class="step-text">
+
+                    <div class="step-title">
+                        Sifariş verildi
+                    </div>
+
+                    <div class="step-date">
+                        Sifarişiniz qəbul edildi
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="step ${currentStep >= 2 ? "active" : ""}">
+
+                <div class="circle">
+                    ${currentStep >= 2 ? "✓" : "2"}
+                </div>
+
+                <div class="step-text">
+
+                    <div class="step-title">
+                        Hazırlanır
+                    </div>
+
+                    <div class="step-date">
+                        Məhsul hazırlanır
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="step ${currentStep >= 3 ? "active" : ""}">
+
+                <div class="circle">
+                    ${currentStep >= 3 ? "✓" : "3"}
+                </div>
+
+                <div class="step-text">
+
+                    <div class="step-title">
+                        Yola verildi
+                    </div>
+
+                    <div class="step-date">
+                        Sifariş yoldadır
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="step ${currentStep >= 4 ? "active" : ""}">
+
+                <div class="circle">
+                    ${currentStep >= 4 ? "✓" : "4"}
+                </div>
+
+                <div class="step-text">
+
+                    <div class="step-title">
+                        Çatdırılma məntəqəsində
+                    </div>
+
+                    <div class="step-date">
+                        Sifarişiniz çatdırılma nöqtəsinə çatıb
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="step ${currentStep >= 5 ? "active" : ""}">
+
+                <div class="circle">
+                    ${currentStep >= 5 ? "✓" : "5"}
+                </div>
+
+                <div class="step-text">
+
+                    <div class="step-title">
+                        Çatdırıldı
+                    </div>
+
+                    <div class="step-date">
+                        Sifariş müştəriyə çatdırılıb
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="total">
+
+            Ümumi:
+            ${Number(order.total || 0).toFixed(2)}
+            AZN
+
+        </div>
+
+    `;
+
+}
+
+</script>
+
+</body>
+</html>
