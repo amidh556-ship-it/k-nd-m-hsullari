@@ -2,12 +2,16 @@
 <html lang="az">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Profilim - Kənd məhsulları</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -24,6 +28,8 @@
             margin: auto;
             min-height: 100vh;
         }
+
+        /* PROFİL */
 
         .profile-top {
             background: white;
@@ -53,6 +59,8 @@
             color: #777;
             font-size: 14px;
         }
+
+        /* MENYU */
 
         .menu {
             background: white;
@@ -86,6 +94,8 @@
             font-size: 13px;
         }
 
+        /* ŞƏXSİ MƏLUMATLAR */
+
         .information {
             background: white;
             margin-top: 10px;
@@ -118,24 +128,7 @@
             font-weight: bold;
         }
 
-        #logoutBtn {
-            width: 100%;
-            margin-top: 10px;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #e53935;
-            color: white;
-            font-size: 16px;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            padding: 20px;
-            color: #333;
-            text-decoration: none;
-        }
+        /* YADDA SAXLANILDI */
 
         #savedMessage {
             display: none;
@@ -146,20 +139,51 @@
             color: #2e7d32;
             font-weight: bold;
         }
+
+        /* HESABDAN ÇIXIŞ */
+
+        #logoutBtn {
+            width: calc(100% - 40px);
+            margin: 15px 20px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #e53935;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            color: #333;
+            text-decoration: none;
+        }
+
     </style>
+
 </head>
 
 <body>
 
 <div class="profile-page">
 
-    <!-- PROFİL -->
+
+    <!-- PROFİL ŞƏKİLİ + AD + GMAIL -->
 
     <div class="profile-top">
 
-        <img id="userPhoto" src="" alt="Profil şəkli">
+        <img
+            id="userPhoto"
+            src=""
+            alt="Profil şəkli"
+        >
 
-        <span id="userName">Müştəri</span>
+        <span id="userName">
+            Müştəri
+        </span>
 
         <span id="userEmail"></span>
 
@@ -171,46 +195,96 @@
     <div class="menu">
 
         <a href="orders.html">
-            <span class="menu-icon">📦</span>
-            <span class="menu-text">Sifarişlərim</span>
+
+            <span class="menu-icon">
+                📦
+            </span>
+
+            <span class="menu-text">
+                Sifarişlərim
+            </span>
+
         </a>
+
 
         <a href="sebet.html">
-            <span class="menu-icon">🛒</span>
-            <span class="menu-text">Səbətim</span>
+
+            <span class="menu-icon">
+                🛒
+            </span>
+
+            <span class="menu-text">
+                Səbətim
+            </span>
+
         </a>
+
 
         <a href="comments.html">
-            <span class="menu-icon">💬</span>
-            <span class="menu-text">Yorumlarım</span>
+
+            <span class="menu-icon">
+                💬
+            </span>
+
+            <span class="menu-text">
+                Yorumlarım
+            </span>
+
         </a>
+
 
         <a href="#address">
-            <span class="menu-icon">📍</span>
-            <span class="menu-text">Ünvanlarım</span>
+
+            <span class="menu-icon">
+                📍
+            </span>
+
+            <span class="menu-text">
+                Ünvanlarım
+            </span>
+
         </a>
+
 
         <a href="#favorites">
-            <span class="menu-icon">❤️</span>
-            <span class="menu-text">Seçilmişlər</span>
+
+            <span class="menu-icon">
+                ❤️
+            </span>
+
+            <span class="menu-text">
+                Seçilmişlər
+            </span>
+
         </a>
 
+
         <a href="history.html">
-            <span class="menu-icon">🕘</span>
-            <span class="menu-text">Tarixçə</span>
+
+            <span class="menu-icon">
+                🕘
+            </span>
+
+            <span class="menu-text">
+                Tarixçə
+            </span>
+
         </a>
 
     </div>
 
 
-    <!-- MƏLUMATLAR İLK DƏFƏ GÖRÜNƏCƏK -->
+    <!-- ŞƏXSİ MƏLUMATLAR -->
 
     <div
         class="information"
         id="informationBox"
     >
 
-        <h2>👤 Şəxsi məlumatlar</h2>
+        <h2>
+            👤 Şəxsi məlumatlar
+        </h2>
+
 
         <input
             type="text"
@@ -218,11 +292,13 @@
             placeholder="Ad"
         >
 
+
         <input
             type="text"
             id="lastName"
             placeholder="Soyad"
         >
+
 
         <input
             type="tel"
@@ -230,17 +306,20 @@
             placeholder="Telefon nömrəsi"
         >
 
+
         <input
             type="text"
             id="address"
             placeholder="Çatdırılma ünvanı"
         >
 
+
         <input
             type="text"
             id="city"
             placeholder="Şəhər / Rayon"
         >
+
 
         <button
             id="saveBtn"
@@ -249,24 +328,36 @@
             💾 Məlumatları yadda saxla
         </button>
 
-        <button
-            id="logoutBtn"
-            onclick="logout()"
-        >
-            🚪 Çıxış et
-        </button>
-
     </div>
 
 
-    <!-- YADDA SAXLANANDAN SONRA -->
+    <!-- YADDA SAXLANILDI -->
 
     <div id="savedMessage">
+
         ✅ Profil məlumatların yadda saxlanılıb
+
     </div>
 
 
-    <a class="back" href="index.html">
+    <!-- HƏMİŞƏ GÖRÜNƏN ÇIXIŞ -->
+
+    <button
+        id="logoutBtn"
+        onclick="logout()"
+    >
+
+        🚪 Hesabdan çıxış et
+
+    </button>
+
+
+    <!-- ANA SƏHİFƏ -->
+
+    <a
+        class="back"
+        href="index.html"
+    >
         ← Ana səhifəyə qayıt
     </a>
 
@@ -295,39 +386,49 @@ window.onload = function () {
         localStorage.getItem("userPhoto");
 
 
-    // GİRİŞ YOXDURSA
+    // HESABA GİRİŞ YOXDURSA
 
     if (login !== "true") {
 
-        window.location.href = "kent.html";
+        window.location.href =
+            "kent.html";
 
         return;
     }
 
 
-    // PROFİL MƏLUMATLARI
+    // AD
 
-    document.getElementById("userName").innerText =
+    document.getElementById(
+        "userName"
+    ).innerText =
         name || "Müştəri";
 
-    document.getElementById("userEmail").innerText =
+
+    // GMAIL
+
+    document.getElementById(
+        "userEmail"
+    ).innerText =
         email || "";
 
 
-    // GOOGLE ŞƏKLİ
+    // ŞƏKİL
 
     if (photo) {
 
-        document.getElementById("userPhoto").src =
-            photo;
+        document.getElementById(
+            "userPhoto"
+        ).src = photo;
 
     }
 
 
     /*
-       HƏR GMAIL ÜÇÜN AYRI MƏLUMAT SAXLAYIRIQ.
+       HƏR GMAIL ÜÇÜN AYRI YADDAŞ
+
        Məsələn:
-       profil_email@gmail...
+       profile_amid_gmail_com
     */
 
     userKey =
@@ -346,18 +447,21 @@ window.onload = function () {
 
     if (saved) {
 
-        // FORMU GİZLƏT
+        /*
+           MƏLUMATLAR ƏVVƏLDƏN VARSA
+           FORM GÖRÜNMƏSİN
+        */
 
         document.getElementById(
             "informationBox"
-        ).style.display = "none";
+        ).style.display =
+            "none";
 
-
-        // YADDA SAXLANILDI YAZISI
 
         document.getElementById(
             "savedMessage"
-        ).style.display = "block";
+        ).style.display =
+            "block";
 
     }
 
@@ -373,26 +477,32 @@ function saveProfile() {
             "firstName"
         ).value.trim();
 
+
     const lastName =
         document.getElementById(
             "lastName"
         ).value.trim();
+
 
     const phone =
         document.getElementById(
             "phone"
         ).value.trim();
 
+
     const address =
         document.getElementById(
             "address"
         ).value.trim();
+
 
     const city =
         document.getElementById(
             "city"
         ).value.trim();
 
+
+    // BOŞ SAXLAMA
 
     if (
         !firstName ||
@@ -410,6 +520,8 @@ function saveProfile() {
     }
 
 
+    // MƏLUMATLAR
+
     const profileData = {
 
         firstName: firstName,
@@ -426,54 +538,86 @@ function saveProfile() {
 
 
     /*
-       BU GMAIL HESABINA XÜSUSİ YADDA SAXLANIR
+       MƏLUMATI HƏMİN GMAIL-Ə BAĞLA
     */
 
     localStorage.setItem(
         userKey,
-        JSON.stringify(profileData)
+        JSON.stringify(
+            profileData
+        )
     );
 
 
-    // FORM ARTİQ GÖRÜNMƏSİN
+    /*
+       FORMU GİZLƏT
+    */
 
     document.getElementById(
         "informationBox"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
+
+    /*
+       YADDA SAXLANILDI YAZISI
+    */
 
     document.getElementById(
         "savedMessage"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     alert(
         "✅ Məlumatlar yadda saxlanıldı!"
     );
 
-}
+};
 
 
-// ÇIXIŞ
+// HESABDAN ÇIXIŞ
 
 function logout() {
 
-    localStorage.removeItem("login");
+    localStorage.removeItem(
+        "login"
+    );
 
-    localStorage.removeItem("userName");
+    localStorage.removeItem(
+        "userName"
+    );
 
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem(
+        "userEmail"
+    );
 
-    localStorage.removeItem("userPhoto");
+    localStorage.removeItem(
+        "userPhoto"
+    );
 
-    localStorage.removeItem("operator");
+    localStorage.removeItem(
+        "operator"
+    );
+
+
+    /*
+       PROFİL MƏLUMATLARINA
+       TOXUNMURUQ.
+
+       Ona görə eyni Gmail ilə
+       yenidən girəndə məlumatlar
+       qalacaq.
+    */
 
 
     window.location.href =
         "index.html";
+
 }
 
 </script>
 
 </body>
+
 </html>
