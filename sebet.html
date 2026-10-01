@@ -2,13 +2,8 @@
 <html lang="az">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Səbətim</title>
 
@@ -22,6 +17,7 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background: #f5f5f5;
+            color: #222;
         }
 
         .container {
@@ -33,17 +29,18 @@
         h1 {
             background: white;
             padding: 20px;
+            margin: 0 0 12px;
             border-radius: 10px;
-            margin-top: 0;
         }
 
         .cart-item {
             background: white;
+            margin-bottom: 10px;
             padding: 12px;
             border-radius: 10px;
-            margin-bottom: 10px;
             display: flex;
             gap: 12px;
+            align-items: center;
         }
 
         .cart-item img {
@@ -58,14 +55,14 @@
         }
 
         .name {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
         }
 
         .price {
+            margin-top: 6px;
             color: #2e7d32;
             font-weight: bold;
-            margin-top: 7px;
         }
 
         .quantity {
@@ -76,28 +73,28 @@
         }
 
         .quantity button {
-            width: 35px;
-            height: 35px;
+            width: 34px;
+            height: 34px;
             border: none;
             border-radius: 7px;
-            font-size: 20px;
             background: #eee;
+            font-size: 21px;
         }
 
         .delete {
-            margin-top: 8px;
+            margin-top: 9px;
+            padding: 8px 12px;
             border: none;
             border-radius: 7px;
-            padding: 8px 12px;
             background: #e53935;
             color: white;
         }
 
         .total {
             background: white;
+            margin-top: 15px;
             padding: 18px;
             border-radius: 10px;
-            margin-top: 15px;
             font-size: 20px;
             font-weight: bold;
         }
@@ -113,21 +110,23 @@
             text-decoration: none;
             border-radius: 9px;
             font-weight: bold;
+            font-size: 17px;
         }
 
         .empty {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 35px 15px;
             text-align: center;
+            border-radius: 10px;
+            font-size: 18px;
         }
 
         .back {
             display: block;
             text-align: center;
             padding: 20px;
-            text-decoration: none;
             color: #222;
+            text-decoration: none;
         }
 
     </style>
@@ -140,7 +139,6 @@
 
 <div class="container">
 
-
     <h1>
         🛒 Səbətim
     </h1>
@@ -152,7 +150,7 @@
     <div class="total">
 
         Ümumi:
-        <span id="total">0</span>
+        <span id="total">0.00</span>
         AZN
 
     </div>
@@ -161,8 +159,9 @@
     <!-- SİFARİŞ ET -->
 
     <a
-        href="orders.html"
+        id="orderButton"
         class="order-button"
+        href="sifariş.html"
     >
         📦 Sifariş et
     </a>
@@ -175,12 +174,15 @@
         ← Alış-verişə qayıt
     </a>
 
-
 </div>
 
 
 <script>
 
+
+/* =========================
+   SƏBƏTİ GÖTÜR
+========================= */
 
 function getCart() {
 
@@ -190,7 +192,7 @@ function getCart() {
             localStorage.getItem("cart")
         ) || [];
 
-    } catch (e) {
+    } catch (error) {
 
         return [];
 
@@ -198,6 +200,10 @@ function getCart() {
 
 }
 
+
+/* =========================
+   SƏBƏTİ YADDA SAXLA
+========================= */
 
 function saveCart(cart) {
 
@@ -208,6 +214,10 @@ function saveCart(cart) {
 
 }
 
+
+/* =========================
+   SƏBƏTİ GÖSTƏR
+========================= */
 
 function showCart() {
 
@@ -220,60 +230,96 @@ function showCart() {
     const totalBox =
         document.getElementById("total");
 
+    const orderButton =
+        document.getElementById("orderButton");
+
 
     box.innerHTML = "";
+
 
     let total = 0;
 
 
+    /* SƏBƏT BOŞDUR */
+
     if (cart.length === 0) {
 
         box.innerHTML = `
+
             <div class="empty">
+
                 🛒 Səbətin boşdur
+
             </div>
+
         `;
 
-        totalBox.innerText = "0";
+        totalBox.innerText =
+            "0.00";
+
+        orderButton.style.display =
+            "none";
 
         return;
 
     }
 
 
+    orderButton.style.display =
+        "block";
+
+
+    /* MƏHSULLAR */
+
     cart.forEach(function(item, index) {
+
 
         const quantity =
             Number(item.quantity) || 1;
+
 
         const price =
             Number(item.price) || 0;
 
 
-        total +=
+        const itemTotal =
             price * quantity;
+
+
+        total += itemTotal;
 
 
         box.innerHTML += `
 
             <div class="cart-item">
 
+
                 <img
                     src="${item.image || ''}"
                     alt="${item.name || 'Məhsul'}"
+                    onerror="this.style.display='none'"
                 >
+
 
                 <div class="info">
 
+
                     <div class="name">
+
                         ${item.name || 'Məhsul'}
+
                     </div>
+
 
                     <div class="price">
+
                         ${price.toFixed(2)} AZN
+
                     </div>
 
+
                     <div class="quantity">
+
 
                         <button
                             onclick="minusItem(${index})"
@@ -281,9 +327,11 @@ function showCart() {
                             −
                         </button>
 
+
                         <b>
                             ${quantity}
                         </b>
+
 
                         <button
                             onclick="plusItem(${index})"
@@ -291,7 +339,9 @@ function showCart() {
                             +
                         </button>
 
+
                     </div>
+
 
                     <button
                         class="delete"
@@ -299,6 +349,7 @@ function showCart() {
                     >
                         🗑️ Sil
                     </button>
+
 
                 </div>
 
@@ -315,6 +366,10 @@ function showCart() {
 }
 
 
+/* =========================
+   ARTIR
+========================= */
+
 function plusItem(index) {
 
     const cart =
@@ -327,7 +382,7 @@ function plusItem(index) {
 
 
     cart[index].quantity =
-        Number(cart[index].quantity || 0) + 1;
+        (Number(cart[index].quantity) || 0) + 1;
 
 
     saveCart(cart);
@@ -336,6 +391,10 @@ function plusItem(index) {
 
 }
 
+
+/* =========================
+   AZALT
+========================= */
 
 function minusItem(index) {
 
@@ -349,12 +408,10 @@ function minusItem(index) {
 
 
     cart[index].quantity =
-        Number(cart[index].quantity || 1) - 1;
+        (Number(cart[index].quantity) || 1) - 1;
 
 
-    if (
-        cart[index].quantity <= 0
-    ) {
+    if (cart[index].quantity <= 0) {
 
         cart.splice(index, 1);
 
@@ -368,10 +425,19 @@ function minusItem(index) {
 }
 
 
+/* =========================
+   TAM SİL
+========================= */
+
 function deleteItem(index) {
 
     const cart =
         getCart();
+
+
+    if (!cart[index]) {
+        return;
+    }
 
 
     cart.splice(index, 1);
@@ -384,11 +450,14 @@ function deleteItem(index) {
 }
 
 
+/* =========================
+   BAŞLA
+========================= */
+
 showCart();
 
 </script>
 
 
 </body>
-
 </html>
