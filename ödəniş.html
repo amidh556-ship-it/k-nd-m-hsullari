@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ödəniş</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 20px 0;
+        }
+
+        .pay {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 9px;
+            background: #2e7d32;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .info {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            color: #222;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="box">
+
+        <h1>💳 Ödəniş</h1>
+
+        <p>
+            Sifariş məbləği:
+        </p>
+
+        <div class="amount">
+            <span id="amount">0.00</span> AZN
+        </div>
+
+        <p class="info">
+            Ödəniş üçün təhlükəsiz bank/payment provayderinin
+            ödəniş səhifəsinə keçəcəksiniz.
+        </p>
+
+        <button
+            class="pay"
+            onclick="startPayment()"
+        >
+            💳 Təhlükəsiz ödənişə keç
+        </button>
+
+    </div>
+
+    <a
+        class="back"
+        href="orders.html"
+    >
+        ← Sifarişlərim
+    </a>
+
+</div>
+
+
+<script>
+
+const orders =
+    JSON.parse(
+        localStorage.getItem("orders")
+    ) || [];
+
+
+const selected =
+    Number(
+        localStorage.getItem("selectedOrder")
+    );
+
+
+const order =
+    orders[selected];
+
+
+if (order) {
+
+    document.getElementById("amount")
+        .innerText =
+        Number(order.total || 0)
+        .toFixed(2);
+
+}
+
+
+function startPayment() {
+
+    if (!order) {
+
+        alert(
+            "Sifariş tapılmadı."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       BURADA REAL ÖDƏNİŞ PROVAYDERİNİN
+       CHECKOUT URL-İ OLACAQ.
+
+       Məsələn provayder sənə belə
+       bir ödəniş linki/API verəcək.
+
+       Öz kart məlumatlarını bizim sayta
+       yazdırmırıq.
+    */
+
+
+    alert(
+        "Ödəniş sistemi hələ qoşulmayıb. " +
+        "Bank/payment provayderi qoşulduqdan sonra " +
+        "buradan təhlükəsiz ödəniş açılacaq."
+    );
+
+}
+
+</script>
+
+</body>
+</html>
