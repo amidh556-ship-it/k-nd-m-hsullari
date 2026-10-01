@@ -8,139 +8,293 @@
     <title>Profilim - Kənd məhsulları</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
             margin: 0;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
         }
 
-        .profile {
-            max-width: 450px;
+        .profile-page {
+            max-width: 500px;
             margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 3px 15px #ccc;
+            min-height: 100vh;
         }
 
-        h1 {
+        /* YUXARI PROFİL */
+
+        .profile-top {
+            background: white;
+            padding: 30px 20px 25px;
             text-align: center;
         }
 
         #userPhoto {
-            display: block;
-            width: 90px;
-            height: 90px;
+            width: 95px;
+            height: 95px;
             border-radius: 50%;
             object-fit: cover;
-            margin: 10px auto;
-        }
-
-        #userName,
-        #userEmail {
             display: block;
-            text-align: center;
-            margin: 5px;
+            margin: 0 auto 12px;
+            border: 3px solid #eee;
         }
 
         #userName {
-            font-size: 21px;
+            display: block;
+            font-size: 22px;
             font-weight: bold;
         }
 
         #userEmail {
-            color: #666;
+            display: block;
+            margin-top: 6px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* MENYU */
+
+        .menu {
+            background: white;
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #222;
+            text-align: center;
+            padding: 18px 5px;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu a:nth-child(3n) {
+            border-right: none;
+        }
+
+        .menu-icon {
+            display: block;
+            font-size: 25px;
+            margin-bottom: 7px;
+        }
+
+        .menu-text {
+            font-size: 13px;
+        }
+
+        /* MƏLUMATLAR */
+
+        .information {
+            background: white;
+            margin-top: 10px;
+            padding: 20px;
+        }
+
+        .information h2 {
+            margin-top: 0;
+            font-size: 19px;
         }
 
         input {
             width: 100%;
-            box-sizing: border-box;
             padding: 13px;
             margin-top: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 15px;
         }
 
-        button {
-            width: 100%;
-            padding: 13px;
-            margin-top: 12px;
-            border: 0;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
         #saveBtn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
             background: #2e7d32;
             color: white;
+            font-size: 16px;
+            font-weight: bold;
         }
 
         #logoutBtn {
-            background: #d32f2f;
+            width: 100%;
+            margin-top: 10px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #e53935;
             color: white;
+            font-size: 16px;
         }
+
+        .back {
+            display: block;
+            text-align: center;
+            padding: 20px;
+            color: #333;
+            text-decoration: none;
+        }
+
     </style>
+
 </head>
 
 <body>
 
-<div class="profile">
+<div class="profile-page">
 
-    <h1>👤 Profilim</h1>
+    <!-- PROFİLİN YUXARISI -->
 
-    <!-- GOOGLE ŞƏKİLİ -->
-    <img id="userPhoto" src="" alt="Profil şəkli">
+    <div class="profile-top">
 
-    <!-- AD -->
-    <span id="userName"></span>
+        <img id="userPhoto" src="" alt="Profil şəkli">
 
-    <!-- GMAIL -->
-    <span id="userEmail"></span>
+        <span id="userName">Müştəri</span>
 
+        <span id="userEmail"></span>
 
-    <!-- PROFİL MƏLUMATLARI -->
-
-    <input
-        type="text"
-        id="firstName"
-        placeholder="Ad"
-    >
-
-    <input
-        type="text"
-        id="lastName"
-        placeholder="Soyad"
-    >
-
-    <input
-        type="tel"
-        id="phone"
-        placeholder="Telefon nömrəsi"
-    >
-
-    <input
-        type="text"
-        id="address"
-        placeholder="Çatdırılma ünvanı"
-    >
-
-    <input
-        type="text"
-        id="city"
-        placeholder="Şəhər / Rayon"
-    >
+    </div>
 
 
-    <button id="saveBtn" onclick="saveProfile()">
-        💾 Məlumatları yadda saxla
-    </button>
+    <!-- TEMU KİMİ MENYU -->
 
-    <button id="logoutBtn" onclick="logout()">
-        🚪 Çıxış et
-    </button>
+    <div class="menu">
+
+        <a href="orders.html">
+
+            <span class="menu-icon">📦</span>
+
+            <span class="menu-text">
+                Sifarişlərim
+            </span>
+
+        </a>
+
+
+        <a href="sebet.html">
+
+            <span class="menu-icon">🛒</span>
+
+            <span class="menu-text">
+                Səbətim
+            </span>
+
+        </a>
+
+
+        <a href="comments.html">
+
+            <span class="menu-icon">💬</span>
+
+            <span class="menu-text">
+                Yorumlarım
+            </span>
+
+        </a>
+
+
+        <a href="#address">
+
+            <span class="menu-icon">📍</span>
+
+            <span class="menu-text">
+                Ünvanlarım
+            </span>
+
+        </a>
+
+
+        <a href="#favorites">
+
+            <span class="menu-icon">❤️</span>
+
+            <span class="menu-text">
+                Seçilmişlər
+            </span>
+
+        </a>
+
+
+        <a href="history.html">
+
+            <span class="menu-icon">🕘</span>
+
+            <span class="menu-text">
+                Tarixçə
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- ŞƏXSİ MƏLUMATLAR -->
+
+    <div class="information">
+
+        <h2>👤 Şəxsi məlumatlar</h2>
+
+        <input
+            type="text"
+            id="firstName"
+            placeholder="Ad"
+        >
+
+        <input
+            type="text"
+            id="lastName"
+            placeholder="Soyad"
+        >
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Telefon nömrəsi"
+        >
+
+        <input
+            type="text"
+            id="address"
+            placeholder="Çatdırılma ünvanı"
+        >
+
+        <input
+            type="text"
+            id="city"
+            placeholder="Şəhər / Rayon"
+        >
+
+
+        <button
+            id="saveBtn"
+            onclick="saveProfile()"
+        >
+            💾 Məlumatları yadda saxla
+        </button>
+
+
+        <button
+            id="logoutBtn"
+            onclick="logout()"
+        >
+            🚪 Çıxış et
+        </button>
+
+    </div>
+
+
+    <a class="back" href="index.html">
+        ← Ana səhifəyə qayıt
+    </a>
 
 </div>
 
@@ -162,7 +316,7 @@ window.onload = function () {
         localStorage.getItem("userPhoto");
 
 
-    // GİRİŞ EDİLMƏYİBSƏ
+    /* GİRİŞ YOXDURSA */
 
     if (login !== "true") {
 
@@ -172,7 +326,7 @@ window.onload = function () {
     }
 
 
-    // GOOGLE / HESAB ADI
+    /* PROFİL */
 
     document.getElementById("userName").innerText =
         name || "Müştəri";
@@ -182,33 +336,33 @@ window.onload = function () {
         email || "";
 
 
-    // GOOGLE ŞƏKİLİ
+    /* GOOGLE ŞƏKLİ */
 
     if (photo) {
 
         document.getElementById("userPhoto").src =
             photo;
 
-    } else {
-
-        document.getElementById("userPhoto").style.display =
-            "none";
     }
 
 
-    // ƏVVƏLDƏN SAXLANMIŞ MƏLUMATLAR
+    /* YADDA SAXLANMIŞ MƏLUMATLAR */
 
     document.getElementById("firstName").value =
         localStorage.getItem("firstName") || name || "";
 
+
     document.getElementById("lastName").value =
         localStorage.getItem("lastName") || "";
+
 
     document.getElementById("phone").value =
         localStorage.getItem("phone") || "";
 
+
     document.getElementById("address").value =
         localStorage.getItem("address") || "";
+
 
     document.getElementById("city").value =
         localStorage.getItem("city") || "";
@@ -216,7 +370,7 @@ window.onload = function () {
 };
 
 
-// MƏLUMATLARI YADDA SAXLA
+/* MƏLUMATLARI YADDA SAXLA */
 
 function saveProfile() {
 
@@ -262,17 +416,18 @@ function saveProfile() {
     );
 
 
-    alert("✅ Profil məlumatların yadda saxlanıldı!");
+    alert("✅ Məlumatlar yadda saxlanıldı!");
 
 }
 
 
-// ÇIXIŞ
+/* ÇIXIŞ */
 
 function logout() {
 
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem("login");
     localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
     localStorage.removeItem("userPhoto");
 
     localStorage.removeItem("firstName");
@@ -281,12 +436,10 @@ function logout() {
     localStorage.removeItem("address");
     localStorage.removeItem("city");
 
-    localStorage.removeItem("login");
-
     localStorage.removeItem("operator");
 
-    window.location.href =
-        "index.html";
+    window.location.href = "index.html";
+
 }
 
 </script>
