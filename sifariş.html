@@ -2,11 +2,18 @@
 <html lang="az">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Sifariş et</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -101,27 +108,48 @@
             text-align: center;
             border-radius: 10px;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-    <h1>📦 Sifariş et</h1>
+
+    <h1>
+        📦 Sifariş et
+    </h1>
+
 
     <div class="box">
-        <h3>Sifariş etdiyiniz məhsullar</h3>
+
+        <h3>
+            Sifariş etdiyiniz məhsullar
+        </h3>
+
         <div id="products"></div>
 
         <div class="total">
-            Ümumi: <span id="total">0.00</span> AZN
+
+            Ümumi:
+            <span id="total">0.00</span>
+            AZN
+
         </div>
+
     </div>
+
 
     <div class="box">
 
-        <h3>Müştəri məlumatları</h3>
+        <h3>
+            Müştəri məlumatları
+        </h3>
+
 
         <input
             type="text"
@@ -129,63 +157,49 @@
             placeholder="Ad və soyad"
         >
 
+
         <input
             type="tel"
             id="phone"
             placeholder="Telefon nömrəsi"
         >
 
+
         <textarea
             id="address"
-            placeholder="Ünvan"
+            placeholder="Çatdırılma ünvanı"
         ></textarea>
 
-        <button onclick="placeOrder()">
+
+        <button
+            onclick="placeOrder()"
+        >
+
             ✅ Sifarişi təsdiqlə
+
         </button>
 
     </div>
 
-    <a class="back" href="sebet.html">
+
+    <a
+        class="back"
+        href="sebet.html"
+    >
+
         ← Səbətə qayıt
+
     </a>
+
 
 </div>
 
 
-<script type="module">
-
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-    getDatabase,
-    ref,
-    push
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<script>
 
 
 /* =========================
-   FIREBASE
-========================= */
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0",
-    authDomain: "knd-mhsullari.firebaseapp.com",
-    databaseURL: "https://knd-mhsullari-default-rtdb.firebaseio.com",
-    projectId: "knd-mhsullari",
-    storageBucket: "knd-mhsullari.firebasestorage.app",
-    messagingSenderId: "000000000000",
-    appId: "1:000000000000:web:000000000000"
-};
-
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-
-
-/* =========================
-   SƏBƏT
+   SƏBƏTİ GÖTÜR
 ========================= */
 
 function getCart() {
@@ -207,8 +221,10 @@ function getCart() {
 
 const cart = getCart();
 
+
 const productsBox =
     document.getElementById("products");
+
 
 const totalBox =
     document.getElementById("total");
@@ -217,25 +233,39 @@ const totalBox =
 let total = 0;
 
 
+/* =========================
+   MƏHSULLARI GÖSTƏR
+========================= */
+
 if (cart.length === 0) {
 
     productsBox.innerHTML = `
+
         <div class="empty">
+
             🛒 Səbət boşdur
+
         </div>
+
     `;
 
 } else {
 
+
     cart.forEach(function(item) {
+
 
         const quantity =
             Number(item.quantity) || 1;
 
+
         const price =
             Number(item.price) || 0;
 
-        total += price * quantity;
+
+        total +=
+            price * quantity;
+
 
         productsBox.innerHTML += `
 
@@ -254,11 +284,13 @@ if (cart.length === 0) {
 
                     <br>
 
-                    ${quantity} ədəd
+                    Say:
+                    ${quantity}
 
                     <br>
 
-                    ${price.toFixed(2)} AZN / ədəd
+                    Qiymət:
+                    ${price.toFixed(2)} AZN
 
                 </div>
 
@@ -276,34 +308,53 @@ totalBox.innerText =
 
 
 /* =========================
-   SİFARİŞ VER
+   SİFARİŞİ TƏSDİQLƏ
 ========================= */
 
-window.placeOrder = async function() {
+function placeOrder() {
+
 
     const name =
-        document.getElementById("name")
-        .value.trim();
+        document
+        .getElementById("name")
+        .value
+        .trim();
+
 
     const phone =
-        document.getElementById("phone")
-        .value.trim();
+        document
+        .getElementById("phone")
+        .value
+        .trim();
+
 
     const address =
-        document.getElementById("address")
-        .value.trim();
+        document
+        .getElementById("address")
+        .value
+        .trim();
 
+
+    /* SƏBƏT BOŞDUR */
 
     if (cart.length === 0) {
 
-        alert("🛒 Səbət boşdur!");
+        alert(
+            "🛒 Səbət boşdur!"
+        );
 
         return;
 
     }
 
 
-    if (!name || !phone || !address) {
+    /* MƏLUMATLAR BOŞDUR */
+
+    if (
+        name === "" ||
+        phone === "" ||
+        address === ""
+    ) {
 
         alert(
             "Zəhmət olmasa Ad, Telefon və Ünvanı doldur."
@@ -314,21 +365,29 @@ window.placeOrder = async function() {
     }
 
 
+    /* =========================
+       SİFARİŞ
+    ========================= */
+
     const order = {
 
         orderId:
-            "SIF-" +
-            Date.now(),
+            "SIF-" + Date.now(),
 
-        name: name,
+        name:
+            name,
 
-        phone: phone,
+        phone:
+            phone,
 
-        address: address,
+        address:
+            address,
 
-        products: cart,
+        products:
+            cart,
 
-        total: total,
+        total:
+            total,
 
         status:
             "Sifariş qəbul edildi",
@@ -339,62 +398,62 @@ window.placeOrder = async function() {
     };
 
 
+    /* =========================
+       KÖHNƏ SİFARİŞLƏR
+    ========================= */
+
+    let orders = [];
+
+
     try {
 
-        /* Firebase-ə göndər */
-
-        await push(
-            ref(database, "orders"),
-            order
-        );
-
-
-        /* orders.html üçün yadda saxla */
-
-        let orders =
+        orders =
             JSON.parse(
                 localStorage.getItem("orders")
             ) || [];
 
-
-        orders.push(order);
-
-
-        localStorage.setItem(
-            "orders",
-            JSON.stringify(orders)
-        );
-
-
-        /* Səbəti təmizlə */
-
-        localStorage.removeItem("cart");
-
-
-        alert(
-            "✅ Sifarişiniz uğurla qəbul edildi!"
-        );
-
-
-        /* Sifarişlər səhifəsinə keç */
-
-        window.location.href =
-            "orders.html";
-
-
     } catch (error) {
 
-        console.error(error);
-
-        alert(
-            "❌ Sifariş göndərilmədi. Firebase bağlantısını yoxla."
-        );
+        orders = [];
 
     }
 
-};
+
+    /* YENİ SİFARİŞİ ƏLAVƏ ET */
+
+    orders.push(order);
+
+
+    localStorage.setItem(
+        "orders",
+        JSON.stringify(orders)
+    );
+
+
+    /* SƏBƏTİ TƏMİZLƏ */
+
+    localStorage.removeItem(
+        "cart"
+    );
+
+
+    /* UĞURLU MESAJ */
+
+    alert(
+        "✅ Sifarişiniz qəbul edildi!"
+    );
+
+
+    /* ORDERS.HTML */
+
+    window.location.href =
+        "orders.html";
+
+}
 
 </script>
 
+
 </body>
+
 </html>
