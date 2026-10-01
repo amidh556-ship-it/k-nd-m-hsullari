@@ -1,114 +1,95 @@
-<!DOCTYPE html>
+1<!DOCTYPE html>
 <html lang="az">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sifariş et</title>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-    box-sizing: border-box;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
+.container{
+    max-width:600px;
+    margin:auto;
+    padding:15px;
 }
 
-.container {
-    max-width: 600px;
-    margin: auto;
-    padding: 15px;
+.box{
+    background:white;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:15px;
 }
 
-.box {
-    background: white;
-    padding: 18px;
-    border-radius: 12px;
-    margin-bottom: 15px;
+.product{
+    display:flex;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid #ddd;
 }
 
-h1 {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
+.product img{
+    width:70px;
+    height:70px;
+    object-fit:cover;
+    border-radius:8px;
 }
 
-.product {
-    display: flex;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
+.product-info{
+    flex:1;
 }
 
-.product img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 8px;
+input,textarea{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
 }
 
-.product-info {
-    flex: 1;
+textarea{
+    height:90px;
+    resize:none;
 }
 
-input,
-textarea {
-    width: 100%;
-    padding: 13px;
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
+.total{
+    margin-top:15px;
+    font-size:20px;
+    font-weight:bold;
 }
 
-textarea {
-    height: 90px;
-    resize: none;
+button{
+    width:100%;
+    padding:16px;
+    margin-top:15px;
+    border:0;
+    border-radius:9px;
+    background:#2e7d32;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
 }
 
-.total {
-    margin-top: 15px;
-    font-size: 20px;
-    font-weight: bold;
+.back{
+    display:block;
+    text-align:center;
+    padding:20px;
+    color:#222;
+    text-decoration:none;
 }
 
-button {
-    width: 100%;
-    padding: 16px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 9px;
-    background: #2e7d32;
-    color: white;
-    font-size: 17px;
-    font-weight: bold;
+.empty{
+    padding:25px;
+    text-align:center;
 }
-
-.back {
-    display: block;
-    text-align: center;
-    padding: 20px;
-    color: #222;
-    text-decoration: none;
-}
-
-.empty {
-    background: white;
-    padding: 30px;
-    text-align: center;
-    border-radius: 10px;
-}
-
 </style>
-
 </head>
 
 <body>
@@ -117,65 +98,49 @@ button {
 
 <h1>📦 Sifariş et</h1>
 
-
 <div class="box">
 
-<h3>
-Sifariş etdiyiniz məhsullar
-</h3>
+<h3>Sifariş etdiyiniz məhsullar</h3>
 
 <div id="products"></div>
 
 <div class="total">
-
 Ümumi:
-<span id="total">0.00</span>
-AZN
-
+<span id="total">0.00</span> AZN
 </div>
 
 </div>
-
 
 <div class="box">
 
-<h3>
-Çatdırılma məlumatları
-</h3>
-
+<h3>Müştəri məlumatları</h3>
 
 <input
-    type="text"
-    id="name"
-    placeholder="Ad və soyad"
+id="name"
+type="text"
+placeholder="Ad və soyad"
 >
-
 
 <input
-    type="tel"
-    id="phone"
-    placeholder="Telefon nömrəsi"
+id="phone"
+type="tel"
+placeholder="Telefon nömrəsi"
 >
-
 
 <textarea
-    id="address"
-    placeholder="Çatdırılma ünvanı"
+id="address"
+placeholder="Ünvan"
 ></textarea>
 
-
 <button onclick="placeOrder()">
-
-📦 Sifarişi təsdiqlə və ödənişə keç
-
+✅ Sifarişi təsdiqlə
 </button>
 
 </div>
 
-
 <a
-    class="back"
-    href="sebet.html"
+class="back"
+href="sebet.html"
 >
 ← Səbətə qayıt
 </a>
@@ -185,19 +150,55 @@ AZN
 
 <script>
 
-/* =========================
+function getKey(){
+
+    const email =
+        localStorage.getItem("userEmail");
+
+    if(!email){
+        return null;
+    }
+
+    return email
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g,"_");
+}
+
+
+/* =====================
+   GİRİŞ YOXLAMASI
+===================== */
+
+const key = getKey();
+
+if(!key){
+
+    alert(
+        "Əvvəlcə hesabına giriş et."
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =====================
    SƏBƏT
-========================= */
+===================== */
 
-function getCart() {
+function getCart(){
 
-    try {
+    try{
 
         return JSON.parse(
-            localStorage.getItem("cart")
+            localStorage.getItem(
+                "cart_" + key
+            )
         ) || [];
 
-    } catch (error) {
+    }catch(e){
 
         return [];
 
@@ -209,34 +210,29 @@ function getCart() {
 const cart = getCart();
 
 const productsBox =
-    document.getElementById("products");
+    document.getElementById(
+        "products"
+    );
 
 const totalBox =
-    document.getElementById("total");
-
+    document.getElementById(
+        "total"
+    );
 
 let total = 0;
 
 
-/* =========================
-   MƏHSULLAR
-========================= */
-
-if (cart.length === 0) {
+if(cart.length === 0){
 
     productsBox.innerHTML = `
-
         <div class="empty">
-
             🛒 Səbət boşdur
-
         </div>
-
     `;
 
-} else {
+}else{
 
-    cart.forEach(function(item) {
+    cart.forEach(function(item){
 
         const quantity =
             Number(item.quantity) || 1;
@@ -254,7 +250,7 @@ if (cart.length === 0) {
 
                 <img
                     src="${item.image || ''}"
-                    alt="${item.name || 'Məhsul'}"
+                    alt="Məhsul"
                 >
 
                 <div class="product-info">
@@ -265,8 +261,7 @@ if (cart.length === 0) {
 
                     <br>
 
-                    Say:
-                    ${quantity}
+                    ${quantity} ədəd
 
                     <br>
 
@@ -276,7 +271,6 @@ if (cart.length === 0) {
                 </div>
 
             </div>
-
         `;
 
     });
@@ -288,48 +282,12 @@ totalBox.innerText =
     total.toFixed(2);
 
 
-/* =========================
-   İZLƏMƏ KODU
-========================= */
+/* =====================
+   SİFARİŞ
+===================== */
 
-function createTrackingCode() {
-
-    const random =
-        Math.random()
-        .toString(36)
-        .substring(2, 8)
-        .toUpperCase();
-
-    return "KND-" + random;
-
-}
-
-
-/* =========================
-   SİFARİŞ NÖMRƏSİ
-========================= */
-
-function createOrderNumber() {
-
-    return "SIF-" + Date.now();
-
-}
-
-
-/* =========================
-   SİFARİŞ VER
-========================= */
-
-function placeOrder() {
-
-    if (cart.length === 0) {
-
-        alert("🛒 Səbət boşdur!");
-
-        return;
-
-    }
-
+window.placeOrder =
+async function(){
 
     const name =
         document
@@ -337,13 +295,11 @@ function placeOrder() {
         .value
         .trim();
 
-
     const phone =
         document
         .getElementById("phone")
         .value
         .trim();
-
 
     const address =
         document
@@ -352,11 +308,18 @@ function placeOrder() {
         .trim();
 
 
-    if (
-        name === "" ||
-        phone === "" ||
-        address === ""
-    ) {
+    if(cart.length === 0){
+
+        alert(
+            "🛒 Səbət boşdur."
+        );
+
+        return;
+
+    }
+
+
+    if(!name || !phone || !address){
 
         alert(
             "Ad, telefon və ünvanı doldur."
@@ -370,51 +333,56 @@ function placeOrder() {
     const order = {
 
         orderId:
-            createOrderNumber(),
+            "SIF-" + Date.now(),
 
-        trackingCode:
-            createTrackingCode(),
+        email:
+            localStorage.getItem(
+                "userEmail"
+            ),
 
-        name:
-            name,
+        name:name,
 
-        phone:
-            phone,
+        phone:phone,
 
-        address:
-            address,
+        address:address,
 
-        products:
-            cart,
+        products:cart,
 
-        total:
-            total,
+        total:total,
 
         status:
-            "Sifariş verildi",
+            "Sifariş qəbul edildi",
 
-        step:
-            1,
-
-        paymentStatus:
-            "Ödəniş gözlənilir",
+        trackingCode:
+            "TRK-" +
+            Math.random()
+            .toString(36)
+            .substring(2,10)
+            .toUpperCase(),
 
         date:
-            new Date().toLocaleString("az-AZ")
+            new Date()
+            .toLocaleString("az-AZ")
 
     };
 
 
+    /* =====================
+       HESABIN SİFARİŞLƏRİ
+    ===================== */
+
     let orders = [];
 
-    try {
+    try{
 
         orders =
             JSON.parse(
-                localStorage.getItem("orders")
+                localStorage.getItem(
+                    "orders_" + key
+                )
             ) || [];
 
-    } catch (error) {
+    }catch(e){
 
         orders = [];
 
@@ -425,34 +393,36 @@ function placeOrder() {
 
 
     localStorage.setItem(
-        "orders",
+
+        "orders_" + key,
+
         JSON.stringify(orders)
+
     );
 
 
-    /* SON SİFARİŞİN İNDEKSİ */
-
-    const selectedIndex =
-        orders.length - 1;
-
+    /* =====================
+       SƏBƏTİ TƏMİZLƏ
+    ===================== */
 
     localStorage.setItem(
-        "selectedOrder",
-        selectedIndex
+
+        "cart_" + key,
+
+        JSON.stringify([])
+
     );
 
 
-    /* SƏBƏTİ TƏMİZLƏ */
+    alert(
+        "✅ Sifariş uğurla qəbul edildi!"
+    );
 
-    localStorage.removeItem("cart");
-
-
-    /* ÖDƏNİŞ SƏHİFƏSİNƏ GET */
 
     window.location.href =
-        "ödəniş.html";
+        "orders.html";
 
-}
+};
 
 </script>
 
