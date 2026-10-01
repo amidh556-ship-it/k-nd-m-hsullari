@@ -1,21 +1,294 @@
 <!DOCTYPE html>
-<html>
+<html lang="az">
+
 <head>
     <meta charset="UTF-8">
-    <title>Profil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profilim - Kənd məhsulları</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .profile {
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px #ccc;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #userPhoto {
+            display: block;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 10px auto;
+        }
+
+        #userName,
+        #userEmail {
+            display: block;
+            text-align: center;
+            margin: 5px;
+        }
+
+        #userName {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        #userEmail {
+            color: #666;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 12px;
+            border: 0;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #saveBtn {
+            background: #2e7d32;
+            color: white;
+        }
+
+        #logoutBtn {
+            background: #d32f2f;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Profil səhifəsi</h1>
+<div class="profile">
 
-<button onclick="logout()">Çıxış et</button>
+    <h1>👤 Profilim</h1>
+
+    <!-- GOOGLE ŞƏKİLİ -->
+    <img id="userPhoto" src="" alt="Profil şəkli">
+
+    <!-- AD -->
+    <span id="userName"></span>
+
+    <!-- GMAIL -->
+    <span id="userEmail"></span>
+
+
+    <!-- PROFİL MƏLUMATLARI -->
+
+    <input
+        type="text"
+        id="firstName"
+        placeholder="Ad"
+    >
+
+    <input
+        type="text"
+        id="lastName"
+        placeholder="Soyad"
+    >
+
+    <input
+        type="tel"
+        id="phone"
+        placeholder="Telefon nömrəsi"
+    >
+
+    <input
+        type="text"
+        id="address"
+        placeholder="Çatdırılma ünvanı"
+    >
+
+    <input
+        type="text"
+        id="city"
+        placeholder="Şəhər / Rayon"
+    >
+
+
+    <button id="saveBtn" onclick="saveProfile()">
+        💾 Məlumatları yadda saxla
+    </button>
+
+    <button id="logoutBtn" onclick="logout()">
+        🚪 Çıxış et
+    </button>
+
+</div>
+
 
 <script>
-function logout(){
-    localStorage.removeItem("userEmail")
-    localStorage.removeItem("login");
-    window.location.href = "index.html";
+
+window.onload = function () {
+
+    const login =
+        localStorage.getItem("login");
+
+    const name =
+        localStorage.getItem("userName");
+
+    const email =
+        localStorage.getItem("userEmail");
+
+    const photo =
+        localStorage.getItem("userPhoto");
+
+
+    // GİRİŞ EDİLMƏYİBSƏ
+
+    if (login !== "true") {
+
+        window.location.href = "kent.html";
+
+        return;
+    }
+
+
+    // GOOGLE / HESAB ADI
+
+    document.getElementById("userName").innerText =
+        name || "Müştəri";
+
+
+    document.getElementById("userEmail").innerText =
+        email || "";
+
+
+    // GOOGLE ŞƏKİLİ
+
+    if (photo) {
+
+        document.getElementById("userPhoto").src =
+            photo;
+
+    } else {
+
+        document.getElementById("userPhoto").style.display =
+            "none";
+    }
+
+
+    // ƏVVƏLDƏN SAXLANMIŞ MƏLUMATLAR
+
+    document.getElementById("firstName").value =
+        localStorage.getItem("firstName") || name || "";
+
+    document.getElementById("lastName").value =
+        localStorage.getItem("lastName") || "";
+
+    document.getElementById("phone").value =
+        localStorage.getItem("phone") || "";
+
+    document.getElementById("address").value =
+        localStorage.getItem("address") || "";
+
+    document.getElementById("city").value =
+        localStorage.getItem("city") || "";
+
+};
+
+
+// MƏLUMATLARI YADDA SAXLA
+
+function saveProfile() {
+
+    const firstName =
+        document.getElementById("firstName").value.trim();
+
+    const lastName =
+        document.getElementById("lastName").value.trim();
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const address =
+        document.getElementById("address").value.trim();
+
+    const city =
+        document.getElementById("city").value.trim();
+
+
+    localStorage.setItem(
+        "firstName",
+        firstName
+    );
+
+    localStorage.setItem(
+        "lastName",
+        lastName
+    );
+
+    localStorage.setItem(
+        "phone",
+        phone
+    );
+
+    localStorage.setItem(
+        "address",
+        address
+    );
+
+    localStorage.setItem(
+        "city",
+        city
+    );
+
+
+    alert("✅ Profil məlumatların yadda saxlanıldı!");
+
 }
+
+
+// ÇIXIŞ
+
+function logout() {
+
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userPhoto");
+
+    localStorage.removeItem("firstName");
+    localStorage.removeItem("lastName");
+    localStorage.removeItem("phone");
+    localStorage.removeItem("address");
+    localStorage.removeItem("city");
+
+    localStorage.removeItem("login");
+
+    localStorage.removeItem("operator");
+
+    window.location.href =
+        "index.html";
+}
+
 </script>
 
 </body>
