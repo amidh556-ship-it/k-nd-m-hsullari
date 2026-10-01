@@ -5,10 +5,8 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Sifariş et</title>
 
@@ -46,8 +44,8 @@
         .product {
             display: flex;
             gap: 10px;
-            border-bottom: 1px solid #ddd;
             padding: 10px 0;
+            border-bottom: 1px solid #ddd;
         }
 
         .product img {
@@ -77,9 +75,9 @@
         }
 
         .total {
+            margin-top: 15px;
             font-size: 20px;
             font-weight: bold;
-            margin-top: 15px;
         }
 
         button {
@@ -147,7 +145,7 @@
     <div class="box">
 
         <h3>
-            Müştəri məlumatları
+            Çatdırılma məlumatları
         </h3>
 
 
@@ -199,7 +197,7 @@
 
 
 /* =========================
-   SƏBƏTİ GÖTÜR
+   SƏBƏT
 ========================= */
 
 function getCart() {
@@ -219,7 +217,8 @@ function getCart() {
 }
 
 
-const cart = getCart();
+const cart =
+    getCart();
 
 
 const productsBox =
@@ -279,7 +278,7 @@ if (cart.length === 0) {
                 <div class="product-info">
 
                     <b>
-                        ${item.name || 'Məhsul'}
+                        ${item.name || "Məhsul"}
                     </b>
 
                     <br>
@@ -289,8 +288,7 @@ if (cart.length === 0) {
 
                     <br>
 
-                    Qiymət:
-                    ${price.toFixed(2)} AZN
+                    ${price.toFixed(2)} AZN / ədəd
 
                 </div>
 
@@ -308,10 +306,45 @@ totalBox.innerText =
 
 
 /* =========================
-   SİFARİŞİ TƏSDİQLƏ
+   KOD YARAT
+========================= */
+
+function createTrackingCode() {
+
+    const random =
+        Math.random()
+        .toString(36)
+        .substring(2, 8)
+        .toUpperCase();
+
+    return "KND-" + random;
+
+}
+
+
+function createOrderNumber() {
+
+    return "SIF-" + Date.now();
+
+}
+
+
+/* =========================
+   SİFARİŞ
 ========================= */
 
 function placeOrder() {
+
+
+    if (cart.length === 0) {
+
+        alert(
+            "🛒 Səbət boşdur!"
+        );
+
+        return;
+
+    }
 
 
     const name =
@@ -335,21 +368,6 @@ function placeOrder() {
         .trim();
 
 
-    /* SƏBƏT BOŞDUR */
-
-    if (cart.length === 0) {
-
-        alert(
-            "🛒 Səbət boşdur!"
-        );
-
-        return;
-
-    }
-
-
-    /* MƏLUMATLAR BOŞDUR */
-
     if (
         name === "" ||
         phone === "" ||
@@ -357,7 +375,7 @@ function placeOrder() {
     ) {
 
         alert(
-            "Zəhmət olmasa Ad, Telefon və Ünvanı doldur."
+            "Ad, telefon və ünvanı doldur."
         );
 
         return;
@@ -366,13 +384,16 @@ function placeOrder() {
 
 
     /* =========================
-       SİFARİŞ
+       SİFARİŞ MƏLUMATLARI
     ========================= */
 
     const order = {
 
         orderId:
-            "SIF-" + Date.now(),
+            createOrderNumber(),
+
+        trackingCode:
+            createTrackingCode(),
 
         name:
             name,
@@ -390,7 +411,10 @@ function placeOrder() {
             total,
 
         status:
-            "Sifariş qəbul edildi",
+            "Sifariş verildi",
+
+        step:
+            1,
 
         date:
             new Date().toLocaleString("az-AZ")
@@ -403,7 +427,6 @@ function placeOrder() {
     ========================= */
 
     let orders = [];
-
 
     try {
 
@@ -418,8 +441,6 @@ function placeOrder() {
 
     }
 
-
-    /* YENİ SİFARİŞİ ƏLAVƏ ET */
 
     orders.push(order);
 
@@ -437,14 +458,13 @@ function placeOrder() {
     );
 
 
-    /* UĞURLU MESAJ */
-
     alert(
-        "✅ Sifarişiniz qəbul edildi!"
+        "✅ Sifariş qəbul edildi!\n\nİzləmə kodu: " +
+        order.trackingCode
     );
 
 
-    /* ORDERS.HTML */
+    /* SİFARİŞLƏRƏ GET */
 
     window.location.href =
         "orders.html";
@@ -455,5 +475,4 @@ function placeOrder() {
 
 
 </body>
-
 </html>
