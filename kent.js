@@ -1,171 +1,52 @@
 const wrapper = document.querySelector(".wrapper");
 
-const signupHeader =
-    document.querySelector(".signup header");
-
-const loginHeader =
-    document.querySelector(".login header");
+const signupHeader = document.querySelector(".signup header");
+const loginHeader = document.querySelector(".login header");
 
 
-// QEYDİYYAT / GİRİŞ KEÇİDİ
+/* =========================
+   HESAB AÇARI
+========================= */
 
-loginHeader.addEventListener("click", () => {
-    wrapper.classList.add("active");
-});
+function accountKey(email) {
 
-signupHeader.addEventListener("click", () => {
-    wrapper.classList.remove("active");
-});
+    return email
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g, "_");
 
-
-// ===============================
-// HESABA DAXİL OL
-// ===============================
-
-function login(e) {
-
-    e.preventDefault();
-
-    const email =
-        document.getElementById("loginEmail")
-        .value
-        .trim();
-
-    const password =
-        document.getElementById("loginPassword")
-        .value;
-
-
-    if (email === "" || password === "") {
-
-        alert("Email və şifrəni doldur.");
-
-        return;
-    }
-
-
-    // ===============================
-    // OPERATOR
-    // ===============================
-
-    if (
-        email === "ttik66006@gmail.com" &&
-        password === "a1m2i3d42006"
-    ) {
-
-        localStorage.setItem(
-            "login",
-            "true"
-        );
-
-        localStorage.setItem(
-            "operator",
-            "true"
-        );
-
-        localStorage.setItem(
-            "userEmail",
-            email
-        );
-
-        window.location.href =
-            "operator.html";
-
-        return;
-    }
-
-
-    // ===============================
-    // QEYDİYYAT YOXLANIŞI
-    // ===============================
-
-    const registeredEmail =
-        localStorage.getItem("registeredEmail");
-
-    const registeredPassword =
-        localStorage.getItem("registeredPassword");
-
-    const registeredName =
-        localStorage.getItem("registeredName");
-
-
-    // QEYDİYYATDAN KEÇMƏYİB
-
-    if (
-        registeredEmail === null ||
-        registeredPassword === null
-    ) {
-
-        alert(
-            "❌ Bu hesab qeydiyyatdan keçməyib. Əvvəlcə Qeydiyyatdan keç."
-        );
-
-        return;
-    }
-
-
-    // GMAIL DÜZGÜN DEYİL
-
-    if (
-        email !== registeredEmail
-    ) {
-
-        alert(
-            "❌ Bu Gmail ilə qeydiyyat yoxdur."
-        );
-
-        return;
-    }
-
-
-    // PAROL DÜZGÜN DEYİL
-
-    if (
-        password !== registeredPassword
-    ) {
-
-        alert(
-            "❌ Parol səhvdir."
-        );
-
-        return;
-    }
-
-
-    // ===============================
-    // GİRİŞ UĞURLUDUR
-    // ===============================
-
-    localStorage.setItem(
-        "login",
-        "true"
-    );
-
-    localStorage.setItem(
-        "operator",
-        "false"
-    );
-
-    localStorage.setItem(
-        "userName",
-        registeredName
-    );
-
-    localStorage.setItem(
-        "userEmail",
-        registeredEmail
-    );
-
-
-    window.location.href =
-        "index.html";
 }
 
 
+/* =========================
+   QEYDİYYAT / GİRİŞ KEÇİDİ
+========================= */
 
-// ===============================
-// QEYDİYYATDAN KEÇ
-// ===============================
+if (loginHeader) {
+
+    loginHeader.addEventListener("click", function () {
+
+        wrapper.classList.add("active");
+
+    });
+
+}
+
+
+if (signupHeader) {
+
+    signupHeader.addEventListener("click", function () {
+
+        wrapper.classList.remove("active");
+
+    });
+
+}
+
+
+/* =========================
+   QEYDİYYAT
+========================= */
 
 function qeydiyyat(e) {
 
@@ -177,33 +58,126 @@ function qeydiyyat(e) {
         .value
         .trim();
 
+
     const email =
         document.getElementById("signupEmail")
         .value
-        .trim();
+        .trim()
+        .toLowerCase();
+
 
     const password =
         document.getElementById("signupPassword")
         .value;
 
 
-    if (
-        name === "" ||
-        email === "" ||
-        password === ""
-    ) {
+    if (!name || !email || !password) {
 
-        alert(
-            "Bütün xanaları doldur."
-        );
+        alert("Bütün xanaları doldur");
 
         return;
+
     }
 
 
-    // ===============================
-    // OPERATOR
-    // ===============================
+    const key =
+        accountKey(email);
+
+
+    /*
+       BU HESAB ƏVVƏL VARMI?
+    */
+
+    const oldAccount =
+        localStorage.getItem(
+            "account_" + key
+        );
+
+
+    if (oldAccount) {
+
+        alert(
+            "Bu Gmail artıq qeydiyyatdan keçib. Hesaba giriş et."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       HESABI YARAT
+    */
+
+    const account = {
+
+        name: name,
+
+        email: email,
+
+        password: password
+
+    };
+
+
+    localStorage.setItem(
+
+        "account_" + key,
+
+        JSON.stringify(account)
+
+    );
+
+
+    /*
+       BU HESAB ÜÇÜN AYRI SƏBƏT
+    */
+
+    localStorage.setItem(
+
+        "cart_" + key,
+
+        JSON.stringify([])
+
+    );
+
+
+    /*
+       BU HESAB ÜÇÜN AYRI SİFARİŞLƏR
+    */
+
+    localStorage.setItem(
+
+        "orders_" + key,
+
+        JSON.stringify([])
+
+    );
+
+
+    /*
+       AKTİV HESAB
+    */
+
+    localStorage.setItem(
+        "login",
+        "true"
+    );
+
+    localStorage.setItem(
+        "userName",
+        name
+    );
+
+    localStorage.setItem(
+        "userEmail",
+        email
+    );
+
+
+    /*
+       OPERATOR
+    */
 
     if (
         email === "ttik66006@gmail.com" &&
@@ -211,76 +185,17 @@ function qeydiyyat(e) {
     ) {
 
         localStorage.setItem(
-            "login",
-            "true"
-        );
-
-        localStorage.setItem(
             "operator",
             "true"
-        );
-
-        localStorage.setItem(
-            "userEmail",
-            email
         );
 
         window.location.href =
             "operator.html";
 
         return;
+
     }
 
-
-    // ===============================
-    // HESAB ARTİQ VAR?
-    // ===============================
-
-    const oldEmail =
-        localStorage.getItem(
-            "registeredEmail"
-        );
-
-
-    if (
-        oldEmail &&
-        oldEmail === email
-    ) {
-
-        alert(
-            "❌ Bu Gmail artıq qeydiyyatdan keçib."
-        );
-
-        return;
-    }
-
-
-    // ===============================
-    // QEYDİYYATI YADDA SAXLA
-    // ===============================
-
-    localStorage.setItem(
-        "registeredName",
-        name
-    );
-
-    localStorage.setItem(
-        "registeredEmail",
-        email
-    );
-
-    localStorage.setItem(
-        "registeredPassword",
-        password
-    );
-
-
-    // AVTOMATİK GİRİŞ ETMİRİK
-
-    localStorage.setItem(
-        "login",
-        "false"
-    );
 
     localStorage.setItem(
         "operator",
@@ -288,67 +203,280 @@ function qeydiyyat(e) {
     );
 
 
-    alert(
-        "✅ Qeydiyyat tamamlandı! İndi Hesaba daxil ol bölməsindən Gmail və parolunla giriş et."
-    );
-
-
-    // GİRİŞ FORMUNA KEÇ
-
-    wrapper.classList.add("active");
+    window.location.href =
+        "index.html";
 
 }
 
 
+/* =========================
+   GİRİŞ
+========================= */
 
-// ===============================
-// GOOGLE İLƏ GİRİŞ
-// ===============================
+function login(e) {
+
+    e.preventDefault();
+
+
+    const email =
+        document.getElementById("loginEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const password =
+        document.getElementById("loginPassword")
+        .value;
+
+
+    if (!email || !password) {
+
+        alert(
+            "Email və şifrəni doldur"
+        );
+
+        return;
+
+    }
+
+
+    const key =
+        accountKey(email);
+
+
+    /*
+       HESABI TAP
+    */
+
+    const saved =
+        localStorage.getItem(
+            "account_" + key
+        );
+
+
+    if (!saved) {
+
+        alert(
+            "Bu Gmail ilə əvvəlcə qeydiyyatdan keç."
+        );
+
+        return;
+
+    }
+
+
+    const account =
+        JSON.parse(saved);
+
+
+    /*
+       PAROLU YOXLAYIRIQ
+    */
+
+    if (
+        account.password !== password
+    ) {
+
+        alert(
+            "Email və ya parol səhvdir."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       AKTİV HESAB
+    */
+
+    localStorage.setItem(
+        "login",
+        "true"
+    );
+
+    localStorage.setItem(
+        "userName",
+        account.name
+    );
+
+    localStorage.setItem(
+        "userEmail",
+        account.email
+    );
+
+
+    /*
+       OPERATOR
+    */
+
+    if (
+        email === "ttik66006@gmail.com" &&
+        password === "a1m2i3d42006"
+    ) {
+
+        localStorage.setItem(
+            "operator",
+            "true"
+        );
+
+        window.location.href =
+            "operator.html";
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "operator",
+        "false"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================
+   ÇIXIŞ
+========================= */
+
+function logout() {
+
+    /*
+       HESABIN SƏBƏTİNƏ VƏ
+       SİFARİŞLƏRİNƏ TOXUNMURUQ.
+    */
+
+    localStorage.removeItem(
+        "login"
+    );
+
+    localStorage.removeItem(
+        "userName"
+    );
+
+    localStorage.removeItem(
+        "userEmail"
+    );
+
+    localStorage.removeItem(
+        "userPhoto"
+    );
+
+    localStorage.removeItem(
+        "operator"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+/* =========================
+   GOOGLE GİRİŞİ
+========================= */
 
 function handleCredentialResponse(response) {
 
     try {
 
         const data =
-            jwt_decode(response.credential);
-
-
-        /*
-           GOOGLE HESABI İLƏ DƏ
-           ƏVVƏLCƏ QEYDİYYAT YOXLANIR
-        */
-
-        const registeredEmail =
-            localStorage.getItem(
-                "registeredEmail"
+            jwt_decode(
+                response.credential
             );
 
 
-        // QEYDİYYAT YOXDUR
+        const email =
+            (data.email || "")
+            .toLowerCase()
+            .trim();
 
-        if (
-            !registeredEmail ||
-            registeredEmail !== data.email
-        ) {
+
+        if (!email) {
 
             alert(
-                "❌ Bu Gmail ilə əvvəlcə qeydiyyatdan keçməlisən."
+                "Google hesabı tapılmadı."
             );
 
             return;
+
         }
 
 
-        // GOOGLE HESABI QEYDİYYATDADIR
+        const key =
+            accountKey(email);
+
+
+        /*
+           GOOGLE HESABI YOXDURSA
+           YARADIRIQ
+        */
+
+        let saved =
+            localStorage.getItem(
+                "account_" + key
+            );
+
+
+        if (!saved) {
+
+            const account = {
+
+                name:
+                    data.name || "",
+
+                email:
+                    email,
+
+                password:
+                    ""
+
+            };
+
+
+            localStorage.setItem(
+
+                "account_" + key,
+
+                JSON.stringify(account)
+
+            );
+
+
+            localStorage.setItem(
+
+                "cart_" + key,
+
+                JSON.stringify([])
+
+            );
+
+
+            localStorage.setItem(
+
+                "orders_" + key,
+
+                JSON.stringify([])
+
+            );
+
+        }
+
+
+        /*
+           AKTİV HESAB
+        */
 
         localStorage.setItem(
             "login",
             "true"
-        );
-
-        localStorage.setItem(
-            "operator",
-            "false"
         );
 
         localStorage.setItem(
@@ -358,12 +486,17 @@ function handleCredentialResponse(response) {
 
         localStorage.setItem(
             "userEmail",
-            data.email || ""
+            email
         );
 
         localStorage.setItem(
             "userPhoto",
             data.picture || ""
+        );
+
+        localStorage.setItem(
+            "operator",
+            "false"
         );
 
 
@@ -382,3 +515,20 @@ function handleCredentialResponse(response) {
     }
 
 }
+
+
+/* =========================
+   FUNKSİYALARI HTML ÜÇÜN AÇ
+========================= */
+
+window.qeydiyyat =
+    qeydiyyat;
+
+window.login =
+    login;
+
+window.logout =
+    logout;
+
+window.handleCredentialResponse =
+    handleCredentialResponse;
