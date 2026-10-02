@@ -5,13 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Operator Paneli</title>
-
 
 <style>
 
@@ -25,7 +22,6 @@ body{
     background:#f3f4f6;
 }
 
-
 #login{
     width:90%;
     max-width:400px;
@@ -37,7 +33,6 @@ body{
     box-shadow:0 5px 25px rgba(0,0,0,.12);
 }
 
-
 #googleLogin{
     width:100%;
     padding:14px;
@@ -48,12 +43,11 @@ body{
     font-size:16px;
 }
 
-
 #error{
     margin-top:15px;
     color:#d32f2f;
+    word-break:break-word;
 }
-
 
 #operatorPanel{
     width:95%;
@@ -65,24 +59,20 @@ body{
     box-shadow:0 5px 25px rgba(0,0,0,.12);
 }
 
-
 .header{
     background:#111827;
     color:white;
     padding:18px;
 }
 
-
 .header h2{
     margin:0 0 5px;
 }
-
 
 .header p{
     margin:0;
     font-size:13px;
 }
-
 
 #status{
     padding:10px 15px;
@@ -90,14 +80,12 @@ body{
     font-size:13px;
 }
 
-
 #messages{
     height:450px;
     overflow-y:auto;
     padding:15px;
     background:#f8fafc;
 }
-
 
 .message{
     max-width:80%;
@@ -107,13 +95,11 @@ body{
     word-break:break-word;
 }
 
-
 .customer{
     background:#e5e7eb;
     color:#111;
     margin-right:auto;
 }
-
 
 .agent{
     background:#2563eb;
@@ -121,19 +107,16 @@ body{
     margin-left:auto;
 }
 
-
 .sender{
     font-size:11px;
     opacity:.7;
-    margin-bottom:4px;
+    margin-bottom:5px;
 }
-
 
 audio{
-    max-width:100%;
     width:240px;
+    max-width:100%;
 }
-
 
 .bottom{
     display:flex;
@@ -142,15 +125,13 @@ audio{
     border-top:1px solid #ddd;
 }
 
-
 #messageInput{
     flex:1;
+    min-width:0;
     padding:13px;
     border:1px solid #ccc;
     border-radius:10px;
-    font-size:15px;
 }
-
 
 #sendMessage{
     padding:0 15px;
@@ -159,7 +140,6 @@ audio{
     background:#2563eb;
     color:white;
 }
-
 
 #recordButton{
     width:50px;
@@ -170,11 +150,9 @@ audio{
     font-size:20px;
 }
 
-
 #recordButton.recording{
     background:#16a34a;
 }
-
 
 #logout{
     margin:0 12px 15px;
@@ -189,21 +167,16 @@ audio{
 
 </head>
 
-
 <body>
 
-
-<!-- LOGIN -->
 
 <div id="login">
 
     <h2>👨‍💼 Operator paneli</h2>
 
     <p>
-        Yalnız operator hesabları daxil ola bilər.
+        Operator hesabına daxil olun.
     </p>
-
-    <br>
 
     <button id="googleLogin">
         Google ilə daxil ol
@@ -214,20 +187,12 @@ audio{
 </div>
 
 
-
-<!-- OPERATOR PANEL -->
-
-<div
-    id="operatorPanel"
-    style="display:none;"
->
-
+<div id="operatorPanel"
+     style="display:none;">
 
     <div class="header">
 
-        <h2>
-            Operator 💬
-        </h2>
+        <h2>Operator 💬</h2>
 
         <p id="operatorEmail"></p>
 
@@ -244,28 +209,23 @@ audio{
 
     <div class="bottom">
 
-
         <input
             id="messageInput"
             type="text"
             placeholder="Mesajınızı yazın..."
         >
 
-
         <button
             id="recordButton"
-            title="Səs yaz"
-        >
+            type="button">
             🎙️
         </button>
 
-
         <button
             id="sendMessage"
-        >
+            type="button">
             Göndər
         </button>
-
 
     </div>
 
@@ -274,18 +234,10 @@ audio{
         Çıxış
     </button>
 
-
 </div>
 
 
-
 <script type="module">
-
-
-/* =========================
-   FIREBASE
-========================= */
-
 
 import {
     initializeApp
@@ -316,6 +268,19 @@ from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
+import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+
+/* =========================
+   FIREBASE
+========================= */
 
 const firebaseConfig = {
 
@@ -344,136 +309,109 @@ const firebaseConfig = {
 
 
 const app =
-initializeApp(firebaseConfig);
-
+    initializeApp(firebaseConfig);
 
 const auth =
-getAuth(app);
-
+    getAuth(app);
 
 const db =
-getDatabase(app);
+    getDatabase(app);
 
+const storage =
+    getStorage(app);
 
 const provider =
-new GoogleAuthProvider();
-
+    new GoogleAuthProvider();
 
 
 /* =========================
-   OPERATORLAR
+   İKİ OPERATOR
 ========================= */
-
 
 const OPERATOR_EMAILS = [
 
-    "ttiktok66006@gmail.com",
+    "ttik66006@gmail.com",
 
     "amallizad72@gmail.com"
 
 ];
 
 
-
 const messagesRef =
-ref(db,"messages");
-
+    ref(db,"messages");
 
 const operatorRef =
-ref(db,"operatorOnline");
-
+    ref(db,"operatorOnline");
 
 
 /* =========================
    ELEMENTLƏR
 ========================= */
 
-
 const login =
-document.getElementById("login");
-
+    document.getElementById("login");
 
 const panel =
-document.getElementById("operatorPanel");
-
+    document.getElementById("operatorPanel");
 
 const errorBox =
-document.getElementById("error");
-
+    document.getElementById("error");
 
 const emailText =
-document.getElementById("operatorEmail");
-
+    document.getElementById("operatorEmail");
 
 const messages =
-document.getElementById("messages");
-
+    document.getElementById("messages");
 
 const input =
-document.getElementById("messageInput");
-
+    document.getElementById("messageInput");
 
 const sendButton =
-document.getElementById("sendMessage");
-
+    document.getElementById("sendMessage");
 
 const recordButton =
-document.getElementById("recordButton");
+    document.getElementById("recordButton");
 
 
-let currentOperator =
-null;
+let currentOperator = null;
 
+let messagesStarted = false;
 
-let messagesStarted =
-false;
+let recorder = null;
 
+let audioChunks = [];
 
-let recorder =
-null;
-
-
-let audioChunks =
-[];
-
-
-let recording =
-false;
-
+let recording = false;
 
 
 /* =========================
    GOOGLE GİRİŞ
 ========================= */
 
-
 document
 .getElementById("googleLogin")
 .onclick =
 async function(){
 
-
     errorBox.textContent = "";
-
 
     try{
 
-
         const result =
-        await signInWithPopup(
-            auth,
-            provider
-        );
+            await signInWithPopup(
+                auth,
+                provider
+            );
 
 
         const user =
-        result.user;
+            result.user;
 
 
         const email =
-        (user.email || "")
-        .trim()
-        .toLowerCase();
+            (user.email || "")
+            .trim()
+            .toLowerCase();
 
 
         if(
@@ -484,10 +422,8 @@ async function(){
 
             await signOut(auth);
 
-
             errorBox.textContent =
-            "❌ Bu hesab operator hesabı deyil.";
-
+                "Bu Gmail operator hesabı deyil.";
 
             return;
 
@@ -497,114 +433,89 @@ async function(){
         openOperator(user);
 
 
-    }
-
-
-    catch(error){
-
+    }catch(error){
 
         console.error(error);
 
-
         errorBox.textContent =
-        "❌ Giriş xətası: " +
-        error.message;
+            "Giriş xətası: " +
+            error.message;
 
     }
 
 };
 
 
-
 /* =========================
-   OPERATOR PANEL
+   OPERATOR PANELİ
 ========================= */
-
 
 function openOperator(user){
 
-
-    currentOperator =
-    user;
-
+    currentOperator = user;
 
     login.style.display =
-    "none";
-
+        "none";
 
     panel.style.display =
-    "block";
-
+        "block";
 
     emailText.textContent =
-    "Operator: " +
-    user.email;
-
+        "Operator: " +
+        user.email;
 
     set(
         operatorRef,
         true
     );
 
-
     loadMessages();
 
 }
-
 
 
 /* =========================
    MESAJLARI OXU
 ========================= */
 
-
 function loadMessages(){
 
-
     if(messagesStarted)
-    return;
+        return;
 
-
-    messagesStarted =
-    true;
+    messagesStarted = true;
 
 
     onChildAdded(
         messagesRef,
         function(snapshot){
 
-
             const data =
-            snapshot.val();
-
+                snapshot.val();
 
             if(!data)
-            return;
+                return;
 
 
-            const text =
-            data.message ||
-            data.text ||
-            "";
+            if(
+                data.type === "audio" &&
+                !data.audioURL
+            )
+                return;
 
 
             if(
                 data.type !== "audio" &&
-                !text
+                !data.message
             )
-            return;
+                return;
 
 
             const box =
-            document.createElement(
-                "div"
-            );
-
+                document.createElement("div");
 
             const sender =
-            document.createElement(
-                "div"
-            );
+                document.createElement("div");
 
 
             if(
@@ -613,18 +524,12 @@ function loadMessages(){
             ){
 
                 box.className =
-                "message customer";
-
-
-                sender.className =
-                "sender";
-
+                    "message customer";
 
                 sender.textContent =
-                "Müştəri";
+                    "Müştəri";
 
             }
-
 
             else if(
                 data.sender ===
@@ -632,19 +537,12 @@ function loadMessages(){
             ){
 
                 box.className =
-                "message agent";
-
-
-                sender.className =
-                "sender";
-
+                    "message agent";
 
                 sender.textContent =
-                data.email ||
-                "Operator";
+                    "Siz";
 
             }
-
 
             else{
 
@@ -653,75 +551,49 @@ function loadMessages(){
             }
 
 
-            box.appendChild(
-                sender
-            );
+            sender.className =
+                "sender";
 
-
-            /* =================
-               SƏS MESAJI
-            ================= */
+            box.appendChild(sender);
 
 
             if(
-                data.type ===
-                "audio"
+                data.type === "audio"
             ){
 
-
                 const audio =
-                document.createElement(
-                    "audio"
-                );
+                    document.createElement(
+                        "audio"
+                    );
 
-
-                audio.controls =
-                true;
-
+                audio.controls = true;
 
                 audio.src =
-                data.audio;
+                    data.audioURL;
 
-
-                box.appendChild(
-                    audio
-                );
+                box.appendChild(audio);
 
             }
-
-
-            /* =================
-               YAZILI MESAJ
-            ================= */
-
 
             else{
 
+                const text =
+                    document.createElement(
+                        "div"
+                    );
 
-                const textDiv =
-                document.createElement(
-                    "div"
-                );
+                text.textContent =
+                    data.message;
 
-
-                textDiv.textContent =
-                text;
-
-
-                box.appendChild(
-                    textDiv
-                );
+                box.appendChild(text);
 
             }
 
 
-            messages.appendChild(
-                box
-            );
-
+            messages.appendChild(box);
 
             messages.scrollTop =
-            messages.scrollHeight;
+                messages.scrollHeight;
 
         }
     );
@@ -729,67 +601,56 @@ function loadMessages(){
 }
 
 
-
 /* =========================
-   YAZILI MESAJ GÖNDƏR
+   YAZILI MESAJ
 ========================= */
-
 
 async function sendMessage(){
 
-
     const text =
-    input.value.trim();
-
+        input.value.trim();
 
     if(
         !text ||
         !currentOperator
     )
-    return;
+        return;
 
 
     try{
-
 
         await push(
             messagesRef,
             {
 
                 sender:
-                "agent",
+                    "agent",
 
                 type:
-                "text",
+                    "text",
 
                 message:
-                text,
+                    text,
 
                 email:
-                currentOperator.email,
+                    currentOperator.email,
 
                 time:
-                Date.now()
+                    Date.now()
 
             }
         );
 
 
-        input.value =
-        "";
-
+        input.value = "";
 
         input.focus();
 
 
-    }
-
-
-    catch(error){
-
+    }catch(error){
 
         alert(
-            "❌ Mesaj göndərilmədi."
+            "Mesaj göndərilmədi."
         );
 
     }
@@ -798,8 +659,7 @@ async function sendMessage(){
 
 
 sendButton.onclick =
-sendMessage;
-
+    sendMessage;
 
 
 input.addEventListener(
@@ -807,8 +667,7 @@ input.addEventListener(
     function(event){
 
         if(
-            event.key ===
-            "Enter"
+            event.key === "Enter"
         ){
 
             event.preventDefault();
@@ -821,127 +680,43 @@ input.addEventListener(
 );
 
 
-
 /* =========================
-   SƏS YAZMA
+   OPERATOR SƏSİ
 ========================= */
-
 
 recordButton.onclick =
 async function(){
 
-
     if(!recording){
-
 
         try{
 
-
             const stream =
-            await navigator
-            .mediaDevices
-            .getUserMedia({
-
-                audio:true
-
-            });
+                await navigator
+                .mediaDevices
+                .getUserMedia({
+                    audio:true
+                });
 
 
-            audioChunks =
-            [];
+            audioChunks = [];
 
 
             recorder =
-            new MediaRecorder(
-                stream
-            );
+                new MediaRecorder(
+                    stream
+                );
 
 
             recorder.ondataavailable =
-            function(event){
+                function(event){
 
-                if(
-                    event.data.size >
-                    0
-                ){
+                    if(
+                        event.data.size > 0
+                    ){
 
-                    audioChunks.push(
-                        event.data
-                    );
-
-                }
-
-            };
-
-
-            recorder.onstop =
-            async function(){
-
-
-                stream
-                .getTracks()
-                .forEach(
-                    track =>
-                    track.stop()
-                );
-
-
-                const blob =
-                new Blob(
-                    audioChunks,
-                    {
-                        type:
-                        "audio/webm"
-                    }
-                );
-
-
-                const reader =
-                new FileReader();
-
-
-                reader.onloadend =
-                async function(){
-
-
-                    const audio =
-                    reader.result;
-
-
-                    try{
-
-
-                        await push(
-                            messagesRef,
-                            {
-
-                                sender:
-                                "agent",
-
-                                type:
-                                "audio",
-
-                                audio:
-                                audio,
-
-                                email:
-                                currentOperator.email,
-
-                                time:
-                                Date.now()
-
-                            }
-                        );
-
-
-                    }
-
-
-                    catch(error){
-
-
-                        alert(
-                            "❌ Səs göndərilmədi."
+                        audioChunks.push(
+                            event.data
                         );
 
                     }
@@ -949,39 +724,113 @@ async function(){
                 };
 
 
-                reader.readAsDataURL(
-                    blob
-                );
+            recorder.onstop =
+                async function(){
 
-            };
+                    stream
+                    .getTracks()
+                    .forEach(
+                        track =>
+                        track.stop()
+                    );
+
+
+                    const blob =
+                        new Blob(
+                            audioChunks,
+                            {
+                                type:
+                                "audio/webm"
+                            }
+                        );
+
+
+                    try{
+
+                        recordButton.textContent =
+                            "⏳";
+
+
+                        const fileName =
+                            "operator_" +
+                            Date.now() +
+                            ".webm";
+
+
+                        const fileRef =
+                            storageRef(
+                                storage,
+                                "voice/" +
+                                fileName
+                            );
+
+
+                        await uploadBytes(
+                            fileRef,
+                            blob
+                        );
+
+
+                        const audioURL =
+                            await getDownloadURL(
+                                fileRef
+                            );
+
+
+                        await push(
+                            messagesRef,
+                            {
+
+                                sender:
+                                    "agent",
+
+                                type:
+                                    "audio",
+
+                                audioURL:
+                                    audioURL,
+
+                                email:
+                                    currentOperator.email,
+
+                                time:
+                                    Date.now()
+
+                            }
+                        );
+
+
+                    }catch(error){
+
+                        console.error(error);
+
+                        alert(
+                            "Səs göndərilmədi: " +
+                            error.message
+                        );
+
+                    }
+
+
+                    recordButton.textContent =
+                        "🎙️";
+
+                };
 
 
             recorder.start();
 
+            recording = true;
 
-            recording =
-            true;
-
-
-            recordButton
-            .classList
-            .add(
+            recordButton.classList.add(
                 "recording"
             );
 
-
             recordButton.textContent =
-            "⏹️";
+                "⏹️";
 
 
-        }
-
-
-        catch(error){
-
-
-            console.error(error);
-
+        }catch(error){
 
             alert(
                 "Mikrofon icazəsi verilmədi."
@@ -989,96 +838,74 @@ async function(){
 
         }
 
-
     }
-
 
     else{
 
-
         recorder.stop();
 
+        recording = false;
 
-        recording =
-        false;
-
-
-        recordButton
-        .classList
-        .remove(
+        recordButton.classList.remove(
             "recording"
         );
 
-
         recordButton.textContent =
-        "🎙️";
+            "🎙️";
 
     }
 
 };
-
 
 
 /* =========================
    ÇIXIŞ
 ========================= */
 
-
 document
 .getElementById("logout")
 .onclick =
 async function(){
-
 
     await set(
         operatorRef,
         false
     );
 
-
     await signOut(auth);
 
-
-    currentOperator =
-    null;
-
+    currentOperator = null;
 
     panel.style.display =
-    "none";
-
+        "none";
 
     login.style.display =
-    "block";
-
+        "block";
 
     messages.innerHTML =
-    "";
-
+        "";
 
     messagesStarted =
-    false;
+        false;
 
 };
-
 
 
 /* =========================
    AUTH
 ========================= */
 
-
 onAuthStateChanged(
     auth,
     async function(user){
 
-
         if(!user){
 
             login.style.display =
-            "block";
+                "block";
 
             panel.style.display =
-            "none";
+                "none";
 
             return;
 
@@ -1086,9 +913,9 @@ onAuthStateChanged(
 
 
         const email =
-        (user.email || "")
-        .trim()
-        .toLowerCase();
+            (user.email || "")
+            .trim()
+            .toLowerCase();
 
 
         if(
