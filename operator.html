@@ -2,11 +2,8 @@
 <html lang="az">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Operator Paneli</title>
 
@@ -43,6 +40,11 @@ body{
     font-size:16px;
 }
 
+#error{
+    margin-top:15px;
+    color:#d32f2f;
+}
+
 #operatorPanel{
     width:95%;
     max-width:700px;
@@ -66,7 +68,12 @@ body{
 .header p{
     margin:0;
     font-size:13px;
-    opacity:.8;
+}
+
+#status{
+    padding:10px 15px;
+    color:#666;
+    font-size:13px;
 }
 
 #messages{
@@ -115,7 +122,6 @@ body{
     border:1px solid #ccc;
     border-radius:10px;
     font-size:15px;
-    outline:none;
 }
 
 #sendMessage{
@@ -124,7 +130,6 @@ body{
     border-radius:10px;
     background:#2563eb;
     color:white;
-    font-size:15px;
 }
 
 #logout{
@@ -136,25 +141,19 @@ body{
     color:white;
 }
 
-#status{
-    padding:8px 15px;
-    color:#666;
-    font-size:13px;
-}
-
 </style>
-
 </head>
+
 
 <body>
 
 
 <div id="login">
 
-<h2>Operator paneli</h2>
+<h2>👨‍💼 Operator paneli</h2>
 
 <p>
-Operator hesabına daxil olun.
+Yalnız operator hesabları daxil ola bilər.
 </p>
 
 <br>
@@ -163,12 +162,13 @@ Operator hesabına daxil olun.
 Google ilə daxil ol
 </button>
 
+<div id="error"></div>
+
 </div>
 
 
 
-<div id="operatorPanel"
-style="display:none;">
+<div id="operatorPanel" style="display:none;">
 
 <div class="header">
 
@@ -180,7 +180,7 @@ style="display:none;">
 
 
 <div id="status">
-Yazışmalar aktivdir
+🟢 Yazışmalar aktivdir
 </div>
 
 
@@ -190,9 +190,9 @@ Yazışmalar aktivdir
 <div class="bottom">
 
 <input
-id="messageInput"
-type="text"
-placeholder="Mesajınızı yazın..."
+    id="messageInput"
+    type="text"
+    placeholder="Mesajınızı yazın..."
 >
 
 <button id="sendMessage">
@@ -291,7 +291,7 @@ new GoogleAuthProvider();
 
 
 /* =========================
-   İKİ OPERATOR
+   YALNIZ 2 OPERATOR
 ========================= */
 
 const OPERATOR_EMAILS = [
@@ -305,64 +305,40 @@ const OPERATOR_EMAILS = [
 
 
 /* =========================
-   REFERANSLAR
+   ELEMENTLƏR
 ========================= */
+
+const login =
+document.getElementById("login");
+
+const panel =
+document.getElementById("operatorPanel");
+
+const errorBox =
+document.getElementById("error");
+
+const emailText =
+document.getElementById("operatorEmail");
+
+const messages =
+document.getElementById("messages");
+
+const input =
+document.getElementById("messageInput");
+
+const sendButton =
+document.getElementById("sendMessage");
+
+const operatorRef =
+ref(db,"operatorOnline");
 
 const messagesRef =
 ref(db,"messages");
 
 
-const operatorRef =
-ref(db,"operatorOnline");
+let currentOperator = null;
 
-
-
-const login =
-document.getElementById("login");
-
-
-const panel =
-document.getElementById(
-"operatorPanel"
-);
-
-
-const emailText =
-document.getElementById(
-"operatorEmail"
-);
-
-
-const messages =
-document.getElementById(
-"messages"
-);
-
-
-const input =
-document.getElementById(
-"messageInput"
-);
-
-
-const sendButton =
-document.getElementById(
-"sendMessage"
-);
-
-
-const status =
-document.getElementById(
-"status"
-);
-
-
-let messagesStarted =
-false;
-
-
-let currentOperator =
-null;
+let messagesStarted = false;
 
 
 
@@ -373,6 +349,8 @@ null;
 document
 .getElementById("googleLogin")
 .onclick = async function(){
+
+    errorBox.textContent = "";
 
     try{
 
@@ -389,11 +367,11 @@ document
 
         const email =
         (user.email || "")
-        .toLowerCase()
-        .trim();
+        .trim()
+        .toLowerCase();
 
 
-        /* İKİ HESABDAN BİRİDİR? */
+        /* MÜŞTƏRİDİR? */
 
         if(
             !OPERATOR_EMAILS.includes(
@@ -403,14 +381,15 @@ document
 
             await signOut(auth);
 
-            alert(
-                "Bu Gmail operator hesabı deyil."
-            );
+            errorBox.textContent =
+            "❌ Bu hesab operator hesabı deyil.";
 
             return;
 
         }
 
+
+        /* OPERATORUDUR */
 
         openOperator(user);
 
@@ -420,10 +399,9 @@ document
 
         console.error(error);
 
-        alert(
-            "Google girişində xəta:\n" +
-            error.message
-        );
+        errorBox.textContent =
+        "❌ Giriş xətası: " +
+        error.message;
 
     }
 
@@ -432,7 +410,7 @@ document
 
 
 /* =========================
-   OPERATORU AÇ
+   OPERATOR PANELİ
 ========================= */
 
 function openOperator(user){
@@ -452,10 +430,6 @@ function openOperator(user){
     emailText.textContent =
     "Operator: " +
     user.email;
-
-
-    status.textContent =
-    "🟢 Yazışmalar aktivdir";
 
 
     set(
@@ -496,25 +470,23 @@ function loadMessages(){
             return;
 
 
-            const messageText =
+            const text =
             data.message ||
             data.text ||
             "";
 
 
-            if(
-                messageText === ""
-            )
+            if(!text)
             return;
 
 
-            const messageDiv =
+            const div =
             document.createElement(
                 "div"
             );
 
 
-            const senderDiv =
+            const sender =
             document.createElement(
                 "div"
             );
@@ -531,15 +503,13 @@ function loadMessages(){
                 "customer"
             ){
 
-                messageDiv.className =
+                div.className =
                 "message customer";
 
-
-                senderDiv.className =
+                sender.className =
                 "sender";
 
-
-                senderDiv.textContent =
+                sender.textContent =
                 "Müştəri";
 
             }
@@ -549,15 +519,13 @@ function loadMessages(){
                 "agent"
             ){
 
-                messageDiv.className =
+                div.className =
                 "message agent";
 
-
-                senderDiv.className =
+                sender.className =
                 "sender";
 
-
-                senderDiv.textContent =
+                sender.textContent =
                 data.email ||
                 "Operator";
 
@@ -571,21 +539,21 @@ function loadMessages(){
 
 
             textDiv.textContent =
-            messageText;
+            text;
 
 
-            messageDiv.appendChild(
-                senderDiv
+            div.appendChild(
+                sender
             );
 
 
-            messageDiv.appendChild(
+            div.appendChild(
                 textDiv
             );
 
 
             messages.appendChild(
-                messageDiv
+                div
             );
 
 
@@ -610,13 +578,10 @@ async function sendMessage(){
 
 
     if(
-        text === "" ||
+        !text ||
         !currentOperator
-    ){
-
-        return;
-
-    }
+    )
+    return;
 
 
     try{
@@ -644,18 +609,14 @@ async function sendMessage(){
         input.value =
         "";
 
-
         input.focus();
 
     }
 
     catch(error){
 
-        console.error(error);
-
         alert(
-            "Mesaj göndərilmədi:\n" +
-            error.message
+            "❌ Mesaj göndərilmədi."
         );
 
     }
@@ -663,10 +624,8 @@ async function sendMessage(){
 }
 
 
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
+sendButton.onclick =
+sendMessage;
 
 
 input.addEventListener(
@@ -703,9 +662,7 @@ async function(){
     );
 
 
-    await signOut(
-        auth
-    );
+    await signOut(auth);
 
 
     currentOperator =
@@ -723,7 +680,6 @@ async function(){
     messages.innerHTML =
     "";
 
-
     messagesStarted =
     false;
 
@@ -737,7 +693,7 @@ async function(){
 
 onAuthStateChanged(
     auth,
-    function(user){
+    async function(user){
 
         if(!user){
 
@@ -754,25 +710,37 @@ onAuthStateChanged(
 
         const email =
         (user.email || "")
-        .toLowerCase()
-        .trim();
+        .trim()
+        .toLowerCase();
 
+
+        /* MÜŞTƏRİDİR */
 
         if(
-            OPERATOR_EMAILS.includes(
+            !OPERATOR_EMAILS.includes(
                 email
             )
         ){
 
-            openOperator(user);
+            await signOut(auth);
+
+            login.style.display =
+            "block";
+
+            panel.style.display =
+            "none";
+
+            errorBox.textContent =
+            "❌ Bu hesab operator hesabı deyil.";
+
+            return;
 
         }
 
-        else{
 
-            signOut(auth);
+        /* OPERATOR */
 
-        }
+        openOperator(user);
 
     }
 );
@@ -780,5 +748,4 @@ onAuthStateChanged(
 </script>
 
 </body>
-
 </html>
