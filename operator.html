@@ -2,6 +2,7 @@
 <html lang="az">
 
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -24,22 +25,33 @@ body{
 #login{
     width:90%;
     max-width:400px;
-    margin:100px auto;
+    margin:80px auto;
     background:white;
-    padding:30px;
+    padding:25px;
     border-radius:18px;
     text-align:center;
     box-shadow:0 5px 25px rgba(0,0,0,.12);
 }
 
-#googleLogin{
+input{
     width:100%;
     padding:14px;
+    margin-top:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px;
+}
+
+#loginButton{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
     border:0;
     border-radius:10px;
-    background:#4285f4;
+    background:#2e7d32;
     color:white;
-    font-size:16px;
+    font-size:17px;
+    font-weight:bold;
 }
 
 #operatorPanel{
@@ -65,7 +77,6 @@ body{
 .header p{
     margin:0;
     font-size:13px;
-    opacity:.8;
 }
 
 #messages{
@@ -114,7 +125,6 @@ body{
     border:1px solid #ccc;
     border-radius:10px;
     font-size:15px;
-    outline:none;
 }
 
 #sendMessage{
@@ -123,7 +133,6 @@ body{
     border-radius:10px;
     background:#2563eb;
     color:white;
-    font-size:15px;
 }
 
 #logout{
@@ -135,13 +144,13 @@ body{
     color:white;
 }
 
-#status{
-    padding:8px 15px;
-    color:#666;
-    font-size:13px;
+#error{
+    color:red;
+    margin-top:12px;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -149,41 +158,53 @@ body{
 
 <div id="login">
 
-<h2>Operator paneli</h2>
+<h2>👨‍💼 Operator paneli</h2>
 
-<p>
-Operator hesabına daxil olun.
-</p>
+<p>Operator hesabına daxil olun.</p>
 
-<br>
 
-<button id="googleLogin">
+<input
+    type="email"
+    id="email"
+    placeholder="Gmail"
+>
 
-Google ilə daxil ol
+
+<input
+    type="password"
+    id="password"
+    placeholder="Şifrə"
+>
+
+
+<button id="loginButton">
+
+Daxil ol
 
 </button>
+
+
+<div id="error"></div>
 
 </div>
 
 
 
 <div id="operatorPanel"
-     style="display:none;">
+style="display:none;">
 
 <div class="header">
 
-<h2>
-Operator 💬
-</h2>
+<h2>Operator 💬</h2>
 
 <p id="operatorEmail"></p>
 
 </div>
 
 
-<div id="status">
+<div style="padding:8px 15px;color:#666;">
 
-Yazışmalar aktivdir
+🟢 Yazışmalar aktivdir
 
 </div>
 
@@ -220,23 +241,11 @@ Göndər
 
 <script type="module">
 
-
 import {
     initializeApp
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 import {
@@ -248,7 +257,6 @@ import {
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
 
 
 /* =========================
@@ -285,36 +293,9 @@ const app =
     initializeApp(firebaseConfig);
 
 
-const auth =
-    getAuth(app);
-
-
 const db =
     getDatabase(app);
 
-
-const provider =
-    new GoogleAuthProvider();
-
-
-
-/* =========================
-   2 OPERATOR HESABI
-========================= */
-
-const OPERATOR_EMAILS = [
-
-    "ttik66006@gmail.com",
-
-    "amallizad72@gmail.com"
-
-];
-
-
-
-/* =========================
-   ELEMENTLƏR
-========================= */
 
 const messagesRef =
     ref(db,"messages");
@@ -324,27 +305,51 @@ const operatorRef =
     ref(db,"operatorOnline");
 
 
+
+/* =========================
+   OPERATOR HESABLARI
+========================= */
+
+const operators = {
+
+    "ttik66006@gmail.com":
+        "amal2005",
+
+    "amallizad72@gmail.com":
+        "amal2005"
+
+};
+
+
+
+/* =========================
+   ELEMENTLƏR
+========================= */
+
 const login =
     document.getElementById("login");
-
 
 const panel =
     document.getElementById(
         "operatorPanel"
     );
 
+const emailInput =
+    document.getElementById("email");
+
+const passwordInput =
+    document.getElementById("password");
+
+const errorBox =
+    document.getElementById("error");
 
 const emailText =
     document.getElementById(
         "operatorEmail"
     );
 
-
 const messages =
-    document.getElementById(
-        "messages"
-    );
-
+    document.getElementById("messages");
 
 const input =
     document.getElementById(
@@ -352,121 +357,69 @@ const input =
     );
 
 
-const sendButton =
-    document.getElementById(
-        "sendMessage"
-    );
-
-
-const status =
-    document.getElementById(
-        "status"
-    );
-
-
-
-let messagesStarted = false;
 
 let currentOperator = null;
+
+let messagesStarted = false;
 
 
 
 /* =========================
-   GOOGLE GİRİŞ
+   GİRİŞ
 ========================= */
 
 document
-.getElementById("googleLogin")
-.onclick = async function(){
+.getElementById("loginButton")
+.onclick = function(){
 
-    try{
-
-        const result =
-            await signInWithPopup(
-                auth,
-                provider
-            );
+    const email =
+        emailInput.value
+        .trim()
+        .toLowerCase();
 
 
-        const user =
-            result.user;
+    const password =
+        passwordInput.value;
 
 
-        if(
-            !OPERATOR_EMAILS
-            .includes(
-                user.email
-            )
-        ){
+    if(
+        operators[email] &&
+        operators[email] === password
+    ){
 
-            await signOut(auth);
-
-
-            alert(
-                "Bu Gmail operator hesabı deyil."
-            );
+        currentOperator =
+            email;
 
 
-            return;
-
-        }
-
-
-        openOperator(user);
+        login.style.display =
+            "none";
 
 
-    }catch(error){
+        panel.style.display =
+            "block";
 
-        console.error(error);
+
+        emailText.textContent =
+            "Operator: " + email;
 
 
-        alert(
-            "Google girişində xəta oldu:\n" +
-            error.message
+        set(
+            operatorRef,
+            true
         );
+
+
+        loadMessages();
+
+
+    }else{
+
+        errorBox.textContent =
+            "❌ Gmail və ya şifrə səhvdir.";
 
     }
 
 };
-
-
-
-/* =========================
-   OPERATOR PANELİ
-========================= */
-
-function openOperator(user){
-
-    currentOperator =
-        user;
-
-
-    login.style.display =
-        "none";
-
-
-    panel.style.display =
-        "block";
-
-
-    emailText.textContent =
-        "Operator: " +
-        user.email;
-
-
-    status.textContent =
-        "🟢 Yazışmalar aktivdir";
-
-
-    set(
-        operatorRef,
-        true
-    );
-
-
-    loadMessages();
-
-}
 
 
 
@@ -502,38 +455,35 @@ function loadMessages(){
             }
 
 
-            const messageText =
+            const text =
                 data.message ||
                 data.text ||
                 "";
 
 
-            if(
-                messageText === ""
-            ){
+            if(!text){
 
                 return;
 
             }
 
 
-            const messageDiv =
+            const div =
                 document.createElement(
                     "div"
                 );
 
 
-            const senderDiv =
+            const sender =
                 document.createElement(
                     "div"
                 );
 
 
-            const textDiv =
+            const message =
                 document.createElement(
                     "div"
                 );
-
 
 
             if(
@@ -541,64 +491,55 @@ function loadMessages(){
                 "customer"
             ){
 
-                messageDiv.className =
+                div.className =
                     "message customer";
 
-
-                senderDiv.className =
+                sender.className =
                     "sender";
 
-
-                senderDiv.textContent =
+                sender.textContent =
                     "Müştəri";
 
-            }
 
-
-            else if(
+            }else if(
                 data.sender ===
                 "agent"
             ){
 
-                messageDiv.className =
+                div.className =
                     "message agent";
 
-
-                senderDiv.className =
+                sender.className =
                     "sender";
 
-
-                senderDiv.textContent =
+                sender.textContent =
                     data.email ||
                     "Operator";
 
-            }
 
-
-            else{
+            }else{
 
                 return;
 
             }
 
 
+            message.textContent =
+                text;
 
-            textDiv.textContent =
-                messageText;
 
-
-            messageDiv.appendChild(
-                senderDiv
+            div.appendChild(
+                sender
             );
 
 
-            messageDiv.appendChild(
-                textDiv
+            div.appendChild(
+                message
             );
 
 
             messages.appendChild(
-                messageDiv
+                div
             );
 
 
@@ -613,7 +554,7 @@ function loadMessages(){
 
 
 /* =========================
-   OPERATOR MESAJ GÖNDƏRİR
+   MESAJ GÖNDƏR
 ========================= */
 
 async function sendMessage(){
@@ -623,15 +564,7 @@ async function sendMessage(){
 
 
     if(
-        text === ""
-    ){
-
-        return;
-
-    }
-
-
-    if(
+        !text ||
         !currentOperator
     ){
 
@@ -653,7 +586,7 @@ async function sendMessage(){
                     "agent",
 
                 email:
-                    currentOperator.email,
+                    currentOperator,
 
                 time:
                     Date.now()
@@ -665,7 +598,6 @@ async function sendMessage(){
         input.value =
             "";
 
-
         input.focus();
 
 
@@ -673,10 +605,8 @@ async function sendMessage(){
 
         console.error(error);
 
-
         alert(
-            "Mesaj göndərilmədi:\n" +
-            error.message
+            "Mesaj göndərilmədi."
         );
 
     }
@@ -684,12 +614,10 @@ async function sendMessage(){
 }
 
 
-
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
-
+document
+.getElementById("sendMessage")
+.onclick =
+sendMessage;
 
 
 input.addEventListener(
@@ -697,8 +625,7 @@ input.addEventListener(
     function(event){
 
         if(
-            event.key ===
-            "Enter"
+            event.key === "Enter"
         ){
 
             event.preventDefault();
@@ -719,16 +646,11 @@ input.addEventListener(
 document
 .getElementById("logout")
 .onclick =
-async function(){
+function(){
 
-    await set(
+    set(
         operatorRef,
         false
-    );
-
-
-    await signOut(
-        auth
     );
 
 
@@ -747,56 +669,19 @@ async function(){
     messages.innerHTML =
         "";
 
-
     messagesStarted =
         false;
 
+    emailInput.value =
+        "";
+
+    passwordInput.value =
+        "";
+
 };
-
-
-
-/* =========================
-   ƏVVƏLDƏN GİRİŞ VARSA
-========================= */
-
-onAuthStateChanged(
-    auth,
-    function(user){
-
-        if(!user){
-
-            login.style.display =
-                "block";
-
-            panel.style.display =
-                "none";
-
-            return;
-
-        }
-
-
-        if(
-            OPERATOR_EMAILS
-            .includes(
-                user.email
-            )
-        ){
-
-            openOperator(user);
-
-        }
-
-        else{
-
-            signOut(auth);
-
-        }
-
-    }
-);
 
 </script>
 
 </body>
+
 </html>
