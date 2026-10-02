@@ -90,7 +90,7 @@ body{
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: 0.3s;
-    font-size: 80px;
+    font-size: 0px;
 }
 
 .chat-button:hover{
