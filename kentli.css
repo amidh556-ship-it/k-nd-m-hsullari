@@ -69,7 +69,6 @@ body{
 .qiraq-h2{
     position: relative;
     top: -20px;
-    white-space: nowrap;
 }
 
 .messii-input::placeholder{
