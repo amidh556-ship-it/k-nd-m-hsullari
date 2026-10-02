@@ -26,7 +26,7 @@ body{
     padding: none;
     display: flex;
     align-items: center;
-    box-shadow: 0 0 5px rgba(0, 0, 0,5);
+    box-shadow: 0 0 5px rgba(0,0,0,5);
 }
 
 .aramaKutusu a{
@@ -50,7 +50,7 @@ body{
     color: white;
     font-size: 80%;
     font-weight: 500;
-    padding: 6px 10px; 
+    padding: 6px 10px;
     flex: 1;
     min-width: 0;
 }
@@ -69,6 +69,7 @@ body{
 .qiraq-h2{
     position: relative;
     top: -20px;
+    white-space: nowrap;
 }
 
 .messii-input::placeholder{
@@ -88,7 +89,7 @@ body{
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: 0.3s;
     font-size: 30px;
 }
@@ -108,13 +109,14 @@ body{
     text-transform: none;
 }
 
-/* YALNIZ Dəstək hissəsi düzəldildi */
+/* Dəstək */
 .lisa-l2{
+    position: fixed;
+    top: 270px;
+    right: 20px;
+    margin: 0;
     font-size: 20px;
-    position: relative;
-    left: 20px;
-    margin-left: 0;
-    margin-top: 20px;
+    z-index: 1000;
 }
 
 #profileMenu{
@@ -134,12 +136,6 @@ body{
 
 .profile-area:hover #profileMenu{
     display: block;
-}
-
-#profileMenu ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 #profileMenu ul{
