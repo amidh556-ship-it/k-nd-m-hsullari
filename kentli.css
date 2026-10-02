@@ -75,6 +75,7 @@ body{
     margin-top: -30px;
     right:-10px ;
     top: -30px ;
+    font-size: 14px;
 }
 
 .messii-input::placeholder{
