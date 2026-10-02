@@ -1,4 +1,4 @@
-:root{
+ :root{
     --aramaKutusu-boyut:40px;
     --aramaKutusu-uzunluk:70px
 }
@@ -66,8 +66,32 @@ body{
     bottom: none;
 }
 
-.mehsul{
-    top: 50px}
+
+.mehsul {
+    display: block;
+    width: 300px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.mehsul img {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    display: block;
+    border-radius: 10px;
+}
+
+.mehsul h3 {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.mehsul p {
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
+}
 
 .qiraq-h2{
     position: relative;
