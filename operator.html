@@ -1,512 +1,800 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operator Paneli</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
-    }
+<title>Operator Paneli</title>
 
-    #login {
-      width: 90%;
-      max-width: 400px;
-      margin: 100px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 18px;
-      text-align: center;
-      box-shadow: 0 5px 25px rgba(0,0,0,.12);
-    }
+<style>
 
-    #googleLogin {
-      width: 100%;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #4285f4;
-      color: white;
-      font-size: 16px;
-    }
+*{
+    box-sizing:border-box;
+}
 
-    #operatorPanel {
-      width: 95%;
-      max-width: 700px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 5px 25px rgba(0,0,0,.12);
-    }
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f4f6;
+}
 
-    .header {
-      background: #111827;
-      color: white;
-      padding: 18px;
-    }
+#login{
+    width:90%;
+    max-width:400px;
+    margin:100px auto;
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 5px 25px rgba(0,0,0,.12);
+}
 
-    .header h2 {
-      margin: 0 0 5px;
-    }
+#googleLogin{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:10px;
+    background:#4285f4;
+    color:white;
+    font-size:16px;
+}
 
-    .header p {
-      margin: 0;
-      font-size: 13px;
-      opacity: .8;
-    }
+#operatorPanel{
+    width:95%;
+    max-width:700px;
+    margin:20px auto;
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 5px 25px rgba(0,0,0,.12);
+}
 
-    #messages {
-      height: 450px;
-      overflow-y: auto;
-      padding: 15px;
-      background: #f8fafc;
-    }
+.header{
+    background:#111827;
+    color:white;
+    padding:18px;
+}
 
-    .message {
-      max-width: 80%;
-      padding: 11px 14px;
-      margin-bottom: 10px;
-      border-radius: 14px;
-      word-break: break-word;
-    }
+.header h2{
+    margin:0 0 5px;
+}
 
-    .customer {
-      background: #e5e7eb;
-      color: #111;
-      margin-right: auto;
-    }
+.header p{
+    margin:0;
+    font-size:13px;
+    opacity:.8;
+}
 
-    .agent {
-      background: #2563eb;
-      color: white;
-      margin-left: auto;
-    }
+#messages{
+    height:450px;
+    overflow-y:auto;
+    padding:15px;
+    background:#f8fafc;
+}
 
-    .sender {
-      font-size: 11px;
-      opacity: .7;
-      margin-bottom: 4px;
-    }
+.message{
+    max-width:80%;
+    padding:11px 14px;
+    margin-bottom:10px;
+    border-radius:14px;
+    word-break:break-word;
+}
 
-    .bottom {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      border-top: 1px solid #ddd;
-    }
+.customer{
+    background:#e5e7eb;
+    color:#111;
+    margin-right:auto;
+}
 
-    #messageInput {
-      flex: 1;
-      padding: 13px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 15px;
-      outline: none;
-    }
+.agent{
+    background:#2563eb;
+    color:white;
+    margin-left:auto;
+}
 
-    #sendMessage {
-      padding: 0 18px;
-      border: 0;
-      border-radius: 10px;
-      background: #2563eb;
-      color: white;
-      font-size: 15px;
-    }
+.sender{
+    font-size:11px;
+    opacity:.7;
+    margin-bottom:4px;
+}
 
-    #logout {
-      margin: 0 12px 15px;
-      padding: 10px 18px;
-      border: 0;
-      border-radius: 9px;
-      background: #ef4444;
-      color: white;
-    }
+.bottom{
+    display:flex;
+    gap:8px;
+    padding:12px;
+    border-top:1px solid #ddd;
+}
 
-    #status {
-      padding: 8px 15px;
-      color: #666;
-      font-size: 13px;
-    }
-  </style>
+#messageInput{
+    flex:1;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+}
+
+#sendMessage{
+    padding:0 18px;
+    border:0;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:15px;
+}
+
+#logout{
+    margin:0 12px 15px;
+    padding:10px 18px;
+    border:0;
+    border-radius:9px;
+    background:#ef4444;
+    color:white;
+}
+
+#status{
+    padding:8px 15px;
+    color:#666;
+    font-size:13px;
+}
+
+</style>
 </head>
 
 <body>
 
+
 <div id="login">
-  <h2>Operator paneli</h2>
-  <p>Operator hesabına daxil olun.</p>
 
-  <br>
+<h2>Operator paneli</h2>
 
-  <button id="googleLogin">
-    Google ilə daxil ol
-  </button>
+<p>
+Operator hesabına daxil olun.
+</p>
+
+<br>
+
+<button id="googleLogin">
+
+Google ilə daxil ol
+
+</button>
+
+</div>
+
+
+
+<div id="operatorPanel"
+     style="display:none;">
+
+<div class="header">
+
+<h2>
+Operator 💬
+</h2>
+
+<p id="operatorEmail"></p>
+
 </div>
 
 
-<div id="operatorPanel" style="display:none;">
+<div id="status">
 
-  <div class="header">
-    <h2>Operator 💬</h2>
-    <p id="operatorEmail"></p>
-  </div>
-
-  <div id="status">
-    Yazışmalar aktivdir
-  </div>
-
-  <div id="messages"></div>
-
-  <div class="bottom">
-
-    <input
-      id="messageInput"
-      type="text"
-      placeholder="Mesajınızı yazın..."
-    >
-
-    <button id="sendMessage">
-      Göndər
-    </button>
-
-  </div>
-
-  <button id="logout">
-    Çıxış
-  </button>
+Yazışmalar aktivdir
 
 </div>
+
+
+<div id="messages"></div>
+
+
+<div class="bottom">
+
+<input
+    id="messageInput"
+    type="text"
+    placeholder="Mesajınızı yazın..."
+>
+
+<button id="sendMessage">
+
+Göndər
+
+</button>
+
+</div>
+
+
+<button id="logout">
+
+Çıxış
+
+</button>
+
+</div>
+
 
 
 <script type="module">
 
-import { initializeApp } from
+
+import {
+    initializeApp
+}
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  getDatabase,
-  ref,
-  push,
-  onChildAdded,
-  set
-} from
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+import {
+    getDatabase,
+    ref,
+    push,
+    onChildAdded,
+    set
+}
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
+
+/* =========================
+   FIREBASE
+========================= */
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-  authDomain: "kendmehsullari-6a53d.firebaseapp.com",
-  databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-  projectId: "kendmehsullari-6a53d",
-  storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
-  messagingSenderId: "551607499773",
-  appId: "1:551607499773:web:a84aa63dc5b55c38687794"
+
+    apiKey:
+    "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+
+    authDomain:
+    "kendmehsullari-6a53d.firebaseapp.com",
+
+    databaseURL:
+    "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+
+    projectId:
+    "kendmehsullari-6a53d",
+
+    storageBucket:
+    "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+    "551607499773",
+
+    appId:
+    "1:551607499773:web:a84aa63dc5b55c38687794"
+
 };
 
 
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-const db = getDatabase(app);
-
-const provider = new GoogleAuthProvider();
+const app =
+    initializeApp(firebaseConfig);
 
 
-const messagesRef = ref(db, "messages");
+const auth =
+    getAuth(app);
 
-const operatorRef = ref(db, "operatorOnline");
+
+const db =
+    getDatabase(app);
 
 
-const login = document.getElementById("login");
+const provider =
+    new GoogleAuthProvider();
 
-const panel = document.getElementById("operatorPanel");
 
-const emailText = document.getElementById("operatorEmail");
 
-const messages = document.getElementById("messages");
+/* =========================
+   2 OPERATOR HESABI
+========================= */
 
-const input = document.getElementById("messageInput");
+const OPERATOR_EMAILS = [
 
-const sendButton = document.getElementById("sendMessage");
+    "ttik66006@gmail.com",
 
-const status = document.getElementById("status");
+    "amallizad72@gmail.com"
+
+];
+
+
+
+/* =========================
+   ELEMENTLƏR
+========================= */
+
+const messagesRef =
+    ref(db,"messages");
+
+
+const operatorRef =
+    ref(db,"operatorOnline");
+
+
+const login =
+    document.getElementById("login");
+
+
+const panel =
+    document.getElementById(
+        "operatorPanel"
+    );
+
+
+const emailText =
+    document.getElementById(
+        "operatorEmail"
+    );
+
+
+const messages =
+    document.getElementById(
+        "messages"
+    );
+
+
+const input =
+    document.getElementById(
+        "messageInput"
+    );
+
+
+const sendButton =
+    document.getElementById(
+        "sendMessage"
+    );
+
+
+const status =
+    document.getElementById(
+        "status"
+    );
+
 
 
 let messagesStarted = false;
 
+let currentOperator = null;
 
-/* GOOGLE GİRİŞ */
 
-document.getElementById("googleLogin").onclick = async () => {
 
-  try {
+/* =========================
+   GOOGLE GİRİŞ
+========================= */
 
-    const result =
-      await signInWithPopup(auth, provider);
+document
+.getElementById("googleLogin")
+.onclick = async function(){
 
-    const user = result.user;
+    try{
 
-    if (user.email !== "ttik66006@gmail.com") {
+        const result =
+            await signInWithPopup(
+                auth,
+                provider
+            );
 
-      await signOut(auth);
 
-      alert("Bu hesab operator hesabı deyil.");
+        const user =
+            result.user;
 
-      return;
+
+        if(
+            !OPERATOR_EMAILS
+            .includes(
+                user.email
+            )
+        ){
+
+            await signOut(auth);
+
+
+            alert(
+                "Bu Gmail operator hesabı deyil."
+            );
+
+
+            return;
+
+        }
+
+
+        openOperator(user);
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        alert(
+            "Google girişində xəta oldu:\n" +
+            error.message
+        );
+
     }
-
-    openOperator(user);
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Google girişində xəta oldu:\n" +
-      error.message
-    );
-
-  }
 
 };
 
 
-/* OPERATOR PANELİNİ AÇ */
 
-function openOperator(user) {
+/* =========================
+   OPERATOR PANELİ
+========================= */
 
-  login.style.display = "none";
+function openOperator(user){
 
-  panel.style.display = "block";
+    currentOperator =
+        user;
 
-  emailText.textContent =
-    "Operator: " + user.email;
 
-  status.textContent =
-    "Yazışmalar aktivdir";
+    login.style.display =
+        "none";
 
-  /* OPERATOR ONLAYN */
 
-  set(operatorRef, true);
+    panel.style.display =
+        "block";
 
-  loadMessages();
 
-}
+    emailText.textContent =
+        "Operator: " +
+        user.email;
 
 
-/* MESAJLARI OXU */
+    status.textContent =
+        "🟢 Yazışmalar aktivdir";
 
-function loadMessages() {
 
-  if (messagesStarted) return;
-
-  messagesStarted = true;
-
-
-  onChildAdded(messagesRef, (snapshot) => {
-
-    const data = snapshot.val();
-
-    if (!data) return;
-
-
-    const messageText =
-      data.message || data.text || "";
-
-
-    if (messageText === "") return;
-
-
-    const messageDiv =
-      document.createElement("div");
-
-    const senderDiv =
-      document.createElement("div");
-
-    const textDiv =
-      document.createElement("div");
-
-
-    if (data.sender === "customer") {
-
-      messageDiv.className =
-        "message customer";
-
-      senderDiv.className =
-        "sender";
-
-      senderDiv.textContent =
-        "Müştəri";
-
-    }
-
-
-    else if (data.sender === "agent") {
-
-      messageDiv.className =
-        "message agent";
-
-      senderDiv.className =
-        "sender";
-
-      senderDiv.textContent =
-        "Siz";
-
-    }
-
-
-    else {
-
-      return;
-
-    }
-
-
-    textDiv.textContent =
-      messageText;
-
-
-    messageDiv.appendChild(senderDiv);
-
-    messageDiv.appendChild(textDiv);
-
-    messages.appendChild(messageDiv);
-
-
-    messages.scrollTop =
-      messages.scrollHeight;
-
-  });
-
-}
-
-
-/* OPERATOR MESAJ GÖNDƏRİR */
-
-async function sendMessage() {
-
-  const text =
-    input.value.trim();
-
-  if (text === "") return;
-
-
-  try {
-
-    await push(messagesRef, {
-
-      message: text,
-
-      sender: "agent",
-
-      email: "ttik66006@gmail.com",
-
-      time: Date.now()
-
-    });
-
-
-    input.value = "";
-
-    input.focus();
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert(
-      "Mesaj göndərilmədi:\n" +
-      error.message
+    set(
+        operatorRef,
+        true
     );
 
-  }
+
+    loadMessages();
 
 }
+
+
+
+/* =========================
+   MESAJLARI OXU
+========================= */
+
+function loadMessages(){
+
+    if(messagesStarted){
+
+        return;
+
+    }
+
+
+    messagesStarted =
+        true;
+
+
+    onChildAdded(
+        messagesRef,
+        function(snapshot){
+
+            const data =
+                snapshot.val();
+
+
+            if(!data){
+
+                return;
+
+            }
+
+
+            const messageText =
+                data.message ||
+                data.text ||
+                "";
+
+
+            if(
+                messageText === ""
+            ){
+
+                return;
+
+            }
+
+
+            const messageDiv =
+                document.createElement(
+                    "div"
+                );
+
+
+            const senderDiv =
+                document.createElement(
+                    "div"
+                );
+
+
+            const textDiv =
+                document.createElement(
+                    "div"
+                );
+
+
+
+            if(
+                data.sender ===
+                "customer"
+            ){
+
+                messageDiv.className =
+                    "message customer";
+
+
+                senderDiv.className =
+                    "sender";
+
+
+                senderDiv.textContent =
+                    "Müştəri";
+
+            }
+
+
+            else if(
+                data.sender ===
+                "agent"
+            ){
+
+                messageDiv.className =
+                    "message agent";
+
+
+                senderDiv.className =
+                    "sender";
+
+
+                senderDiv.textContent =
+                    data.email ||
+                    "Operator";
+
+            }
+
+
+            else{
+
+                return;
+
+            }
+
+
+
+            textDiv.textContent =
+                messageText;
+
+
+            messageDiv.appendChild(
+                senderDiv
+            );
+
+
+            messageDiv.appendChild(
+                textDiv
+            );
+
+
+            messages.appendChild(
+                messageDiv
+            );
+
+
+            messages.scrollTop =
+                messages.scrollHeight;
+
+        }
+    );
+
+}
+
+
+
+/* =========================
+   OPERATOR MESAJ GÖNDƏRİR
+========================= */
+
+async function sendMessage(){
+
+    const text =
+        input.value.trim();
+
+
+    if(
+        text === ""
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !currentOperator
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await push(
+            messagesRef,
+            {
+
+                message:
+                    text,
+
+                sender:
+                    "agent",
+
+                email:
+                    currentOperator.email,
+
+                time:
+                    Date.now()
+
+            }
+        );
+
+
+        input.value =
+            "";
+
+
+        input.focus();
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        alert(
+            "Mesaj göndərilmədi:\n" +
+            error.message
+        );
+
+    }
+
+}
+
 
 
 sendButton.addEventListener(
-  "click",
-  sendMessage
+    "click",
+    sendMessage
 );
+
 
 
 input.addEventListener(
-  "keydown",
-  function(event) {
+    "keydown",
+    function(event){
 
-    if (event.key === "Enter") {
+        if(
+            event.key ===
+            "Enter"
+        ){
 
-      event.preventDefault();
+            event.preventDefault();
 
-      sendMessage();
+            sendMessage();
+
+        }
 
     }
-
-  }
 );
 
 
-/* ÇIXIŞ */
 
-document.getElementById("logout").onclick =
-async () => {
+/* =========================
+   ÇIXIŞ
+========================= */
 
-  await set(operatorRef, false);
+document
+.getElementById("logout")
+.onclick =
+async function(){
 
-  await signOut(auth);
+    await set(
+        operatorRef,
+        false
+    );
 
-  panel.style.display = "none";
 
-  login.style.display = "block";
+    await signOut(
+        auth
+    );
 
-  messages.innerHTML = "";
 
-  messagesStarted = false;
+    currentOperator =
+        null;
+
+
+    panel.style.display =
+        "none";
+
+
+    login.style.display =
+        "block";
+
+
+    messages.innerHTML =
+        "";
+
+
+    messagesStarted =
+        false;
 
 };
 
 
-/* GİRİŞ ARTIQ VARSA */
 
-onAuthStateChanged(auth, (user) => {
+/* =========================
+   ƏVVƏLDƏN GİRİŞ VARSA
+========================= */
 
-  if (!user) {
+onAuthStateChanged(
+    auth,
+    function(user){
 
-    login.style.display = "block";
+        if(!user){
 
-    panel.style.display = "none";
+            login.style.display =
+                "block";
 
-    return;
+            panel.style.display =
+                "none";
 
-  }
+            return;
+
+        }
 
 
-  if (user.email === "ttik66006@gmail.com") {
+        if(
+            OPERATOR_EMAILS
+            .includes(
+                user.email
+            )
+        ){
 
-    openOperator(user);
+            openOperator(user);
 
-  }
+        }
 
-});
+        else{
+
+            signOut(auth);
+
+        }
+
+    }
+);
 
 </script>
 
