@@ -1,46 +1,483 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Az Operator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="bot.css">
+<title>Kənd məhsulları - Çat</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f4f6;
+}
+
+.chat{
+    max-width:700px;
+    margin:auto;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:white;
+}
+
+.header{
+    background:#111827;
+    color:white;
+    padding:18px;
+}
+
+.header h2{
+    margin:0;
+}
+
+#messages{
+    flex:1;
+    overflow-y:auto;
+    padding:15px;
+    background:#f8fafc;
+}
+
+.message{
+    max-width:80%;
+    padding:11px;
+    margin-bottom:10px;
+    border-radius:14px;
+    word-break:break-word;
+}
+
+.customer{
+    background:#2563eb;
+    color:white;
+    margin-left:auto;
+}
+
+.agent{
+    background:#e5e7eb;
+    color:#111;
+    margin-right:auto;
+}
+
+audio{
+    max-width:100%;
+}
+
+.bottom{
+    display:flex;
+    gap:7px;
+    padding:10px;
+    border-top:1px solid #ddd;
+}
+
+#userInput{
+    flex:1;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:10px;
+}
+
+#send{
+    padding:0 15px;
+    border:0;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+}
+
+#record{
+    width:50px;
+    border:0;
+    border-radius:10px;
+    background:#dc2626;
+    color:white;
+    font-size:20px;
+}
+
+#record.recording{
+    background:#16a34a;
+}
+
+</style>
 </head>
 
 <body>
 
-    <div class="chat-container">
+<div class="chat">
 
-        <div class="chat-box" id="chat-box">
+<div class="header">
+    <h2>💬 Kənd məhsulları</h2>
+    <small>Operatorla əlaqə</small>
+</div>
 
-            <div class="bot-message">
-                Salam, mən Kənd Məhsullarının botuyam 🤖
-                Sizə necə kömək ola bilərəm?
-            </div>
+<div id="messages"></div>
 
-        </div>
+<div class="bottom">
 
-        <div class="chat-input-area">
+<input
+    id="userInput"
+    type="text"
+    placeholder="Mesajınızı yazın..."
+>
 
-            <input
-                type="text"
-                id="user-input"
-                placeholder="Mesaj yaz..."
-                class="chat-input"
-            >
+<button id="record">🎙️</button>
 
-            <button
-                id="send-btn"
-                class="chat-btn">
-                Göndər
-            </button>
+<button id="send">Göndər</button>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
-<script type="module" src="script.js"></script>
+
+<script type="module">
+
+import {
+    initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getDatabase,
+    ref,
+    push,
+    onChildAdded
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+
+    authDomain:
+    "kendmehsullari-6a53d.firebaseapp.com",
+
+    databaseURL:
+    "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+
+    projectId:
+    "kendmehsullari-6a53d",
+
+    storageBucket:
+    "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+    "551607499773",
+
+    appId:
+    "1:551607499773:web:a84aa63dc5b55c38687794"
+
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+const messagesRef =
+ref(db,"messages");
+
+
+const messages =
+document.getElementById("messages");
+
+const input =
+document.getElementById("userInput");
+
+const send =
+document.getElementById("send");
+
+const record =
+document.getElementById("record");
+
+
+/* =========================
+   YAZILI MESAJ
+========================= */
+
+async function sendMessage(){
+
+    const text =
+    input.value.trim();
+
+    if(!text) return;
+
+    await push(
+        messagesRef,
+        {
+
+            sender:"customer",
+
+            message:text,
+
+            time:Date.now(),
+
+            email:
+            localStorage.getItem(
+                "userEmail"
+            ) || ""
+
+        }
+    );
+
+    input.value="";
+
+}
+
+
+send.onclick =
+sendMessage;
+
+
+input.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key==="Enter"){
+
+            e.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MESAJLARI GÖSTƏR
+========================= */
+
+onChildAdded(
+    messagesRef,
+    function(snapshot){
+
+        const data =
+        snapshot.val();
+
+        if(!data) return;
+
+
+        const box =
+        document.createElement("div");
+
+
+        if(data.sender==="customer"){
+
+            box.className =
+            "message customer";
+
+        }
+
+        else if(data.sender==="agent"){
+
+            box.className =
+            "message agent";
+
+        }
+
+        else{
+
+            return;
+
+        }
+
+
+        if(data.type==="audio"){
+
+            const audio =
+            document.createElement("audio");
+
+            audio.controls=true;
+
+            audio.src =
+            data.audio;
+
+
+            box.appendChild(audio);
+
+        }
+
+        else{
+
+            box.textContent =
+            data.message || "";
+
+        }
+
+
+        messages.appendChild(box);
+
+        messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+);
+
+
+/* =========================
+   SƏS YAZMA
+========================= */
+
+let recorder = null;
+
+let audioChunks = [];
+
+let recording = false;
+
+
+record.onclick =
+async function(){
+
+    if(!recording){
+
+        try{
+
+            const stream =
+            await navigator
+            .mediaDevices
+            .getUserMedia({
+                audio:true
+            });
+
+
+            audioChunks=[];
+
+
+            recorder =
+            new MediaRecorder(stream);
+
+
+            recorder.ondataavailable =
+            function(e){
+
+                if(e.data.size>0){
+
+                    audioChunks.push(
+                        e.data
+                    );
+
+                }
+
+            };
+
+
+            recorder.onstop =
+            async function(){
+
+                stream
+                .getTracks()
+                .forEach(
+                    track =>
+                    track.stop()
+                );
+
+
+                const blob =
+                new Blob(
+                    audioChunks,
+                    {
+                        type:
+                        "audio/webm"
+                    }
+                );
+
+
+                const reader =
+                new FileReader();
+
+
+                reader.onloadend =
+                async function(){
+
+                    const audio =
+                    reader.result;
+
+
+                    await push(
+                        messagesRef,
+                        {
+
+                            sender:
+                            "customer",
+
+                            type:
+                            "audio",
+
+                            audio:
+                            audio,
+
+                            time:
+                            Date.now(),
+
+                            email:
+                            localStorage.getItem(
+                                "userEmail"
+                            ) || ""
+
+                        }
+                    );
+
+                };
+
+
+                reader.readAsDataURL(blob);
+
+            };
+
+
+            recorder.start();
+
+            recording=true;
+
+            record.classList.add(
+                "recording"
+            );
+
+            record.textContent="⏹️";
+
+        }
+
+        catch(error){
+
+            alert(
+                "Mikrofon icazəsi verilmədi."
+            );
+
+            console.error(error);
+
+        }
+
+    }
+
+    else{
+
+        recorder.stop();
+
+        recording=false;
+
+        record.classList.remove(
+            "recording"
+        );
+
+        record.textContent="🎙️";
+
+    }
+
+};
+
+</script>
 
 </body>
 </html>
