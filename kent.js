@@ -1,7 +1,25 @@
 const wrapper = document.querySelector(".wrapper");
 
-const signupHeader = document.querySelector(".signup header");
-const loginHeader = document.querySelector(".login header");
+const signupHeader =
+    document.querySelector(".signup header");
+
+const loginHeader =
+    document.querySelector(".login header");
+
+
+/* =========================
+   OPERATOR HESABLARI
+========================= */
+
+const operators = {
+
+    "ttiktok66006@gmail.com":
+        "a1m2i3d42006",
+
+    "amallizad72@gmail.com":
+        "amal2005"
+
+};
 
 
 /* =========================
@@ -24,22 +42,28 @@ function accountKey(email) {
 
 if (loginHeader) {
 
-    loginHeader.addEventListener("click", function () {
+    loginHeader.addEventListener(
+        "click",
+        function () {
 
-        wrapper.classList.add("active");
+            wrapper.classList.add("active");
 
-    });
+        }
+    );
 
 }
 
 
 if (signupHeader) {
 
-    signupHeader.addEventListener("click", function () {
+    signupHeader.addEventListener(
+        "click",
+        function () {
 
-        wrapper.classList.remove("active");
+            wrapper.classList.remove("active");
 
-    });
+        }
+    );
 
 }
 
@@ -52,19 +76,14 @@ function qeydiyyat(e) {
 
     e.preventDefault();
 
-
     const name =
         document.getElementById("signupName")
-        .value
-        .trim();
-
+        .value.trim();
 
     const email =
         document.getElementById("signupEmail")
-        .value
-        .trim()
+        .value.trim()
         .toLowerCase();
-
 
     const password =
         document.getElementById("signupPassword")
@@ -73,20 +92,108 @@ function qeydiyyat(e) {
 
     if (!name || !email || !password) {
 
-        alert("Bütün xanaları doldur");
+        alert("Bütün xanaları doldur.");
 
         return;
 
     }
 
 
+    /* OPERATOR HESABIDIRSA */
+
+    if (
+        operators[email] &&
+        operators[email] === password
+    ) {
+
+        const key =
+            accountKey(email);
+
+
+        const operatorAccount = {
+
+            name: name,
+
+            email: email,
+
+            password: password
+
+        };
+
+
+        localStorage.setItem(
+            "account_" + key,
+            JSON.stringify(operatorAccount)
+        );
+
+
+        if (
+            !localStorage.getItem(
+                "cart_" + key
+            )
+        ) {
+
+            localStorage.setItem(
+                "cart_" + key,
+                JSON.stringify([])
+            );
+
+        }
+
+
+        if (
+            !localStorage.getItem(
+                "orders_" + key
+            )
+        ) {
+
+            localStorage.setItem(
+                "orders_" + key,
+                JSON.stringify([])
+            );
+
+        }
+
+
+        localStorage.setItem(
+            "login",
+            "true"
+        );
+
+        localStorage.setItem(
+            "userName",
+            name
+        );
+
+        localStorage.setItem(
+            "userEmail",
+            email
+        );
+
+        localStorage.setItem(
+            "operator",
+            "true"
+        );
+
+        localStorage.setItem(
+            "operatorEmail",
+            email
+        );
+
+
+        window.location.href =
+            "operator.html";
+
+        return;
+
+    }
+
+
+    /* MÜŞTƏRİ HESABI */
+
     const key =
         accountKey(email);
 
-
-    /*
-       BU HESAB ƏVVƏL VARMI?
-    */
 
     const oldAccount =
         localStorage.getItem(
@@ -105,10 +212,6 @@ function qeydiyyat(e) {
     }
 
 
-    /*
-       HESABI YARAT
-    */
-
     const account = {
 
         name: name,
@@ -121,43 +224,22 @@ function qeydiyyat(e) {
 
 
     localStorage.setItem(
-
         "account_" + key,
-
         JSON.stringify(account)
-
     );
 
 
-    /*
-       BU HESAB ÜÇÜN AYRI SƏBƏT
-    */
-
     localStorage.setItem(
-
         "cart_" + key,
-
         JSON.stringify([])
-
     );
 
-
-    /*
-       BU HESAB ÜÇÜN AYRI SİFARİŞLƏR
-    */
 
     localStorage.setItem(
-
         "orders_" + key,
-
         JSON.stringify([])
-
     );
 
-
-    /*
-       AKTİV HESAB
-    */
 
     localStorage.setItem(
         "login",
@@ -174,32 +256,13 @@ function qeydiyyat(e) {
         email
     );
 
-
-    /*
-       OPERATOR
-    */
-
-    if (
-        email === "ttik66006@gmail.com" &&
-        password === "a1m2i3d42006"
-    ) {
-
-        localStorage.setItem(
-            "operator",
-            "true"
-        );
-
-        window.location.href =
-            "operator.html";
-
-        return;
-
-    }
-
-
     localStorage.setItem(
         "operator",
         "false"
+    );
+
+    localStorage.removeItem(
+        "operatorEmail"
     );
 
 
@@ -207,6 +270,7 @@ function qeydiyyat(e) {
         "index.html";
 
 }
+
 
 
 /* =========================
@@ -220,10 +284,8 @@ function login(e) {
 
     const email =
         document.getElementById("loginEmail")
-        .value
-        .trim()
+        .value.trim()
         .toLowerCase();
-
 
     const password =
         document.getElementById("loginPassword")
@@ -233,7 +295,7 @@ function login(e) {
     if (!email || !password) {
 
         alert(
-            "Email və şifrəni doldur"
+            "Email və şifrəni doldur."
         );
 
         return;
@@ -241,13 +303,120 @@ function login(e) {
     }
 
 
+    /* =========================
+       1. OPERATOR YOXLAMASI
+    ========================= */
+
+    if (
+        operators[email] &&
+        operators[email] === password
+    ) {
+
+        const key =
+            accountKey(email);
+
+
+        let saved =
+            localStorage.getItem(
+                "account_" + key
+            );
+
+
+        /*
+           Operator hesabı yoxdursa
+           avtomatik yaradırıq
+        */
+
+        if (!saved) {
+
+            const operatorAccount = {
+
+                name: "Operator",
+
+                email: email,
+
+                password: password
+
+            };
+
+
+            localStorage.setItem(
+                "account_" + key,
+                JSON.stringify(operatorAccount)
+            );
+
+        }
+
+
+        if (
+            !localStorage.getItem(
+                "cart_" + key
+            )
+        ) {
+
+            localStorage.setItem(
+                "cart_" + key,
+                JSON.stringify([])
+            );
+
+        }
+
+
+        if (
+            !localStorage.getItem(
+                "orders_" + key
+            )
+        ) {
+
+            localStorage.setItem(
+                "orders_" + key,
+                JSON.stringify([])
+            );
+
+        }
+
+
+        localStorage.setItem(
+            "login",
+            "true"
+        );
+
+        localStorage.setItem(
+            "userName",
+            "Operator"
+        );
+
+        localStorage.setItem(
+            "userEmail",
+            email
+        );
+
+        localStorage.setItem(
+            "operator",
+            "true"
+        );
+
+        localStorage.setItem(
+            "operatorEmail",
+            email
+        );
+
+
+        window.location.href =
+            "operator.html";
+
+        return;
+
+    }
+
+
+    /* =========================
+       2. MÜŞTƏRİ HESABI
+    ========================= */
+
     const key =
         accountKey(email);
 
-
-    /*
-       HESABI TAP
-    */
 
     const saved =
         localStorage.getItem(
@@ -270,10 +439,6 @@ function login(e) {
         JSON.parse(saved);
 
 
-    /*
-       PAROLU YOXLAYIRIQ
-    */
-
     if (
         account.password !== password
     ) {
@@ -286,10 +451,6 @@ function login(e) {
 
     }
 
-
-    /*
-       AKTİV HESAB
-    */
 
     localStorage.setItem(
         "login",
@@ -306,32 +467,13 @@ function login(e) {
         account.email
     );
 
-
-    /*
-       OPERATOR
-    */
-
-    if (
-        email === "ttik66006@gmail.com" &&
-        password === "a1m2i3d42006"
-    ) {
-
-        localStorage.setItem(
-            "operator",
-            "true"
-        );
-
-        window.location.href =
-            "operator.html";
-
-        return;
-
-    }
-
-
     localStorage.setItem(
         "operator",
         "false"
+    );
+
+    localStorage.removeItem(
+        "operatorEmail"
     );
 
 
@@ -339,6 +481,7 @@ function login(e) {
         "index.html";
 
 }
+
 
 
 /* =========================
@@ -347,36 +490,24 @@ function login(e) {
 
 function logout() {
 
-    /*
-       HESABIN SƏBƏTİNƏ VƏ
-       SİFARİŞLƏRİNƏ TOXUNMURUQ.
-    */
+    localStorage.removeItem("login");
 
-    localStorage.removeItem(
-        "login"
-    );
+    localStorage.removeItem("userName");
 
-    localStorage.removeItem(
-        "userName"
-    );
+    localStorage.removeItem("userEmail");
 
-    localStorage.removeItem(
-        "userEmail"
-    );
+    localStorage.removeItem("userPhoto");
 
-    localStorage.removeItem(
-        "userPhoto"
-    );
+    localStorage.removeItem("operator");
 
-    localStorage.removeItem(
-        "operator"
-    );
+    localStorage.removeItem("operatorEmail");
 
 
     window.location.href =
         "index.html";
 
 }
+
 
 
 /* =========================
@@ -415,8 +546,88 @@ function handleCredentialResponse(response) {
 
 
         /*
-           GOOGLE HESABI YOXDURSA
-           YARADIRIQ
+           GOOGLE OPERATOR
+        */
+
+        if (
+            operators[email]
+        ) {
+
+            let saved =
+                localStorage.getItem(
+                    "account_" + key
+                );
+
+
+            if (!saved) {
+
+                const operatorAccount = {
+
+                    name:
+                        data.name ||
+                        "Operator",
+
+                    email:
+                        email,
+
+                    password:
+                        operators[email]
+
+                };
+
+
+                localStorage.setItem(
+                    "account_" + key,
+                    JSON.stringify(
+                        operatorAccount
+                    )
+                );
+
+            }
+
+
+            localStorage.setItem(
+                "login",
+                "true"
+            );
+
+            localStorage.setItem(
+                "userName",
+                data.name ||
+                "Operator"
+            );
+
+            localStorage.setItem(
+                "userEmail",
+                email
+            );
+
+            localStorage.setItem(
+                "userPhoto",
+                data.picture || ""
+            );
+
+            localStorage.setItem(
+                "operator",
+                "true"
+            );
+
+            localStorage.setItem(
+                "operatorEmail",
+                email
+            );
+
+
+            window.location.href =
+                "operator.html";
+
+            return;
+
+        }
+
+
+        /*
+           GOOGLE MÜŞTƏRİ
         */
 
         let saved =
@@ -435,44 +646,30 @@ function handleCredentialResponse(response) {
                 email:
                     email,
 
-                password:
-                    ""
+                password: ""
 
             };
 
 
             localStorage.setItem(
-
                 "account_" + key,
-
                 JSON.stringify(account)
-
             );
 
 
             localStorage.setItem(
-
                 "cart_" + key,
-
                 JSON.stringify([])
-
             );
 
 
             localStorage.setItem(
-
                 "orders_" + key,
-
                 JSON.stringify([])
-
             );
 
         }
 
-
-        /*
-           AKTİV HESAB
-        */
 
         localStorage.setItem(
             "login",
@@ -499,6 +696,10 @@ function handleCredentialResponse(response) {
             "false"
         );
 
+        localStorage.removeItem(
+            "operatorEmail"
+        );
+
 
         window.location.href =
             "index.html";
@@ -517,8 +718,9 @@ function handleCredentialResponse(response) {
 }
 
 
+
 /* =========================
-   FUNKSİYALARI HTML ÜÇÜN AÇ
+   HTML ÜÇÜN AÇ
 ========================= */
 
 window.qeydiyyat =
