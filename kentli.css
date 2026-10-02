@@ -13,7 +13,6 @@ body{
     width: 100vw;
     height: 100vh;
     background: none;
-
 }
 
 .aramaKutusu{
@@ -56,8 +55,6 @@ body{
     min-width: 0;
 }
 
-
-
 .login{
     position: fixed;
     top: -20px;
@@ -69,10 +66,9 @@ body{
     bottom: none;
 }
 
-    
 .qiraq-h2{
- position: relative;
- top: -20px;
+    position: relative;
+    top: -20px;
 }
 
 .messii-input::placeholder{
@@ -100,6 +96,7 @@ body{
 .chat-button:hover{
     transform: scale(1.1);
 }
+
 .lisi-i2{
     position: absolute;
     top: -28px;
@@ -110,15 +107,14 @@ body{
     text-align: center;
     text-transform: none;
 }
+
+/* YALNIZ Dəstək hissəsi düzəldildi */
 .lisa-l2{
-    margin-left: 1200px;
-    margin-top: 20px;
     font-size: 20px;
-    position: fixed;
-    bottom: 50px;
-    right: 1600px;
     position: relative;
     left: 20px;
+    margin-left: 0;
+    margin-top: 20px;
 }
 
 #profileMenu{
@@ -139,6 +135,7 @@ body{
 .profile-area:hover #profileMenu{
     display: block;
 }
+
 #profileMenu ul{
     list-style: none;
     padding: 0;
@@ -167,7 +164,7 @@ body{
     text-decoration: none;
     color: #333;
 }
- 
+
 .googleUser{
     width: 40px;
     height: 40px;
@@ -180,29 +177,30 @@ body{
 }
 
 .topbar{
-width:100%;
-background:white;
-padding:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:fixed;
-top:0;
-left:0;
-z-index:999;
+    width:100%;
+    background:white;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:999;
 }
 
 #userInfo{
-display:flex;
-align-items:center;
+    display:flex;
+    align-items:center;
 }
 
 #userPhoto{
-width:40px;
-height:40px;
-border-radius:50%;
-margin-right:15px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    margin-right:15px;
 }
+
 @media (max-width: 600px) {
     h1 {
         font-size: 30px;
@@ -219,7 +217,7 @@ margin-right:15px;
 }
 
 body{
-padding-top:60px;
+    padding-top:60px;
 }
 
 .mehsulSekli {
