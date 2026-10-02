@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Kənd məhsulları - Çat</title>
+<title>Kənd məhsulları - Operator</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -46,7 +42,7 @@ body{
 
 .message{
     max-width:80%;
-    padding:11px;
+    padding:11px 14px;
     margin-bottom:10px;
     border-radius:14px;
     word-break:break-word;
@@ -64,7 +60,14 @@ body{
     margin-right:auto;
 }
 
+.sender{
+    font-size:11px;
+    opacity:.7;
+    margin-bottom:5px;
+}
+
 audio{
+    width:240px;
     max-width:100%;
 }
 
@@ -77,13 +80,15 @@ audio{
 
 #userInput{
     flex:1;
+    min-width:0;
     padding:13px;
     border:1px solid #ccc;
     border-radius:10px;
+    font-size:15px;
 }
 
 #send{
-    padding:0 15px;
+    padding:0 14px;
     border:0;
     border-radius:10px;
     background:#2563eb;
@@ -102,7 +107,6 @@ audio{
 #record.recording{
     background:#16a34a;
 }
-
 </style>
 </head>
 
@@ -110,26 +114,26 @@ audio{
 
 <div class="chat">
 
-<div class="header">
-    <h2>💬 Kənd məhsulları</h2>
-    <small>Operatorla əlaqə</small>
-</div>
+    <div class="header">
+        <h2>💬 Kənd məhsulları</h2>
+        <small>Operatorla əlaqə</small>
+    </div>
 
-<div id="messages"></div>
+    <div id="messages"></div>
 
-<div class="bottom">
+    <div class="bottom">
 
-<input
-    id="userInput"
-    type="text"
-    placeholder="Mesajınızı yazın..."
->
+        <input
+            id="userInput"
+            type="text"
+            placeholder="Mesajınızı yazın..."
+        >
 
-<button id="record">🎙️</button>
+        <button id="record" type="button">🎙️</button>
 
-<button id="send">Göndər</button>
+        <button id="send" type="button">Göndər</button>
 
-</div>
+    </div>
 
 </div>
 
@@ -151,6 +155,19 @@ import {
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+
+/* =========================
+   FIREBASE
+========================= */
 
 const firebaseConfig = {
 
@@ -179,26 +196,41 @@ const firebaseConfig = {
 
 
 const app =
-initializeApp(firebaseConfig);
+    initializeApp(firebaseConfig);
 
 const db =
-getDatabase(app);
+    getDatabase(app);
+
+const storage =
+    getStorage(app);
 
 const messagesRef =
-ref(db,"messages");
+    ref(db,"messages");
 
+
+/* =========================
+   ELEMENTLƏR
+========================= */
 
 const messages =
-document.getElementById("messages");
+    document.getElementById("messages");
 
 const input =
-document.getElementById("userInput");
+    document.getElementById("userInput");
 
 const send =
-document.getElementById("send");
+    document.getElementById("send");
 
 const record =
-document.getElementById("record");
+    document.getElementById("record");
+
+
+/* =========================
+   HESAB
+========================= */
+
+const customerEmail =
+    localStorage.getItem("userEmail") || "";
 
 
 /* =========================
@@ -208,29 +240,34 @@ document.getElementById("record");
 async function sendMessage(){
 
     const text =
-    input.value.trim();
+        input.value.trim();
 
     if(!text) return;
 
-    await push(
-        messagesRef,
-        {
+    try{
 
-            sender:"customer",
+        await push(
+            messagesRef,
+            {
+                sender:"customer",
+                type:"text",
+                message:text,
+                email:customerEmail,
+                time:Date.now()
+            }
+        );
 
-            message:text,
+        input.value="";
 
-            time:Date.now(),
+    }catch(error){
 
-            email:
-            localStorage.getItem(
-                "userEmail"
-            ) || ""
+        console.error(error);
 
-        }
-    );
+        alert(
+            "Mesaj göndərilmədi."
+        );
 
-    input.value="";
+    }
 
 }
 
@@ -264,26 +301,38 @@ onChildAdded(
     function(snapshot){
 
         const data =
-        snapshot.val();
+            snapshot.val();
 
         if(!data) return;
 
 
         const box =
-        document.createElement("div");
+            document.createElement("div");
+
+        const sender =
+            document.createElement("div");
+
+        sender.className =
+            "sender";
 
 
-        if(data.sender==="customer"){
+        if(data.sender === "customer"){
 
             box.className =
-            "message customer";
+                "message customer";
+
+            sender.textContent =
+                "Siz";
 
         }
 
-        else if(data.sender==="agent"){
+        else if(data.sender === "agent"){
 
             box.className =
-            "message agent";
+                "message agent";
+
+            sender.textContent =
+                "Operator";
 
         }
 
@@ -294,25 +343,38 @@ onChildAdded(
         }
 
 
-        if(data.type==="audio"){
+        box.appendChild(sender);
+
+
+        /* SƏS */
+
+        if(data.type === "audio"){
+
+            if(!data.audioURL) return;
 
             const audio =
-            document.createElement("audio");
+                document.createElement("audio");
 
-            audio.controls=true;
+            audio.controls = true;
 
             audio.src =
-            data.audio;
-
+                data.audioURL;
 
             box.appendChild(audio);
 
         }
 
+        /* YAZI */
+
         else{
 
-            box.textContent =
-            data.message || "";
+            const text =
+                document.createElement("div");
+
+            text.textContent =
+                data.message || "";
+
+            box.appendChild(text);
 
         }
 
@@ -320,7 +382,7 @@ onChildAdded(
         messages.appendChild(box);
 
         messages.scrollTop =
-        messages.scrollHeight;
+            messages.scrollHeight;
 
     }
 );
@@ -345,117 +407,149 @@ async function(){
         try{
 
             const stream =
-            await navigator
-            .mediaDevices
-            .getUserMedia({
-                audio:true
-            });
+                await navigator
+                .mediaDevices
+                .getUserMedia({
+                    audio:true
+                });
 
 
-            audioChunks=[];
+            audioChunks = [];
 
 
             recorder =
-            new MediaRecorder(stream);
+                new MediaRecorder(stream);
 
 
             recorder.ondataavailable =
-            function(e){
+                function(event){
 
-                if(e.data.size>0){
+                    if(event.data.size > 0){
 
-                    audioChunks.push(
-                        e.data
-                    );
+                        audioChunks.push(
+                            event.data
+                        );
 
-                }
-
-            };
-
-
-            recorder.onstop =
-            async function(){
-
-                stream
-                .getTracks()
-                .forEach(
-                    track =>
-                    track.stop()
-                );
-
-
-                const blob =
-                new Blob(
-                    audioChunks,
-                    {
-                        type:
-                        "audio/webm"
                     }
-                );
-
-
-                const reader =
-                new FileReader();
-
-
-                reader.onloadend =
-                async function(){
-
-                    const audio =
-                    reader.result;
-
-
-                    await push(
-                        messagesRef,
-                        {
-
-                            sender:
-                            "customer",
-
-                            type:
-                            "audio",
-
-                            audio:
-                            audio,
-
-                            time:
-                            Date.now(),
-
-                            email:
-                            localStorage.getItem(
-                                "userEmail"
-                            ) || ""
-
-                        }
-                    );
 
                 };
 
 
-                reader.readAsDataURL(blob);
+            recorder.onstop =
+                async function(){
 
-            };
+                    stream
+                    .getTracks()
+                    .forEach(
+                        track =>
+                        track.stop()
+                    );
+
+
+                    const blob =
+                        new Blob(
+                            audioChunks,
+                            {
+                                type:
+                                "audio/webm"
+                            }
+                        );
+
+
+                    try{
+
+                        record.textContent =
+                            "⏳";
+
+
+                        /* FIREBASE STORAGE */
+
+                        const fileName =
+                            "voice_" +
+                            Date.now() +
+                            ".webm";
+
+
+                        const fileRef =
+                            storageRef(
+                                storage,
+                                "voice/" +
+                                fileName
+                            );
+
+
+                        await uploadBytes(
+                            fileRef,
+                            blob
+                        );
+
+
+                        const audioURL =
+                            await getDownloadURL(
+                                fileRef
+                            );
+
+
+                        /* MESAJI DATABASE-Ə YAZ */
+
+                        await push(
+                            messagesRef,
+                            {
+                                sender:
+                                    "customer",
+
+                                type:
+                                    "audio",
+
+                                audioURL:
+                                    audioURL,
+
+                                email:
+                                    customerEmail,
+
+                                time:
+                                    Date.now()
+                            }
+                        );
+
+
+                    }catch(error){
+
+                        console.error(error);
+
+                        alert(
+                            "Səs göndərilmədi:\n" +
+                            error.message
+                        );
+
+                    }
+
+
+                    record.textContent =
+                        "🎙️";
+
+                };
 
 
             recorder.start();
 
-            recording=true;
+            recording = true;
 
             record.classList.add(
                 "recording"
             );
 
-            record.textContent="⏹️";
+            record.textContent =
+                "⏹️";
 
-        }
 
-        catch(error){
+        }catch(error){
+
+            console.error(error);
 
             alert(
                 "Mikrofon icazəsi verilmədi."
             );
-
-            console.error(error);
 
         }
 
@@ -465,13 +559,11 @@ async function(){
 
         recorder.stop();
 
-        recording=false;
+        recording = false;
 
         record.classList.remove(
             "recording"
         );
-
-        record.textContent="🎙️";
 
     }
 
