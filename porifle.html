@@ -1,32 +1,251 @@
-
-
 <div class="menu">
-<p onclick="showPage('orders')">Sifarişlərin</p>                                    <div class="content">
 
-<div id="orders" class="page">
-<h2>Sifarişlərin</h2>
-<p>Sifarişlər burada çıxacaq</p>
-</div>
+    <p onclick="showPage('orders')">
+        Sifarişlərin
+    </p>
 
-<div id="comments" class="page">
-<h2>Yorumlarınız</h2>
-<p>Yorumlar burada çıxacaq</p>
-</div>
+    <p onclick="showPage('comments')">
+        Yorumların
+    </p>
 
-<div id="profil" class="page">
-<h2>Profilin</h2>
-<p>Ad Soyad burada çıxacaq</p>
-</div>
+    <p onclick="showPage('profil')">
+        Profilin
+    </p>
 
-<div id="history" class="page">
-<h2>Axtarış tarixçəsi</h2>
-<p>Tarixçə burada çıxacaq</p>
-</div>
+    <p onclick="showPage('history')">
+        🕘 Tarixçə
+    </p>
 
 </div>
-<p onclick="showPage('comments')">Yorumlarınız</p>
-<p onclick="showPage('profil')">Profilin</p>
-<p onclick="showPage('history')">Axtarış tarixçəsi</p>
+
+
+<div class="content">
+
+
+    <!-- SİFARİŞLƏR -->
+
+    <div id="orders" class="page">
+
+        <h2>Sifarişlərin</h2>
+
+        <p>
+            Sifarişlər burada çıxacaq
+        </p>
+
+    </div>
+
+
+    <!-- YORUMLAR -->
+
+    <div id="comments" class="page">
+
+        <h2>Yorumların</h2>
+
+        <p>
+            Yorumlar burada çıxacaq
+        </p>
+
+    </div>
+
+
+    <!-- PROFİL -->
+
+    <div id="profil" class="page">
+
+        <h2>Profilin</h2>
+
+        <p>
+            Ad Soyad burada çıxacaq
+        </p>
+
+    </div>
+
+
+    <!-- TARİXÇƏ -->
+
+    <div id="history" class="page">
+
+        <h2>🕘 Axtarış tarixçəsi</h2>
+
+        <div id="historyList">
+
+            <p>
+                Hələ tarixçə yoxdur.
+            </p>
+
+        </div>
+
+    </div>
+
+
 </div>
+
+
+<script>
+
+function showPage(pageId){
+
+    const pages =
+        document.querySelectorAll(".page");
+
+    pages.forEach(function(page){
+
+        page.style.display = "none";
+
+    });
+
+
+    const selected =
+        document.getElementById(pageId);
+
+    if(selected){
+
+        selected.style.display = "block";
+
+    }
+
+}
+
+
+/* İlk açılış */
+
+showPage("profil");
+
+
+/* =========================
+   TARİXÇƏNİ GÖSTƏR
+========================= */
+
+function loadHistory(){
+
+    const list =
+        document.getElementById("historyList");
+
+    if(!list) return;
+
+
+    const email =
+        localStorage.getItem("userEmail");
+
+
+    if(!email){
+
+        list.innerHTML =
+            "<p>Hesabına daxil olmalısan.</p>";
+
+        return;
+
+    }
+
+
+    const key =
+        email
+        .toLowerCase()
+        .trim()
+        .replace(
+            /[^a-z0-9]/g,
+            "_"
+        );
+
+
+    let history = [];
+
+
+    try{
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    "history_" + key
+                )
+            ) || [];
+
+    }catch(error){
+
+        history = [];
+
+    }
+
+
+    if(history.length === 0){
+
+        list.innerHTML =
+            "<p>Hələ tarixçə yoxdur.</p>";
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    history.forEach(function(item){
+
+        const div =
+            document.createElement("div");
+
+        div.style.background = "#fff";
+        div.style.padding = "10px";
+        div.style.marginBottom = "8px";
+        div.style.borderRadius = "10px";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.gap = "10px";
+
+
+        div.innerHTML = `
+
+            <img
+                src="${item.image || ""}"
+                style="
+                    width:70px;
+                    height:70px;
+                    object-fit:contain;
+                    border-radius:8px;
+                "
+            >
+
+            <div>
+
+                <b>${item.name || "Məhsul"}</b>
+
+                <br>
+
+                <span>
+                    ${item.price || ""} AZN
+                </span>
+
+            </div>
+
+        `;
+
+
+        div.style.cursor = "pointer";
+
+
+        div.onclick = function(){
+
+            if(item.productId){
+
+                window.location.href =
+                    "al.html?id=" +
+                    item.productId;
+
+            }
+
+        };
+
+
+        list.appendChild(div);
+
+    });
+
+}
+
+
+loadHistory();
+
+</script>
 
 <script src="profile.js"></script>
