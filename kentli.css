@@ -24,7 +24,6 @@ body{
     background:none;
     height:var(--aramaKutusu-boyut);
     border-radius:var(--aramaKutusu-boyut);
-    padding:none;
     display:flex;
     align-items:center;
     box-shadow:0 0 5px rgba(0,0,0,0.5);
@@ -72,8 +71,8 @@ body{
     text-align:center;
     position:relative;
 
-    /* TATO-NUN YERİ */
-    top:120px;
+    /* TATO DAHA AŞAĞIDA */
+    top:180px;
 }
 
 .mehsul img{
