@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="az">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Məhsul - Kənd məhsulları</title>
-
-<style>
+<!DOCTYPE html><html lang="az"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Məhsul - Kənd məhsulları</title><style>
 
 *{
     box-sizing:border-box;
@@ -160,154 +149,121 @@ body{
     text-decoration:none;
 }
 
-</style>
+</style></head><body><div class="product-page"><div class="product"><div class="gallery"><button
+class="gallery-button gallery-left"
+onclick="oncekiSekil()"
+type="button"
 
-</head>
+«»
 
-<body>
+❮
 
-<div class="product-page">
+</button><img
+id="productImage"
+src="1.png"
+alt="Məhsul"
 
-<div class="product">
-
-<div class="gallery" id="gallery">
-
-<button
-    class="gallery-button gallery-left"
-    onclick="oncekiSekil()"
-    type="button"
->
-    ❮
-</button>
-
-<img
-    id="productImage"
-    src="1.png"
-    alt="Məhsul"
->
+«»
 
 <button
-    class="gallery-button gallery-right"
-    onclick="novbetiSekil()"
-    type="button"
->
-    ❯
-</button>
+class="gallery-button gallery-right"
+onclick="novbetiSekil()"
+type="button"
 
-<div
+«»
+
+❯
+
+</button><div
     class="photo-count"
     id="photoCount"
 >
     1 / 5
-</div>
+</div></div><div class="thumbnails"><img
+class="thumbnail active"
+src="1.png"
+onclick="sekilSec(0)"
 
-</div>
-
-
-<div class="thumbnails">
-
-<img
-    class="thumbnail active"
-    src="1.png"
-    onclick="sekilSec(0)"
->
+«»
 
 <img
-    class="thumbnail"
-    src="2.png"
-    onclick="sekilSec(1)"
->
+class="thumbnail"
+src="2.png"
+onclick="sekilSec(1)"
+
+«»
 
 <img
-    class="thumbnail"
-    src="3.png"
-    onclick="sekilSec(2)"
->
+class="thumbnail"
+src="3.png"
+onclick="sekilSec(2)"
+
+«»
 
 <img
-    class="thumbnail"
-    src="4.png"
-    onclick="sekilSec(3)"
->
+class="thumbnail"
+src="4.png"
+onclick="sekilSec(3)"
+
+«»
 
 <img
-    class="thumbnail"
-    src="5.png"
-    onclick="sekilSec(4)"
->
+class="thumbnail"
+src="5.png"
+onclick="sekilSec(4)"
 
-</div>
+«»
 
-
-<div
+</div><div
     class="product-name"
     id="productName"
 >
     Kənd məhsulu
-</div>
-
-
-<div
+</div><div
     class="product-price"
     id="productPrice"
 >
     10 AZN
-</div>
-
-
-<div class="description">
+</div><div class="description">
     Təbii və keyfiyyətli kənd məhsulu.
-</div>
+</div><button
+class="cart-button"
+onclick="addCurrentProduct()"
+type="button"
 
+«»
 
-<button
-    class="cart-button"
-    onclick="addCurrentProduct()"
-    type="button"
->
-    🛒 Səbətə əlavə et
-</button>
+🛒 Səbətə əlavə et
 
+</button><a
+class="cart-link"
+href="sebet.html"
 
-<a
-    class="cart-link"
-    href="sebet.html"
->
-    🛒 Səbətimə bax
-</a>
+«»
 
+🛒 Səbətimə bax
 
-</div>
+</a></div><a
+class="back-link"
+href="index.html"
 
+«»
 
-<a
-    class="back-link"
-    href="index.html"
->
-    ← Alış-verişə qayıt
-</a>
+← Alış-verişə qayıt
 
-</div>
-
-
-<script>
+</a></div><script>
 
 /* =========================
-   ŞƏKİLLƏR
+   URL-DƏN MƏHSUL ID-Sİ
 ========================= */
 
-const sekiller = [
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
 
-    "1.png",
-    "2.png",
-    "3.png",
-    "4.png",
-    "5.png"
-
-];
-
-
-let cariSekil = 0;
+const urlProductId =
+    params.get("id") || "kend-mehsulu";
 
 
 /* =========================
@@ -332,49 +288,89 @@ function getAccountKey(){
 
 
 /* =========================
+   MƏHSULU FƏRQLƏNDİR
+========================= */
+
+if(urlProductId === "masin"){
+
+    document.getElementById(
+        "productName"
+    ).innerText =
+        "Maşın məhsulu";
+
+    document.getElementById(
+        "productPrice"
+    ).innerText =
+        "10 AZN";
+
+}else{
+
+    document.getElementById(
+        "productName"
+    ).innerText =
+        "Kənd məhsulu";
+
+    document.getElementById(
+        "productPrice"
+    ).innerText =
+        "10 AZN";
+
+}
+
+
+/* =========================
+   ŞƏKİLLƏR
+========================= */
+
+const sekiller = [
+
+    "1.png",
+    "2.png",
+    "3.png",
+    "4.png",
+    "5.png"
+
+];
+
+let cariSekil = 0;
+
+
+/* =========================
    ŞƏKLİ GÖSTƏR
 ========================= */
 
 function sekliGoster(){
 
-    const image =
-        document.getElementById(
-            "productImage"
-        );
-
-    image.src =
+    document.getElementById(
+        "productImage"
+    ).src =
         sekiller[cariSekil];
 
 
     document.getElementById(
         "photoCount"
     ).innerText =
-        (cariSekil + 1) + " / " +
+        (cariSekil + 1) +
+        " / " +
         sekiller.length;
 
 
-    const thumbnails =
-        document.querySelectorAll(
-            ".thumbnail"
+    document
+    .querySelectorAll(".thumbnail")
+    .forEach(function(item,index){
+
+        item.classList.toggle(
+            "active",
+            index === cariSekil
         );
 
-
-    thumbnails.forEach(
-        function(item,index){
-
-            item.classList.toggle(
-                "active",
-                index === cariSekil
-            );
-
-        }
-    );
+    });
 
 }
 
 
 /* =========================
-   NÖVBƏTİ ŞƏKİL
+   NÖVBƏTİ
 ========================= */
 
 function novbetiSekil(){
@@ -384,9 +380,7 @@ function novbetiSekil(){
     if(
         cariSekil >= sekiller.length
     ){
-
         cariSekil = 0;
-
     }
 
     sekliGoster();
@@ -395,7 +389,7 @@ function novbetiSekil(){
 
 
 /* =========================
-   ƏVVƏLKİ ŞƏKİL
+   ƏVVƏLKİ
 ========================= */
 
 function oncekiSekil(){
@@ -403,10 +397,8 @@ function oncekiSekil(){
     cariSekil--;
 
     if(cariSekil < 0){
-
         cariSekil =
             sekiller.length - 1;
-
     }
 
     sekliGoster();
@@ -453,7 +445,6 @@ function addCurrentProduct(){
 
     let cart = [];
 
-
     try{
 
         cart =
@@ -485,39 +476,34 @@ function addCurrentProduct(){
     const price =
         parseFloat(
             priceText
-                .replace(",", ".")
-                .replace(/[^\d.]/g,"")
+            .replace(",", ".")
+            .replace(/[^\d.]/g,"")
         ) || 0;
 
 
     const image =
         document.getElementById(
             "productImage"
-        ).src;
+        ).getAttribute("src");
 
 
     /*
-       HƏR MƏHSULA AYRI ID VERİRİK.
-       Beləliklə iki fərqli məhsul
-       bir-birinin üstünə düşmür.
+       ƏSAS DÜZƏLİŞ:
+       URL-dəki id məhsulun
+       öz unikal ID-si olur.
     */
 
     const productId =
-        name
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g,"-");
+        urlProductId;
 
 
     const existing =
-        cart.find(
-            function(item){
+        cart.find(function(item){
 
-                return item.productId ===
-                    productId;
+            return item.productId ===
+                productId;
 
-            }
-        );
+        });
 
 
     if(existing){
@@ -559,22 +545,21 @@ function addCurrentProduct(){
     );
 
 
-    alert(
-        "✅ Məhsul səbətə əlavə edildi!"
-    );
+    /*
+       SƏBƏTƏ ƏLAVƏ EDƏNDƏ
+       BİRBAŞA SƏBƏTƏ GET
+    */
+
+    window.location.href =
+        "sebet.html";
 
 }
 
 
 /* =========================
-   SƏHİFƏ AÇILANDA
+   BAŞLA
 ========================= */
 
 sekliGoster();
 
-
-</script>
-
-</body>
-
-</html>
+</script></body></html>
