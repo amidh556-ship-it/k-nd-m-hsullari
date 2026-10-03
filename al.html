@@ -34,11 +34,6 @@ body{
     padding:15px;
 }
 
-
-/* =========================
-   ŞƏKİL QALEREYASI
-========================= */
-
 .gallery{
     position:relative;
     width:100%;
@@ -55,27 +50,17 @@ body{
     display:block;
 }
 
-
-/* SAĞ-SOL DÜYMƏLƏR */
-
 .gallery-button{
     position:absolute;
-
     top:50%;
     transform:translateY(-50%);
-
     width:45px;
     height:45px;
-
     border:none;
     border-radius:50%;
-
     background:rgba(0,0,0,.45);
-
     color:white;
-
     font-size:25px;
-
     z-index:5;
 }
 
@@ -87,64 +72,38 @@ body{
     right:10px;
 }
 
-
-/* 5 BALACA GÖSTƏRİCİ */
-
 .photo-count{
     position:absolute;
-
     right:12px;
     bottom:12px;
-
     background:rgba(0,0,0,.55);
-
     color:white;
-
     padding:6px 10px;
-
     border-radius:15px;
-
     font-size:13px;
-
     z-index:5;
 }
 
-
-/* AŞAĞIDA 5 BALACA ŞƏKİL */
-
 .thumbnails{
     display:flex;
-
     gap:7px;
-
     margin-top:10px;
-
     overflow-x:auto;
 }
 
 .thumbnail{
     width:58px;
     height:58px;
-
     object-fit:cover;
-
     border-radius:7px;
-
     border:2px solid transparent;
-
     cursor:pointer;
-
     flex-shrink:0;
 }
 
 .thumbnail.active{
     border:2px solid #2e7d32;
 }
-
-
-/* =========================
-   MƏHSUL
-========================= */
 
 .product-name{
     font-size:24px;
@@ -169,14 +128,10 @@ body{
     width:100%;
     padding:15px;
     margin-top:20px;
-
     border:none;
     border-radius:9px;
-
     background:#2e7d32;
-
     color:white;
-
     font-size:17px;
     font-weight:bold;
 }
@@ -187,33 +142,21 @@ body{
 
 .cart-link{
     display:block;
-
     text-align:center;
-
     margin-top:15px;
-
     padding:14px;
-
     background:white;
-
     border-radius:9px;
-
     text-decoration:none;
-
     color:#222;
-
     font-weight:bold;
 }
 
 .back-link{
     display:block;
-
     text-align:center;
-
     padding:20px;
-
     color:#222;
-
     text-decoration:none;
 }
 
@@ -221,96 +164,80 @@ body{
 
 </head>
 
-
 <body>
-
 
 <div class="product-page">
 
 <div class="product">
 
-
-<!-- =========================
-     5 ŞƏKİLLİ QALEREYA
-========================= -->
-
 <div class="gallery" id="gallery">
 
+<button
+    class="gallery-button gallery-left"
+    onclick="oncekiSekil()"
+    type="button"
+>
+    ❮
+</button>
 
-    <button
-        class="gallery-button gallery-left"
-        onclick="oncekiSekil()"
-        type="button"
-    >
-        ❮
-    </button>
+<img
+    id="productImage"
+    src="1.png"
+    alt="Məhsul"
+>
 
+<button
+    class="gallery-button gallery-right"
+    onclick="novbetiSekil()"
+    type="button"
+>
+    ❯
+</button>
 
-    <img
-        id="productImage"
-        src="1.png"
-        alt="Məhsul"
-    >
-
-
-    <button
-        class="gallery-button gallery-right"
-        onclick="novbetiSekil()"
-        type="button"
-    >
-        ❯
-    </button>
-
-
-    <div
-        class="photo-count"
-        id="photoCount"
-    >
-        1 / 5
-    </div>
-
+<div
+    class="photo-count"
+    id="photoCount"
+>
+    1 / 5
+</div>
 
 </div>
 
-
-<!-- BALACA ŞƏKİLLƏR -->
 
 <div class="thumbnails">
 
-    <img
-        class="thumbnail active"
-        src="1.png"
-        onclick="sekilSec(0)"
-    >
+<img
+    class="thumbnail active"
+    src="1.png"
+    onclick="sekilSec(0)"
+>
 
-    <img
-        class="thumbnail"
-        src="2.png"
-        onclick="sekilSec(1)"
-    >
+<img
+    class="thumbnail"
+    src="2.png"
+    onclick="sekilSec(1)"
+>
 
-    <img
-        class="thumbnail"
-        src="3.png"
-        onclick="sekilSec(2)"
-    >
+<img
+    class="thumbnail"
+    src="3.png"
+    onclick="sekilSec(2)"
+>
 
-    <img
-        class="thumbnail"
-        src="4.png"
-        onclick="sekilSec(3)"
-    >
+<img
+    class="thumbnail"
+    src="4.png"
+    onclick="sekilSec(3)"
+>
 
-    <img
-        class="thumbnail"
-        src="5.png"
-        onclick="sekilSec(4)"
-    >
+<img
+    class="thumbnail"
+    src="5.png"
+    onclick="sekilSec(4)"
+>
 
 </div>
 
-
-<!-- MƏHSUL ADI -->
 
 <div
     class="product-name"
@@ -320,8 +247,6 @@ body{
 </div>
 
 
-<!-- QİYMƏT -->
-
 <div
     class="product-price"
     id="productPrice"
@@ -330,18 +255,15 @@ body{
 </div>
 
 
-<!-- AÇIQLAMA -->
-
 <div class="description">
     Təbii və keyfiyyətli kənd məhsulu.
 </div>
 
 
-<!-- SƏBƏT -->
-
 <button
     class="cart-button"
     onclick="addCurrentProduct()"
+    type="button"
 >
     🛒 Səbətə əlavə et
 </button>
@@ -365,16 +287,13 @@ body{
     ← Alış-verişə qayıt
 </a>
 
-
 </div>
-
 
 
 <script>
 
-
 /* =========================
-   5 ŞƏKİL
+   ŞƏKİLLƏR
 ========================= */
 
 const sekiller = [
@@ -392,17 +311,270 @@ let cariSekil = 0;
 
 
 /* =========================
+   HESAB AÇARI
+========================= */
+
+function getAccountKey(){
+
+    const email =
+        localStorage.getItem("userEmail");
+
+    if(!email){
+        return null;
+    }
+
+    return email
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]/g,"_");
+
+}
+
+
+/* =========================
    ŞƏKLİ GÖSTƏR
 ========================= */
 
 function sekliGoster(){
 
     const image =
-        document.getElementById("productImage");
+        document.getElementById(
+            "productImage"
+        );
 
     image.src =
         sekiller[cariSekil];
 
 
-    document.getElementById("photoCount")
-        .text
+    document.getElementById(
+        "photoCount"
+    ).innerText =
+        (cariSekil + 1) + " / " +
+        sekiller.length;
+
+
+    const thumbnails =
+        document.querySelectorAll(
+            ".thumbnail"
+        );
+
+
+    thumbnails.forEach(
+        function(item,index){
+
+            item.classList.toggle(
+                "active",
+                index === cariSekil
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   NÖVBƏTİ ŞƏKİL
+========================= */
+
+function novbetiSekil(){
+
+    cariSekil++;
+
+    if(
+        cariSekil >= sekiller.length
+    ){
+
+        cariSekil = 0;
+
+    }
+
+    sekliGoster();
+
+}
+
+
+/* =========================
+   ƏVVƏLKİ ŞƏKİL
+========================= */
+
+function oncekiSekil(){
+
+    cariSekil--;
+
+    if(cariSekil < 0){
+
+        cariSekil =
+            sekiller.length - 1;
+
+    }
+
+    sekliGoster();
+
+}
+
+
+/* =========================
+   ŞƏKİL SEÇ
+========================= */
+
+function sekilSec(index){
+
+    cariSekil = index;
+
+    sekliGoster();
+
+}
+
+
+/* =========================
+   SƏBƏTƏ ƏLAVƏ ET
+========================= */
+
+function addCurrentProduct(){
+
+    const key =
+        getAccountKey();
+
+
+    if(!key){
+
+        alert(
+            "Əvvəlcə hesabına daxil ol."
+        );
+
+        window.location.href =
+            "kent.html";
+
+        return;
+
+    }
+
+
+    let cart = [];
+
+
+    try{
+
+        cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "cart_" + key
+                )
+            ) || [];
+
+    }catch(error){
+
+        cart = [];
+
+    }
+
+
+    const name =
+        document.getElementById(
+            "productName"
+        ).innerText.trim();
+
+
+    const priceText =
+        document.getElementById(
+            "productPrice"
+        ).innerText;
+
+
+    const price =
+        parseFloat(
+            priceText
+                .replace(",", ".")
+                .replace(/[^\d.]/g,"")
+        ) || 0;
+
+
+    const image =
+        document.getElementById(
+            "productImage"
+        ).src;
+
+
+    /*
+       HƏR MƏHSULA AYRI ID VERİRİK.
+       Beləliklə iki fərqli məhsul
+       bir-birinin üstünə düşmür.
+    */
+
+    const productId =
+        name
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g,"-");
+
+
+    const existing =
+        cart.find(
+            function(item){
+
+                return item.productId ===
+                    productId;
+
+            }
+        );
+
+
+    if(existing){
+
+        existing.quantity =
+            (Number(existing.quantity) || 1)
+            + 1;
+
+    }else{
+
+        cart.push({
+
+            productId:
+                productId,
+
+            name:
+                name,
+
+            price:
+                price,
+
+            image:
+                image,
+
+            quantity:
+                1
+
+        });
+
+    }
+
+
+    localStorage.setItem(
+
+        "cart_" + key,
+
+        JSON.stringify(cart)
+
+    );
+
+
+    alert(
+        "✅ Məhsul səbətə əlavə edildi!"
+    );
+
+}
+
+
+/* =========================
+   SƏHİFƏ AÇILANDA
+========================= */
+
+sekliGoster();
+
+
+</script>
+
+</body>
+
+</html>
