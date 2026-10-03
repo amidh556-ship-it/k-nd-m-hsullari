@@ -69,8 +69,6 @@ body{
     width:300px;
     margin:20px auto;
     text-align:center;
-    position:relative;
-    top:-60px;
 }
 
 .mehsul img{
@@ -83,7 +81,7 @@ body{
 
 .mehsul h3{
     font-size:20px;
-    margin-top:40px;
+    margin-top:80px;
 }
 
 .mehsul p{
