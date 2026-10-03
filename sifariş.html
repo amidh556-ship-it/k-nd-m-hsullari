@@ -1,12 +1,22 @@
-1<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="az">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
 <title>Sifariş et</title>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -45,7 +55,8 @@ body{
     flex:1;
 }
 
-input,textarea{
+input,
+textarea{
     width:100%;
     padding:13px;
     margin-top:10px;
@@ -89,14 +100,18 @@ button{
     padding:25px;
     text-align:center;
 }
+
 </style>
+
 </head>
+
 
 <body>
 
 <div class="container">
 
 <h1>📦 Sifariş et</h1>
+
 
 <div class="box">
 
@@ -105,74 +120,130 @@ button{
 <div id="products"></div>
 
 <div class="total">
+
 Ümumi:
 <span id="total">0.00</span> AZN
+
 </div>
 
 </div>
+
 
 <div class="box">
 
 <h3>Müştəri məlumatları</h3>
 
-<input
-id="name"
-type="text"
-placeholder="Ad və soyad"
->
 
 <input
-id="phone"
-type="tel"
-placeholder="Telefon nömrəsi"
+    id="name"
+    type="text"
+    placeholder="Ad və soyad"
 >
+
+
+<input
+    id="phone"
+    type="tel"
+    placeholder="Telefon nömrəsi"
+>
+
 
 <textarea
-id="address"
-placeholder="Ünvan"
+    id="address"
+    placeholder="Ünvan"
 ></textarea>
 
-<button onclick="placeOrder()">
+
+<button
+    onclick="placeOrder()"
+>
+
 ✅ Sifarişi təsdiqlə
+
 </button>
 
 </div>
 
+
 <a
-class="back"
-href="sebet.html"
+    class="back"
+    href="sebet.html"
 >
+
 ← Səbətə qayıt
+
 </a>
 
 </div>
 
 
-<script>
 
-function getKey(){
+<script type="module">
 
-    const email =
-        localStorage.getItem("userEmail");
-
-    if(!email){
-        return null;
-    }
-
-    return email
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]/g,"_");
-}
+import {
+    initializeApp
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
-/* =====================
-   GİRİŞ YOXLAMASI
-===================== */
+import {
+    getDatabase,
+    ref,
+    push,
+    set
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-const key = getKey();
 
-if(!key){
+
+/* =========================
+   FIREBASE
+========================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+
+    authDomain:
+        "kendmehsullari-6a53d.firebaseapp.com",
+
+    databaseURL:
+        "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+
+    projectId:
+        "kendmehsullari-6a53d",
+
+    storageBucket:
+        "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+        "551607499773",
+
+    appId:
+        "1:551607499773:web:a84aa63dc5b55c38687794"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getDatabase(app);
+
+
+
+/* =========================
+   HESAB
+========================= */
+
+const email =
+    localStorage.getItem("userEmail");
+
+
+if(!email){
 
     alert(
         "Əvvəlcə hesabına giriş et."
@@ -184,9 +255,32 @@ if(!key){
 }
 
 
-/* =====================
+
+/* =========================
+   SƏBƏT AÇARI
+========================= */
+
+function getKey(){
+
+    return email
+        .toLowerCase()
+        .trim()
+        .replace(
+            /[^a-z0-9]/g,
+            "_"
+        );
+
+}
+
+
+const key =
+    getKey();
+
+
+
+/* =========================
    SƏBƏT
-===================== */
+========================= */
 
 function getCart(){
 
@@ -198,7 +292,7 @@ function getCart(){
             )
         ) || [];
 
-    }catch(e){
+    }catch(error){
 
         return [];
 
@@ -207,27 +301,40 @@ function getCart(){
 }
 
 
-const cart = getCart();
+const cart =
+    getCart();
+
 
 const productsBox =
     document.getElementById(
         "products"
     );
 
+
 const totalBox =
     document.getElementById(
         "total"
     );
 
+
 let total = 0;
 
+
+
+/* =========================
+   MƏHSULLARI GÖSTƏR
+========================= */
 
 if(cart.length === 0){
 
     productsBox.innerHTML = `
+
         <div class="empty">
+
             🛒 Səbət boşdur
+
         </div>
+
     `;
 
 }else{
@@ -237,8 +344,10 @@ if(cart.length === 0){
         const quantity =
             Number(item.quantity) || 1;
 
+
         const price =
             Number(item.price) || 0;
+
 
         total +=
             price * quantity;
@@ -271,6 +380,7 @@ if(cart.length === 0){
                 </div>
 
             </div>
+
         `;
 
     });
@@ -282,9 +392,10 @@ totalBox.innerText =
     total.toFixed(2);
 
 
-/* =====================
-   SİFARİŞ
-===================== */
+
+/* =========================
+   SİFARİŞ YARAT
+========================= */
 
 window.placeOrder =
 async function(){
@@ -295,17 +406,20 @@ async function(){
         .value
         .trim();
 
+
     const phone =
         document
         .getElementById("phone")
         .value
         .trim();
 
+
     const address =
         document
         .getElementById("address")
         .value
         .trim();
+
 
 
     if(cart.length === 0){
@@ -319,7 +433,12 @@ async function(){
     }
 
 
-    if(!name || !phone || !address){
+
+    if(
+        !name ||
+        !phone ||
+        !address
+    ){
 
         alert(
             "Ad, telefon və ünvanı doldur."
@@ -330,25 +449,34 @@ async function(){
     }
 
 
+
+    /* =========================
+       SİFARİŞ MƏLUMATI
+    ========================= */
+
     const order = {
 
         orderId:
-            "SIF-" + Date.now(),
+            "SIF-" +
+            Date.now(),
 
         email:
-            localStorage.getItem(
-                "userEmail"
-            ),
+            email,
 
-        name:name,
+        name:
+            name,
 
-        phone:phone,
+        phone:
+            phone,
 
-        address:address,
+        address:
+            address,
 
-        products:cart,
+        products:
+            cart,
 
-        total:total,
+        total:
+            total,
 
         status:
             "Sifariş qəbul edildi",
@@ -362,69 +490,112 @@ async function(){
 
         date:
             new Date()
-            .toLocaleString("az-AZ")
+            .toLocaleString("az-AZ"),
+
+        createdAt:
+            Date.now()
 
     };
 
 
-    /* =====================
-       HESABIN SİFARİŞLƏRİ
-    ===================== */
-
-    let orders = [];
 
     try{
 
-        orders =
-            JSON.parse(
-                localStorage.getItem(
-                    "orders_" + key
+        /* =========================
+           FIREBASE-A YAZ
+        ========================= */
+
+        const newOrder =
+            push(
+                ref(
+                    db,
+                    "orders"
                 )
-            ) || [];
+            );
 
-    }catch(e){
 
-        orders = [];
+        await set(
+            newOrder,
+            order
+        );
+
+
+
+        /* =========================
+           TELEFONDA DA SAXLA
+        ========================= */
+
+        let oldOrders = [];
+
+
+        try{
+
+            oldOrders =
+                JSON.parse(
+                    localStorage.getItem(
+                        "orders_" + key
+                    )
+                ) || [];
+
+        }catch(error){
+
+            oldOrders = [];
+
+        }
+
+
+        oldOrders.push(order);
+
+
+        localStorage.setItem(
+
+            "orders_" + key,
+
+            JSON.stringify(
+                oldOrders
+            )
+
+        );
+
+
+
+        /* =========================
+           SƏBƏTİ TƏMİZLƏ
+        ========================= */
+
+        localStorage.setItem(
+
+            "cart_" + key,
+
+            JSON.stringify([])
+
+        );
+
+
+
+        alert(
+            "✅ Sifariş uğurla qəbul edildi!"
+        );
+
+
+        window.location.href =
+            "orders.html";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "❌ Sifariş göndərilmədi. Firebase bağlantısını yoxla."
+        );
 
     }
-
-
-    orders.push(order);
-
-
-    localStorage.setItem(
-
-        "orders_" + key,
-
-        JSON.stringify(orders)
-
-    );
-
-
-    /* =====================
-       SƏBƏTİ TƏMİZLƏ
-    ===================== */
-
-    localStorage.setItem(
-
-        "cart_" + key,
-
-        JSON.stringify([])
-
-    );
-
-
-    alert(
-        "✅ Sifariş uğurla qəbul edildi!"
-    );
-
-
-    window.location.href =
-        "orders.html";
 
 };
 
 </script>
 
 </body>
+
 </html>
