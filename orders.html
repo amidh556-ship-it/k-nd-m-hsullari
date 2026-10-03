@@ -7,7 +7,6 @@
 <title>Sifarişlərim</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
@@ -160,7 +159,6 @@ h1{
     font-size:14px;
     margin-top:10px;
 }
-
 </style>
 </head>
 
@@ -178,12 +176,66 @@ h1{
 
 </div>
 
-<script>
+
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getDatabase,
+    ref,
+    onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
+const firebaseConfig = {
+
+    apiKey: "BURAYA_API_KEY",
+
+    authDomain:
+        "kendmehsullari-6a53d.firebaseapp.com",
+
+    databaseURL:
+        "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+
+    projectId:
+        "kendmehsullari-6a53d",
+
+    storageBucket:
+        "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+        "BURAYA_MESSAGING_SENDER_ID",
+
+    appId:
+        "BURAYA_APP_ID"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getDatabase(app);
+
+
+/* =========================
+   HESAB
+========================= */
 
 function getAccountKey(){
 
     const email =
-        localStorage.getItem("userEmail");
+        localStorage.getItem(
+            "userEmail"
+        );
 
     if(!email){
         return null;
@@ -192,33 +244,34 @@ function getAccountKey(){
     return email
         .toLowerCase()
         .trim()
-        .replace(/[^a-z0-9]/g,"_");
+        .replace(
+            /[^a-z0-9]/g,
+            "_"
+        );
 }
 
 
-function getOrders(){
+const accountKey =
+    getAccountKey();
 
-    const key =
-        getAccountKey();
 
-    if(!key){
-        return [];
-    }
+/* =========================
+   STATUSLAR
+========================= */
 
-    try{
+const statuses = [
 
-        return JSON.parse(
-            localStorage.getItem(
-                "orders_" + key
-            )
-        ) || [];
+    "Sifariş qəbul edildi",
 
-    }catch(error){
+    "Hazırlanır",
 
-        return [];
+    "Yola verildi",
 
-    }
-}
+    "Çatdırılır",
+
+    "Çatdırıldı"
+
+];
 
 
 function getStatusIndex(status){
@@ -230,11 +283,15 @@ function getStatusIndex(status){
     const s =
         status.toLowerCase();
 
-    if(s.includes("çatdırıldı")){
+    if(
+        s.includes("çatdırıldı")
+    ){
         return 4;
     }
 
-    if(s.includes("çatdırılır")){
+    if(
+        s.includes("çatdırılır")
+    ){
         return 3;
     }
 
@@ -256,55 +313,21 @@ function getStatusIndex(status){
 }
 
 
-const statuses = [
+/* =========================
+   SİFARİŞLƏRİ GÖSTƏR
+========================= */
 
-    "Sifariş qəbul edildi",
-
-    "Hazırlanır",
-
-    "Yola verildi",
-
-    "Çatdırılır",
-
-    "Çatdırıldı"
-
-];
-
-
-function showOrders(){
+function showOrders(orders){
 
     const box =
-        document.getElementById("orders");
+        document.getElementById(
+            "orders"
+        );
 
     box.innerHTML = "";
 
 
-    const email =
-        localStorage.getItem("userEmail");
-
-
-    if(!email){
-
-        box.innerHTML = `
-
-            <div class="login">
-
-                🔐 Sifarişlərini görmək üçün
-                hesabına giriş et.
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    const orders =
-        getOrders();
-
-
-    if(orders.length === 0){
+    if(!orders){
 
         box.innerHTML = `
 
@@ -320,14 +343,29 @@ function showOrders(){
     }
 
 
-    orders
-    .slice()
+    const list =
+        Object.values(orders);
+
+
+    if(list.length === 0){
+
+        box.innerHTML = `
+
+            <div class="empty">
+
+                📦 Hələ sifarişin yoxdur.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    list
     .reverse()
     .forEach(function(order,index){
-
-        const realIndex =
-            orders.length - 1 - index;
-
 
         const currentStatus =
             order.status ||
@@ -350,10 +388,15 @@ function showOrders(){
         products.forEach(function(item){
 
             const quantity =
-                Number(item.quantity) || 1;
+                Number(
+                    item.quantity
+                ) || 1;
+
 
             const price =
-                Number(item.price) || 0;
+                Number(
+                    item.price
+                ) || 0;
 
 
             productsHTML += `
@@ -392,31 +435,33 @@ function showOrders(){
         let timelineHTML = "";
 
 
-        statuses.forEach(function(status,i){
+        statuses.forEach(
+            function(status,i){
 
-            const active =
-                i <= statusIndex
-                ? "active"
-                : "";
+                const active =
+                    i <= statusIndex
+                    ? "active"
+                    : "";
 
 
-            timelineHTML += `
+                timelineHTML += `
 
-                <div class="step ${active}">
+                    <div class="step ${active}">
 
-                    <div class="circle"></div>
+                        <div class="circle"></div>
 
-                    <div class="step-text">
+                        <div class="step-text">
 
-                        ${status}
+                            ${status}
+
+                        </div>
 
                     </div>
 
-                </div>
+                `;
 
-            `;
-
-        });
+            }
+        );
 
 
         box.innerHTML += `
@@ -425,7 +470,9 @@ function showOrders(){
 
                 <div
                     class="order-top"
-                    onclick="toggleOrder(${realIndex})"
+                    onclick="
+                        toggleOrder(${index})
+                    "
                 >
 
                     <span class="arrow">
@@ -435,7 +482,10 @@ function showOrders(){
                     <div class="order-id">
 
                         📦
-                        ${order.orderId || "Sifariş"}
+                        ${
+                            order.orderId ||
+                            "Sifariş"
+                        }
 
                     </div>
 
@@ -450,7 +500,7 @@ function showOrders(){
 
                 <div
                     class="details"
-                    id="details-${realIndex}"
+                    id="details-${index}"
                 >
 
                     ${productsHTML}
@@ -460,9 +510,11 @@ function showOrders(){
 
                         Ümumi:
 
-                        ${Number(
-                            order.total || 0
-                        ).toFixed(2)}
+                        ${
+                            Number(
+                                order.total || 0
+                            ).toFixed(2)
+                        }
 
                         AZN
 
@@ -502,7 +554,10 @@ function showOrders(){
 
                     <div class="date">
 
-                        📅 ${order.date || ""}
+                        📅
+                        ${
+                            order.date || ""
+                        }
 
                     </div>
 
@@ -517,7 +572,12 @@ function showOrders(){
 }
 
 
-function toggleOrder(index){
+/* =========================
+   AÇ / BAĞLA
+========================= */
+
+window.toggleOrder =
+function(index){
 
     const details =
         document.getElementById(
@@ -545,10 +605,71 @@ function toggleOrder(index){
 
     }
 
+};
+
+
+/* =========================
+   GİRİŞ YOXLAMASI
+========================= */
+
+if(!accountKey){
+
+    document.getElementById(
+        "orders"
+    ).innerHTML = `
+
+        <div class="login">
+
+            🔐 Sifarişlərini görmək üçün
+            hesabına giriş et.
+
+        </div>
+
+    `;
+
+}else{
+
+    /* =====================
+       FIREBASE-DƏN CANLI OXU
+    ===================== */
+
+    const ordersRef =
+        ref(
+            db,
+            "orders/" + accountKey
+        );
+
+
+    onValue(
+        ordersRef,
+        function(snapshot){
+
+            const data =
+                snapshot.val();
+
+            showOrders(data);
+
+        },
+        function(error){
+
+            console.error(error);
+
+            document.getElementById(
+                "orders"
+            ).innerHTML = `
+
+                <div class="empty">
+
+                    ❌ Sifarişlər yüklənmədi.
+
+                </div>
+
+            `;
+
+        }
+    );
+
 }
-
-
-showOrders();
 
 </script>
 
