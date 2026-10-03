@@ -5,7 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Məhsul - Kənd məhsulları</title>
 
@@ -29,9 +32,7 @@ body{
     padding-bottom:90px;
 }
 
-/* =========================
-   YUXARI HİSSƏ
-========================= */
+/* YUXARI */
 
 .topbar{
     height:55px;
@@ -55,9 +56,7 @@ body{
     font-size:24px;
 }
 
-/* =========================
-   MƏHSUL ŞƏKİLİ
-========================= */
+/* MƏHSUL ŞƏKİLİ */
 
 .image-box{
     width:100%;
@@ -75,9 +74,7 @@ body{
     object-fit:contain;
 }
 
-/* =========================
-   ENDİRİM SƏTRİ
-========================= */
+/* ENDİRİM SƏTRİ */
 
 .info-strip{
     display:flex;
@@ -91,9 +88,7 @@ body{
     font-weight:bold;
 }
 
-/* =========================
-   MƏLUMATLAR
-========================= */
+/* MƏLUMATLAR */
 
 .info{
     padding:14px 20px;
@@ -154,9 +149,7 @@ body{
     font-size:15px;
 }
 
-/* =========================
-   SEÇİMLƏR
-========================= */
+/* SEÇİMLƏR */
 
 .option-title{
     padding:10px 20px;
@@ -183,9 +176,7 @@ body{
     border-radius:6px;
 }
 
-/* =========================
-   AŞAĞI SABİT DÜYMƏ
-========================= */
+/* AŞAĞI DÜYMƏ */
 
 .bottom-bar{
     position:fixed;
@@ -213,9 +204,7 @@ body{
     transform:scale(.98);
 }
 
-/* =========================
-   SƏBƏT
-========================= */
+/* SƏBƏT */
 
 .cart-button{
     position:fixed;
@@ -245,10 +234,6 @@ body{
     line-height:1.5;
 }
 
-/* =========================
-   MOBİL
-========================= */
-
 @media(max-width:600px){
 
     .image-box{
@@ -273,8 +258,6 @@ body{
 
 <div class="product-page">
 
-    <!-- YUXARI -->
-
     <div class="topbar">
 
         <a
@@ -295,8 +278,6 @@ body{
     </div>
 
 
-    <!-- MƏHSUL ŞƏKİLİ -->
-
     <div class="image-box">
 
         <img
@@ -309,20 +290,22 @@ body{
     </div>
 
 
-    <!-- ENDİRİM MƏLUMATI -->
-
     <div class="info-strip">
 
-        <span>✓ Pulsuz çatdırılma</span>
+        <span>
+            ✓ Pulsuz çatdırılma
+        </span>
 
-        <span>▣ Sifarişlərdə 10% ENDİRİM</span>
+        <span>
+            ▣ Sifarişlərdə 10% ENDİRİM
+        </span>
 
-        <span>✓ Gecikməyə qarşı qoruma</span>
+        <span>
+            ✓ Gecikməyə qarşı qoruma
+        </span>
 
     </div>
 
-
-    <!-- MƏHSUL MƏLUMATI -->
 
     <div class="info">
 
@@ -347,7 +330,7 @@ body{
         <div class="price-row">
 
             <span class="old-price">
-                25.00 AZN
+                7.00 AZN
             </span>
 
             <span
@@ -360,7 +343,7 @@ body{
 
 
         <div class="discount">
-            69% ENDİRİM
+            7.00 AZN ENDİRİM
         </div>
 
 
@@ -371,11 +354,10 @@ body{
     </div>
 
 
-    <!-- RƏNG -->
-
     <div class="option-title">
         Rəng seçimi
     </div>
+
 
     <div class="color-name">
         Rəng: Əsas
@@ -393,19 +375,14 @@ body{
     </div>
 
 
-    <!-- AÇIQLAMA -->
-
     <div
         id="productDescription"
         class="description"
     >
     </div>
 
-
 </div>
 
-
-<!-- SƏBƏT -->
 
 <button
     class="cart-button"
@@ -419,15 +396,15 @@ body{
 </button>
 
 
-<!-- AŞAĞI DÜYMƏ -->
-
 <div class="bottom-bar">
 
     <button
         class="bottom-button"
         onclick="addCurrentProduct()"
     >
+
         🛒 Səbətə əlavə et
+
     </button>
 
 </div>
@@ -445,7 +422,7 @@ const products = {
 
         name: "Maşın",
 
-        price: 20,
+        price: 7,
 
         image: "foto.png",
 
@@ -459,7 +436,7 @@ const products = {
 
         name: "Tato",
 
-        price: 10,
+        price: 7,
 
         image: "1.png",
 
@@ -516,7 +493,7 @@ if(product){
     document.getElementById(
         "productPrice"
     ).innerText =
-        product.price +
+        product.price.toFixed(2) +
         " AZN";
 
 
