@@ -8,15 +8,18 @@ const loginHeader =
 
 
 /* =========================
-   İDARƏÇİ HESABI
+   İDARƏÇİ
 ========================= */
 
 const ADMIN_EMAIL =
     "amidh365@gmail.com";
 
+const ADMIN_PASSWORD =
+    "a1m2i3d42006";
+
 
 /* =========================
-   OPERATOR HESABLARI
+   KÖHNƏ OPERATOR HESABLARI
 ========================= */
 
 const operators = {
@@ -100,21 +103,8 @@ function qeydiyyat(e) {
 
     if (!name || !email || !password) {
 
-        alert("Bütün xanaları doldur.");
-
-        return;
-
-    }
-
-
-    /* =========================
-       İDARƏÇİ HESABI
-    ========================= */
-
-    if (email === ADMIN_EMAIL) {
-
         alert(
-            "Bu Gmail idarəçi hesabıdır. Giriş bölməsindən daxil ol."
+            "Bütün xanaları doldur."
         );
 
         return;
@@ -123,7 +113,22 @@ function qeydiyyat(e) {
 
 
     /* =========================
-       OPERATOR HESABI
+       İDARƏÇİ GMAIL İLƏ QEYDİYYAT OLMAZ
+    ========================= */
+
+    if (email === ADMIN_EMAIL) {
+
+        alert(
+            "Bu idarəçi hesabıdır. Giriş bölməsindən daxil ol."
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       OPERATOR
     ========================= */
 
     if (
@@ -137,18 +142,20 @@ function qeydiyyat(e) {
 
         const operatorAccount = {
 
-            name: name,
+            name:name,
 
-            email: email,
+            email:email,
 
-            password: password
+            password:password
 
         };
 
 
         localStorage.setItem(
             "account_" + key,
-            JSON.stringify(operatorAccount)
+            JSON.stringify(
+                operatorAccount
+            )
         );
 
 
@@ -169,20 +176,24 @@ function qeydiyyat(e) {
             "true"
         );
 
+
         localStorage.setItem(
             "userName",
             name
         );
+
 
         localStorage.setItem(
             "userEmail",
             email
         );
 
+
         localStorage.setItem(
             "operator",
             "true"
         );
+
 
         localStorage.setItem(
             "operatorEmail",
@@ -199,7 +210,7 @@ function qeydiyyat(e) {
 
 
     /* =========================
-       MÜŞTƏRİ HESABI
+       MÜŞTƏRİ
     ========================= */
 
     const key =
@@ -225,11 +236,11 @@ function qeydiyyat(e) {
 
     const account = {
 
-        name: name,
+        name:name,
 
-        email: email,
+        email:email,
 
-        password: password
+        password:password
 
     };
 
@@ -257,20 +268,24 @@ function qeydiyyat(e) {
         "true"
     );
 
+
     localStorage.setItem(
         "userName",
         name
     );
+
 
     localStorage.setItem(
         "userEmail",
         email
     );
 
+
     localStorage.setItem(
         "operator",
         "false"
     );
+
 
     localStorage.removeItem(
         "operatorEmail"
@@ -294,8 +309,10 @@ function login(e) {
 
     const email =
         document.getElementById("loginEmail")
-        .value.trim()
+        .value
+        .trim()
         .toLowerCase();
+
 
     const password =
         document.getElementById("loginPassword")
@@ -314,57 +331,25 @@ function login(e) {
 
 
     /* =========================
-       İDARƏÇİ HESABI
+       İDARƏÇİ GİRİŞİ
     ========================= */
 
-    if (email === ADMIN_EMAIL) {
-
-        const key =
-            accountKey(email);
-
-
-        let saved =
-            localStorage.getItem(
-                "account_" + key
-            );
-
-
-        /*
-           İdarəçi hesabı
-           hələ localStorage-da yoxdursa
-           avtomatik yaradılır.
-        */
-
-        if (!saved) {
-
-            const adminAccount = {
-
-                name: "İdarəçi",
-
-                email: ADMIN_EMAIL,
-
-                password: password
-
-            };
-
-
-            localStorage.setItem(
-                "account_" + key,
-                JSON.stringify(adminAccount)
-            );
-
-        }
-
+    if (
+        email === ADMIN_EMAIL &&
+        password === ADMIN_PASSWORD
+    ) {
 
         localStorage.setItem(
             "login",
             "true"
         );
 
+
         localStorage.setItem(
             "userName",
             "İdarəçi"
         );
+
 
         localStorage.setItem(
             "userEmail",
@@ -378,11 +363,6 @@ function login(e) {
         );
 
 
-        /*
-           ƏSAS HİSSƏ:
-           İdarəçi admin.html-ə gedir.
-        */
-
         window.location.href =
             "admin.html";
 
@@ -392,7 +372,25 @@ function login(e) {
 
 
     /* =========================
-       OPERATOR YOXLAMASI
+       İDARƏÇİ GMAIL, SƏHV PAROL
+    ========================= */
+
+    if (
+        email === ADMIN_EMAIL &&
+        password !== ADMIN_PASSWORD
+    ) {
+
+        alert(
+            "İdarəçi parolu səhvdir."
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       KÖHNƏ OPERATOR
     ========================= */
 
     if (
@@ -414,18 +412,23 @@ function login(e) {
 
             const operatorAccount = {
 
-                name: "Operator",
+                name:
+                    "Operator",
 
-                email: email,
+                email:
+                    email,
 
-                password: password
+                password:
+                    password
 
             };
 
 
             localStorage.setItem(
                 "account_" + key,
-                JSON.stringify(operatorAccount)
+                JSON.stringify(
+                    operatorAccount
+                )
             );
 
         }
@@ -436,20 +439,24 @@ function login(e) {
             "true"
         );
 
+
         localStorage.setItem(
             "userName",
             "Operator"
         );
+
 
         localStorage.setItem(
             "userEmail",
             email
         );
 
+
         localStorage.setItem(
             "operator",
             "true"
         );
+
 
         localStorage.setItem(
             "operatorEmail",
@@ -466,7 +473,7 @@ function login(e) {
 
 
     /* =========================
-       MÜŞTƏRİ HESABI
+       MÜŞTƏRİ GİRİŞİ
     ========================= */
 
     const key =
@@ -512,20 +519,24 @@ function login(e) {
         "true"
     );
 
+
     localStorage.setItem(
         "userName",
         account.name
     );
+
 
     localStorage.setItem(
         "userEmail",
         account.email
     );
 
+
     localStorage.setItem(
         "operator",
         "false"
     );
+
 
     localStorage.removeItem(
         "operatorEmail"
@@ -544,17 +555,29 @@ function login(e) {
 
 function logout() {
 
-    localStorage.removeItem("login");
+    localStorage.removeItem(
+        "login"
+    );
 
-    localStorage.removeItem("userName");
+    localStorage.removeItem(
+        "userName"
+    );
 
-    localStorage.removeItem("userEmail");
+    localStorage.removeItem(
+        "userEmail"
+    );
 
-    localStorage.removeItem("userPhoto");
+    localStorage.removeItem(
+        "userPhoto"
+    );
 
-    localStorage.removeItem("operator");
+    localStorage.removeItem(
+        "operator"
+    );
 
-    localStorage.removeItem("operatorEmail");
+    localStorage.removeItem(
+        "operatorEmail"
+    );
 
 
     window.location.href =
@@ -567,7 +590,9 @@ function logout() {
    GOOGLE GİRİŞİ
 ========================= */
 
-function handleCredentialResponse(response) {
+function handleCredentialResponse(
+    response
+) {
 
     try {
 
@@ -602,12 +627,15 @@ function handleCredentialResponse(response) {
            GOOGLE İDARƏÇİ
         ========================= */
 
-        if (email === ADMIN_EMAIL) {
+        if (
+            email === ADMIN_EMAIL
+        ) {
 
             localStorage.setItem(
                 "login",
                 "true"
             );
+
 
             localStorage.setItem(
                 "userName",
@@ -615,15 +643,18 @@ function handleCredentialResponse(response) {
                 "İdarəçi"
             );
 
+
             localStorage.setItem(
                 "userEmail",
                 email
             );
 
+
             localStorage.setItem(
                 "userPhoto",
                 data.picture || ""
             );
+
 
             localStorage.setItem(
                 "operator",
@@ -685,26 +716,31 @@ function handleCredentialResponse(response) {
                 "true"
             );
 
+
             localStorage.setItem(
                 "userName",
                 data.name ||
                 "Operator"
             );
 
+
             localStorage.setItem(
                 "userEmail",
                 email
             );
+
 
             localStorage.setItem(
                 "userPhoto",
                 data.picture || ""
             );
 
+
             localStorage.setItem(
                 "operator",
                 "true"
             );
+
 
             localStorage.setItem(
                 "operatorEmail",
@@ -740,7 +776,7 @@ function handleCredentialResponse(response) {
                 email:
                     email,
 
-                password: ""
+                password:""
 
             };
 
@@ -770,25 +806,30 @@ function handleCredentialResponse(response) {
             "true"
         );
 
+
         localStorage.setItem(
             "userName",
             data.name || ""
         );
+
 
         localStorage.setItem(
             "userEmail",
             email
         );
 
+
         localStorage.setItem(
             "userPhoto",
             data.picture || ""
         );
 
+
         localStorage.setItem(
             "operator",
             "false"
         );
+
 
         localStorage.removeItem(
             "operatorEmail"
