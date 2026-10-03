@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Sifarişlərim</title>
 
@@ -136,6 +134,39 @@ h1{
     font-weight:bold;
 }
 
+.admin-box{
+    background:#fff8e1;
+    border:2px solid #ffca28;
+    padding:12px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+.admin-box select{
+    width:100%;
+    padding:13px;
+    margin-top:8px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+.admin-title{
+    font-weight:bold;
+}
+
+.save-button{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:0;
+    border-radius:8px;
+    background:#2e7d32;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
 .empty{
     background:white;
     padding:35px 15px;
@@ -164,6 +195,14 @@ h1{
     margin-top:10px;
 }
 
+.customer{
+    background:#f5f5f5;
+    padding:10px;
+    border-radius:8px;
+    margin-top:10px;
+    font-size:14px;
+}
+
 </style>
 
 </head>
@@ -172,77 +211,95 @@ h1{
 
 <div class="container">
 
-<h1>
-📦 Sifarişlərim
-</h1>
+<h1>📦 Sifarişlərim</h1>
 
-<div id="orders"></div>
+<div id="orders">
+    ⏳ Sifarişlər yüklənir...
+</div>
 
-<a
-class="back"
-href="index.html"
->
+<a class="back" href="index.html">
 ← Alış-verişə qayıt
 </a>
 
 </div>
 
 
-<script>
+<script type="module">
+
+import {
+    initializeApp
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getDatabase,
+    ref,
+    onValue,
+    update
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 
 /* =========================
-   HESAB AÇARI
+   FIREBASE
 ========================= */
 
-function getAccountKey(){
+const firebaseConfig = {
 
-    const email =
-        localStorage.getItem("userEmail");
+    apiKey:
+        "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
 
-    if(!email){
-        return null;
-    }
+    authDomain:
+        "kendmehsullari-6a53d.firebaseapp.com",
 
-    return email
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]/g,"_");
+    databaseURL:
+        "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
 
-}
+    projectId:
+        "kendmehsullari-6a53d",
+
+    storageBucket:
+        "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+        "551607499773",
+
+    appId:
+        "1:551607499773:web:a84aa63dc5b55c38687794"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getDatabase(app);
 
 
 /* =========================
-   SİFARİŞLƏRİ GÖTÜR
+   ADMIN EMAIL
 ========================= */
 
-function getOrders(){
+const ADMIN_EMAIL =
+    "amidh365@gmail.com";
 
-    const key =
-        getAccountKey();
 
-    if(!key){
-        return [];
-    }
+const currentEmail =
+    (
+        localStorage.getItem("userEmail")
+        || ""
+    )
+    .toLowerCase()
+    .trim();
 
-    try{
 
-        return JSON.parse(
-            localStorage.getItem(
-                "orders_" + key
-            )
-        ) || [];
-
-    }catch(error){
-
-        return [];
-
-    }
-
-}
+const isAdmin =
+    currentEmail === ADMIN_EMAIL;
 
 
 /* =========================
-   STATUS
+   STATUSLAR
 ========================= */
 
 const statuses = [
@@ -269,15 +326,11 @@ function getStatusIndex(status){
     const s =
         status.toLowerCase();
 
-    if(
-        s.includes("çatdırıldı")
-    ){
+    if(s.includes("çatdırıldı")){
         return 4;
     }
 
-    if(
-        s.includes("çatdırılır")
-    ){
+    if(s.includes("çatdırılır")){
         return 3;
     }
 
@@ -296,263 +349,184 @@ function getStatusIndex(status){
     }
 
     return 0;
-
 }
 
 
 /* =========================
-   SİFARİŞLƏRİ GÖSTƏR
+   SİFARİŞLƏR
 ========================= */
 
-function showOrders(){
-
-    const box =
-        document.getElementById(
-            "orders"
-        );
-
-    box.innerHTML = "";
+const ordersBox =
+    document.getElementById("orders");
 
 
-    const email =
-        localStorage.getItem(
-            "userEmail"
-        );
+onValue(
+    ref(db,"orders"),
+    function(snapshot){
+
+        ordersBox.innerHTML = "";
+
+        const data =
+            snapshot.val();
 
 
-    if(!email){
+        if(!data){
 
-        box.innerHTML = `
+            ordersBox.innerHTML = `
+                <div class="empty">
+                    📦 Hələ sifariş yoxdur.
+                </div>
+            `;
 
-            <div class="login">
-
-                🔐 Sifarişlərini görmək üçün
-                hesabına giriş et.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
+            return;
+        }
 
 
-    const orders =
-        getOrders();
+        let orders = [];
 
 
-    if(orders.length === 0){
+        Object.keys(data).forEach(function(key){
 
-        box.innerHTML = `
+            const order =
+                data[key];
 
-            <div class="empty">
+            order.firebaseKey =
+                key;
 
-                📦 Hələ sifarişin yoxdur.
+            orders.push(order);
 
-            </div>
-
-        `;
-
-        return;
-
-    }
+        });
 
 
-    orders
-    .slice()
-    .reverse()
-    .forEach(function(order,index){
+        /* =========================
+           ADMIN = BÜTÜN SİFARİŞLƏR
+        ========================= */
 
-        const currentStatus =
-            order.status ||
-            "Sifariş qəbul edildi";
+        if(!isAdmin){
+
+            orders =
+                orders.filter(function(order){
+
+                    return (
+                        String(order.email || "")
+                        .toLowerCase()
+                        .trim()
+                        === currentEmail
+                    );
+
+                });
+
+        }
 
 
-        const statusIndex =
-            getStatusIndex(
-                currentStatus
+        orders.sort(function(a,b){
+
+            return (
+                Number(b.createdAt || 0)
+                -
+                Number(a.createdAt || 0)
             );
 
-
-        let productsHTML = "";
-
-
-        const products =
-            order.products || [];
-
-
-        products.forEach(function(item){
-
-            const quantity =
-                Number(
-                    item.quantity
-                ) || 1;
-
-
-            const price =
-                Number(
-                    item.price
-                ) || 0;
-
-
-            productsHTML += `
-
-                <div class="product">
-
-                    <img
-                        src="${item.image || ''}"
-                        alt="Məhsul"
-                    >
-
-                    <div class="product-info">
-
-                        <b>
-                            ${item.name || "Məhsul"}
-                        </b>
-
-                        <br>
-
-                        ${quantity} ədəd
-
-                        <br>
-
-                        ${price.toFixed(2)}
-                        AZN / ədəd
-
-                    </div>
-
-                </div>
-
-            `;
-
         });
 
 
-        let timelineHTML = "";
+        if(orders.length === 0){
 
-
-        statuses.forEach(function(status,i){
-
-            const active =
-                i <= statusIndex
-                ? "active"
-                : "";
-
-
-            timelineHTML += `
-
-                <div class="step ${active}">
-
-                    <div class="circle"></div>
-
-                    <div class="step-text">
-
-                        ${status}
-
-                    </div>
-
+            ordersBox.innerHTML = `
+                <div class="empty">
+                    📦 Sifariş yoxdur.
                 </div>
-
             `;
+
+            return;
+        }
+
+
+        orders.forEach(function(order,index){
+
+            renderOrder(
+                order,
+                index
+            );
 
         });
 
+    },
+    function(error){
 
-        box.innerHTML += `
+        console.error(error);
 
-            <div class="order">
+        ordersBox.innerHTML = `
+            <div class="empty">
+                ❌ Sifarişləri yükləmək olmadı.
+                <br><br>
+                Firebase bağlantısını yoxla.
+            </div>
+        `;
 
-                <div
-                    class="order-top"
-                    onclick="toggleOrder(${index})"
+    }
+);
+
+
+/* =========================
+   SİFARİŞİ GÖSTƏR
+========================= */
+
+function renderOrder(
+    order,
+    index
+){
+
+    const currentStatus =
+        order.status ||
+        "Sifariş qəbul edildi";
+
+
+    const statusIndex =
+        getStatusIndex(
+            currentStatus
+        );
+
+
+    let productsHTML = "";
+
+
+    const products =
+        order.products || [];
+
+
+    products.forEach(function(item){
+
+        const quantity =
+            Number(item.quantity) || 1;
+
+        const price =
+            Number(item.price) || 0;
+
+
+        productsHTML += `
+
+            <div class="product">
+
+                <img
+                    src="${item.image || ''}"
+                    alt="Məhsul"
                 >
 
-                    <span class="arrow">
-                        ▼
-                    </span>
+                <div class="product-info">
 
-                    <div class="order-id">
+                    <b>
+                        ${item.name || "Məhsul"}
+                    </b>
 
-                        📦
-                        ${
-                            order.orderId ||
-                            "Sifariş"
-                        }
+                    <br>
 
-                    </div>
+                    ${quantity} ədəd
 
-                    <div class="status">
+                    <br>
 
-                        ${currentStatus}
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="details"
-                    id="details-${index}"
-                >
-
-                    ${productsHTML}
-
-
-                    <div class="total">
-
-                        Ümumi:
-
-                        ${
-                            Number(
-                                order.total || 0
-                            ).toFixed(2)
-                        }
-
-                        AZN
-
-                    </div>
-
-
-                    <div class="tracking">
-
-                        <b>
-                            📍 İzləmə kodu
-                        </b>
-
-                        <div class="tracking-code">
-
-                            ${
-                                order.trackingCode ||
-                                "Hazırlanır"
-                            }
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="timeline">
-
-                        <b>
-                            📦 Sifarişin vəziyyəti
-                        </b>
-
-                        <br><br>
-
-                        ${timelineHTML}
-
-                    </div>
-
-
-                    <div class="date">
-
-                        📅
-                        ${
-                            order.date || ""
-                        }
-
-                    </div>
+                    ${price.toFixed(2)}
+                    AZN / ədəd
 
                 </div>
 
@@ -562,14 +536,310 @@ function showOrders(){
 
     });
 
+
+    let timelineHTML = "";
+
+
+    statuses.forEach(function(status,i){
+
+        const active =
+            i <= statusIndex
+            ? "active"
+            : "";
+
+
+        timelineHTML += `
+
+            <div class="step ${active}">
+
+                <div class="circle"></div>
+
+                <div class="step-text">
+                    ${status}
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    let adminHTML = "";
+
+
+    /* =========================
+       YALNIZ ADMIN DƏYİŞƏ BİLƏR
+    ========================= */
+
+    if(isAdmin){
+
+        let optionsHTML = "";
+
+
+        statuses.forEach(function(status){
+
+            const selected =
+                status === currentStatus
+                ? "selected"
+                : "";
+
+
+            optionsHTML += `
+
+                <option
+                    value="${status}"
+                    ${selected}
+                >
+                    ${status}
+                </option>
+
+            `;
+
+        });
+
+
+        adminHTML = `
+
+            <div class="admin-box">
+
+                <div class="admin-title">
+                    🔐 Admin — Sifariş statusu
+                </div>
+
+                <select
+                    id="status-${index}"
+                >
+
+                    ${optionsHTML}
+
+                </select>
+
+                <button
+                    class="save-button"
+                    onclick="saveStatus(
+                        '${order.firebaseKey}',
+                        ${index}
+                    )"
+                >
+
+                    💾 Statusu yadda saxla
+
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+
+    ordersBox.innerHTML += `
+
+        <div class="order">
+
+            <div
+                class="order-top"
+                onclick="toggleOrder(${index})"
+            >
+
+                <span class="arrow">
+                    ▼
+                </span>
+
+                <div class="order-id">
+
+                    📦
+                    ${order.orderId || "Sifariş"}
+
+                </div>
+
+                <div class="status">
+
+                    ${currentStatus}
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="details"
+                id="details-${index}"
+            >
+
+                ${
+                    isAdmin
+                    ? `
+                    <div class="customer">
+
+                        👤 <b>Müştəri:</b>
+                        ${order.name || ""}
+
+                        <br>
+
+                        📧 <b>Gmail:</b>
+                        ${order.email || ""}
+
+                        <br>
+
+                        📞 <b>Telefon:</b>
+                        ${order.phone || ""}
+
+                        <br>
+
+                        📍 <b>Ünvan:</b>
+                        ${order.address || ""}
+
+                    </div>
+                    `
+                    : ""
+                }
+
+
+                ${productsHTML}
+
+
+                <div class="total">
+
+                    Ümumi:
+                    ${Number(order.total || 0).toFixed(2)}
+                    AZN
+
+                </div>
+
+
+                <div class="tracking">
+
+                    <b>
+                        📍 İzləmə kodu
+                    </b>
+
+                    <div class="tracking-code">
+
+                        ${
+                            order.trackingCode ||
+                            "Hazırlanır"
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="timeline">
+
+                    <b>
+                        📦 Sifarişin vəziyyəti
+                    </b>
+
+                    <br><br>
+
+                    ${timelineHTML}
+
+                </div>
+
+
+                ${adminHTML}
+
+
+                <div class="date">
+
+                    📅
+                    ${order.date || ""}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
 }
+
+
+/* =========================
+   STATUSU FIREBASE-DƏ
+   DƏYİŞ
+========================= */
+
+window.saveStatus =
+async function(
+    firebaseKey,
+    index
+){
+
+    if(!isAdmin){
+
+        alert(
+            "❌ Bu əməliyyata icazən yoxdur."
+        );
+
+        return;
+
+    }
+
+
+    const select =
+        document.getElementById(
+            "status-" + index
+        );
+
+
+    if(!select){
+        return;
+    }
+
+
+    const newStatus =
+        select.value;
+
+
+    try{
+
+        await update(
+            ref(
+                db,
+                "orders/" + firebaseKey
+            ),
+            {
+
+                status:
+                    newStatus,
+
+                updatedAt:
+                    Date.now()
+
+            }
+        );
+
+
+        alert(
+            "✅ Status yadda saxlanıldı: " +
+            newStatus
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "❌ Status dəyişmədi. Firebase qaydalarını yoxla."
+        );
+
+    }
+
+};
 
 
 /* =========================
    AÇ / BAĞLA
 ========================= */
 
-function toggleOrder(index){
+window.toggleOrder =
+function(index){
 
     const details =
         document.getElementById(
@@ -597,14 +867,7 @@ function toggleOrder(index){
 
     }
 
-}
-
-
-/* =========================
-   BAŞLA
-========================= */
-
-showOrders();
+};
 
 </script>
 
