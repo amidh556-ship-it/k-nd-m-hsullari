@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İdarəetmə</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f5f5f5;
+}
+
+.box{
+    max-width:500px;
+    margin:50px auto;
+    padding:25px;
+    background:white;
+    border-radius:15px;
+    text-align:center;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    border:0;
+    border-radius:10px;
+    background:#2e7d32;
+    color:white;
+    font-size:17px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>⚙️ Sifariş idarəetməsi</h2>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+const email =
+    localStorage.getItem("userEmail");
+
+const result =
+    document.getElementById("result");
+
+
+if(!email){
+
+    result.innerHTML = `
+
+        <p>❌ Hesaba daxil olmamısan.</p>
+
+        <button onclick="
+            window.location.href='index.html'
+        ">
+            Hesaba daxil ol
+        </button>
+
+    `;
+
+}else if(
+    email.toLowerCase().trim()
+    === "amidh365@gmail.com"
+){
+
+    result.innerHTML = `
+
+        <p>✅ Xoş gəldin, idarəçi!</p>
+
+        <button onclick="
+            window.location.href='orders.html'
+        ">
+            📦 Sifarişlərə bax
+        </button>
+
+    `;
+
+}else{
+
+    result.innerHTML = `
+
+        <p>❌ Bu hesabın icazəsi yoxdur.</p>
+
+    `;
+
+}
+
+</script>
+
+</body>
+</html>
