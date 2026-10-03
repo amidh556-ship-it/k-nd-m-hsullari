@@ -1,7 +1,7 @@
 :root{
     --aramaKutusu-boyut:40px;
     --aramaKutusu-uzunluk:70px;
-} 
+}
 
 *{
     margin:0;
@@ -70,8 +70,6 @@ body{
     margin:20px auto;
     text-align:center;
     position:relative;
-
-    /* TATO DAHA AŞAĞIDA */
     top:180px;
 }
 
@@ -242,6 +240,17 @@ body{
     max-width:100% !important;
     visibility:visible !important;
     opacity:1 !important;
+}
+
+
+/* =========================
+   MAŞIN — SAĞA
+========================= */
+
+a[href="al.html?id=masin"]{
+    display:block;
+    width:200px;
+    margin-left:120px;
 }
 
 a[href="al.html?id=masin"] img{
