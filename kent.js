@@ -8,6 +8,14 @@ const loginHeader =
 
 
 /* =========================
+   İDARƏÇİ HESABI
+========================= */
+
+const ADMIN_EMAIL =
+    "amidh365@gmail.com";
+
+
+/* =========================
    OPERATOR HESABLARI
 ========================= */
 
@@ -99,7 +107,24 @@ function qeydiyyat(e) {
     }
 
 
-    /* OPERATOR HESABIDIRSA */
+    /* =========================
+       İDARƏÇİ HESABI
+    ========================= */
+
+    if (email === ADMIN_EMAIL) {
+
+        alert(
+            "Bu Gmail idarəçi hesabıdır. Giriş bölməsindən daxil ol."
+        );
+
+        return;
+
+    }
+
+
+    /* =========================
+       OPERATOR HESABI
+    ========================= */
 
     if (
         operators[email] &&
@@ -127,32 +152,16 @@ function qeydiyyat(e) {
         );
 
 
-        if (
-            !localStorage.getItem(
-                "cart_" + key
-            )
-        ) {
-
-            localStorage.setItem(
-                "cart_" + key,
-                JSON.stringify([])
-            );
-
-        }
+        localStorage.setItem(
+            "cart_" + key,
+            JSON.stringify([])
+        );
 
 
-        if (
-            !localStorage.getItem(
-                "orders_" + key
-            )
-        ) {
-
-            localStorage.setItem(
-                "orders_" + key,
-                JSON.stringify([])
-            );
-
-        }
+        localStorage.setItem(
+            "orders_" + key,
+            JSON.stringify([])
+        );
 
 
         localStorage.setItem(
@@ -189,7 +198,9 @@ function qeydiyyat(e) {
     }
 
 
-    /* MÜŞTƏRİ HESABI */
+    /* =========================
+       MÜŞTƏRİ HESABI
+    ========================= */
 
     const key =
         accountKey(email);
@@ -272,7 +283,6 @@ function qeydiyyat(e) {
 }
 
 
-
 /* =========================
    GİRİŞ
 ========================= */
@@ -304,7 +314,85 @@ function login(e) {
 
 
     /* =========================
-       1. OPERATOR YOXLAMASI
+       İDARƏÇİ HESABI
+    ========================= */
+
+    if (email === ADMIN_EMAIL) {
+
+        const key =
+            accountKey(email);
+
+
+        let saved =
+            localStorage.getItem(
+                "account_" + key
+            );
+
+
+        /*
+           İdarəçi hesabı
+           hələ localStorage-da yoxdursa
+           avtomatik yaradılır.
+        */
+
+        if (!saved) {
+
+            const adminAccount = {
+
+                name: "İdarəçi",
+
+                email: ADMIN_EMAIL,
+
+                password: password
+
+            };
+
+
+            localStorage.setItem(
+                "account_" + key,
+                JSON.stringify(adminAccount)
+            );
+
+        }
+
+
+        localStorage.setItem(
+            "login",
+            "true"
+        );
+
+        localStorage.setItem(
+            "userName",
+            "İdarəçi"
+        );
+
+        localStorage.setItem(
+            "userEmail",
+            ADMIN_EMAIL
+        );
+
+
+        localStorage.setItem(
+            "operator",
+            "false"
+        );
+
+
+        /*
+           ƏSAS HİSSƏ:
+           İdarəçi admin.html-ə gedir.
+        */
+
+        window.location.href =
+            "admin.html";
+
+        return;
+
+    }
+
+
+    /* =========================
+       OPERATOR YOXLAMASI
     ========================= */
 
     if (
@@ -322,11 +410,6 @@ function login(e) {
             );
 
 
-        /*
-           Operator hesabı yoxdursa
-           avtomatik yaradırıq
-        */
-
         if (!saved) {
 
             const operatorAccount = {
@@ -343,34 +426,6 @@ function login(e) {
             localStorage.setItem(
                 "account_" + key,
                 JSON.stringify(operatorAccount)
-            );
-
-        }
-
-
-        if (
-            !localStorage.getItem(
-                "cart_" + key
-            )
-        ) {
-
-            localStorage.setItem(
-                "cart_" + key,
-                JSON.stringify([])
-            );
-
-        }
-
-
-        if (
-            !localStorage.getItem(
-                "orders_" + key
-            )
-        ) {
-
-            localStorage.setItem(
-                "orders_" + key,
-                JSON.stringify([])
             );
 
         }
@@ -411,7 +466,7 @@ function login(e) {
 
 
     /* =========================
-       2. MÜŞTƏRİ HESABI
+       MÜŞTƏRİ HESABI
     ========================= */
 
     const key =
@@ -483,7 +538,6 @@ function login(e) {
 }
 
 
-
 /* =========================
    ÇIXIŞ
 ========================= */
@@ -507,7 +561,6 @@ function logout() {
         "index.html";
 
 }
-
 
 
 /* =========================
@@ -545,9 +598,50 @@ function handleCredentialResponse(response) {
             accountKey(email);
 
 
-        /*
+        /* =========================
+           GOOGLE İDARƏÇİ
+        ========================= */
+
+        if (email === ADMIN_EMAIL) {
+
+            localStorage.setItem(
+                "login",
+                "true"
+            );
+
+            localStorage.setItem(
+                "userName",
+                data.name ||
+                "İdarəçi"
+            );
+
+            localStorage.setItem(
+                "userEmail",
+                email
+            );
+
+            localStorage.setItem(
+                "userPhoto",
+                data.picture || ""
+            );
+
+            localStorage.setItem(
+                "operator",
+                "false"
+            );
+
+
+            window.location.href =
+                "admin.html";
+
+            return;
+
+        }
+
+
+        /* =========================
            GOOGLE OPERATOR
-        */
+        ========================= */
 
         if (
             operators[email]
@@ -626,9 +720,9 @@ function handleCredentialResponse(response) {
         }
 
 
-        /*
+        /* =========================
            GOOGLE MÜŞTƏRİ
-        */
+        ========================= */
 
         let saved =
             localStorage.getItem(
@@ -716,7 +810,6 @@ function handleCredentialResponse(response) {
     }
 
 }
-
 
 
 /* =========================
