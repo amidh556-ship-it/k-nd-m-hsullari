@@ -1,74 +1,210 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title> Kənd məhsulları </title>
-        <title>Axtar</title>
-        <link rel="stylesheet" href="kentli.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
-    </head>
-    <body>
+<html lang="az">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Kənd məhsulları</title>
+
+    <link
+        rel="stylesheet"
+        href="kentli.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#000000"
+    >
+
+</head>
+
+
+<body>
+
 
 <div class="profile-area">
-    <h2><a class="lisi-i2">Hesaba <br>daxil ol</a></h2>
-    
+
+    <h2>
+        <a class="lisi-i2">
+            Hesaba <br>daxil ol
+        </a>
+    </h2>
+
 
     <div id="profileMenu">
 
         <ul>
-            <li><a href="sebet.html"><i class="fa-solid fa-cart-shopping"></i> Səbətim</a></li>
-            <li><a href="orders.html"><i class="fa-solid fa-box"></i> Siparişlərim</a></li>
-            <li><a href="comments.html"><i class="fa-solid fa-comment"></i> Yorumlarım</a></li>
-            <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profilim</a></li>
-            <li><a href="history.html"><i class="fa-solid fa-clock"></i> Axtarış tarixçəsi</a></li>
+
+            <li>
+                <a href="sebet.html">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Səbətim
+                </a>
+            </li>
+
+            <li>
+                <a href="orders.html">
+                    <i class="fa-solid fa-box"></i>
+                    Siparişlərim
+                </a>
+            </li>
+
+            <li>
+                <a href="comments.html">
+                    <i class="fa-solid fa-comment"></i>
+                    Yorumlarım
+                </a>
+            </li>
+
+            <li>
+                <a href="profile.html">
+                    <i class="fa-solid fa-user"></i>
+                    Profilim
+                </a>
+            </li>
+
+            <li>
+                <a href="history.html">
+                    <i class="fa-solid fa-clock"></i>
+                    Axtarış tarixçəsi
+                </a>
+            </li>
+
         </ul>
+
     </div>
+
 </div>
 
-<img id="userPhoto" width="40" height="40" style="border-radius:50%">
 
-        
+<img
+    id="userPhoto"
+    width="40"
+    height="40"
+    style="border-radius:50%"
+>
 
 
-        <div class="aramaKutusu">
- <a href="axtar.html">
-    <i class="fa fa-search"></i>
- </a>
+<div class="aramaKutusu">
 
-           <h2 class="qiraq-h2">Kend Mehsullari</h2>
-                <h2 class="lisa-l2">Dəstək</h2>
 
-        <a href="al.html?id=masin">
-    <img src="foto.png" width="300">
-        </a>
-            
-            <div class="mehsul">
-    <a href="al.html">
-        <img src="1.png" width="300" alt="Kənd məhsulu">
+    <a href="axtar.html">
+        <i class="fa fa-search"></i>
     </a>
-    <h3>Kənd məhsulu</h3>
-    <p>10 AZN</p>
-            </div>
-
-            
-            <a  id="profileBtn" class="login" onclick="loginSehife()"><i class="fa-regular fa-user"></i>
-            </a>
-            <a href="bot.html" class="chat-butto"><i class="fa-solid fa-comment"></i>
-            </a>
-
-    
-            
-
-             <script src="kentli.js"></script>
-            
-            
-    </body>
 
 
-<div class="profile-area">
+    <h2 class="qiraq-h2">
+        Kend Mehsullari
+    </h2>
+
+
+    <h2 class="lisa-l2">
+        Dəstək
+    </h2>
+
+
+
+    <!-- =========================
+         MAŞIN
+    ========================= -->
+
+    <a href="al.html?id=masin">
+
+        <img
+            src="foto.png"
+            width="300"
+            alt="Maşın"
+        >
+
+    </a>
+
+
+
+    <!-- =========================
+         TATO
+    ========================= -->
+
+    <div class="mehsul">
+
+        <a href="al.html?id=tato">
+
+            <img
+                src="1.png"
+                width="300"
+                alt="Tato"
+            >
+
+        </a>
+
+        <h3>
+            Tato
+        </h3>
+
+        <p>
+            10 AZN
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         PROFİL
+    ========================= -->
+
+    <a
+        id="profileBtn"
+        class="login"
+        onclick="loginSehife()"
+    >
+
+        <i class="fa-regular fa-user"></i>
+
+    </a>
+
+
+
+    <!-- =========================
+         BOT
+    ========================= -->
+
+    <a
+        href="bot.html"
+        class="chat-butto"
+    >
+
+        <i class="fa-solid fa-comment"></i>
+
+    </a>
+
+
+</div>
+
+
+<script src="kentli.js"></script>
+
+
+</body>
 
 </html>
