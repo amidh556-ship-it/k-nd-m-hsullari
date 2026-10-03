@@ -1,41 +1,341 @@
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        http-equiv="X-UA-Compatible"
-        content="IE=edge"
-    >
+<title>Kənd məhsulları</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <title>Kənd məhsulları</title>
+<style>
 
-    <link
-        rel="stylesheet"
-        href="kentli.css"
-    >
+/* =========================
+   ÜMUMİ
+========================= */
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    >
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
 
-    <link
-        rel="manifest"
-        href="manifest.json"
-    >
+body{
+    background:#f6f6f6;
+    color:#222;
+    padding-bottom:75px;
+}
 
-    <meta
-        name="theme-color"
-        content="#000000"
-    >
+
+/* =========================
+   YUXARI HİSSƏ
+========================= */
+
+.top{
+    background:white;
+    padding:10px 12px 8px;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+
+/* AXTARIŞ */
+
+.search{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.search-box{
+    flex:1;
+    height:46px;
+    border:1px solid #aaa;
+    border-radius:25px;
+    background:#f5f5f5;
+    display:flex;
+    align-items:center;
+    padding:0 14px;
+}
+
+.search-box i{
+    color:#777;
+    font-size:19px;
+}
+
+.search-box a{
+    width:100%;
+    text-decoration:none;
+    color:#777;
+}
+
+.search-text{
+    font-size:16px;
+}
+
+.camera{
+    font-size:21px;
+    color:#222;
+}
+
+
+/* PROFİL */
+
+.profile{
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f2f2f2;
+    color:#222;
+    font-size:20px;
+    text-decoration:none;
+}
+
+
+/* =========================
+   KATEQORİYALAR
+========================= */
+
+.categories{
+    display:flex;
+    gap:22px;
+    overflow-x:auto;
+    padding:12px 5px 5px;
+    white-space:nowrap;
+}
+
+.categories::-webkit-scrollbar{
+    display:none;
+}
+
+.category{
+    font-weight:bold;
+    font-size:15px;
+    color:#555;
+}
+
+.category.active{
+    color:#111;
+    border-bottom:3px solid #111;
+    padding-bottom:5px;
+}
+
+
+/* =========================
+   ENDİRİM BANNERİ
+========================= */
+
+.banner{
+    background:#fff1df;
+    padding:10px 12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.banner span{
+    color:#278b35;
+}
+
+
+/* =========================
+   MƏHSULLAR BAŞLIQ
+========================= */
+
+.section{
+    padding:14px 10px 8px;
+    background:white;
+}
+
+.section-title{
+    font-size:21px;
+    font-weight:bold;
+}
+
+.section-title span{
+    font-size:14px;
+    color:#777;
+    margin-left:8px;
+}
+
+
+/* =========================
+   MƏHSULLAR
+========================= */
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    padding:8px;
+    background:#f6f6f6;
+}
+
+.card{
+    background:white;
+    border-radius:8px;
+    overflow:hidden;
+    position:relative;
+}
+
+.card-image{
+    width:100%;
+    height:190px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+}
+
+.card-image img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.card-info{
+    padding:9px;
+}
+
+.card-name{
+    font-size:15px;
+    min-height:38px;
+    line-height:19px;
+}
+
+.stars{
+    margin-top:5px;
+    font-size:13px;
+}
+
+.stars i{
+    color:#111;
+}
+
+.sold{
+    color:#777;
+    margin-left:4px;
+}
+
+.price{
+    margin-top:7px;
+    font-size:21px;
+    font-weight:bold;
+}
+
+.price small{
+    font-size:14px;
+}
+
+.old-price{
+    color:#999;
+    text-decoration:line-through;
+    font-size:13px;
+    margin-left:5px;
+}
+
+.cart-btn{
+    position:absolute;
+    right:8px;
+    bottom:8px;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:white;
+    border:1px solid #222;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+
+/* =========================
+   DƏSTƏK
+========================= */
+
+.support{
+    position:fixed;
+    right:15px;
+    bottom:85px;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    background:white;
+    border:1px solid #ddd;
+    box-shadow:0 3px 12px #aaa;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#111;
+    font-size:23px;
+    text-decoration:none;
+    z-index:2000;
+}
+
+
+/* =========================
+   AŞAĞI MENYU
+========================= */
+
+.bottom{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:68px;
+    background:white;
+    border-top:1px solid #ddd;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:1500;
+}
+
+.bottom a{
+    text-decoration:none;
+    color:#333;
+    text-align:center;
+    font-size:12px;
+}
+
+.bottom i{
+    display:block;
+    font-size:21px;
+    margin-bottom:4px;
+}
+
+.bottom .home{
+    color:#e44b18;
+}
+
+
+/* =========================
+   TELEFON
+========================= */
+
+@media(max-width:380px){
+
+    .card-image{
+        height:165px;
+    }
+
+    .categories{
+        gap:17px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -43,168 +343,291 @@
 <body>
 
 
-<div class="profile-area">
+<!-- =========================
+     YUXARI
+========================= -->
 
-    <h2>
-        <a class="lisi-i2">
-            Hesaba <br>daxil ol
+<div class="top">
+
+    <div class="search">
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <a href="axtar.html">
+
+                <span class="search-text">
+                    Nə axtarırsınız?
+                </span>
+
+            </a>
+
+        </div>
+
+        <i class="fa-solid fa-camera camera"></i>
+
+        <a href="profile.html" class="profile">
+
+            <i class="fa-regular fa-user"></i>
+
         </a>
-    </h2>
+
+    </div>
 
 
-    <div id="profileMenu">
+    <!-- KATEQORİYALAR -->
 
-        <ul>
+    <div class="categories">
 
-            <li>
-                <a href="sebet.html">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Səbətim
-                </a>
-            </li>
+        <div class="category active">
+            Hamısı
+        </div>
 
-            <li>
-                <a href="orders.html">
-                    <i class="fa-solid fa-box"></i>
-                    Siparişlərim
-                </a>
-            </li>
+        <div class="category">
+            Qadın
+        </div>
 
-            <li>
-                <a href="comments.html">
-                    <i class="fa-solid fa-comment"></i>
-                    Yorumlarım
-                </a>
-            </li>
+        <div class="category">
+            Kişi
+        </div>
 
-            <li>
-                <a href="profile.html">
-                    <i class="fa-solid fa-user"></i>
-                    Profilim
-                </a>
-            </li>
+        <div class="category">
+            Ev
+        </div>
 
-            <li>
-                <a href="history.html">
-                    <i class="fa-solid fa-clock"></i>
-                    Axtarış tarixçəsi
-                </a>
-            </li>
+        <div class="category">
+            Zinət əşyaları
+        </div>
 
-        </ul>
+        <div class="category">
+            İdman
+        </div>
 
     </div>
 
 </div>
 
 
-<img
-    id="userPhoto"
-    width="40"
-    height="40"
-    style="border-radius:50%"
->
+<!-- =========================
+     BANNER
+========================= -->
+
+<div class="banner">
+
+    <span>
+        ✓ Pulsuz çatdırılma
+    </span>
+
+    <span>
+        ✓ 10% endirim
+    </span>
+
+    <span>
+        ›
+    </span>
+
+</div>
 
 
-<div class="aramaKutusu">
+<!-- =========================
+     MƏHSULLAR BAŞLIQ
+========================= -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        Hamısı
+
+        <span>
+            ★ Ən çox satılan
+        </span>
+
+    </div>
+
+</div>
 
 
-    <a href="axtar.html">
-        <i class="fa fa-search"></i>
-    </a>
+<!-- =========================
+     MƏHSULLAR
+========================= -->
+
+<div class="products">
 
 
-    <h2 class="qiraq-h2">
-        Kend Mehsullari
-    </h2>
+    <!-- MAŞIN -->
 
+    <div class="card">
 
-    <h2 class="lisa-l2">
-        Dəstək
-    </h2>
+        <a href="al.html?id=masin">
 
+            <div class="card-image">
 
+                <img
+                    src="foto.png"
+                    alt="Maşın"
+                >
 
-    <!-- =========================
-         MAŞIN
-    ========================= -->
+            </div>
 
-    <a href="al.html?id=masin">
+        </a>
 
-        <img
-            src="foto.png"
-            width="300"
-            alt="Maşın"
+        <div class="card-info">
+
+            <div class="card-name">
+                Maşın oyuncaq
+            </div>
+
+            <div class="stars">
+
+                ★★★★★
+
+                <span class="sold">
+                    100+ satılıb
+                </span>
+
+            </div>
+
+            <div class="price">
+
+                10
+                <small>AZN</small>
+
+            </div>
+
+        </div>
+
+        <a
+            href="al.html?id=masin"
+            class="cart-btn"
         >
 
-    </a>
+            <i class="fa-solid fa-cart-plus"></i>
+
+        </a>
+
+    </div>
 
 
 
-    <!-- =========================
-         TATO
-    ========================= -->
+    <!-- TATO -->
 
-    <div class="mehsul">
+    <div class="card">
 
         <a href="al.html?id=tato">
 
-            <img
-                src="1.png"
-                width="300"
-                alt="Tato"
-            >
+            <div class="card-image">
+
+                <img
+                    src="1.png"
+                    alt="Tato"
+                >
+
+            </div>
 
         </a>
 
-        <h3>
-            Tato
-        </h3>
+        <div class="card-info">
 
-        <p>
-            10 AZN
-        </p>
+            <div class="card-name">
+                Tato
+            </div>
+
+            <div class="stars">
+
+                ★★★★★
+
+                <span class="sold">
+                    100+ satılıb
+                </span>
+
+            </div>
+
+            <div class="price">
+
+                10
+                <small>AZN</small>
+
+            </div>
+
+        </div>
+
+        <a
+            href="al.html?id=tato"
+            class="cart-btn"
+        >
+
+            <i class="fa-solid fa-cart-plus"></i>
+
+        </a>
 
     </div>
-
-
-
-    <!-- =========================
-         PROFİL
-    ========================= -->
-
-    <a
-        id="profileBtn"
-        class="login"
-        onclick="loginSehife()"
-    >
-
-        <i class="fa-regular fa-user"></i>
-
-    </a>
-
-
-
-    <!-- =========================
-         BOT
-    ========================= -->
-
-    <a
-        href="bot.html"
-        class="chat-butto"
-    >
-
-        <i class="fa-solid fa-comment"></i>
-
-    </a>
 
 
 </div>
 
 
-<script src="kentli.js"></script>
+<!-- =========================
+     DƏSTƏK
+========================= -->
+
+<a
+    href="bot.html"
+    class="support"
+>
+
+    <i class="fa-solid fa-comment"></i>
+
+</a>
+
+
+<!-- =========================
+     AŞAĞI MENYU
+========================= -->
+
+<div class="bottom">
+
+    <a
+        href="index.html"
+        class="home"
+    >
+
+        <i class="fa-solid fa-house"></i>
+
+        Ana səhifə
+
+    </a>
+
+
+    <a href="axtar.html">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        Axtar
+
+    </a>
+
+
+    <a href="profile.html">
+
+        <i class="fa-regular fa-user"></i>
+
+        Profil
+
+    </a>
+
+
+    <a href="sebet.html">
+
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        Səbət
+
+    </a>
+
+</div>
 
 
 </body>
-
 </html>
