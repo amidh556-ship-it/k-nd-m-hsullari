@@ -11,7 +11,7 @@
 
 body{
     width:100vw;
-    height:100vh;
+    min-height:100vh;
     background:none;
     padding-top:60px;
 }
@@ -24,6 +24,7 @@ body{
     background:none;
     height:var(--aramaKutusu-boyut);
     border-radius:var(--aramaKutusu-boyut);
+    padding:none;
     display:flex;
     align-items:center;
     box-shadow:0 0 5px rgba(0,0,0,0.5);
@@ -69,6 +70,10 @@ body{
     width:300px;
     margin:20px auto;
     text-align:center;
+    position:relative;
+
+    /* TATO-NUN YERİ */
+    top:120px;
 }
 
 .mehsul img{
@@ -81,14 +86,13 @@ body{
 
 .mehsul h3{
     font-size:20px;
-    margin-top:80px;
+    margin-top:10px;
 }
 
 .mehsul p{
     color:green;
     font-size:20px;
     font-weight:bold;
-    margin-top:10px;
 }
 
 .qiraq-h2{
@@ -107,7 +111,7 @@ body{
     background:none;
     color:black;
     width:40px;
-    height:40px;
+    height:1px;
     border-radius:50%;
     display:flex;
     align-items:center;
@@ -128,7 +132,6 @@ body{
     right:-30px;
     font-size:14px;
     width:120px;
-    bottom:300px;
     text-align:center;
     text-transform:none;
 }
@@ -231,7 +234,6 @@ body{
         width:90%;
         margin:auto;
     }
-
 }
 
 .mehsulSekli{
