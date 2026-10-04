@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
 
 <meta charset="UTF-8">
@@ -12,10 +13,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 
 <style>
 
-/* =========================
-   ÜMUMİ
-========================= */
-
 *{
     box-sizing:border-box;
     margin:0;
@@ -24,9 +21,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 }
 
 body{
-    background:#f6f6f6;
-    color:#222;
-    padding-bottom:75px;
+    background:#f4f1ea;
+    color:#252525;
+    padding-bottom:80px;
 }
 
 
@@ -35,15 +32,46 @@ body{
 ========================= */
 
 .top{
-    background:white;
-    padding:10px 12px 8px;
-    position:sticky;
-    top:0;
-    z-index:1000;
+    background:#263b2b;
+    padding:15px 14px 13px;
+    border-radius:0 0 24px 24px;
+    box-shadow:0 4px 15px rgba(0,0,0,.18);
+}
+
+.logo-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+}
+
+.logo{
+    color:white;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#e8b84b;
+}
+
+.profile{
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    background:#e8b84b;
+    color:#263b2b;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    font-size:20px;
 }
 
 
-/* AXTARIŞ */
+/* =========================
+   AXTARIŞ
+========================= */
 
 .search{
     display:flex;
@@ -53,18 +81,18 @@ body{
 
 .search-box{
     flex:1;
-    height:46px;
-    border:1px solid #aaa;
-    border-radius:25px;
-    background:#f5f5f5;
+    height:47px;
+    background:white;
+    border-radius:15px;
     display:flex;
     align-items:center;
     padding:0 14px;
 }
 
 .search-box i{
-    color:#777;
+    color:#263b2b;
     font-size:19px;
+    margin-right:8px;
 }
 
 .search-box a{
@@ -74,28 +102,19 @@ body{
 }
 
 .search-text{
-    font-size:16px;
+    font-size:15px;
 }
 
 .camera{
-    font-size:21px;
-    color:#222;
-}
-
-
-/* PROFİL */
-
-.profile{
-    width:43px;
-    height:43px;
-    border-radius:50%;
+    width:47px;
+    height:47px;
+    border-radius:15px;
+    background:#e8b84b;
+    color:#263b2b;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:#f2f2f2;
-    color:#222;
-    font-size:20px;
-    text-decoration:none;
+    font-size:19px;
 }
 
 
@@ -105,9 +124,9 @@ body{
 
 .categories{
     display:flex;
-    gap:22px;
+    gap:9px;
     overflow-x:auto;
-    padding:12px 5px 5px;
+    padding:15px 2px 2px;
     white-space:nowrap;
 }
 
@@ -116,55 +135,116 @@ body{
 }
 
 .category{
-    font-weight:bold;
-    font-size:15px;
-    color:#555;
-}
-
-.category.active{
-    color:#111;
-    border-bottom:3px solid #111;
-    padding-bottom:5px;
-}
-
-
-/* =========================
-   ENDİRİM BANNERİ
-========================= */
-
-.banner{
-    background:#fff1df;
-    padding:10px 12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+    flex:none;
+    padding:9px 14px;
+    border-radius:20px;
+    background:rgba(255,255,255,.12);
+    color:#e9eee9;
     font-size:14px;
     font-weight:bold;
 }
 
-.banner span{
-    color:#278b35;
+.category.active{
+    background:#e8b84b;
+    color:#263b2b;
 }
 
 
 /* =========================
-   MƏHSULLAR BAŞLIQ
+   BÖYÜK BANNER
+========================= */
+
+.hero{
+    margin:16px 14px;
+    min-height:150px;
+    padding:22px;
+    border-radius:24px;
+    background:#e8b84b;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero h1{
+    color:#263b2b;
+    font-size:27px;
+    line-height:1.15;
+    max-width:230px;
+}
+
+.hero p{
+    color:#435744;
+    font-size:14px;
+    margin-top:9px;
+    max-width:235px;
+    line-height:1.4;
+}
+
+.hero-button{
+    display:inline-block;
+    margin-top:13px;
+    background:#263b2b;
+    color:white;
+    padding:9px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.hero-circle{
+    position:absolute;
+    right:-50px;
+    bottom:-65px;
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    background:rgba(255,255,255,.2);
+}
+
+
+/* =========================
+   ENDİRİM
+========================= */
+
+.banner{
+    margin:0 14px 15px;
+    background:white;
+    border-radius:15px;
+    padding:14px;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    overflow:hidden;
+    white-space:nowrap;
+    box-shadow:0 2px 9px rgba(0,0,0,.06);
+}
+
+.banner span{
+    color:#357443;
+    font-size:13px;
+    font-weight:bold;
+}
+
+
+/* =========================
+   MƏHSULLAR BAŞLIĞI
 ========================= */
 
 .section{
-    padding:14px 10px 8px;
-    background:white;
+    padding:3px 15px 12px;
 }
 
 .section-title{
-    font-size:21px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:22px;
     font-weight:bold;
 }
 
 .section-title span{
-    font-size:14px;
+    font-size:12px;
     color:#777;
-    margin-left:8px;
+    font-weight:normal;
 }
 
 
@@ -175,25 +255,25 @@ body{
 .products{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:8px;
-    padding:8px;
-    background:#f6f6f6;
+    gap:12px;
+    padding:0 12px;
 }
 
 .card{
     background:white;
-    border-radius:8px;
+    border-radius:20px;
     overflow:hidden;
     position:relative;
+    box-shadow:0 3px 12px rgba(0,0,0,.07);
 }
 
 .card-image{
     width:100%;
-    height:190px;
+    height:185px;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:#fff;
+    background:#faf9f5;
 }
 
 .card-image img{
@@ -203,22 +283,20 @@ body{
 }
 
 .card-info{
-    padding:9px;
+    padding:11px;
 }
 
 .card-name{
-    font-size:15px;
+    font-size:16px;
     min-height:38px;
     line-height:19px;
+    font-weight:500;
 }
 
 .stars{
     margin-top:5px;
-    font-size:13px;
-}
-
-.stars i{
-    color:#111;
+    font-size:12px;
+    color:#e5a91d;
 }
 
 .sold{
@@ -227,35 +305,30 @@ body{
 }
 
 .price{
-    margin-top:7px;
+    margin-top:9px;
     font-size:21px;
     font-weight:bold;
+    color:#263b2b;
 }
 
 .price small{
-    font-size:14px;
-}
-
-.old-price{
-    color:#999;
-    text-decoration:line-through;
     font-size:13px;
-    margin-left:5px;
 }
 
 .cart-btn{
     position:absolute;
-    right:8px;
-    bottom:8px;
+    right:9px;
+    bottom:9px;
     width:40px;
     height:40px;
-    border-radius:50%;
-    background:white;
-    border:1px solid #222;
+    border-radius:13px;
+    background:#263b2b;
+    color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:18px;
+    text-decoration:none;
+    font-size:17px;
 }
 
 
@@ -266,18 +339,17 @@ body{
 .support{
     position:fixed;
     right:15px;
-    bottom:85px;
-    width:54px;
-    height:54px;
+    bottom:88px;
+    width:56px;
+    height:56px;
     border-radius:50%;
-    background:white;
-    border:1px solid #ddd;
-    box-shadow:0 3px 12px #aaa;
+    background:#e8b84b;
+    color:#263b2b;
+    box-shadow:0 4px 15px rgba(0,0,0,.22);
     display:flex;
     align-items:center;
     justify-content:center;
-    color:#111;
-    font-size:23px;
+    font-size:22px;
     text-decoration:none;
     z-index:2000;
 }
@@ -292,20 +364,21 @@ body{
     left:0;
     right:0;
     bottom:0;
-    height:68px;
+    height:70px;
     background:white;
     border-top:1px solid #ddd;
     display:flex;
     justify-content:space-around;
     align-items:center;
     z-index:1500;
+    box-shadow:0 -3px 15px rgba(0,0,0,.08);
 }
 
 .bottom a{
     text-decoration:none;
-    color:#333;
+    color:#69716b;
     text-align:center;
-    font-size:12px;
+    font-size:11px;
 }
 
 .bottom i{
@@ -315,7 +388,8 @@ body{
 }
 
 .bottom .home{
-    color:#e44b18;
+    color:#263b2b;
+    font-weight:bold;
 }
 
 
@@ -325,12 +399,22 @@ body{
 
 @media(max-width:380px){
 
+    .hero{
+        margin:13px 10px;
+    }
+
     .card-image{
         height:165px;
     }
 
-    .categories{
-        gap:17px;
+    .products{
+        gap:9px;
+        padding:0 9px;
+    }
+
+    .section{
+        padding-left:12px;
+        padding-right:12px;
     }
 
 }
@@ -349,6 +433,19 @@ body{
 
 <div class="top">
 
+    <div class="logo-row">
+
+        <div class="logo">
+            Kənd <span>məhsulları</span>
+        </div>
+
+        <a href="profile.html" class="profile">
+            <i class="fa-regular fa-user"></i>
+        </a>
+
+    </div>
+
+
     <div class="search">
 
         <div class="search-box">
@@ -365,13 +462,8 @@ body{
 
         </div>
 
+
         <i class="fa-solid fa-camera camera"></i>
-
-        <a href="profile.html" class="profile">
-
-            <i class="fa-regular fa-user"></i>
-
-        </a>
 
     </div>
 
@@ -410,7 +502,32 @@ body{
 
 
 <!-- =========================
-     BANNER
+     BÖYÜK ÖZ BANNERİMİZ
+========================= -->
+
+<div class="hero">
+
+    <h1>
+        Kənddən
+        birbaşa sənə 🌿
+    </h1>
+
+    <p>
+        Sevdiyin məhsulları
+        rahat və təhlükəsiz sifariş et.
+    </p>
+
+    <span class="hero-button">
+        20% çatdırılma endirimi
+    </span>
+
+    <div class="hero-circle"></div>
+
+</div>
+
+
+<!-- =========================
+     ENDİRİM
 ========================= -->
 
 <div class="banner">
@@ -431,14 +548,16 @@ body{
 
 
 <!-- =========================
-     MƏHSULLAR BAŞLIQ
+     BAŞLIQ
 ========================= -->
 
 <div class="section">
 
     <div class="section-title">
 
-        Hamısı
+        <span style="font-size:22px;color:#252525;font-weight:bold;">
+            Məhsullar
+        </span>
 
         <span>
             ★ Ən çox satılan
@@ -473,11 +592,13 @@ body{
 
         </a>
 
+
         <div class="card-info">
 
             <div class="card-name">
                 Maşın oyuncaq
             </div>
+
 
             <div class="stars">
 
@@ -489,6 +610,7 @@ body{
 
             </div>
 
+
             <div class="price">
 
                 3.80
@@ -497,6 +619,7 @@ body{
             </div>
 
         </div>
+
 
         <a
             href="al.html?id=masin"
@@ -528,11 +651,13 @@ body{
 
         </a>
 
+
         <div class="card-info">
 
             <div class="card-name">
                 Tato
             </div>
+
 
             <div class="stars">
 
@@ -544,6 +669,7 @@ body{
 
             </div>
 
+
             <div class="price">
 
                 4.80
@@ -552,6 +678,7 @@ body{
             </div>
 
         </div>
+
 
         <a
             href="al.html?id=tato"
@@ -587,6 +714,7 @@ body{
 ========================= -->
 
 <div class="bottom">
+
 
     <a
         href="index.html"
@@ -626,8 +754,10 @@ body{
 
     </a>
 
+
 </div>
 
 
 </body>
+
 </html>
