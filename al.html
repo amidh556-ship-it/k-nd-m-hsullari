@@ -34,7 +34,9 @@ body{
 }
 
 
-/* GALEREYA */
+/* =========================
+   GALEREYA
+========================= */
 
 .gallery{
     position:relative;
@@ -111,7 +113,9 @@ body{
 }
 
 
-/* ENDİRİM */
+/* =========================
+   ENDİRİM
+========================= */
 
 .discount-bar{
     display:flex;
@@ -126,7 +130,9 @@ body{
 }
 
 
-/* MƏHSUL */
+/* =========================
+   MƏHSUL
+========================= */
 
 .product-info{
     padding:20px;
@@ -173,7 +179,9 @@ body{
 }
 
 
-/* SƏBƏT */
+/* =========================
+   SƏBƏT
+========================= */
 
 .cart-button{
     position:fixed;
@@ -223,7 +231,9 @@ body{
 }
 
 
-/* RƏYLƏR */
+/* =========================
+   RƏYLƏR
+========================= */
 
 .reviews{
     margin-top:10px;
@@ -248,9 +258,6 @@ body{
     margin:0 0 12px;
 }
 
-
-/* ULDUZLAR */
-
 .star-select{
     display:flex;
     gap:5px;
@@ -261,15 +268,11 @@ body{
     font-size:32px;
     color:#bbb;
     cursor:pointer;
-    user-select:none;
 }
 
 .star-select span.active{
     color:#e5a91d;
 }
-
-
-/* RƏY YAZISI */
 
 .review-form textarea{
     width:100%;
@@ -282,28 +285,19 @@ body{
     outline:none;
 }
 
-
-/* ŞƏKİL SEÇ */
-
 .photo-label{
-    display:block;
+    display:inline-block;
     margin-top:10px;
-    padding:12px 14px;
+    padding:10px 14px;
     border:1px solid #263b2b;
     border-radius:12px;
     color:#263b2b;
     font-weight:bold;
-    text-align:center;
     cursor:pointer;
-    background:#fff;
 }
 
 #reviewPhoto{
-    position:absolute;
-    width:1px;
-    height:1px;
-    opacity:0;
-    pointer-events:none;
+    display:none;
 }
 
 #photoName{
@@ -311,22 +305,6 @@ body{
     color:#777;
     font-size:13px;
 }
-
-
-/* ŞƏKİL ÖNİZLƏMƏ */
-
-#photoPreview{
-    display:none;
-    width:100%;
-    max-height:250px;
-    object-fit:contain;
-    margin-top:10px;
-    border-radius:12px;
-    background:#f5f5f5;
-}
-
-
-/* GÖNDƏR */
 
 .review-submit{
     width:100%;
@@ -340,13 +318,6 @@ body{
     font-weight:bold;
     cursor:pointer;
 }
-
-.review-submit:disabled{
-    opacity:.6;
-}
-
-
-/* RƏY */
 
 .review-item{
     margin-top:15px;
@@ -364,7 +335,6 @@ body{
 .review-stars{
     color:#e5a91d;
     margin-top:5px;
-    font-size:18px;
 }
 
 .review-text{
@@ -416,11 +386,16 @@ body{
 <div class="product">
 
 
-<!-- GALEREYA -->
+<!-- =========================
+     4 ŞƏKİL
+========================= -->
 
 <div class="gallery">
 
-<div class="gallery-track" id="galleryTrack">
+<div
+class="gallery-track"
+id="galleryTrack"
+>
 
 <div class="gallery-slide">
 <img id="image1" src="1.png">
@@ -444,7 +419,8 @@ body{
 <button
 class="gallery-btn gallery-left"
 onclick="previousImage()"
-type="button">
+type="button"
+>
 ‹
 </button>
 
@@ -452,20 +428,33 @@ type="button">
 <button
 class="gallery-btn gallery-right"
 onclick="nextImage()"
-type="button">
+type="button"
+>
 ›
 </button>
 
 
 <div class="dots">
 
-<span class="dot active" onclick="goToImage(0)"></span>
+<span
+class="dot active"
+onclick="goToImage(0)"
+></span>
 
-<span class="dot" onclick="goToImage(1)"></span>
+<span
+class="dot"
+onclick="goToImage(1)"
+></span>
 
-<span class="dot" onclick="goToImage(2)"></span>
+<span
+class="dot"
+onclick="goToImage(2)"
+></span>
 
-<span class="dot" onclick="goToImage(3)"></span>
+<span
+class="dot"
+onclick="goToImage(3)"
+></span>
 
 </div>
 
@@ -489,7 +478,10 @@ type="button">
 
 <div class="product-info">
 
-<div id="productName" class="product-name"></div>
+<div
+id="productName"
+class="product-name"
+></div>
 
 
 <div class="rating">
@@ -509,7 +501,10 @@ type="button">
 </div>
 
 
-<div id="productPrice" class="product-price"></div>
+<div
+id="productPrice"
+class="product-price"
+></div>
 
 
 <div class="discount-text">
@@ -517,14 +512,19 @@ type="button">
 </div>
 
 
-<div id="productDescription" class="description"></div>
+<div
+id="productDescription"
+class="description"
+></div>
 
 </div>
 
 </div>
 
 
-<!-- RƏYLƏR -->
+<!-- =========================
+     RƏYLƏR
+========================= -->
 
 <div class="reviews">
 
@@ -551,29 +551,31 @@ Müştəri rəyləri
 
 <textarea
 id="reviewText"
-placeholder="Məhsul haqqında fikrinizi yazın..."></textarea>
+placeholder="Məhsul haqqında fikrinizi yazın..."
+></textarea>
 
 
-<label class="photo-label" for="reviewPhoto">
-🖼️ Şəkil seç
+<label
+class="photo-label"
+for="reviewPhoto"
+>
+🖼️ Şəkil əlavə et
 </label>
 
 <input
 type="file"
 id="reviewPhoto"
-accept="image/*">
-
+accept="image/*"
+>
 
 <div id="photoName"></div>
 
-<img id="photoPreview">
-
 
 <button
-id="reviewSubmit"
 class="review-submit"
 onclick="sendReview()"
-type="button">
+type="button"
+>
 Rəyi göndər
 </button>
 
@@ -587,7 +589,8 @@ Rəyi göndər
 
 <a
 class="cart-link"
-href="sebet.html">
+href="sebet.html"
+>
 
 <span>🛒</span>
 
@@ -599,7 +602,8 @@ Səbət
 <button
 class="cart-button"
 onclick="addCurrentProduct()"
-type="button">
+type="button"
+>
 
 🛒 Səbətə əlavə et
 
@@ -608,6 +612,10 @@ type="button">
 
 </div>
 
+
+<!-- =========================
+     FIREBASE
+========================= -->
 
 <script type="module">
 
@@ -628,6 +636,16 @@ from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
+import {
+getStorage,
+ref as storageRef,
+uploadBytes,
+getDownloadURL
+}
+from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+
 const firebaseConfig = {
 
 apiKey:
@@ -643,7 +661,13 @@ projectId:
 "kendmehsullari-6a53d",
 
 storageBucket:
-"kendmehsullari-6a53d.appspot.com"
+"kendmehsullari-6a53d.appspot.com",
+
+messagingSenderId:
+"",
+
+appId:
+""
 
 };
 
@@ -651,8 +675,13 @@ storageBucket:
 const app =
 initializeApp(firebaseConfig);
 
+
 const database =
 getDatabase(app);
+
+
+const storage =
+getStorage(app);
 
 
 /* =========================
@@ -701,7 +730,9 @@ description:
 };
 
 
-/* MƏHSUL */
+/* =========================
+   MƏHSUL ID
+========================= */
 
 const params =
 new URLSearchParams(
@@ -714,6 +745,99 @@ params.get("id");
 const product =
 products[productId];
 
+
+/* =========================
+   TARİXÇƏYƏ ƏLAVƏ ET
+========================= */
+
+function saveToHistory(){
+
+    const email =
+        localStorage.getItem("userEmail");
+
+    /* Hesaba daxil olmayıbsa yazmır */
+    if(!email){
+        return;
+    }
+
+    const key =
+        email
+        .toLowerCase()
+        .trim()
+        .replace(
+            /[^a-z0-9]/g,
+            "_"
+        );
+
+    let history = [];
+
+    try{
+
+        history =
+            JSON.parse(
+                localStorage.getItem(
+                    "history_" + key
+                )
+            ) || [];
+
+    }catch(error){
+
+        history = [];
+
+    }
+
+
+    /* Eyni məhsul varsa sil */
+    history =
+        history.filter(
+            function(item){
+
+                return item.productId !== productId;
+
+            }
+        );
+
+
+    /* İndi baxılan məhsulu əvvələ qoy */
+    history.unshift({
+
+        productId:
+            productId,
+
+        name:
+            product.name,
+
+        price:
+            product.price,
+
+        image:
+            product.images[0],
+
+        time:
+            Date.now()
+
+    });
+
+
+    /* Maksimum 30 məhsul */
+    history =
+        history.slice(0,30);
+
+
+    localStorage.setItem(
+
+        "history_" + key,
+
+        JSON.stringify(history)
+
+    );
+
+}
+
+
+/* =========================
+   MƏHSULU GÖSTƏR
+========================= */
 
 if(product){
 
@@ -737,6 +861,8 @@ document.getElementById(
 product.description;
 
 
+/* MAŞIN / TATO ŞƏKİLLƏRİ */
+
 document.getElementById("image1").src =
 product.images[0];
 
@@ -748,6 +874,10 @@ product.images[2];
 
 document.getElementById("image4").src =
 product.images[3];
+
+
+/* TARİXÇƏYƏ YAZ */
+saveToHistory();
 
 }
 
@@ -825,7 +955,9 @@ updateGallery();
 };
 
 
-/* SÜRÜŞDÜRMƏ */
+/* =========================
+   SÜRÜŞDÜRMƏ
+========================= */
 
 let touchStartX=0;
 
@@ -848,14 +980,18 @@ const touchEndX =
 e.changedTouches[0].screenX;
 
 
-if(touchStartX-touchEndX>50){
+if(
+touchStartX-touchEndX>50
+){
 
 nextImage();
 
 }
 
 
-if(touchEndX-touchStartX>50){
+if(
+touchEndX-touchStartX>50
+){
 
 previousImage();
 
@@ -895,64 +1031,23 @@ index<star
 
 
 /* =========================
-   ŞƏKİL SEÇİMİ
+   ŞƏKİL ADI
 ========================= */
 
-const photoInput =
-document.getElementById(
-"reviewPhoto"
-);
-
-const photoName =
-document.getElementById(
-"photoName"
-);
-
-const photoPreview =
-document.getElementById(
-"photoPreview"
-);
-
-
-photoInput.addEventListener(
+document
+.getElementById("reviewPhoto")
+.addEventListener(
 "change",
 function(){
 
-if(!this.files || !this.files[0]){
+if(this.files.length){
 
-photoName.innerText="";
-
-photoPreview.style.display="none";
-
-photoPreview.removeAttribute("src");
-
-return;
+document.getElementById(
+"photoName"
+).innerText =
+this.files[0].name;
 
 }
-
-
-const file =
-this.files[0];
-
-
-photoName.innerText =
-"Seçildi: " + file.name;
-
-
-const reader =
-new FileReader();
-
-
-reader.onload=function(e){
-
-photoPreview.src=e.target.result;
-
-photoPreview.style.display="block";
-
-};
-
-
-reader.readAsDataURL(file);
 
 }
 );
@@ -962,7 +1057,7 @@ reader.readAsDataURL(file);
    RƏY GÖNDƏR
 ========================= */
 
-window.sendReview =
+window.sendReview=
 async function(){
 
 const text =
@@ -973,7 +1068,7 @@ document.getElementById(
 
 if(!selectedStar){
 
-alert("Əvvəlcə ulduz seç.");
+alert("Ulduz seç.");
 
 return;
 
@@ -983,15 +1078,6 @@ return;
 if(!text){
 
 alert("Rəyini yaz.");
-
-return;
-
-}
-
-
-if(!productId){
-
-alert("Məhsul tapılmadı.");
 
 return;
 
@@ -1014,58 +1100,11 @@ localStorage.getItem(
 email;
 
 
-const button =
+const photoInput =
 document.getElementById(
-"reviewSubmit"
+"reviewPhoto"
 );
 
-
-button.disabled=true;
-
-button.innerText=
-"Göndərilir...";
-
-
-try{
-
-/*
-   ŞƏKİLİ DİREKT BASE64
-   KİMİ YADDA SAXLAYIRIQ.
-   BELƏLİKLƏ STORAGE LAZIM OLMUR.
-*/
-
-let imageData="";
-
-
-if(photoInput.files && photoInput.files[0]){
-
-const file =
-photoInput.files[0];
-
-
-if(file.size > 5 * 1024 * 1024){
-
-alert(
-"Şəkil 5 MB-dan böyük olmasın."
-);
-
-button.disabled=false;
-
-button.innerText=
-"Rəyi göndər";
-
-return;
-
-}
-
-
-imageData =
-await fileToBase64(file);
-
-}
-
-
-/* FIREBASE DATABASE */
 
 const reviewRef =
 ref(
@@ -1073,6 +1112,54 @@ database,
 "reviews/"+productId
 );
 
+
+try{
+
+let imageUrl="";
+
+
+/* ŞƏKİL YÜKLƏ */
+
+if(photoInput.files.length){
+
+const file =
+photoInput.files[0];
+
+
+const fileName =
+Date.now()
++
+"_"
++
+file.name;
+
+
+const fileRef =
+storageRef(
+storage,
+"reviews/"
++
+productId+
+"/"+
+fileName
+);
+
+
+await uploadBytes(
+fileRef,
+file
+);
+
+
+imageUrl =
+await getDownloadURL(
+fileRef
+);
+
+}
+
+
+/* RƏYİ YAZ */
 
 await push(
 reviewRef,
@@ -1082,11 +1169,11 @@ name:name,
 
 email:email,
 
-stars:Number(selectedStar),
+stars:selectedStar,
 
 text:text,
 
-image:imageData,
+image:imageUrl,
 
 time:Date.now()
 
@@ -1095,11 +1182,9 @@ time:Date.now()
 
 
 alert(
-"✅ Rəy uğurla göndərildi!"
+"✅ Rəyiniz göndərildi!"
 );
 
-
-/* FORMU TƏMİZLƏ */
 
 document.getElementById(
 "reviewText"
@@ -1108,12 +1193,10 @@ document.getElementById(
 
 photoInput.value="";
 
-photoName.innerText="";
 
-
-photoPreview.style.display="none";
-
-photoPreview.removeAttribute("src");
+document.getElementById(
+"photoName"
+).innerText="";
 
 
 selectStar(0);
@@ -1121,64 +1204,19 @@ selectStar(0);
 
 }catch(error){
 
-console.error(
-"RƏY XƏTASI:",
-error
-);
+console.error(error);
 
 alert(
-"Rəy göndərilmədi. Firebase Database qaydalarını yoxla."
+"Rəy göndərilmədi. Firebase ayarlarını yoxla."
 );
 
 }
 
-
-button.disabled=false;
-
-button.innerText=
-"Rəyi göndər";
-
 };
-
-
-/* FILE -> BASE64 */
-
-function fileToBase64(file){
-
-return new Promise(
-function(resolve,reject){
-
-const reader =
-new FileReader();
-
-
-reader.onload=function(){
-
-resolve(
-reader.result
-);
-
-};
-
-
-reader.onerror=function(){
-
-reject(
-reader.error
-);
-
-};
-
-
-reader.readAsDataURL(file);
-
-});
-
-}
 
 
 /* =========================
-   RƏYLƏRİ GÖSTƏR
+   RƏYLƏRİ OXU
 ========================= */
 
 const reviewsRef =
@@ -1231,7 +1269,6 @@ item.className =
 
 let stars="";
 
-
 for(
 let i=1;
 i<=5;
@@ -1248,72 +1285,43 @@ i<=Number(review.stars)
 }
 
 
-const user =
-document.createElement(
-"div"
-);
+item.innerHTML =
 
-user.className=
-"review-user";
-
-user.innerText=
+'<div class="review-user">'
++
+escapeHtml(
 review.name ||
-"Anonim";
+"Anonim"
+)
++
+'</div>'+
 
+'<div class="review-stars">'
++
+stars
++
+'</div>'+
 
-const starBox =
-document.createElement(
-"div"
-);
-
-starBox.className=
-"review-stars";
-
-starBox.innerText=
-stars;
-
-
-const textBox =
-document.createElement(
-"div"
-);
-
-textBox.className=
-"review-text";
-
-textBox.innerText=
+'<div class="review-text">'
++
+escapeHtml(
 review.text ||
-"";
+""
+)
++
+'</div>'+
 
-
-item.appendChild(user);
-
-item.appendChild(starBox);
-
-item.appendChild(textBox);
-
-
-/* RƏY ŞƏKİLİ */
-
-if(review.image){
-
-const image =
-document.createElement(
-"img"
+(
+review.image
+?
+'<img class="review-image" src="'
++
+review.image
++
+'">'
+:
+""
 );
-
-image.className=
-"review-image";
-
-image.src=
-review.image;
-
-image.alt=
-"Rəy şəkli";
-
-item.appendChild(image);
-
-}
 
 
 list.appendChild(item);
@@ -1324,6 +1332,22 @@ list.appendChild(item);
 
 }
 );
+
+
+/* =========================
+   TƏHLÜKƏSİZ MƏTN
+========================= */
+
+function escapeHtml(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
 
 
 /* =========================
