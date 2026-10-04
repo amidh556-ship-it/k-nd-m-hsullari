@@ -12,37 +12,80 @@
 
 *{
     box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
-    color:#222;
-    padding-bottom:90px;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f3f5f1;
+    color:#202820;
+    padding-bottom:100px;
 }
 
 .product-page{
     width:100%;
-    max-width:600px;
+    max-width:650px;
     margin:auto;
-    background:white;
-}
-
-.product{
-    background:white;
+    background:#f3f5f1;
 }
 
 
 /* =========================
-   ŞƏKİL GALEREYASI
+   YUXARI
+========================= */
+
+.topbar{
+    height:62px;
+    background:#ffffff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 16px;
+    border-bottom:1px solid #e2e5e0;
+    position:relative;
+    z-index:20;
+}
+
+.back-button,
+.cart-top{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    font-size:25px;
+}
+
+.back-button{
+    color:#26382a;
+    background:#eef2ed;
+}
+
+.cart-top{
+    color:white;
+    background:#26382a;
+    font-size:20px;
+}
+
+.top-title{
+    font-size:18px;
+    font-weight:bold;
+    color:#26382a;
+}
+
+
+/* =========================
+   ŞƏKİL
 ========================= */
 
 .gallery{
     position:relative;
     width:100%;
-    height:430px;
-    background:white;
+    height:420px;
+    background:#ffffff;
     overflow:hidden;
 }
 
@@ -59,6 +102,7 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
+    background:#ffffff;
 }
 
 .gallery-slide img{
@@ -68,54 +112,77 @@ body{
 }
 
 
-/* SAĞ-SOL DÜYMƏLƏR */
+/* =========================
+   SAĞ SOL
+========================= */
 
 .gallery-btn{
     position:absolute;
     top:50%;
     transform:translateY(-50%);
-    width:42px;
-    height:42px;
+    width:44px;
+    height:44px;
     border:none;
     border-radius:50%;
-    background:rgba(255,255,255,.9);
-    box-shadow:0 2px 8px rgba(0,0,0,.25);
-    font-size:28px;
-    z-index:5;
-    cursor:pointer;
+    background:#ffffff;
+    color:#26382a;
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+    font-size:30px;
+    z-index:10;
 }
 
 .gallery-left{
-    left:10px;
+    left:14px;
 }
 
 .gallery-right{
-    right:10px;
+    right:14px;
 }
 
 
-/* NÖQTƏLƏR */
+/* =========================
+   ŞƏKİL NÖMRƏSİ
+========================= */
+
+.photo-number{
+    position:absolute;
+    top:14px;
+    right:14px;
+    background:#26382a;
+    color:white;
+    padding:7px 12px;
+    border-radius:18px;
+    font-size:13px;
+    z-index:10;
+}
+
+
+/* =========================
+   NÖQTƏLƏR
+========================= */
 
 .dots{
     position:absolute;
-    bottom:12px;
+    bottom:14px;
     left:0;
     right:0;
     display:flex;
     justify-content:center;
     gap:7px;
-    z-index:5;
+    z-index:10;
 }
 
 .dot{
     width:8px;
     height:8px;
     border-radius:50%;
-    background:#aaa;
+    background:#b9c0b9;
 }
 
 .dot.active{
-    background:#111;
+    width:22px;
+    border-radius:10px;
+    background:#26382a;
 }
 
 
@@ -125,87 +192,138 @@ body{
 
 .discount-bar{
     display:flex;
-    gap:20px;
+    gap:25px;
     overflow:hidden;
     white-space:nowrap;
-    background:#fff1df;
-    padding:12px 20px;
-    color:#278b35;
-    font-size:15px;
+    background:#e8f2e6;
+    padding:13px 17px;
+}
+
+.discount-bar span{
+    color:#34743d;
+    font-size:14px;
     font-weight:bold;
 }
 
 
 /* =========================
-   MƏHSUL MƏLUMATLARI
+   MƏHSUL MƏLUMATI
 ========================= */
 
 .product-info{
-    padding:20px;
+    background:#ffffff;
+    margin-top:8px;
+    padding:22px 18px 30px;
+    border-radius:20px 20px 0 0;
 }
 
 .product-name{
-    font-size:25px;
+    font-size:27px;
     font-weight:bold;
-    margin-bottom:15px;
+    color:#26382a;
+    margin-bottom:13px;
 }
 
 .rating{
-    font-size:16px;
-    color:#333;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-wrap:wrap;
 }
 
 .stars{
+    color:#e5a928;
+    font-size:18px;
     letter-spacing:1px;
 }
 
-.sold{
-    color:#777;
-    margin-left:5px;
-}
-
-.product-price{
-    font-size:28px;
-    color:#e66b00;
-    font-weight:bold;
-    margin-top:15px;
-}
-
-.discount-text{
-    margin-top:8px;
-    color:#e66b00;
+.rating-number{
+    color:#333;
     font-size:15px;
     font-weight:bold;
 }
 
+.sold{
+    color:#858585;
+    font-size:14px;
+}
+
+.separator{
+    height:1px;
+    background:#e8e8e8;
+    margin:18px 0;
+}
+
+.product-price{
+    color:#d87312;
+    font-size:32px;
+    font-weight:bold;
+}
+
+.discount-text{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 12px;
+    border-radius:10px;
+    background:#fff3dd;
+    color:#b5650c;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.description-title{
+    margin-top:23px;
+    margin-bottom:8px;
+    font-size:17px;
+    font-weight:bold;
+    color:#26382a;
+}
+
 .description{
-    color:#666;
-    margin-top:12px;
-    line-height:1.5;
+    color:#6c746d;
+    line-height:1.6;
+    font-size:15px;
 }
 
 
 /* =========================
-   SƏBƏT DÜYMƏSİ
+   SƏBƏT
 ========================= */
+
+.cart-link{
+    position:fixed;
+    right:18px;
+    bottom:95px;
+    width:62px;
+    height:62px;
+    border-radius:18px;
+    background:#26382a;
+    color:white;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    box-shadow:0 4px 14px rgba(0,0,0,.22);
+    z-index:1000;
+}
 
 .cart-button{
     position:fixed;
     bottom:15px;
-    left:20px;
-    right:20px;
-    max-width:560px;
+    left:15px;
+    right:15px;
+    max-width:620px;
     margin:auto;
-    padding:17px;
+    height:62px;
     border:none;
-    border-radius:35px;
-    background:#ff7900;
-    color:white;
-    font-size:20px;
+    border-radius:18px;
+    background:#e4b343;
+    color:#26382a;
+    font-size:19px;
     font-weight:bold;
-    z-index:1000;
-    cursor:pointer;
-    box-shadow:0 3px 10px rgba(0,0,0,.2);
+    z-index:1100;
+    box-shadow:0 4px 15px rgba(0,0,0,.18);
 }
 
 .cart-button:active{
@@ -214,57 +332,27 @@ body{
 
 
 /* =========================
-   SƏBƏT DÜYMƏSİ
+   TELEFON
 ========================= */
-
-.cart-link{
-    position:fixed;
-    right:18px;
-    bottom:90px;
-    width:105px;
-    height:105px;
-    border-radius:50%;
-    background:#16a637;
-    color:white;
-    text-decoration:none;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    font-size:17px;
-    font-weight:bold;
-    z-index:900;
-    box-shadow:0 3px 10px rgba(0,0,0,.2);
-}
-
-.cart-link span{
-    font-size:30px;
-}
-
-
-/* =========================
-   GERİ
-========================= */
-
-.back-link{
-    display:block;
-    padding:18px;
-    text-align:center;
-    color:#222;
-    text-decoration:none;
-}
-
-
-/* TELEFON */
 
 @media(max-width:380px){
 
     .gallery{
-        height:380px;
+        height:370px;
     }
 
     .product-name{
-        font-size:23px;
+        font-size:24px;
+    }
+
+    .product-price{
+        font-size:28px;
+    }
+
+    .gallery-btn{
+        width:40px;
+        height:40px;
+        font-size:27px;
     }
 
 }
@@ -276,188 +364,207 @@ body{
 
 <body>
 
-
 <div class="product-page">
 
-    <div class="product">
 
+    <!-- YUXARI -->
 
-        <!-- =========================
-             4 ŞƏKİL
-        ========================= -->
+    <div class="topbar">
 
-        <div class="gallery">
+        <a
+            href="index.html"
+            class="back-button"
+        >
+            ‹
+        </a>
 
-            <div
-                class="gallery-track"
-                id="galleryTrack"
-            >
-
-                <div class="gallery-slide">
-                    <img src="1.png" alt="Məhsul 1">
-                </div>
-
-                <div class="gallery-slide">
-                    <img src="2.png" alt="Məhsul 2">
-                </div>
-
-                <div class="gallery-slide">
-                    <img src="3.png" alt="Məhsul 3">
-                </div>
-
-                <div class="gallery-slide">
-                    <img src="4.png" alt="Məhsul 4">
-                </div>
-
-            </div>
-
-
-            <!-- SOL -->
-
-            <button
-                class="gallery-btn gallery-left"
-                onclick="previousImage()"
-                type="button"
-            >
-                ‹
-            </button>
-
-
-            <!-- SAĞ -->
-
-            <button
-                class="gallery-btn gallery-right"
-                onclick="nextImage()"
-                type="button"
-            >
-                ›
-            </button>
-
-
-            <!-- NÖQTƏLƏR -->
-
-            <div class="dots">
-
-                <span
-                    class="dot active"
-                    onclick="goToImage(0)"
-                ></span>
-
-                <span
-                    class="dot"
-                    onclick="goToImage(1)"
-                ></span>
-
-                <span
-                    class="dot"
-                    onclick="goToImage(2)"
-                ></span>
-
-                <span
-                    class="dot"
-                    onclick="goToImage(3)"
-                ></span>
-
-            </div>
-
+        <div class="top-title">
+            Məhsul
         </div>
 
-
-        <!-- =========================
-             ENDİRİM
-        ========================= -->
-
-        <div class="discount-bar">
-
-            <span>✓ 20% endirim</span>
-
-            <span>▣ Sifarişlərdə 20% ENDİRİM</span>
-
-            <span>✓ Gecikməyə görə</span>
-
-        </div>
-
-
-        <!-- =========================
-             MƏHSUL
-        ========================= -->
-
-        <div class="product-info">
-
-            <div
-                id="productName"
-                class="product-name"
-            >
-            </div>
-
-
-            <div class="rating">
-
-                <span class="stars">
-                    ★★★★☆
-                </span>
-
-                <span>
-                    4.7 ★
-                </span>
-
-                <span class="sold">
-                    487 ədəd satılıb
-                </span>
-
-            </div>
-
-
-            <div
-                id="productPrice"
-                class="product-price"
-            >
-            </div>
-
-
-            <div class="discount-text">
-
-                🔥 Çatdırılmada 20% endirim
-
-            </div>
-
-
-            <div
-                id="productDescription"
-                class="description"
-            >
-            </div>
-
-        </div>
-
+        <a
+            href="sebet.html"
+            class="cart-top"
+        >
+            🛒
+        </a>
 
     </div>
 
 
-    <a
-        class="cart-link"
-        href="sebet.html"
-    >
+    <!-- =========================
+         4 ŞƏKİL
+    ========================= -->
 
-        <span>🛒</span>
+    <div class="gallery">
 
-        Səbət
+        <div
+            class="gallery-track"
+            id="galleryTrack"
+        >
 
-    </a>
+            <div class="gallery-slide">
+                <img src="1.png" alt="Məhsul 1">
+            </div>
+
+            <div class="gallery-slide">
+                <img src="2.png" alt="Məhsul 2">
+            </div>
+
+            <div class="gallery-slide">
+                <img src="3.png" alt="Məhsul 3">
+            </div>
+
+            <div class="gallery-slide">
+                <img src="4.png" alt="Məhsul 4">
+            </div>
+
+        </div>
 
 
-    <button
-        class="cart-button"
-        onclick="addCurrentProduct()"
-        type="button"
-    >
+        <button
+            class="gallery-btn gallery-left"
+            onclick="previousImage()"
+            type="button"
+        >
+            ‹
+        </button>
 
-        🛒 Səbətə əlavə et
 
-    </button>
+        <button
+            class="gallery-btn gallery-right"
+            onclick="nextImage()"
+            type="button"
+        >
+            ›
+        </button>
+
+
+        <div
+            class="photo-number"
+            id="photoNumber"
+        >
+            1 / 4
+        </div>
+
+
+        <div class="dots">
+
+            <span
+                class="dot active"
+                onclick="goToImage(0)"
+            ></span>
+
+            <span
+                class="dot"
+                onclick="goToImage(1)"
+            ></span>
+
+            <span
+                class="dot"
+                onclick="goToImage(2)"
+            ></span>
+
+            <span
+                class="dot"
+                onclick="goToImage(3)"
+            ></span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENDİRİM -->
+
+    <div class="discount-bar">
+
+        <span>✓ 20% endirim</span>
+
+        <span>✓ Sifarişlərdə 20%</span>
+
+        <span>✓ Çatdırılma endirimi</span>
+
+    </div>
+
+
+    <!-- MƏHSUL -->
+
+    <div class="product-info">
+
+        <div
+            id="productName"
+            class="product-name"
+        >
+        </div>
+
+
+        <div class="rating">
+
+            <span class="stars">
+                ★★★★☆
+            </span>
+
+            <span class="rating-number">
+                4.7 ★
+            </span>
+
+            <span class="sold">
+                • 487 ədəd satılıb
+            </span>
+
+        </div>
+
+
+        <div class="separator"></div>
+
+
+        <div
+            id="productPrice"
+            class="product-price"
+        >
+        </div>
+
+
+        <div class="discount-text">
+            🔥 Çatdırılmada 20% endirim
+        </div>
+
+
+        <div class="description-title">
+            Məhsul haqqında
+        </div>
+
+
+        <div
+            id="productDescription"
+            class="description"
+        >
+        </div>
+
+    </div>
 
 
 </div>
+
+
+<!-- SƏBƏT -->
+
+<a
+    class="cart-link"
+    href="sebet.html"
+>
+    🛒
+</a>
+
+
+<button
+    class="cart-button"
+    onclick="addCurrentProduct()"
+    type="button"
+>
+    🛒 Səbətə əlavə et
+</button>
 
 
 <script>
@@ -548,6 +655,30 @@ if(product){
     ).innerText =
         product.description;
 
+
+    document.querySelector(
+        ".gallery-slide:nth-child(1) img"
+    ).src =
+        product.images[0];
+
+
+    document.querySelector(
+        ".gallery-slide:nth-child(2) img"
+    ).src =
+        product.images[1];
+
+
+    document.querySelector(
+        ".gallery-slide:nth-child(3) img"
+    ).src =
+        product.images[2];
+
+
+    document.querySelector(
+        ".gallery-slide:nth-child(4) img"
+    ).src =
+        product.images[3];
+
 }
 
 
@@ -565,6 +696,11 @@ const track =
 const dots =
     document.querySelectorAll(
         ".dot"
+    );
+
+const photoNumber =
+    document.getElementById(
+        "photoNumber"
     );
 
 
@@ -586,6 +722,10 @@ function updateGallery(){
 
         }
     );
+
+
+    photoNumber.innerText =
+        (currentImage + 1) + " / 4";
 
 }
 
