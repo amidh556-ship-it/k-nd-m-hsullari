@@ -1,7 +1,11 @@
-<!DOCTYPE html><html lang="az"><head>
+<!DOCTYPE html>
+<html lang="az">
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sifarişlərim</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sifarişlərim</title>
 
+<style>
 *{
     box-sizing:border-box;
 }
@@ -61,11 +65,11 @@ h1{
 }
 
 .product{
-    padding:12px 0;
+    padding:14px 0;
     border-bottom:1px solid #eee;
 }
 
-.product-main{
+.product-row{
     display:flex;
     gap:10px;
 }
@@ -82,24 +86,26 @@ h1{
 }
 
 .return-button{
+    display:block;
     width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:1px solid #ff6f00;
-    border-radius:8px;
-    background:white;
-    color:#e65100;
-    font-size:15px;
+    margin-top:12px;
+    padding:13px;
+    border:none;
+    border-radius:9px;
+    background:#ff6b00;
+    color:white;
+    font-size:16px;
     font-weight:bold;
+    cursor:pointer;
 }
 
 .return-button:active{
-    background:#fff3e0;
+    opacity:.8;
 }
 
-.returned-box{
+.return-request{
     margin-top:10px;
-    padding:10px;
+    padding:11px;
     background:#fff3e0;
     color:#e65100;
     border-radius:8px;
@@ -220,217 +226,182 @@ h1{
 }
 
 
-/* =========================
-   GERİ QAYTARMA PƏNCƏRƏSİ
-========================= */
+/* GERİ QAYTARMA PƏNCƏRƏSİ */
 
-.return-modal{
+.modal{
     display:none;
     position:fixed;
     inset:0;
     background:rgba(0,0,0,.55);
     z-index:9999;
     padding:20px;
+}
+
+.modal-content{
+    background:white;
+    max-width:500px;
+    margin:30px auto;
+    padding:20px;
+    border-radius:15px;
+    max-height:90vh;
     overflow:auto;
 }
 
-.return-box{
-    background:white;
-    max-width:500px;
-    margin:40px auto;
-    border-radius:15px;
-    padding:20px;
-}
-
-.return-box h2{
+.modal-content h2{
     margin-top:0;
-}
-
-.return-product{
-    background:#f5f5f5;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:15px;
-    font-weight:bold;
 }
 
 .reason{
     display:block;
-    padding:13px;
-    margin:8px 0;
+    padding:12px;
+    margin:7px 0;
     border:1px solid #ddd;
-    border-radius:9px;
-    cursor:pointer;
-    background:white;
+    border-radius:8px;
 }
 
 .reason input{
     margin-right:8px;
 }
 
-.return-text{
+.note{
     width:100%;
     min-height:80px;
+    margin-top:10px;
     padding:12px;
     border:1px solid #ccc;
-    border-radius:9px;
-    margin-top:10px;
+    border-radius:8px;
     font-size:15px;
-    resize:vertical;
 }
 
-.send-return{
+.send-button{
     width:100%;
     padding:14px;
+    margin-top:10px;
     border:0;
-    border-radius:9px;
-    background:#e65100;
+    border-radius:8px;
+    background:#ff6b00;
     color:white;
     font-size:16px;
     font-weight:bold;
-    margin-top:12px;
 }
 
-.close-return{
+.close-button{
     width:100%;
     padding:12px;
-    border:0;
-    border-radius:9px;
-    background:#eee;
-    color:#222;
-    font-size:15px;
     margin-top:8px;
+    border:0;
+    border-radius:8px;
+    background:#eee;
+    font-size:15px;
 }
+</style>
+</head>
 
-.return-success{
-    background:#e8f5e9;
-    color:#2e7d32;
-    padding:12px;
-    border-radius:9px;
-    margin-top:10px;
-    font-weight:bold;
-}
+<body>
 
-</style></head><body><div class="container"><h1>📦 Sifarişlərim</h1><div id="orders">
+<div class="container">
+
+<h1>📦 Sifarişlərim</h1>
+
+<div id="orders">
     ⏳ Sifarişlər yüklənir...
-</div><a class="back" href="index.html">
+</div>
+
+<a class="back" href="index.html">
 ← Alış-verişə qayıt
-</a></div><!-- =========================
-     GERİ QAYTARMA PƏNCƏRƏSİ
-========================= --><div
-    class="return-modal"
-    id="returnModal"
-><div class="return-box">
-
-    <h2>↩️ Geri qaytarma</h2>
-
-    <div
-        class="return-product"
-        id="returnProduct"
-    >
-    </div>
-
-    <b>Niyə geri qaytarmaq istəyirsiniz?</b>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Məhsul zədəlidir"
-        >
-        Məhsul zədəlidir
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Məhsul sınıq gəlib"
-        >
-        Məhsul sınıq gəlib
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Səhv məhsul göndərilib"
-        >
-        Səhv məhsul göndərilib
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Ölçüsü balacadır"
-        >
-        Ölçüsü balacadır
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Ölçüsü böyükdür"
-        >
-        Ölçüsü böyükdür
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Məhsulu bəyənmədim"
-        >
-        Məhsulu bəyənmədim
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Məhsul təsvirə uyğun deyil"
-        >
-        Məhsul təsvirə uyğun deyil
-    </label>
-
-    <label class="reason">
-        <input
-            type="radio"
-            name="returnReason"
-            value="Başqa səbəb"
-        >
-        Başqa səbəb
-    </label>
-
-    <textarea
-        id="returnNote"
-        class="return-text"
-        placeholder="Əlavə məlumat yazın (istəyə görə)..."
-    ></textarea>
-
-    <button
-        class="send-return"
-        onclick="sendReturnRequest()"
-    >
-        ↩️ Geri qaytarma sorğusunu göndər
-    </button>
-
-    <button
-        class="close-return"
-        onclick="closeReturnModal()"
-    >
-        Bağla
-    </button>
+</a>
 
 </div>
 
-</div><script type="module">
+
+<!-- GERİ QAYTARMA PƏNCƏRƏSİ -->
+
+<div class="modal" id="returnModal">
+
+    <div class="modal-content">
+
+        <h2>↩️ Geri qaytarma</h2>
+
+        <p id="returnProductName"></p>
+
+        <b>Səbəbi seç:</b>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Məhsul zədəlidir">
+            Məhsul zədəlidir
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Məhsul sınıq gəlib">
+            Məhsul sınıq gəlib
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Səhv məhsul göndərilib">
+            Səhv məhsul göndərilib
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Balaca gəlib">
+            Balaca gəlib
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Böyük gəlib">
+            Böyük gəlib
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Məhsulu bəyənmədim">
+            Məhsulu bəyənmədim
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Təsvirə uyğun deyil">
+            Təsvirə uyğun deyil
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="İşləmir">
+            Məhsul işləmir
+        </label>
+
+        <label class="reason">
+            <input type="radio" name="reason" value="Başqa səbəb">
+            Başqa səbəb
+        </label>
+
+        <textarea
+            id="returnNote"
+            class="note"
+            placeholder="Əlavə məlumat yazın..."
+        ></textarea>
+
+        <button
+            class="send-button"
+            onclick="sendReturnRequest()"
+        >
+            ↩️ Geri qaytarma sorğusunu göndər
+        </button>
+
+        <button
+            class="close-button"
+            onclick="closeReturnModal()"
+        >
+            Bağla
+        </button>
+
+    </div>
+
+</div>
+
+
+<script type="module">
 
 import {
     initializeApp
-} from
+}
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -439,13 +410,10 @@ import {
     onValue,
     update,
     push
-} from
+}
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-
-/* =========================
-   FIREBASE
-========================= */
 
 const firebaseConfig = {
 
@@ -480,10 +448,6 @@ const db =
     getDatabase(app);
 
 
-/* =========================
-   ADMIN
-========================= */
-
 const ADMIN_EMAIL =
     "amidh365@gmail.com";
 
@@ -501,20 +465,12 @@ const isAdmin =
     currentEmail === ADMIN_EMAIL;
 
 
-/* =========================
-   STATUSLAR
-========================= */
-
 const statuses = [
 
     "Sifariş qəbul edildi",
-
     "Hazırlanır",
-
     "Yola verildi",
-
     "Çatdırılır",
-
     "Çatdırıldı"
 
 ];
@@ -537,27 +493,17 @@ function getStatusIndex(status){
         return 3;
     }
 
-    if(
-        s.includes("yola") ||
-        s.includes("yoldadır")
-    ){
+    if(s.includes("yola")){
         return 2;
     }
 
-    if(
-        s.includes("hazırlanır") ||
-        s.includes("hazırlanıb")
-    ){
+    if(s.includes("hazırlanır")){
         return 1;
     }
 
     return 0;
 }
 
-
-/* =========================
-   SİFARİŞLƏR
-========================= */
 
 const ordersBox =
     document.getElementById("orders");
@@ -600,8 +546,6 @@ onValue(
 
         });
 
-
-        /* ADMIN = BÜTÜN SİFARİŞLƏR */
 
         if(!isAdmin){
 
@@ -652,31 +596,11 @@ onValue(
 
         });
 
-    },
-    function(error){
-
-        console.error(error);
-
-        ordersBox.innerHTML = `
-            <div class="empty">
-                ❌ Sifarişləri yükləmək olmadı.
-                <br><br>
-                Firebase bağlantısını yoxla.
-            </div>
-        `;
-
     }
 );
 
 
-/* =========================
-   SİFARİŞİ GÖSTƏR
-========================= */
-
-function renderOrder(
-    order,
-    index
-){
+function renderOrder(order,index){
 
     const currentStatus =
         order.status ||
@@ -705,40 +629,43 @@ function renderOrder(
             Number(item.price) || 0;
 
 
-        const returnInfo =
-            item.returnRequest;
-
-
         let returnHTML = "";
 
 
-        if(returnInfo){
+        if(item.returnRequest){
 
             returnHTML = `
 
-                <div class="returned-box">
+                <div class="return-request">
 
-                    ↩️ Geri qaytarma sorğusu:
-                    ${returnInfo.reason}
+                    ↩️ Geri qaytarma:
+                    ${item.returnRequest.reason}
+
+                    <br>
+
+                    Status:
+                    ${item.returnRequest.status}
 
                 </div>
 
             `;
 
-        }else if(!isAdmin){
+        }else{
+
+            /* DÜYMƏ HƏR MƏHSULDA GÖRÜNÜR */
 
             returnHTML = `
 
                 <button
+                    type="button"
                     class="return-button"
                     onclick="openReturnModal(
                         '${order.firebaseKey}',
-                        ${productIndex}
+                        ${productIndex},
+                        '${String(item.name || "Məhsul").replace(/'/g,"\\'")}'
                     )"
                 >
-
                     ↩️ Geri qaytarma
-
                 </button>
 
             `;
@@ -750,7 +677,7 @@ function renderOrder(
 
             <div class="product">
 
-                <div class="product-main">
+                <div class="product-row">
 
                     <img
                         src="${item.image || ''}"
@@ -790,15 +717,13 @@ function renderOrder(
 
     statuses.forEach(function(status,i){
 
-        const active =
-            i <= statusIndex
-            ? "active"
-            : "";
-
-
         timelineHTML += `
 
-            <div class="step ${active}">
+            <div class="step ${
+                i <= statusIndex
+                ? "active"
+                : ""
+            }">
 
                 <div class="circle"></div>
 
@@ -816,10 +741,6 @@ function renderOrder(
     let adminHTML = "";
 
 
-    /* =========================
-       ADMIN STATUS DƏYİŞİKLİYİ
-    ========================= */
-
     if(isAdmin){
 
         let optionsHTML = "";
@@ -827,17 +748,15 @@ function renderOrder(
 
         statuses.forEach(function(status){
 
-            const selected =
-                status === currentStatus
-                ? "selected"
-                : "";
-
-
             optionsHTML += `
 
                 <option
                     value="${status}"
-                    ${selected}
+                    ${
+                        status === currentStatus
+                        ? "selected"
+                        : ""
+                    }
                 >
                     ${status}
                 </option>
@@ -855,12 +774,8 @@ function renderOrder(
                     🔐 Admin — Sifariş statusu
                 </div>
 
-                <select
-                    id="status-${index}"
-                >
-
+                <select id="status-${index}">
                     ${optionsHTML}
-
                 </select>
 
                 <button
@@ -870,9 +785,7 @@ function renderOrder(
                         ${index}
                     )"
                 >
-
                     💾 Statusu yadda saxla
-
                 </button>
 
             </div>
@@ -891,21 +804,14 @@ function renderOrder(
                 onclick="toggleOrder(${index})"
             >
 
-                <span class="arrow">
-                    ▼
-                </span>
+                <span class="arrow">▼</span>
 
                 <div class="order-id">
-
-                    📦
-                    ${order.orderId || "Sifariş"}
-
+                    📦 ${order.orderId || "Sifariş"}
                 </div>
 
                 <div class="status">
-
                     ${currentStatus}
-
                 </div>
 
             </div>
@@ -959,9 +865,7 @@ function renderOrder(
 
                 <div class="tracking">
 
-                    <b>
-                        📍 İzləmə kodu
-                    </b>
+                    <b>📍 İzləmə kodu</b>
 
                     <div class="tracking-code">
 
@@ -993,8 +897,7 @@ function renderOrder(
 
                 <div class="date">
 
-                    📅
-                    ${order.date || ""}
+                    📅 ${order.date || ""}
 
                 </div>
 
@@ -1008,7 +911,7 @@ function renderOrder(
 
 
 /* =========================
-   GERİ QAYTARMA MODALI
+   GERİ QAYTARMA AÇ
 ========================= */
 
 let selectedOrderKey = null;
@@ -1018,7 +921,8 @@ let selectedProductIndex = null;
 window.openReturnModal =
 function(
     orderKey,
-    productIndex
+    productIndex,
+    productName
 ){
 
     selectedOrderKey =
@@ -1029,33 +933,17 @@ function(
 
 
     document.getElementById(
+        "returnProductName"
+    ).innerHTML =
+        "📦 Məhsul: <b>" +
+        productName +
+        "</b>";
+
+
+    document.getElementById(
         "returnModal"
     ).style.display =
         "block";
-
-
-    document.getElementById(
-        "returnNote"
-    ).value = "";
-
-
-    const radios =
-        document.querySelectorAll(
-            'input[name="returnReason"]'
-        );
-
-
-    radios.forEach(function(radio){
-
-        radio.checked = false;
-
-    });
-
-
-    document.getElementById(
-        "returnProduct"
-    ).innerText =
-        "Seçilmiş məhsul üçün geri qaytarma sorğusu";
 
 
     document.body.style.overflow =
@@ -1080,7 +968,7 @@ function(){
 
 
 /* =========================
-   GERİ QAYTARMA SORĞUSU
+   GERİ QAYTARMA GÖNDƏR
 ========================= */
 
 window.sendReturnRequest =
@@ -1091,9 +979,7 @@ async function(){
         selectedProductIndex === null
     ){
 
-        alert(
-            "❌ Məhsul seçilməyib."
-        );
+        alert("❌ Məhsul seçilməyib.");
 
         return;
 
@@ -1102,23 +988,19 @@ async function(){
 
     const selected =
         document.querySelector(
-            'input[name="returnReason"]:checked'
+            'input[name="reason"]:checked'
         );
 
 
     if(!selected){
 
         alert(
-            "⚠️ Zəhmət olmasa geri qaytarma səbəbini seç."
+            "⚠️ Əvvəlcə səbəb seç."
         );
 
         return;
 
     }
-
-
-    const reason =
-        selected.value;
 
 
     const note =
@@ -1127,32 +1009,33 @@ async function(){
         ).value.trim();
 
 
+    const request = {
+
+        orderKey:
+            selectedOrderKey,
+
+        productIndex:
+            selectedProductIndex,
+
+        email:
+            currentEmail,
+
+        reason:
+            selected.value,
+
+        note:
+            note,
+
+        status:
+            "Sorğu göndərildi",
+
+        createdAt:
+            Date.now()
+
+    };
+
+
     try{
-
-        const returnData = {
-
-            reason:
-                reason,
-
-            note:
-                note,
-
-            email:
-                currentEmail,
-
-            status:
-                "Sorğu göndərildi",
-
-            createdAt:
-                Date.now()
-
-        };
-
-
-        /*
-           MƏHSULUN ÖZÜNƏ GERİ QAYTARMA
-           MƏLUMATI YAZILIR
-        */
 
         await update(
 
@@ -1166,55 +1049,38 @@ async function(){
 
             {
                 returnRequest:
-                    returnData
+                    request
             }
 
         );
 
 
-        /*
-           OPERATOR/ADMİN ÜÇÜN AYRICA
-           GERİ QAYTARMA SORĞUSU
-        */
-
         await push(
 
-            ref(
-                db,
-                "returnRequests"
-            ),
+            ref(db,"returnRequests"),
 
-            {
-
-                orderKey:
-                    selectedOrderKey,
-
-                productIndex:
-                    selectedProductIndex,
-
-                email:
-                    currentEmail,
-
-                reason:
-                    reason,
-
-                note:
-                    note,
-
-                status:
-                    "Sorğu göndərildi",
-
-                createdAt:
-                    Date.now()
-
-            }
+            request
 
         );
 
 
         alert(
-            "✅ Geri qaytarma sorğunuz göndərildi."
+            "✅ Geri qaytarma sorğusu göndərildi!"
         );
+
+
+        document.getElementById(
+            "returnNote"
+        ).value = "";
+
+
+        document.querySelectorAll(
+            'input[name="reason"]'
+        ).forEach(function(r){
+
+            r.checked = false;
+
+        });
 
 
         closeReturnModal();
@@ -1225,7 +1091,8 @@ async function(){
         console.error(error);
 
         alert(
-            "❌ Sorğu göndərilmədi. Firebase qaydalarını yoxla."
+            "❌ Geri qaytarma göndərilmədi.\n\n" +
+            error.message
         );
 
     }
@@ -1234,7 +1101,7 @@ async function(){
 
 
 /* =========================
-   STATUSU FIREBASE-DƏ DƏYİŞ
+   STATUS YADDA SAXLA
 ========================= */
 
 window.saveStatus =
@@ -1265,10 +1132,6 @@ async function(
     }
 
 
-    const newStatus =
-        select.value;
-
-
     try{
 
         await update(
@@ -1282,7 +1145,7 @@ async function(
             {
 
                 status:
-                    newStatus,
+                    select.value,
 
                 updatedAt:
                     Date.now()
@@ -1293,8 +1156,7 @@ async function(
 
 
         alert(
-            "✅ Status yadda saxlanıldı: " +
-            newStatus
+            "✅ Status yadda saxlanıldı."
         );
 
 
@@ -1303,7 +1165,8 @@ async function(
         console.error(error);
 
         alert(
-            "❌ Status dəyişmədi. Firebase qaydalarını yoxla."
+            "❌ Status dəyişmədi.\n\n" +
+            error.message
         );
 
     }
@@ -1324,11 +1187,6 @@ function(index){
         );
 
 
-    if(!details){
-        return;
-    }
-
-
     if(
         details.style.display ===
         "block"
@@ -1346,5 +1204,7 @@ function(index){
 
 };
 
-</script></body>
+</script>
+
+</body>
 </html>
