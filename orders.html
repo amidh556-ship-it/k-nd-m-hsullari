@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="az">
-
-<head>
+<!DOCTYPE html><html lang="az"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sifarişlərim</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sifarişlərim</title><style>
 
 *{
     box-sizing:border-box;
@@ -68,9 +61,13 @@ h1{
 }
 
 .product{
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.product-main{
     display:flex;
     gap:10px;
-    padding:10px 0;
 }
 
 .product img{
@@ -82,6 +79,32 @@ h1{
 
 .product-info{
     flex:1;
+}
+
+.return-button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:1px solid #ff6f00;
+    border-radius:8px;
+    background:white;
+    color:#e65100;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.return-button:active{
+    background:#fff3e0;
+}
+
+.returned-box{
+    margin-top:10px;
+    padding:10px;
+    background:#fff3e0;
+    color:#e65100;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:bold;
 }
 
 .total{
@@ -174,13 +197,6 @@ h1{
     text-align:center;
 }
 
-.login{
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    text-align:center;
-}
-
 .back{
     display:block;
     text-align:center;
@@ -203,28 +219,214 @@ h1{
     font-size:14px;
 }
 
-</style>
 
-</head>
+/* =========================
+   GERİ QAYTARMA PƏNCƏRƏSİ
+========================= */
 
-<body>
+.return-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:9999;
+    padding:20px;
+    overflow:auto;
+}
 
-<div class="container">
+.return-box{
+    background:white;
+    max-width:500px;
+    margin:40px auto;
+    border-radius:15px;
+    padding:20px;
+}
 
-<h1>📦 Sifarişlərim</h1>
+.return-box h2{
+    margin-top:0;
+}
 
-<div id="orders">
+.return-product{
+    background:#f5f5f5;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+.reason{
+    display:block;
+    padding:13px;
+    margin:8px 0;
+    border:1px solid #ddd;
+    border-radius:9px;
+    cursor:pointer;
+    background:white;
+}
+
+.reason input{
+    margin-right:8px;
+}
+
+.return-text{
+    width:100%;
+    min-height:80px;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:9px;
+    margin-top:10px;
+    font-size:15px;
+    resize:vertical;
+}
+
+.send-return{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:9px;
+    background:#e65100;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    margin-top:12px;
+}
+
+.close-return{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:9px;
+    background:#eee;
+    color:#222;
+    font-size:15px;
+    margin-top:8px;
+}
+
+.return-success{
+    background:#e8f5e9;
+    color:#2e7d32;
+    padding:12px;
+    border-radius:9px;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+</style></head><body><div class="container"><h1>📦 Sifarişlərim</h1><div id="orders">
     ⏳ Sifarişlər yüklənir...
-</div>
-
-<a class="back" href="index.html">
+</div><a class="back" href="index.html">
 ← Alış-verişə qayıt
-</a>
+</a></div><!-- =========================
+     GERİ QAYTARMA PƏNCƏRƏSİ
+========================= --><div
+    class="return-modal"
+    id="returnModal"
+><div class="return-box">
+
+    <h2>↩️ Geri qaytarma</h2>
+
+    <div
+        class="return-product"
+        id="returnProduct"
+    >
+    </div>
+
+    <b>Niyə geri qaytarmaq istəyirsiniz?</b>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Məhsul zədəlidir"
+        >
+        Məhsul zədəlidir
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Məhsul sınıq gəlib"
+        >
+        Məhsul sınıq gəlib
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Səhv məhsul göndərilib"
+        >
+        Səhv məhsul göndərilib
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Ölçüsü balacadır"
+        >
+        Ölçüsü balacadır
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Ölçüsü böyükdür"
+        >
+        Ölçüsü böyükdür
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Məhsulu bəyənmədim"
+        >
+        Məhsulu bəyənmədim
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Məhsul təsvirə uyğun deyil"
+        >
+        Məhsul təsvirə uyğun deyil
+    </label>
+
+    <label class="reason">
+        <input
+            type="radio"
+            name="returnReason"
+            value="Başqa səbəb"
+        >
+        Başqa səbəb
+    </label>
+
+    <textarea
+        id="returnNote"
+        class="return-text"
+        placeholder="Əlavə məlumat yazın (istəyə görə)..."
+    ></textarea>
+
+    <button
+        class="send-return"
+        onclick="sendReturnRequest()"
+    >
+        ↩️ Geri qaytarma sorğusunu göndər
+    </button>
+
+    <button
+        class="close-return"
+        onclick="closeReturnModal()"
+    >
+        Bağla
+    </button>
 
 </div>
 
-
-<script type="module">
+</div><script type="module">
 
 import {
     initializeApp
@@ -235,7 +437,8 @@ import {
     getDatabase,
     ref,
     onValue,
-    update
+    update,
+    push
 } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -278,7 +481,7 @@ const db =
 
 
 /* =========================
-   ADMIN EMAIL
+   ADMIN
 ========================= */
 
 const ADMIN_EMAIL =
@@ -398,9 +601,7 @@ onValue(
         });
 
 
-        /* =========================
-           ADMIN = BÜTÜN SİFARİŞLƏR
-        ========================= */
+        /* ADMIN = BÜTÜN SİFARİŞLƏR */
 
         if(!isAdmin){
 
@@ -495,7 +696,7 @@ function renderOrder(
         order.products || [];
 
 
-    products.forEach(function(item){
+    products.forEach(function(item,productIndex){
 
         const quantity =
             Number(item.quantity) || 1;
@@ -504,31 +705,78 @@ function renderOrder(
             Number(item.price) || 0;
 
 
+        const returnInfo =
+            item.returnRequest;
+
+
+        let returnHTML = "";
+
+
+        if(returnInfo){
+
+            returnHTML = `
+
+                <div class="returned-box">
+
+                    ↩️ Geri qaytarma sorğusu:
+                    ${returnInfo.reason}
+
+                </div>
+
+            `;
+
+        }else if(!isAdmin){
+
+            returnHTML = `
+
+                <button
+                    class="return-button"
+                    onclick="openReturnModal(
+                        '${order.firebaseKey}',
+                        ${productIndex}
+                    )"
+                >
+
+                    ↩️ Geri qaytarma
+
+                </button>
+
+            `;
+
+        }
+
+
         productsHTML += `
 
             <div class="product">
 
-                <img
-                    src="${item.image || ''}"
-                    alt="Məhsul"
-                >
+                <div class="product-main">
 
-                <div class="product-info">
+                    <img
+                        src="${item.image || ''}"
+                        alt="Məhsul"
+                    >
 
-                    <b>
-                        ${item.name || "Məhsul"}
-                    </b>
+                    <div class="product-info">
 
-                    <br>
+                        <b>
+                            ${item.name || "Məhsul"}
+                        </b>
 
-                    ${quantity} ədəd
+                        <br>
 
-                    <br>
+                        ${quantity} ədəd
 
-                    ${price.toFixed(2)}
-                    AZN / ədəd
+                        <br>
+
+                        ${price.toFixed(2)}
+                        AZN / ədəd
+
+                    </div>
 
                 </div>
+
+                ${returnHTML}
 
             </div>
 
@@ -569,7 +817,7 @@ function renderOrder(
 
 
     /* =========================
-       YALNIZ ADMIN DƏYİŞƏ BİLƏR
+       ADMIN STATUS DƏYİŞİKLİYİ
     ========================= */
 
     if(isAdmin){
@@ -760,8 +1008,233 @@ function renderOrder(
 
 
 /* =========================
-   STATUSU FIREBASE-DƏ
-   DƏYİŞ
+   GERİ QAYTARMA MODALI
+========================= */
+
+let selectedOrderKey = null;
+let selectedProductIndex = null;
+
+
+window.openReturnModal =
+function(
+    orderKey,
+    productIndex
+){
+
+    selectedOrderKey =
+        orderKey;
+
+    selectedProductIndex =
+        productIndex;
+
+
+    document.getElementById(
+        "returnModal"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "returnNote"
+    ).value = "";
+
+
+    const radios =
+        document.querySelectorAll(
+            'input[name="returnReason"]'
+        );
+
+
+    radios.forEach(function(radio){
+
+        radio.checked = false;
+
+    });
+
+
+    document.getElementById(
+        "returnProduct"
+    ).innerText =
+        "Seçilmiş məhsul üçün geri qaytarma sorğusu";
+
+
+    document.body.style.overflow =
+        "hidden";
+
+};
+
+
+window.closeReturnModal =
+function(){
+
+    document.getElementById(
+        "returnModal"
+    ).style.display =
+        "none";
+
+
+    document.body.style.overflow =
+        "auto";
+
+};
+
+
+/* =========================
+   GERİ QAYTARMA SORĞUSU
+========================= */
+
+window.sendReturnRequest =
+async function(){
+
+    if(
+        !selectedOrderKey ||
+        selectedProductIndex === null
+    ){
+
+        alert(
+            "❌ Məhsul seçilməyib."
+        );
+
+        return;
+
+    }
+
+
+    const selected =
+        document.querySelector(
+            'input[name="returnReason"]:checked'
+        );
+
+
+    if(!selected){
+
+        alert(
+            "⚠️ Zəhmət olmasa geri qaytarma səbəbini seç."
+        );
+
+        return;
+
+    }
+
+
+    const reason =
+        selected.value;
+
+
+    const note =
+        document.getElementById(
+            "returnNote"
+        ).value.trim();
+
+
+    try{
+
+        const returnData = {
+
+            reason:
+                reason,
+
+            note:
+                note,
+
+            email:
+                currentEmail,
+
+            status:
+                "Sorğu göndərildi",
+
+            createdAt:
+                Date.now()
+
+        };
+
+
+        /*
+           MƏHSULUN ÖZÜNƏ GERİ QAYTARMA
+           MƏLUMATI YAZILIR
+        */
+
+        await update(
+
+            ref(
+                db,
+                "orders/" +
+                selectedOrderKey +
+                "/products/" +
+                selectedProductIndex
+            ),
+
+            {
+                returnRequest:
+                    returnData
+            }
+
+        );
+
+
+        /*
+           OPERATOR/ADMİN ÜÇÜN AYRICA
+           GERİ QAYTARMA SORĞUSU
+        */
+
+        await push(
+
+            ref(
+                db,
+                "returnRequests"
+            ),
+
+            {
+
+                orderKey:
+                    selectedOrderKey,
+
+                productIndex:
+                    selectedProductIndex,
+
+                email:
+                    currentEmail,
+
+                reason:
+                    reason,
+
+                note:
+                    note,
+
+                status:
+                    "Sorğu göndərildi",
+
+                createdAt:
+                    Date.now()
+
+            }
+
+        );
+
+
+        alert(
+            "✅ Geri qaytarma sorğunuz göndərildi."
+        );
+
+
+        closeReturnModal();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "❌ Sorğu göndərilmədi. Firebase qaydalarını yoxla."
+        );
+
+    }
+
+};
+
+
+/* =========================
+   STATUSU FIREBASE-DƏ DƏYİŞ
 ========================= */
 
 window.saveStatus =
@@ -799,10 +1272,13 @@ async function(
     try{
 
         await update(
+
             ref(
                 db,
-                "orders/" + firebaseKey
+                "orders/" +
+                firebaseKey
             ),
+
             {
 
                 status:
@@ -812,6 +1288,7 @@ async function(
                     Date.now()
 
             }
+
         );
 
 
@@ -869,7 +1346,5 @@ function(index){
 
 };
 
-</script>
-
-</body>
+</script></body>
 </html>
