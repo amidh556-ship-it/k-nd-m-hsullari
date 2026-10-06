@@ -1,15 +1,12 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Sifarişlərim - Kənd məhsulları</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -31,7 +28,7 @@ h1{
 }
 
 .order{
-    background:white;
+    background:#fff;
     border-radius:14px;
     margin-bottom:15px;
     overflow:hidden;
@@ -41,7 +38,6 @@ h1{
 .order-top{
     padding:15px;
     cursor:pointer;
-    border-bottom:1px solid #eee;
 }
 
 .order-id{
@@ -50,14 +46,14 @@ h1{
 }
 
 .customer{
-    font-size:13px;
     color:#666;
-    margin-top:5px;
+    font-size:13px;
+    margin-top:6px;
 }
 
 .date{
-    font-size:12px;
     color:#888;
+    font-size:12px;
     margin-top:5px;
 }
 
@@ -66,7 +62,7 @@ h1{
     margin-top:9px;
     padding:7px 11px;
     border-radius:20px;
-    background:#eaf7ed;
+    background:#e9f8ed;
     color:#16833a;
     font-size:13px;
     font-weight:bold;
@@ -80,6 +76,7 @@ h1{
 .details{
     display:none;
     padding:12px;
+    border-top:1px solid #eee;
 }
 
 .product{
@@ -87,7 +84,6 @@ h1{
     border-radius:12px;
     padding:10px;
     margin-bottom:12px;
-    background:#fff;
 }
 
 .product-main{
@@ -109,7 +105,7 @@ h1{
 
 .product-name{
     font-weight:bold;
-    margin-bottom:6px;
+    margin-bottom:8px;
 }
 
 .product-info div{
@@ -119,46 +115,41 @@ h1{
 
 .return-button{
     width:100%;
-    margin-top:10px;
-    padding:12px;
     border:0;
     border-radius:10px;
+    padding:12px;
+    margin-top:10px;
     background:#111;
-    color:white;
+    color:#fff;
     font-size:15px;
     font-weight:bold;
-    cursor:pointer;
-}
-
-.return-button:active{
-    transform:scale(.98);
 }
 
 .return-box{
     margin-top:12px;
     padding:12px;
-    border-radius:12px;
     background:#fff8e8;
-    border:1px solid #f0d99b;
+    border:1px solid #efd89b;
+    border-radius:12px;
 }
 
 .return-title{
-    font-size:16px;
     font-weight:bold;
+    font-size:16px;
     margin-bottom:10px;
 }
 
-.return-reason{
+.reason-text{
     font-size:13px;
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
 .return-address{
-    background:white;
+    background:#fff;
+    border:1px solid #eee;
     border-radius:10px;
     padding:12px;
-    border:1px solid #eee;
-    line-height:1.7;
+    line-height:1.8;
     font-size:14px;
 }
 
@@ -169,44 +160,29 @@ h1{
     padding:12px;
     margin-top:10px;
     background:#ff6b00;
-    color:white;
+    color:#fff;
     font-size:15px;
     font-weight:bold;
-    cursor:pointer;
-}
-
-.sent-info{
-    margin-top:10px;
-    padding:10px;
-    border-radius:10px;
-    background:#eaf7ed;
-    color:#16833a;
-    font-size:14px;
-    font-weight:bold;
-}
-
-.return-timeline{
-    margin-top:14px;
 }
 
 .return-step{
     display:flex;
-    align-items:center;
     gap:10px;
+    align-items:center;
     margin:10px 0;
-    color:#999;
+    color:#aaa;
     font-size:13px;
 }
 
 .return-circle{
     width:25px;
     height:25px;
+    min-width:25px;
     border-radius:50%;
     background:#ddd;
     display:flex;
-    align-items:center;
     justify-content:center;
-    flex-shrink:0;
+    align-items:center;
 }
 
 .return-step.active{
@@ -215,61 +191,41 @@ h1{
 }
 
 .return-step.active .return-circle{
-    background:#19a94b;
-    color:white;
-}
-
-.total{
-    padding:12px 5px;
-    font-size:17px;
-    font-weight:bold;
-    border-top:1px solid #eee;
-}
-
-.tracking{
-    padding:10px 5px;
-    font-size:14px;
-}
-
-.tracking-code{
-    font-weight:bold;
-    color:#333;
+    background:#18a94b;
+    color:#fff;
 }
 
 .timeline{
     display:flex;
-    justify-content:space-between;
-    margin:18px 0;
-    gap:4px;
+    gap:3px;
+    margin:15px 0;
 }
 
 .step{
     flex:1;
     text-align:center;
-    position:relative;
 }
 
 .circle{
     width:24px;
     height:24px;
+    margin:auto;
     border-radius:50%;
     background:#ddd;
-    margin:auto;
     display:flex;
-    align-items:center;
     justify-content:center;
-    font-size:12px;
+    align-items:center;
 }
 
 .step.active .circle{
     background:#18a94b;
-    color:white;
+    color:#fff;
 }
 
 .step-text{
     font-size:9px;
-    margin-top:5px;
     color:#777;
+    margin-top:5px;
 }
 
 .step.active .step-text{
@@ -277,12 +233,24 @@ h1{
     font-weight:bold;
 }
 
+.total{
+    border-top:1px solid #eee;
+    padding:12px 4px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.tracking{
+    padding:8px 4px;
+    font-size:14px;
+}
+
 .admin-box{
-    background:#f1f5ff;
-    border:1px solid #d7e0ff;
+    margin-top:12px;
     padding:12px;
     border-radius:12px;
-    margin-top:12px;
+    background:#f1f5ff;
+    border:1px solid #d7e0ff;
 }
 
 .admin-title{
@@ -295,49 +263,60 @@ h1{
     padding:10px;
     border-radius:8px;
     border:1px solid #ccc;
-    background:white;
+    background:#fff;
 }
 
 .save-button{
     width:100%;
     border:0;
+    border-radius:8px;
     padding:11px;
     margin-top:8px;
-    border-radius:8px;
     background:#2167e8;
-    color:white;
+    color:#fff;
     font-weight:bold;
 }
 
 .empty{
-    text-align:center;
-    background:white;
-    padding:30px;
+    background:#fff;
     border-radius:14px;
+    padding:30px;
+    text-align:center;
+}
+
+.error{
+    background:#fff0f0;
+    color:#b00020;
+    border-radius:12px;
+    padding:15px;
+    text-align:center;
+    line-height:1.5;
 }
 
 .back{
     display:block;
     text-align:center;
     margin:20px;
-    text-decoration:none;
     color:#2167e8;
+    text-decoration:none;
 }
+
+/* MODAL */
 
 .modal{
     display:none;
     position:fixed;
-    z-index:9999;
     inset:0;
+    z-index:9999;
     background:rgba(0,0,0,.55);
-    overflow-y:auto;
+    overflow:auto;
 }
 
 .modal-content{
-    background:white;
     width:94%;
     max-width:500px;
-    margin:30px auto;
+    margin:25px auto;
+    background:#fff;
     border-radius:18px;
     padding:18px;
 }
@@ -346,7 +325,6 @@ h1{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:15px;
 }
 
 .modal-header h2{
@@ -355,21 +333,21 @@ h1{
 }
 
 .close{
-    border:0;
-    background:#eee;
     width:35px;
     height:35px;
+    border:0;
     border-radius:50%;
+    background:#eee;
     font-size:20px;
 }
 
 .modal-product{
     display:flex;
     gap:10px;
+    margin:15px 0;
     padding:10px;
     background:#f7f7f7;
     border-radius:12px;
-    margin-bottom:15px;
 }
 
 .modal-product img{
@@ -385,7 +363,6 @@ h1{
     margin:7px 0;
     border:1px solid #ddd;
     border-radius:10px;
-    cursor:pointer;
 }
 
 .reason input{
@@ -395,28 +372,21 @@ h1{
 .note{
     width:100%;
     min-height:80px;
-    margin-top:10px;
+    margin-top:8px;
     padding:10px;
     border:1px solid #ddd;
     border-radius:10px;
-    resize:vertical;
 }
 
 .submit-return{
     width:100%;
-    margin-top:12px;
-    padding:13px;
     border:0;
     border-radius:10px;
+    padding:13px;
+    margin-top:12px;
     background:#ff6b00;
-    color:white;
+    color:#fff;
     font-size:16px;
-    font-weight:bold;
-}
-
-.send-address-title{
-    margin-top:15px;
-    font-size:17px;
     font-weight:bold;
 }
 </style>
@@ -429,85 +399,89 @@ h1{
 <h1>📦 Sifarişlərim</h1>
 
 <div id="ordersList">
-    Yüklənir...
+    Sifarişlər yoxlanılır...
 </div>
 
-<a class="back" href="index.html">← Ana səhifəyə qayıt</a>
+<a class="back" href="index.html">
+    ← Ana səhifəyə qayıt
+</a>
 
 </div>
 
 
-<!-- GERİ QAYTARMA MODALI -->
 <div class="modal" id="returnModal">
 
-    <div class="modal-content">
+<div class="modal-content">
 
-        <div class="modal-header">
-            <h2>↩️ Geri qaytarma</h2>
-            <button class="close" onclick="closeReturnModal()">×</button>
-        </div>
+<div class="modal-header">
+    <h2>↩️ Geri qaytarma</h2>
+    <button class="close" onclick="closeReturnModal()">×</button>
+</div>
 
-        <div class="modal-product">
+<div class="modal-product">
 
-            <img id="modalProductImage" src="" alt="Məhsul">
+<img id="modalImage" src="" alt="Məhsul">
 
-            <div>
-                <b id="modalProductName">Məhsul</b>
-                <div style="font-size:13px;color:#777;margin-top:5px;">
-                    Geri qaytarma sorğusu
-                </div>
-            </div>
-
-        </div>
-
-        <b>Səbəbi seçin:</b>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Məhsul zədəlidir">
-            Məhsul zədəlidir
-        </label>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Məhsul sınıq gəlib">
-            Məhsul sınıq gəlib
-        </label>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Səhv məhsul göndərilib">
-            Səhv məhsul göndərilib
-        </label>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Məhsulu bəyənmədim">
-            Məhsulu bəyənmədim
-        </label>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Məhsul təsvirə uyğun deyil">
-            Məhsul təsvirə uyğun deyil
-        </label>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Məhsul işləmir">
-            Məhsul işləmir
-        </label>
-
-        <label class="reason">
-            <input type="radio" name="returnReason" value="Başqa səbəb">
-            Başqa səbəb
-        </label>
-
-        <textarea
-            id="returnNote"
-            class="note"
-            placeholder="Əlavə məlumat yazın..."
-        ></textarea>
-
-        <button class="submit-return" onclick="submitReturn()">
-            ↩️ Geri qaytarma sorğusu göndər
-        </button>
-
+<div>
+    <b id="modalName">Məhsul</b>
+    <div style="font-size:13px;color:#777;margin-top:5px">
+        Geri qaytarma səbəbi
     </div>
+</div>
+
+</div>
+
+<b>Səbəbi seçin:</b>
+
+<label class="reason">
+<input type="radio" name="reason" value="Məhsul zədəlidir">
+Məhsul zədəlidir
+</label>
+
+<label class="reason">
+<input type="radio" name="reason" value="Məhsul sınıq gəlib">
+Məhsul sınıq gəlib
+</label>
+
+<label class="reason">
+<input type="radio" name="reason" value="Səhv məhsul göndərilib">
+Səhv məhsul göndərilib
+</label>
+
+<label class="reason">
+<input type="radio" name="reason" value="Məhsulu bəyənmədim">
+Məhsulu bəyənmədim
+</label>
+
+<label class="reason">
+<input type="radio" name="reason" value="Məhsul təsvirə uyğun deyil">
+Məhsul təsvirə uyğun deyil
+</label>
+
+<label class="reason">
+<input type="radio" name="reason" value="Məhsul işləmir">
+Məhsul işləmir
+</label>
+
+<label class="reason">
+<input type="radio" name="reason" value="Başqa səbəb">
+Başqa səbəb
+</label>
+
+<textarea
+id="returnNote"
+class="note"
+placeholder="Əlavə məlumat..."
+></textarea>
+
+<button
+class="submit-return"
+onclick="submitReturn()"
+>
+↩️ Sorğunu göndər
+</button>
+
+</div>
 </div>
 
 
@@ -527,24 +501,13 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
-
     apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-
     authDomain: "kendmehsullari-6a53d.firebaseapp.com",
-
-    databaseURL:
-    "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-
+    databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
     projectId: "kendmehsullari-6a53d",
-
-    storageBucket:
-    "kendmehsullari-6a53d.firebasestorage.app",
-
+    storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
     messagingSenderId: "551607499773",
-
-    appId:
-    "1:551607499773:web:a84aa63dc5b55c38687794"
-
+    appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
 
@@ -574,220 +537,249 @@ const orderStatuses = [
 
 
 const returnStatuses = [
-
     "Sorğu qəbul edildi",
-
     "Məhsul göndərilməlidir",
-
     "Məhsul yoldadır",
-
     "Məhsul satıcıya çatdı",
-
     "Pul geri qaytarılır",
-
     "Pul geri qaytarıldı"
-
 ];
 
 
-let allOrders = [];
-
-let returnProducts = {};
+let orders = [];
 
 let selectedOrderKey = null;
-
 let selectedProductIndex = null;
 
 
+/* SİFARİŞ AÇ / BAĞLA */
+
 window.toggleOrder = function(index){
 
-    const el =
+    const box =
         document.getElementById("details-" + index);
 
-    if(!el) return;
+    if(!box) return;
 
-    if(el.style.display === "block"){
-
-        el.style.display = "none";
-
-    }else{
-
-        el.style.display = "block";
-
-    }
-
+    box.style.display =
+        box.style.display === "block"
+        ? "none"
+        : "block";
 };
 
 
-window.openReturnModal = function(orderKey, productIndex){
+/* STATUS */
 
-    const key =
-        orderKey + "_" + productIndex;
+function statusIndex(status){
+
+    const i =
+        orderStatuses.indexOf(status);
+
+    return i < 0 ? 0 : i;
+}
+
+
+function returnIndex(status){
+
+    const i =
+        returnStatuses.indexOf(status);
+
+    return i < 0 ? 0 : i;
+}
+
+
+/* SİFARİŞ TIMELINE */
+
+function orderTimeline(status){
+
+    const current =
+        statusIndex(status);
+
+    return `
+    <div class="timeline">
+
+    ${orderStatuses.map((x,i)=>`
+
+        <div class="step ${i <= current ? "active" : ""}">
+
+            <div class="circle">
+                ${i <= current ? "✓" : ""}
+            </div>
+
+            <div class="step-text">
+                ${x}
+            </div>
+
+        </div>
+
+    `).join("")}
+
+    </div>
+    `;
+}
+
+
+/* GERİ QAYTARMA TIMELINE */
+
+function returnTimeline(info){
+
+    const current =
+        returnIndex(info.status);
+
+    return `
+    <div>
+
+    ${returnStatuses.map((x,i)=>`
+
+        <div class="return-step ${i <= current ? "active" : ""}">
+
+            <div class="return-circle">
+                ${i <= current ? "✓" : ""}
+            </div>
+
+            <div>${x}</div>
+
+        </div>
+
+    `).join("")}
+
+    </div>
+    `;
+}
+
+
+/* MODAL AÇ */
+
+window.openReturn = function(orderKey,productIndex){
+
+    selectedOrderKey = orderKey;
+    selectedProductIndex = productIndex;
+
+    const order =
+        orders.find(x => x.firebaseKey === orderKey);
+
+    if(!order) return;
 
     const product =
-        returnProducts[key];
+        order.products[productIndex];
 
     if(!product) return;
 
-    selectedOrderKey = orderKey;
+    document.getElementById("modalName")
+        .textContent =
+        product.name || "Məhsul";
 
-    selectedProductIndex = productIndex;
-
-    document.getElementById("modalProductName")
-        .textContent = product.name;
-
-    document.getElementById("modalProductImage")
-        .src = product.image || "";
+    document.getElementById("modalImage")
+        .src =
+        product.image || "";
 
     document.getElementById("returnNote")
         .value = "";
 
-    document
-        .querySelectorAll('input[name="returnReason"]')
-        .forEach(input => input.checked = false);
+    document.querySelectorAll(
+        'input[name="reason"]'
+    ).forEach(x => x.checked = false);
 
     document.getElementById("returnModal")
         .style.display = "block";
-
 };
 
+
+/* MODAL BAĞLA */
 
 window.closeReturnModal = function(){
 
     document.getElementById("returnModal")
         .style.display = "none";
-
 };
 
 
+/* GERİ QAYTARMA SORĞUSU */
+
 window.submitReturn = async function(){
 
-    if(!selectedOrderKey || selectedProductIndex === null){
+    if(!selectedOrderKey) return;
 
-        alert("Məhsul seçilməyib.");
-
-        return;
-
-    }
-
-
-    const selected =
+    const reason =
         document.querySelector(
-            'input[name="returnReason"]:checked'
+            'input[name="reason"]:checked'
         );
 
+    if(!reason){
 
-    if(!selected){
-
-        alert("Zəhmət olmasa geri qaytarma səbəbini seçin.");
+        alert("Səbəb seçin.");
 
         return;
-
     }
 
-
-    const reason = selected.value;
-
-    const note =
-        document.getElementById("returnNote").value.trim();
-
-
-    const product =
-        returnProducts[
-            selectedOrderKey + "_" + selectedProductIndex
-        ];
-
-
     const order =
-        allOrders.find(
+        orders.find(
             x => x.firebaseKey === selectedOrderKey
         );
 
+    if(!order) return;
 
-    if(!order || !product){
+    const product =
+        order.products[selectedProductIndex];
 
-        alert("Sifariş tapılmadı.");
-
-        return;
-
-    }
-
+    if(!product) return;
 
     const now = Date.now();
 
-
-    const requestRef =
-        push(ref(db, "returnRequests"));
-
+    const request =
+        push(ref(db,"returnRequests"));
 
     const requestId =
-        requestRef.key;
+        request.key;
 
-
-    const returnData = {
+    const returnInfo = {
 
         requestId: requestId,
 
         status: "Sorğu qəbul edildi",
 
-        reason: reason,
+        reason: reason.value,
 
-        note: note,
+        note:
+            document.getElementById(
+                "returnNote"
+            ).value.trim(),
 
         email: currentEmail,
 
         createdAt: now,
 
         updatedAt: now
-
     };
 
 
-    const requestData = {
+    const updates = {};
 
-        requestId: requestId,
+
+    updates[
+        `orders/${selectedOrderKey}/products/${selectedProductIndex}/returnRequest`
+    ] = returnInfo;
+
+
+    updates[
+        `returnRequests/${requestId}`
+    ] = {
+
+        ...returnInfo,
 
         orderKey: selectedOrderKey,
 
         productIndex: selectedProductIndex,
 
-        orderId: order.orderId || "",
+        orderId:
+            order.orderId || "",
 
-        productName: product.name,
+        productName:
+            product.name || "",
 
-        productImage: product.image || "",
-
-        email: currentEmail,
-
-        reason: reason,
-
-        note: note,
-
-        status: "Sorğu qəbul edildi",
-
-        createdAt: now,
-
-        updatedAt: now
-
+        productImage:
+            product.image || ""
     };
-
-
-    const updates = {};
-
-
-    updates[
-        "orders/" +
-        selectedOrderKey +
-        "/products/" +
-        selectedProductIndex +
-        "/returnRequest"
-    ] = returnData;
-
-
-    updates[
-        "returnRequests/" +
-        requestId
-    ] = requestData;
 
 
     try{
@@ -797,94 +789,70 @@ window.submitReturn = async function(){
             updates
         );
 
-
         closeReturnModal();
 
         alert(
-            "Geri qaytarma sorğunuz qəbul edildi."
+            "✅ Geri qaytarma sorğusu göndərildi."
         );
-
 
     }catch(error){
 
-        console.error(error);
-
         alert(
-            "Sorğu göndərilmədi: " +
+            "Firebase xətası:\n" +
             error.message
         );
 
     }
-
 };
 
 
-window.sendProductBack = async function(
+/* MƏHSULU GÖNDƏRDİM */
+
+window.productSent = async function(
     orderKey,
     productIndex
 ){
 
     const order =
-        allOrders.find(
+        orders.find(
             x => x.firebaseKey === orderKey
         );
 
     if(!order) return;
 
-
     const product =
-        (order.products || [])[productIndex];
+        order.products[productIndex];
 
-    if(!product || !product.returnRequest){
-
+    if(!product || !product.returnRequest)
         return;
 
-    }
-
-
-    const returnInfo =
+    const info =
         product.returnRequest;
 
-
     const now = Date.now();
-
 
     const updates = {};
 
 
     updates[
-        "orders/" +
-        orderKey +
-        "/products/" +
-        productIndex +
-        "/returnRequest/status"
+        `orders/${orderKey}/products/${productIndex}/returnRequest/status`
     ] = "Məhsul yoldadır";
 
 
     updates[
-        "orders/" +
-        orderKey +
-        "/products/" +
-        productIndex +
-        "/returnRequest/updatedAt"
+        `orders/${orderKey}/products/${productIndex}/returnRequest/updatedAt`
     ] = now;
 
 
-    if(returnInfo.requestId){
+    if(info.requestId){
 
         updates[
-            "returnRequests/" +
-            returnInfo.requestId +
-            "/status"
+            `returnRequests/${info.requestId}/status`
         ] = "Məhsul yoldadır";
 
-
         updates[
-            "returnRequests/" +
-            returnInfo.requestId +
-            "/updatedAt"
+            `returnRequests/${info.requestId}/updatedAt`
         ] = now;
-
     }
 
 
@@ -895,23 +863,56 @@ window.sendProductBack = async function(
             updates
         );
 
-
         alert(
-            "Məhsulu göndərdiyiniz qeyd edildi."
+            "🚚 Məhsul yoldadır olaraq qeyd edildi."
         );
-
 
     }catch(error){
 
         alert(
-            "Xəta baş verdi: " +
-            error.message
+            "Xəta:\n" + error.message
         );
 
     }
-
 };
 
+
+/* ADMIN SİFARİŞ STATUSU */
+
+window.saveStatus = async function(orderKey){
+
+    const select =
+        document.getElementById(
+            "status-" + orderKey
+        );
+
+    if(!select) return;
+
+    try{
+
+        await update(
+            ref(
+                db,
+                "orders/" + orderKey
+            ),
+            {
+                status:select.value,
+                updatedAt:Date.now()
+            }
+        );
+
+        alert("✅ Sifariş statusı yadda saxlanıldı.");
+
+    }catch(error){
+
+        alert(
+            "Xəta:\n" + error.message
+        );
+    }
+};
+
+
+/* ADMIN GERİ QAYTARMA STATUSU */
 
 window.saveReturnStatus = async function(
     orderKey,
@@ -920,43 +921,26 @@ window.saveReturnStatus = async function(
 
     const select =
         document.getElementById(
-            "return-select-" +
-            orderKey +
-            "-" +
-            productIndex
+            `return-${orderKey}-${productIndex}`
         );
-
 
     if(!select) return;
 
-
-    const newStatus =
-        select.value;
-
-
     const order =
-        allOrders.find(
+        orders.find(
             x => x.firebaseKey === orderKey
         );
 
-
     if(!order) return;
 
-
     const product =
-        (order.products || [])[productIndex];
+        order.products[productIndex];
 
-
-    if(!product || !product.returnRequest){
-
+    if(!product || !product.returnRequest)
         return;
 
-    }
-
-
-    const returnInfo =
+    const info =
         product.returnRequest;
-
 
     const now = Date.now();
 
@@ -964,38 +948,24 @@ window.saveReturnStatus = async function(
 
 
     updates[
-        "orders/" +
-        orderKey +
-        "/products/" +
-        productIndex +
-        "/returnRequest/status"
-    ] = newStatus;
+        `orders/${orderKey}/products/${productIndex}/returnRequest/status`
+    ] = select.value;
 
 
     updates[
-        "orders/" +
-        orderKey +
-        "/products/" +
-        productIndex +
-        "/returnRequest/updatedAt"
+        `orders/${orderKey}/products/${productIndex}/returnRequest/updatedAt`
     ] = now;
 
 
-    if(returnInfo.requestId){
+    if(info.requestId){
 
         updates[
-            "returnRequests/" +
-            returnInfo.requestId +
-            "/status"
-        ] = newStatus;
-
+            `returnRequests/${info.requestId}/status`
+        ] = select.value;
 
         updates[
-            "returnRequests/" +
-            returnInfo.requestId +
-            "/updatedAt"
+            `returnRequests/${info.requestId}/updatedAt`
         ] = now;
-
     }
 
 
@@ -1006,250 +976,218 @@ window.saveReturnStatus = async function(
             updates
         );
 
-
         alert(
-            "Geri qaytarma statusı dəyişdirildi."
+            "✅ Geri qaytarma statusı dəyişdirildi."
         );
-
 
     }catch(error){
 
         alert(
-            "Xəta baş verdi: " +
-            error.message
+            "Xəta:\n" + error.message
         );
 
     }
-
 };
 
 
-function getStatusIndex(status){
+/* GERİ QAYTARMA BÖLMƏSİ */
 
-    const index =
-        orderStatuses.indexOf(status);
-
-    return index >= 0 ? index : 0;
-
-}
-
-
-function getReturnStatusIndex(status){
-
-    const index =
-        returnStatuses.indexOf(status);
-
-    return index >= 0 ? index : 0;
-
-}
-
-
-function createTimeline(status){
-
-    const current =
-        getStatusIndex(status);
-
-
-    return `
-        <div class="timeline">
-
-            ${orderStatuses.map((item,index)=>`
-
-                <div class="step ${
-                    index <= current ? "active" : ""
-                }">
-
-                    <div class="circle">
-                        ${index <= current ? "✓" : ""}
-                    </div>
-
-                    <div class="step-text">
-                        ${item}
-                    </div>
-
-                </div>
-
-            `).join("")}
-
-        </div>
-    `;
-
-}
-
-
-function createReturnTimeline(returnInfo){
-
-    const current =
-        getReturnStatusIndex(
-            returnInfo.status
-        );
-
-
-    return `
-        <div class="return-timeline">
-
-            ${returnStatuses.map((item,index)=>`
-
-                <div class="return-step ${
-                    index <= current ? "active" : ""
-                }">
-
-                    <div class="return-circle">
-                        ${index <= current ? "✓" : ""}
-                    </div>
-
-                    <div>
-                        ${item}
-                    </div>
-
-                </div>
-
-            `).join("")}
-
-        </div>
-    `;
-
-}
-
-
-function renderReturnSection(
+function returnSection(
     order,
     product,
     productIndex
 ){
 
-    const returnInfo =
+    const info =
         product.returnRequest;
 
 
-    if(!returnInfo){
+    if(!info){
 
         return `
-            <button
-                class="return-button"
-                onclick="openReturnModal(
+        <button
+            class="return-button"
+            onclick="
+                event.stopPropagation();
+                openReturn(
                     '${order.firebaseKey}',
                     ${productIndex}
-                )"
-            >
-                ↩️ Geri qaytarma
-            </button>
+                )
+            "
+        >
+            ↩️ Geri qaytarma
+        </button>
         `;
-
     }
 
 
-    const status =
-        returnInfo.status ||
-        "Sorğu qəbul edildi";
+    let sendBox = "";
 
 
-    let sendPart = "";
+    if(info.status === "Məhsul göndərilməlidir"){
 
+        sendBox = `
 
-    if(
-        status === "Məhsul göndərilməlidir"
-    ){
+        <div class="return-box">
 
-        sendPart = `
+            <div class="return-title">
+                📦 Məhsulu geri göndərin
+            </div>
 
-            <div class="return-box">
+            <div class="return-address">
 
-                <div class="return-title">
-                    📦 Məhsulu geri göndərin
-                </div>
+                <b>Kimdən:</b>
+                Amid Həmidov
 
-                <div class="return-reason">
-                    <b>Səbəb:</b>
-                    ${returnInfo.reason || ""}
-                </div>
+                <br>
 
-                <div class="return-address">
+                <b>Ünvan:</b>
+                F.ƏMİROV 24
 
-                    <b>Göndəriləcək məlumatlar</b>
+                <br>
 
-                    <br>
+                <b>İndeks:</b>
+                AZ 1020 TƏLƏBLİ
 
-                    <b>Kimdən:</b>
-                    Amid Həmidov
+                <br>
 
-                    <br>
+                <b>Tel:</b>
+                0504535874
 
-                    <b>Ünvan:</b>
-                    F.ƏMİROV 24
+            </div>
 
-                    <br>
-
-                    <b>İndeks:</b>
-                    AZ 1020 TƏLƏBLİ
-
-                    <br>
-
-                    <b>Tel:</b>
-                    0504535874
-
-                </div>
-
-                <button
-                    class="send-button"
-                    onclick="sendProductBack(
+            <button
+                class="send-button"
+                onclick="
+                    event.stopPropagation();
+                    productSent(
                         '${order.firebaseKey}',
                         ${productIndex}
-                    )"
-                >
-                    📦 Məhsulu göndərdim
-                </button>
+                    )
+                "
+            >
+                📦 Məhsulu göndərdim
+            </button>
 
-            </div>
-
+        </div>
         `;
-
     }
 
 
-    if(
-        status === "Məhsul yoldadır"
-    ){
+    return `
 
-        sendPart = `
+    <div class="return-box">
 
-            <div class="sent-info">
+        <div class="return-title">
+            ↩️ Geri qaytarma
+        </div>
+
+        <div class="reason-text">
+            <b>Səbəb:</b>
+            ${info.reason || ""}
+        </div>
+
+        ${returnTimeline(info)}
+
+        ${sendBox}
+
+        ${
+            info.status === "Məhsul yoldadır"
+            ? `
+            <div class="sent-info"
+                 style="
+                 margin-top:10px;
+                 padding:10px;
+                 border-radius:10px;
+                 background:#e9f8ed;
+                 color:#16833a;
+                 ">
                 🚚 Məhsul yoldadır.
-                Satıcıya çatdıqda növbəti mərhələ başlayacaq.
             </div>
+            `
+            : ""
+        }
 
-        `;
-
-    }
-
-
-    if(
-        status === "Məhsul satıcıya çatdı"
-    ){
-
-        sendPart = `
-
-            <div class="sent-info">
+        ${
+            info.status === "Məhsul satıcıya çatdı"
+            ? `
+            <div class="sent-info"
+                 style="
+                 margin-top:10px;
+                 padding:10px;
+                 border-radius:10px;
+                 background:#e9f8ed;
+                 color:#16833a;
+                 ">
                 📍 Məhsul satıcıya çatdı.
-                💰 Pulun geri qaytarılması başlayacaq.
+                <br>
+                💰 Pulun geri qaytarılması başlayır.
             </div>
+            `
+            : ""
+        }
 
-        `;
-
-    }
-
-
-    if(
-        status === "Pul geri qaytarılır"
-    ){
-
-        sendPart = `
-
-            <div class="sent-info">
+        ${
+            info.status === "Pul geri qaytarılır"
+            ? `
+            <div class="sent-info"
+                 style="
+                 margin-top:10px;
+                 padding:10px;
+                 border-radius:10px;
+                 background:#e9f8ed;
+                 color:#16833a;
+                 ">
                 💰 Pul geri qaytarılır.
             </div>
+            `
+            : ""
+        }
 
-        `;
+        ${
+            info.status === "Pul geri qaytarıldı"
+            ? `
+            <div class="sent-info"
+                 style="
+                 margin-top:10px;
+                 padding:10px;
+                 border-radius:10px;
+                 background:#e9f8ed;
+                 color:#16833a;
+                 ">
+                ✅ Pul geri qaytarıldı.
+            </div>
+            `
+            : ""
+        }
 
-    }
-    
+        ${
+            isAdmin
+            ? `
+            <div class="admin-box">
+
+                <div class="admin-title">
+                    🔧 Geri qaytarma statusı
+                </div>
+
+                <select
+                    id="return-${order.firebaseKey}-${productIndex}"
+                >
+
+                ${returnStatuses.map(x=>`
+
+                    <option
+                        value="${x}"
+                        ${x === info.status ? "selected":""}
+                    >
+                        ${x}
+                    </option>
+
+                `).join("")}
+
+                </select>
+
+                <button
+                    class="save-button"
+                    onclick="
+       
