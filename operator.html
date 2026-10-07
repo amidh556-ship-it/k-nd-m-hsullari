@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="az">
+<!DOCTYPE html><html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Operator Paneli</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Operator Paneli</title><style>
 *{
     box-sizing:border-box;
 }
@@ -14,7 +9,7 @@
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f5f5f5;
+    background:#f3f4f6;
 }
 
 .login{
@@ -25,9 +20,9 @@ body{
 }
 
 .login-box{
-    background:white;
     width:90%;
     max-width:400px;
+    background:white;
     padding:30px;
     border-radius:20px;
     text-align:center;
@@ -43,16 +38,16 @@ button{
 }
 
 .google{
+    width:100%;
     background:#4285f4;
     color:white;
-    width:100%;
 }
 
 #panel{
     display:none;
-    padding:15px;
     max-width:800px;
     margin:auto;
+    padding:15px;
 }
 
 .top{
@@ -71,19 +66,19 @@ button{
 }
 
 .notification{
+    display:none;
     background:#fff3cd;
     border:1px solid #ffcc00;
     padding:15px;
     border-radius:15px;
     margin-bottom:15px;
-    display:none;
 }
 
 .order{
     background:white;
     border-radius:18px;
     padding:18px;
-    margin-bottom:18px;
+    margin-bottom:20px;
     box-shadow:0 3px 12px #ddd;
 }
 
@@ -111,27 +106,36 @@ button{
     border-bottom:0;
 }
 
-.tracking-title{
-    display:block;
-    margin-top:15px;
-    font-size:17px;
+/* POÇT KODU */
+.tracking-area{
+    margin-top:18px;
+    padding:18px;
+    background:#e8f4ff;
+    border:3px solid #2196f3;
+    border-radius:16px;
+}
+
+.tracking-area h3{
+    margin:0 0 10px 0;
+    color:#1565c0;
 }
 
 .tracking{
     width:100%;
-    padding:14px;
+    padding:15px;
     border:2px solid #2196f3;
     border-radius:10px;
-    font-size:17px;
-    margin-top:8px;
+    font-size:18px;
     outline:none;
+    background:white;
 }
 
 .start{
     width:100%;
+    margin-top:12px;
     background:#111;
     color:white;
-    margin-top:12px;
+    font-size:18px;
     font-weight:bold;
 }
 
@@ -139,8 +143,9 @@ button{
     background:#16a34a;
 }
 
+/* STATUS */
 .status-box{
-    margin-top:15px;
+    margin-top:18px;
     padding:15px;
     background:#f5f5f5;
     border-radius:15px;
@@ -148,6 +153,9 @@ button{
 
 .current-status{
     margin-top:10px;
+    padding:12px;
+    background:white;
+    border-radius:10px;
     font-size:18px;
     font-weight:bold;
 }
@@ -216,92 +224,82 @@ button{
 
 .chat-row input{
     margin:0;
+    flex:1;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
 }
 
 .chat-row button{
     background:#111;
     color:white;
 }
-</style>
-</head>
 
-<body>
+</style></head><body><div class="login" id="loginPage"><div class="login-box">
 
-<div class="login" id="loginPage">
+    <h2>Operator Paneli</h2>
 
-    <div class="login-box">
+    <p>Operator hesabı ilə daxil olun</p>
 
-        <h2>Operator Paneli</h2>
+    <button class="google" id="googleLogin">
+        Google ilə daxil ol
+    </button>
 
-        <p>Operator hesabı ilə daxil olun</p>
+</div>
 
-        <button class="google" id="googleLogin">
-            Google ilə daxil ol
+</div><div id="panel"><div class="top">
+
+    <div>
+        <b>Operator</b>
+        <br>
+        <span id="operatorEmail"></span>
+    </div>
+
+    <button class="logout" id="logout">
+        Çıxış
+    </button>
+
+</div>
+
+
+<div class="notification" id="notification"></div>
+
+<div id="firebaseError"></div>
+
+
+<h2>📦 Bütün sifarişlər</h2>
+
+<div id="orders">
+
+    <div class="empty">
+        Sifarişlər yüklənir...
+    </div>
+
+</div>
+
+
+<div class="chat">
+
+    <h3>💬 Müştəri mesajları</h3>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="chat-row">
+
+        <input
+            id="messageInput"
+            placeholder="Mesaj yaz..."
+        >
+
+        <button id="sendMessage">
+            Göndər
         </button>
 
     </div>
 
 </div>
 
-
-<div id="panel">
-
-    <div class="top">
-
-        <div>
-            <b>Operator</b>
-            <br>
-            <span id="operatorEmail"></span>
-        </div>
-
-        <button class="logout" id="logout">
-            Çıxış
-        </button>
-
-    </div>
-
-
-    <div class="notification" id="notification"></div>
-
-    <div id="firebaseError"></div>
-
-
-    <h2>📦 Sifarişlər</h2>
-
-    <div id="orders">
-
-        <div class="empty">
-            Sifarişlər yüklənir...
-        </div>
-
-    </div>
-
-
-    <div class="chat">
-
-        <h3>Müştəri mesajları</h3>
-
-        <div class="messages" id="messages"></div>
-
-        <div class="chat-row">
-
-            <input
-                id="messageInput"
-                placeholder="Mesaj yaz..."
-            >
-
-            <button id="sendMessage">
-                Göndər
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script type="module">
+</div><script type="module">
 
 import {
     initializeApp
@@ -350,28 +348,21 @@ const firebaseConfig = {
 };
 
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-getAuth(app);
+const auth = getAuth(app);
 
-const db =
-getDatabase(app);
+const db = getDatabase(app);
 
-const provider =
-new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
 
-const OPERATOR_EMAIL =
-"amidh365@gmail.com";
+const OPERATOR_EMAIL = "amidh365@gmail.com";
 
 
-const ordersRef =
-ref(db,"orders");
+const ordersRef = ref(db,"orders");
 
-const messagesRef =
-ref(db,"messages");
+const messagesRef = ref(db,"messages");
 
 
 const loginPage =
@@ -382,9 +373,6 @@ document.getElementById("panel");
 
 const ordersDiv =
 document.getElementById("orders");
-
-const notification =
-document.getElementById("notification");
 
 const operatorEmail =
 document.getElementById("operatorEmail");
@@ -401,9 +389,7 @@ let messagesLoaded = false;
 
 document
 .getElementById("googleLogin")
-.addEventListener(
-"click",
-async()=>{
+.addEventListener("click",async()=>{
 
     try{
 
@@ -418,7 +404,6 @@ async()=>{
         .toLowerCase()
         .trim();
 
-
         if(email !== OPERATOR_EMAIL){
 
             alert(
@@ -430,9 +415,7 @@ async()=>{
             return;
         }
 
-
         openPanel(result.user);
-
 
     }catch(error){
 
@@ -448,9 +431,7 @@ async()=>{
 
 /* AUTH */
 
-onAuthStateChanged(
-auth,
-user=>{
+onAuthStateChanged(auth,user=>{
 
     if(!user) return;
 
@@ -458,7 +439,6 @@ user=>{
     (user.email || "")
     .toLowerCase()
     .trim();
-
 
     if(email === OPERATOR_EMAIL){
 
@@ -473,11 +453,9 @@ user=>{
 
 function openPanel(user){
 
-    loginPage.style.display =
-    "none";
+    loginPage.style.display = "none";
 
-    panel.style.display =
-    "block";
+    panel.style.display = "block";
 
     operatorEmail.textContent =
     user.email;
@@ -507,62 +485,48 @@ function openPanel(user){
 
 document
 .getElementById("logout")
-.addEventListener(
-"click",
-async()=>{
+.addEventListener("click",async()=>{
 
     await signOut(auth);
 
     ordersLoaded = false;
     messagesLoaded = false;
 
-    panel.style.display =
-    "none";
+    panel.style.display = "none";
 
-    loginPage.style.display =
-    "flex";
+    loginPage.style.display = "flex";
 
 });
 
 
 /* =========================
-   SİFARİŞLƏR
+   BÜTÜN SİFARİŞLƏR
 ========================= */
 
 function loadOrders(){
 
     ordersDiv.innerHTML = `
-
         <div class="empty">
             📦 Sifarişlər yüklənir...
         </div>
-
     `;
 
 
     onValue(
-
         ordersRef,
-
         snapshot=>{
 
             ordersDiv.innerHTML = "";
 
-
-            const data =
-            snapshot.val();
+            const data = snapshot.val();
 
 
             if(!data){
 
                 ordersDiv.innerHTML = `
-
                     <div class="empty">
-
                         📦 Sifariş yoxdur.
-
                     </div>
-
                 `;
 
                 return;
@@ -580,10 +544,7 @@ function loadOrders(){
 
                 count++;
 
-                showOrder(
-                    key,
-                    order
-                );
+                showOrder(key,order);
 
             });
 
@@ -591,76 +552,26 @@ function loadOrders(){
             if(count === 0){
 
                 ordersDiv.innerHTML = `
-
                     <div class="empty">
                         📦 Sifariş yoxdur.
                     </div>
-
                 `;
 
             }
 
         },
-
         error=>{
 
             firebaseError.innerHTML = `
-
                 <div class="error">
-
                     ❌ Firebase xətası:
-
                     <br><br>
-
-                    ${escapeHTML(
-                        error.message
-                    )}
-
+                    ${escapeHTML(error.message)}
                 </div>
-
             `;
 
         }
-
     );
-
-}
-
-
-/* BİLDİRİŞ */
-
-function showNewOrderNotification(order){
-
-    notification.style.display =
-    "block";
-
-    notification.innerHTML = `
-
-        🔔 <b>Yeni sifariş!</b>
-
-        <br><br>
-
-        Müştəri:
-        ${escapeHTML(
-            order.name || "Ad yoxdur"
-        )}
-
-        <br>
-
-        Sifariş:
-        ${escapeHTML(
-            order.orderId || ""
-        )}
-
-        <br>
-
-        Məbləğ:
-        ${escapeHTML(
-            String(order.total || "0")
-        )}
-        AZN
-
-    `;
 
 }
 
@@ -674,8 +585,7 @@ function showOrder(key,order){
     const card =
     document.createElement("div");
 
-    card.className =
-    "order";
+    card.className = "order";
 
 
     let productsHTML = "";
@@ -683,19 +593,18 @@ function showOrder(key,order){
 
     if(Array.isArray(order.products)){
 
-        order.products.forEach(
-        product=>{
+        order.products.forEach(product=>{
 
             productsHTML += `
 
                 <div class="product">
 
                     <b>
-                    ${escapeHTML(
-                        product.name ||
-                        product.title ||
-                        "Məhsul"
-                    )}
+                        ${escapeHTML(
+                            product.name ||
+                            product.title ||
+                            "Məhsul"
+                        )}
                     </b>
 
                     <br>
@@ -732,45 +641,33 @@ function showOrder(key,order){
 
     card.innerHTML = `
 
-        <h3>
-            🛒 Sifariş
-        </h3>
+        <h3>🛒 Sifariş</h3>
 
 
         <div class="info">
 
             <b>Sifariş kodu:</b>
-            ${escapeHTML(
-                order.orderId || ""
-            )}
+            ${escapeHTML(order.orderId || "")}
 
             <br>
 
             <b>Müştəri:</b>
-            ${escapeHTML(
-                order.name || ""
-            )}
+            ${escapeHTML(order.name || "")}
 
             <br>
 
             <b>Email:</b>
-            ${escapeHTML(
-                order.email || ""
-            )}
+            ${escapeHTML(order.email || "")}
 
             <br>
 
             <b>Telefon:</b>
-            ${escapeHTML(
-                order.phone || ""
-            )}
+            ${escapeHTML(order.phone || "")}
 
             <br>
 
             <b>Ünvan:</b>
-            ${escapeHTML(
-                order.address || ""
-            )}
+            ${escapeHTML(order.address || "")}
 
             <br>
 
@@ -787,6 +684,8 @@ function showOrder(key,order){
 
             <b>📦 Məhsulu yığ:</b>
 
+            <br><br>
+
             ${
                 productsHTML ||
                 "Məhsul məlumatı yoxdur."
@@ -795,43 +694,33 @@ function showOrder(key,order){
         </div>
 
 
-        <!-- İZLƏMƏ KODU -->
+        <!-- ÇOX AÇIQ POÇT KODU HİSSƏSİ -->
 
-        <label class="tracking-title">
+        <div class="tracking-area">
 
-            📮 <b>Poçt / İzləmə kodu</b>
+            <h3>📮 POÇT / İZLƏMƏ KODU</h3>
 
-        </label>
-
-
-        <input
-            type="text"
-            class="tracking"
-            placeholder="Məsələn: AZ123456789"
-            value="${
-                started
-                ? escapeHTML(
+            <input
+                type="text"
+                class="tracking"
+                placeholder="Məsələn: AZ123456789"
+                value="${escapeHTML(
                     order.trackingCode || ""
-                  )
-                : ""
-            }"
-        >
+                )}"
+            >
 
+            <button
+                type="button"
+                class="start"
+            >
+                ${
+                    started
+                    ? "✅ BAŞLADI"
+                    : "🚀 BAŞLA"
+                }
+            </button>
 
-        <!-- BAŞLA -->
-
-        <button
-            type="button"
-            class="start"
-        >
-
-            ${
-                started
-                ? "✅ BAŞLADI"
-                : "🚀 BAŞLA"
-            }
-
-        </button>
+        </div>
 
 
         <!-- STATUSLAR -->
@@ -841,14 +730,10 @@ function showOrder(key,order){
             <b>📍 Sifarişin statusu</b>
 
             <div class="current-status">
-
-                ${
-                    escapeHTML(
-                        order.status ||
-                        "Yeni sifariş"
-                    )
-                }
-
+                ${escapeHTML(
+                    order.status ||
+                    "Sifariş qəbul olundu"
+                )}
             </div>
 
 
@@ -916,14 +801,10 @@ function showOrder(key,order){
     card.querySelector(".start");
 
     const currentStatus =
-    card.querySelector(
-        ".current-status"
-    );
+    card.querySelector(".current-status");
 
     const statusButtons =
-    card.querySelectorAll(
-        ".status-btn"
-    );
+    card.querySelectorAll(".status-btn");
 
 
     /* =========================
@@ -941,7 +822,7 @@ function showOrder(key,order){
         if(!tracking){
 
             alert(
-                "❌ Əvvəlcə poçt / izləmə kodunu yaz!"
+                "❌ Poçt / izləmə kodunu yaz!"
             );
 
             trackingInput.focus();
@@ -954,28 +835,28 @@ function showOrder(key,order){
         try{
 
             await update(
-
                 ref(
                     db,
                     "orders/" + key
                 ),
-
                 {
-
-                    trackingCode:
-                    tracking,
+                    trackingCode: tracking,
 
                     status:
                     "Sifariş qəbul olundu",
 
-                    started:
-                    true,
+                    started: true,
 
-                    startedAt:
-                    Date.now()
-
+                    startedAt: Date.now()
                 }
+            );
 
+
+            startButton.textContent =
+            "✅ BAŞLADI";
+
+            startButton.classList.add(
+                "started"
             );
 
 
@@ -983,30 +864,15 @@ function showOrder(key,order){
             "Sifariş qəbul olundu";
 
 
-            startButton.textContent =
-            "✅ BAŞLADI";
+            statusButtons.forEach(btn=>{
 
-
-            startButton.classList.add(
-                "started"
-            );
-
-
-            trackingInput.value =
-            tracking;
-
-
-            statusButtons.forEach(
-            button=>{
-
-                button.disabled =
-                false;
+                btn.disabled = false;
 
             });
 
 
             alert(
-                "✅ İzləmə başladı!"
+                "✅ BAŞLADI! İzləmə kodu yadda saxlanıldı."
             );
 
 
@@ -1026,8 +892,7 @@ function showOrder(key,order){
        STATUS DƏYİŞ
     ========================= */
 
-    statusButtons.forEach(
-    button=>{
+    statusButtons.forEach(button=>{
 
         button.addEventListener(
         "click",
@@ -1040,7 +905,7 @@ function showOrder(key,order){
             if(!tracking){
 
                 alert(
-                    "Əvvəlcə izləmə kodunu yaz."
+                    "❌ Əvvəlcə poçt / izləmə kodunu yaz."
                 );
 
                 return;
@@ -1055,25 +920,19 @@ function showOrder(key,order){
             try{
 
                 await update(
-
                     ref(
                         db,
                         "orders/" + key
                     ),
-
                     {
-
-                        status:
-                        status,
+                        status: status,
 
                         trackingCode:
                         tracking,
 
                         updatedAt:
                         Date.now()
-
                     }
-
                 );
 
 
@@ -1081,8 +940,7 @@ function showOrder(key,order){
                 status;
 
 
-                statusButtons.forEach(
-                btn=>{
+                statusButtons.forEach(btn=>{
 
                     btn.classList.remove(
                         "active"
@@ -1110,19 +968,16 @@ function showOrder(key,order){
     });
 
 
-    /* AKTİV STATUSU GÖSTƏR */
+    /* AKTİV STATUS */
 
-    statusButtons.forEach(
-    button=>{
+    statusButtons.forEach(button=>{
 
         if(
             button.dataset.status ===
             order.status
         ){
 
-            button.classList.add(
-                "active"
-            );
+            button.classList.add("active");
 
         }
 
@@ -1138,19 +993,14 @@ function showOrder(key,order){
 function loadMessages(){
 
     const messages =
-    document.getElementById(
-        "messages"
-    );
+    document.getElementById("messages");
 
 
     onValue(
-
         messagesRef,
-
         snapshot=>{
 
             messages.innerHTML = "";
-
 
             const data =
             snapshot.val();
@@ -1159,8 +1009,7 @@ function loadMessages(){
             if(!data) return;
 
 
-            Object.values(data).forEach(
-            item=>{
+            Object.values(data).forEach(item=>{
 
                 if(!item) return;
 
@@ -1176,9 +1025,7 @@ function loadMessages(){
 
 
                 const div =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
                 div.className =
@@ -1193,13 +1040,11 @@ function loadMessages(){
                 div.innerHTML = `
 
                     <b>
-
                         ${
                             item.sender === "agent"
                             ? "Operator"
                             : "Müştəri"
                         }
-
                     </b>
 
                     <br>
@@ -1220,13 +1065,14 @@ function loadMessages(){
             messages.scrollHeight;
 
         }
-
     );
 
 }
 
 
-/* OPERATOR MESAJI */
+/* =========================
+   OPERATOR MESAJI
+========================= */
 
 document
 .getElementById("sendMessage")
@@ -1250,25 +1096,16 @@ async()=>{
     try{
 
         await push(
-
             messagesRef,
-
             {
+                sender:"agent",
 
-                sender:
-                "agent",
+                text:text,
 
-                text:
-                text,
+                email:OPERATOR_EMAIL,
 
-                email:
-                OPERATOR_EMAIL,
-
-                createdAt:
-                Date.now()
-
+                createdAt:Date.now()
             }
-
         );
 
 
@@ -1298,9 +1135,7 @@ event=>{
     if(event.key === "Enter"){
 
         document
-        .getElementById(
-            "sendMessage"
-        )
+        .getElementById("sendMessage")
         .click();
 
     }
@@ -1321,6 +1156,5 @@ function escapeHTML(value){
 
 }
 
-</script>
-
-</body>
+</script></body>
+</html>
