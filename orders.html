@@ -301,6 +301,8 @@ h1{
     text-decoration:none;
 }
 
+/* MODAL */
+
 .modal{
     display:none;
     position:fixed;
@@ -387,6 +389,25 @@ h1{
     font-size:16px;
     font-weight:bold;
 }
+
+.return-label{
+    background:#fff3cd;
+    border:1px solid #f0d477;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:12px;
+    text-align:center;
+    font-weight:bold;
+    color:#7a5a00;
+}
+
+.return-photo{
+    width:100%;
+    display:block;
+    border-radius:12px;
+    border:1px solid #ddd;
+    margin-bottom:12px;
+}
 </style>
 </head>
 
@@ -406,75 +427,133 @@ h1{
 
 </div>
 
+
+<!-- GERİ QAYTARMA MODALI -->
+
 <div class="modal" id="returnModal">
 
 <div class="modal-content">
 
 <div class="modal-header">
+
     <h2>↩️ Geri qaytarma</h2>
-    <button class="close" onclick="closeReturnModal()">×</button>
+
+    <button
+        class="close"
+        onclick="closeReturnModal()"
+    >
+        ×
+    </button>
+
 </div>
 
 <div class="modal-product">
-<img id="modalImage" src="" alt="Məhsul">
+
+<img
+    id="modalImage"
+    src=""
+    alt="Məhsul"
+>
 
 <div>
-    <b id="modalName">Məhsul</b>
-    <div style="font-size:13px;color:#777;margin-top:5px">
+
+    <b id="modalName">
+        Məhsul
+    </b>
+
+    <div style="
+        font-size:13px;
+        color:#777;
+        margin-top:5px;
+    ">
         Geri qaytarma səbəbi
     </div>
+
 </div>
+
 </div>
 
 <b>Səbəbi seçin:</b>
 
 <label class="reason">
-<input type="radio" name="reason" value="Məhsul zədəlidir">
+<input
+    type="radio"
+    name="reason"
+    value="Məhsul zədəlidir"
+>
 Məhsul zədəlidir
 </label>
 
 <label class="reason">
-<input type="radio" name="reason" value="Məhsul sınıq gəlib">
+<input
+    type="radio"
+    name="reason"
+    value="Məhsul sınıq gəlib"
+>
 Məhsul sınıq gəlib
 </label>
 
 <label class="reason">
-<input type="radio" name="reason" value="Səhv məhsul göndərilib">
+<input
+    type="radio"
+    name="reason"
+    value="Səhv məhsul göndərilib"
+>
 Səhv məhsul göndərilib
 </label>
 
 <label class="reason">
-<input type="radio" name="reason" value="Məhsulu bəyənmədim">
+<input
+    type="radio"
+    name="reason"
+    value="Məhsulu bəyənmədim"
+>
 Məhsulu bəyənmədim
 </label>
 
 <label class="reason">
-<input type="radio" name="reason" value="Məhsul təsvirə uyğun deyil">
+<input
+    type="radio"
+    name="reason"
+    value="Məhsul təsvirə uyğun deyil"
+>
 Məhsul təsvirə uyğun deyil
 </label>
 
 <label class="reason">
-<input type="radio" name="reason" value="Məhsul işləmir">
+<input
+    type="radio"
+    name="reason"
+    value="Məhsul işləmir"
+>
 Məhsul işləmir
 </label>
 
 <label class="reason">
-<input type="radio" name="reason" value="Başqa səbəb">
+<input
+    type="radio"
+    name="reason"
+    value="Başqa səbəb"
+>
 Başqa səbəb
 </label>
 
 <textarea
-id="returnNote"
-class="note"
-placeholder="Əlavə məlumat..."
+    id="returnNote"
+    class="note"
+    placeholder="Əlavə məlumat..."
 ></textarea>
 
-<button class="submit-return" onclick="submitReturn()">
-↩️ Sorğunu göndər
+<button
+    class="submit-return"
+    onclick="submitReturn()"
+>
+    ↩️ Sorğunu göndər
 </button>
 
 </div>
 </div>
+
 
 <script type="module">
 
@@ -492,46 +571,87 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-    authDomain: "kendmehsullari-6a53d.firebaseapp.com",
-    databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-    projectId: "kendmehsullari-6a53d",
-    storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
-    messagingSenderId: "551607499773",
-    appId: "1:551607499773:web:a84aa63dc5b55c38687794"
+
+    apiKey:
+    "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+
+    authDomain:
+    "kendmehsullari-6a53d.firebaseapp.com",
+
+    databaseURL:
+    "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+
+    projectId:
+    "kendmehsullari-6a53d",
+
+    storageBucket:
+    "kendmehsullari-6a53d.firebasestorage.app",
+
+    messagingSenderId:
+    "551607499773",
+
+    appId:
+    "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 
-const ADMIN_EMAIL = "amidh365@gmail.com";
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getDatabase(app);
+
+
+const ADMIN_EMAIL =
+    "amidh365@gmail.com";
+
 
 const currentEmail =
     (localStorage.getItem("userEmail") || "")
     .toLowerCase()
     .trim();
 
-const isAdmin = currentEmail === ADMIN_EMAIL;
+
+const isAdmin =
+    currentEmail === ADMIN_EMAIL;
+
 
 const orderStatuses = [
+
     "Sifariş qəbul edildi",
+
     "Hazırlanır",
+
     "Yola verildi",
+
     "Çatdırılır",
+
     "Çatdırıldı"
+
 ];
+
 
 const returnStatuses = [
+
     "Sorğu qəbul edildi",
+
     "Məhsul göndərilməlidir",
+
     "Məhsul yoldadır",
+
     "Məhsul satıcıya çatdı",
+
     "Pul geri qaytarılır",
+
     "Pul geri qaytarıldı"
+
 ];
 
+
 let orders = [];
+
 let selectedOrderKey = null;
+
 let selectedProductIndex = null;
 
 
@@ -540,7 +660,9 @@ let selectedProductIndex = null;
 window.toggleOrder = function(index){
 
     const box =
-        document.getElementById("details-" + index);
+        document.getElementById(
+            "details-" + index
+        );
 
     if(!box) return;
 
@@ -555,7 +677,8 @@ window.toggleOrder = function(index){
 
 function statusIndex(status){
 
-    const i = orderStatuses.indexOf(status);
+    const i =
+        orderStatuses.indexOf(status);
 
     return i < 0 ? 0 : i;
 }
@@ -565,7 +688,8 @@ function statusIndex(status){
 
 function returnIndex(status){
 
-    const i = returnStatuses.indexOf(status);
+    const i =
+        returnStatuses.indexOf(status);
 
     return i < 0 ? 0 : i;
 }
@@ -575,28 +699,41 @@ function returnIndex(status){
 
 function orderTimeline(status){
 
-    const current = statusIndex(status);
+    const current =
+        statusIndex(status);
 
     return `
+
     <div class="timeline">
 
-    ${orderStatuses.map((x,i)=>`
+        ${orderStatuses.map((x,i)=>`
 
-        <div class="step ${i <= current ? "active" : ""}">
+            <div
+                class="step ${
+                    i <= current
+                    ? "active"
+                    : ""
+                }"
+            >
 
-            <div class="circle">
-                ${i <= current ? "✓" : ""}
+                <div class="circle">
+                    ${
+                        i <= current
+                        ? "✓"
+                        : ""
+                    }
+                </div>
+
+                <div class="step-text">
+                    ${x}
+                </div>
+
             </div>
 
-            <div class="step-text">
-                ${x}
-            </div>
-
-        </div>
-
-    `).join("")}
+        `).join("")}
 
     </div>
+
     `;
 }
 
@@ -605,134 +742,240 @@ function orderTimeline(status){
 
 function returnTimeline(info){
 
-    const current = returnIndex(info.status);
+    const current =
+        returnIndex(info.status);
 
     return `
+
     <div>
 
-    ${returnStatuses.map((x,i)=>`
+        ${returnStatuses.map((x,i)=>`
 
-        <div class="return-step ${i <= current ? "active" : ""}">
+            <div
+                class="return-step ${
+                    i <= current
+                    ? "active"
+                    : ""
+                }"
+            >
 
-            <div class="return-circle">
-                ${i <= current ? "✓" : ""}
+                <div class="return-circle">
+                    ${
+                        i <= current
+                        ? "✓"
+                        : ""
+                    }
+                </div>
+
+                <div>
+                    ${x}
+                </div>
+
             </div>
 
-            <div>${x}</div>
-
-        </div>
-
-    `).join("")}
+        `).join("")}
 
     </div>
+
     `;
 }
 
 
-/* MODAL AÇ */
+/* GERİ QAYTARMA MODALI */
 
-window.openReturn = function(orderKey, productIndex){
+window.openReturn =
+function(orderKey, productIndex){
 
-    selectedOrderKey = orderKey;
-    selectedProductIndex = productIndex;
+    selectedOrderKey =
+        orderKey;
+
+    selectedProductIndex =
+        productIndex;
+
 
     const order =
-        orders.find(x => x.firebaseKey === orderKey);
+        orders.find(
+            x =>
+            x.firebaseKey ===
+            orderKey
+        );
+
 
     if(!order) return;
 
-    const products = Array.isArray(order.products)
-        ? order.products
-        : Object.values(order.products || {});
 
-    const product = products[productIndex];
+    const products =
+        Array.isArray(order.products)
+        ? order.products
+        : Object.values(
+            order.products || {}
+        );
+
+
+    const product =
+        products[productIndex];
+
 
     if(!product) return;
 
-    document.getElementById("modalName").textContent =
-        product.name || "Məhsul";
 
-    document.getElementById("modalImage").src =
-        product.image || "";
+    document.getElementById(
+        "modalName"
+    ).textContent =
+        product.name ||
+        "Məhsul";
 
-    document.getElementById("returnNote").value = "";
+
+    document.getElementById(
+        "modalImage"
+    ).src =
+        product.image ||
+        "";
+
+
+    document.getElementById(
+        "returnNote"
+    ).value = "";
+
 
     document.querySelectorAll(
         'input[name="reason"]'
-    ).forEach(x => x.checked = false);
+    ).forEach(
+        x =>
+        x.checked = false
+    );
 
-    document.getElementById("returnModal").style.display = "block";
+
+    document.getElementById(
+        "returnModal"
+    ).style.display =
+        "block";
 };
 
 
-/* MODAL BAĞLA */
+/* MODALI BAĞLA */
 
-window.closeReturnModal = function(){
+window.closeReturnModal =
+function(){
 
-    document.getElementById("returnModal").style.display = "none";
+    document.getElementById(
+        "returnModal"
+    ).style.display =
+        "none";
 };
 
 
 /* GERİ QAYTARMA SORĞUSU */
 
-window.submitReturn = async function(){
+window.submitReturn =
+async function(){
 
-    if(!selectedOrderKey) return;
+    if(!selectedOrderKey)
+        return;
+
 
     const reason =
         document.querySelector(
             'input[name="reason"]:checked'
         );
 
+
     if(!reason){
 
-        alert("Səbəb seçin.");
+        alert(
+            "Səbəb seçin."
+        );
+
         return;
     }
 
+
     const order =
-        orders.find(x => x.firebaseKey === selectedOrderKey);
+        orders.find(
+            x =>
+            x.firebaseKey ===
+            selectedOrderKey
+        );
+
 
     if(!order) return;
 
-    const products = Array.isArray(order.products)
-        ? order.products
-        : Object.values(order.products || {});
 
-    const product = products[selectedProductIndex];
+    const products =
+        Array.isArray(order.products)
+        ? order.products
+        : Object.values(
+            order.products || {}
+        );
+
+
+    const product =
+        products[selectedProductIndex];
+
 
     if(!product) return;
 
-    const now = Date.now();
+
+    const now =
+        Date.now();
+
 
     const request =
-        push(ref(db,"returnRequests"));
+        push(
+            ref(
+                db,
+                "returnRequests"
+            )
+        );
 
-    const requestId = request.key;
+
+    const requestId =
+        request.key;
+
 
     const returnInfo = {
 
-        requestId: requestId,
+        requestId:
 
-        status: "Sorğu qəbul edildi",
+            requestId,
 
-        reason: reason.value,
+        status:
+
+            "Sorğu qəbul edildi",
+
+        reason:
+
+            reason.value,
 
         note:
-            document.getElementById("returnNote").value.trim(),
 
-        email: currentEmail,
+            document.getElementById(
+                "returnNote"
+            ).value.trim(),
 
-        createdAt: now,
+        email:
 
-        updatedAt: now
+            currentEmail,
+
+        createdAt:
+
+            now,
+
+        updatedAt:
+
+            now
+
     };
+
 
     const updates = {};
 
+
     updates[
         `orders/${selectedOrderKey}/products/${selectedProductIndex}/returnRequest`
-    ] = returnInfo;
+    ] =
+        returnInfo;
+
 
     updates[
         `returnRequests/${requestId}`
@@ -740,117 +983,213 @@ window.submitReturn = async function(){
 
         ...returnInfo,
 
-        orderKey: selectedOrderKey,
+        orderKey:
+            selectedOrderKey,
 
-        productIndex: selectedProductIndex,
+        productIndex:
+            selectedProductIndex,
 
-        orderId: order.orderId || "",
+        orderId:
+            order.orderId || "",
 
-        productName: product.name || "",
+        productName:
+            product.name || "",
 
-        productImage: product.image || ""
+        productImage:
+            product.image || ""
+
     };
+
 
     try{
 
-        await update(ref(db), updates);
+        await update(
+            ref(db),
+            updates
+        );
+
 
         closeReturnModal();
 
-        alert("✅ Geri qaytarma sorğusu göndərildi.");
+
+        alert(
+            "✅ Geri qaytarma sorğusu göndərildi."
+        );
+
 
     }catch(error){
 
-        alert("Firebase xətası:\n" + error.message);
+        alert(
+            "Firebase xətası:\n" +
+            error.message
+        );
+
     }
+
 };
 
 
 /* MƏHSULU GÖNDƏRDİM */
 
-window.productSent = async function(orderKey, productIndex){
+window.productSent =
+async function(
+    orderKey,
+    productIndex
+){
 
     const order =
-        orders.find(x => x.firebaseKey === orderKey);
+        orders.find(
+            x =>
+            x.firebaseKey ===
+            orderKey
+        );
+
 
     if(!order) return;
 
-    const products = Array.isArray(order.products)
+
+    const products =
+        Array.isArray(order.products)
         ? order.products
-        : Object.values(order.products || {});
+        : Object.values(
+            order.products || {}
+        );
 
-    const product = products[productIndex];
 
-    if(!product || !product.returnRequest) return;
+    const product =
+        products[productIndex];
 
-    const info = product.returnRequest;
-    const now = Date.now();
+
+    if(
+        !product ||
+        !product.returnRequest
+    )
+        return;
+
+
+    const info =
+        product.returnRequest;
+
+
+    const now =
+        Date.now();
+
 
     const updates = {};
 
+
     updates[
         `orders/${orderKey}/products/${productIndex}/returnRequest/status`
-    ] = "Məhsul yoldadır";
+    ] =
+        "Məhsul yoldadır";
+
 
     updates[
         `orders/${orderKey}/products/${productIndex}/returnRequest/updatedAt`
-    ] = now;
+    ] =
+        now;
+
 
     if(info.requestId){
 
         updates[
             `returnRequests/${info.requestId}/status`
-        ] = "Məhsul yoldadır";
+        ] =
+            "Məhsul yoldadır";
+
 
         updates[
             `returnRequests/${info.requestId}/updatedAt`
-        ] = now;
+        ] =
+            now;
+
     }
+
 
     try{
 
-        await update(ref(db), updates);
+        await update(
+            ref(db),
+            updates
+        );
 
-        alert("🚚 Məhsul yoldadır olaraq qeyd edildi.");
+
+        alert(
+            "🚚 Məhsul yoldadır olaraq qeyd edildi."
+        );
+
 
     }catch(error){
 
-        alert("Xəta:\n" + error.message);
+        alert(
+            "Xəta:\n" +
+            error.message
+        );
+
     }
+
 };
 
 
 /* ADMIN SİFARİŞ STATUSU */
 
-window.saveStatus = async function(orderKey){
+window.saveStatus =
+async function(orderKey){
 
     const select =
-        document.getElementById("status-" + orderKey);
+        document.getElementById(
+            "status-" +
+            orderKey
+        );
+
 
     if(!select) return;
+
 
     try{
 
         await update(
-            ref(db, "orders/" + orderKey),
+
+            ref(
+                db,
+                "orders/" +
+                orderKey
+            ),
+
             {
-                status: select.value,
-                updatedAt: Date.now()
+
+                status:
+                    select.value,
+
+                updatedAt:
+                    Date.now()
+
             }
+
         );
 
-        alert("✅ Sifariş statusu yadda saxlanıldı.");
+
+        alert(
+            "✅ Sifariş statusu yadda saxlanıldı."
+        );
+
 
     }catch(error){
 
-        alert("Xəta:\n" + error.message);
+        alert(
+            "Xəta:\n" +
+            error.message
+        );
+
     }
+
 };
 
 
 /* ADMIN GERİ QAYTARMA STATUSU */
 
-window.saveReturnStatus = async function(
+window.saveReturnStatus =
+async function(
     orderKey,
     productIndex
 ){
@@ -860,67 +1199,122 @@ window.saveReturnStatus = async function(
             `return-${orderKey}-${productIndex}`
         );
 
+
     if(!select) return;
 
+
     const order =
-        orders.find(x => x.firebaseKey === orderKey);
+        orders.find(
+            x =>
+            x.firebaseKey ===
+            orderKey
+        );
+
 
     if(!order) return;
 
-    const products = Array.isArray(order.products)
+
+    const products =
+        Array.isArray(order.products)
         ? order.products
-        : Object.values(order.products || {});
+        : Object.values(
+            order.products || {}
+        );
 
-    const product = products[productIndex];
 
-    if(!product || !product.returnRequest) return;
+    const product =
+        products[productIndex];
 
-    const info = product.returnRequest;
-    const now = Date.now();
+
+    if(
+        !product ||
+        !product.returnRequest
+    )
+        return;
+
+
+    const info =
+        product.returnRequest;
+
+
+    const now =
+        Date.now();
+
 
     const updates = {};
 
+
     updates[
         `orders/${orderKey}/products/${productIndex}/returnRequest/status`
-    ] = select.value;
+    ] =
+        select.value;
+
 
     updates[
         `orders/${orderKey}/products/${productIndex}/returnRequest/updatedAt`
-    ] = now;
+    ] =
+        now;
+
 
     if(info.requestId){
 
         updates[
             `returnRequests/${info.requestId}/status`
-        ] = select.value;
+        ] =
+            select.value;
+
 
         updates[
             `returnRequests/${info.requestId}/updatedAt`
-        ] = now;
+        ] =
+            now;
+
     }
+
 
     try{
 
-        await update(ref(db), updates);
+        await update(
+            ref(db),
+            updates
+        );
 
-        alert("✅ Geri qaytarma statusı dəyişdirildi.");
+
+        alert(
+            "✅ Geri qaytarma statusı dəyişdirildi."
+        );
+
 
     }catch(error){
 
-        alert("Xəta:\n" + error.message);
+        alert(
+            "Xəta:\n" +
+            error.message
+        );
+
     }
+
 };
 
 
 /* GERİ QAYTARMA BÖLMƏSİ */
 
-function returnSection(order, product, productIndex){
+function returnSection(
+    order,
+    product,
+    productIndex
+){
 
-    const info = product.returnRequest;
+    const info =
+        product.returnRequest;
+
+
+    /* HƏLƏ GERİ QAYTARMA YOXDUR */
 
     if(!info){
 
         return `
+
         <button
             class="return-button"
             onclick="
@@ -933,12 +1327,21 @@ function returnSection(order, product, productIndex){
         >
             ↩️ Geri qaytarma
         </button>
+
         `;
+
     }
+
 
     let sendBox = "";
 
-    if(info.status === "Məhsul göndərilməlidir"){
+
+    /* MƏHSUL GERİ GÖNDƏRİLMƏLİDİR */
+
+    if(
+        info.status ===
+        "Məhsul göndərilməlidir"
+    ){
 
         sendBox = `
 
@@ -948,23 +1351,45 @@ function returnSection(order, product, productIndex){
                 📦 Məhsulu geri göndərin
             </div>
 
-            <div class="return-address">
 
-                <b>Kimdən:</b> Amid Həmidov
+            <div class="return-label">
 
-                <br>
-
-                <b>Ünvan:</b> F.ƏMİROV 24
-
-                <br>
-
-                <b>İndeks:</b> AZ 1020 TƏLƏBLİ
-
-                <br>
-
-                <b>Tel:</b> 0504535874
+                📌 Bu şəkli çap edin
+                və malın üstünə
+                yapışdırın.
 
             </div>
+
+
+            <img
+                class="return-photo"
+                src="geri-gonderme.jpg"
+                alt="Geri göndərmə ünvanı"
+            >
+
+
+            <div class="return-address">
+
+                <b>Kimdən:</b>
+                Amid Həmidov
+
+                <br>
+
+                <b>Ünvan:</b>
+                F.ƏMİROV 24
+
+                <br>
+
+                <b>İndeks:</b>
+                AZ 1020 TƏLƏBLİ
+
+                <br>
+
+                <b>Tel:</b>
+                0504535874
+
+            </div>
+
 
             <button
                 class="send-button"
@@ -980,8 +1405,11 @@ function returnSection(order, product, productIndex){
             </button>
 
         </div>
+
         `;
+
     }
+
 
     return `
 
@@ -991,18 +1419,27 @@ function returnSection(order, product, productIndex){
             ↩️ Geri qaytarma
         </div>
 
+
         <div class="reason-text">
+
             <b>Səbəb:</b>
+
             ${info.reason || ""}
+
         </div>
+
 
         ${returnTimeline(info)}
 
+
         ${sendBox}
 
+
         ${
-            info.status === "Məhsul yoldadır"
+            info.status ===
+            "Məhsul yoldadır"
             ? `
+
             <div style="
                 margin-top:10px;
                 padding:10px;
@@ -1010,15 +1447,21 @@ function returnSection(order, product, productIndex){
                 background:#e9f8ed;
                 color:#16833a;
             ">
+
                 🚚 Məhsul yoldadır.
+
             </div>
+
             `
             : ""
         }
 
+
         ${
-            info.status === "Məhsul satıcıya çatdı"
+            info.status ===
+            "Məhsul satıcıya çatdı"
             ? `
+
             <div style="
                 margin-top:10px;
                 padding:10px;
@@ -1026,17 +1469,25 @@ function returnSection(order, product, productIndex){
                 background:#e9f8ed;
                 color:#16833a;
             ">
+
                 📍 Məhsul satıcıya çatdı.
+
                 <br>
+
                 💰 Pulun geri qaytarılması başlayır.
+
             </div>
+
             `
             : ""
         }
 
+
         ${
-            info.status === "Pul geri qaytarılır"
+            info.status ===
+            "Pul geri qaytarılır"
             ? `
+
             <div style="
                 margin-top:10px;
                 padding:10px;
@@ -1044,15 +1495,21 @@ function returnSection(order, product, productIndex){
                 background:#e9f8ed;
                 color:#16833a;
             ">
+
                 💰 Pul geri qaytarılır.
+
             </div>
+
             `
             : ""
         }
 
+
         ${
-            info.status === "Pul geri qaytarıldı"
+            info.status ===
+            "Pul geri qaytarıldı"
             ? `
+
             <div style="
                 margin-top:10px;
                 padding:10px;
@@ -1060,20 +1517,26 @@ function returnSection(order, product, productIndex){
                 background:#e9f8ed;
                 color:#16833a;
             ">
+
                 ✅ Pul geri qaytarıldı.
+
             </div>
+
             `
             : ""
         }
+
 
         ${
             isAdmin
             ? `
+
             <div class="admin-box">
 
                 <div class="admin-title">
                     🔧 Geri qaytarma statusı
                 </div>
+
 
                 <select
                     id="return-${order.firebaseKey}-${productIndex}"
@@ -1083,7 +1546,11 @@ function returnSection(order, product, productIndex){
 
                         <option
                             value="${x}"
-                            ${x === info.status ? "selected" : ""}
+                            ${
+                                x === info.status
+                                ? "selected"
+                                : ""
+                            }
                         >
                             ${x}
                         </option>
@@ -1091,6 +1558,7 @@ function returnSection(order, product, productIndex){
                     `).join("")}
 
                 </select>
+
 
                 <button
                     class="save-button"
@@ -1106,284 +1574,477 @@ function returnSection(order, product, productIndex){
                 </button>
 
             </div>
+
             `
             : ""
         }
 
     </div>
+
     `;
+
 }
 
 
-/* SİFARİŞLƏRİ EKRANA ÇIXAR */
+/* SİFARİŞLƏRİ GÖSTƏR */
 
 function renderOrders(){
 
     const list =
-        document.getElementById("ordersList");
+        document.getElementById(
+            "ordersList"
+        );
+
 
     if(!orders.length){
 
         list.innerHTML = `
+
             <div class="empty">
+
                 📦 Sifariş tapılmadı.
+
             </div>
+
         `;
 
         return;
+
     }
 
+
     list.innerHTML =
-        orders.map((order,index)=>{
+        orders.map(
+            (order,index)=>{
 
-            const status =
-                order.status ||
-                "Sifariş qəbul edildi";
+                const status =
+                    order.status ||
+                    "Sifariş qəbul edildi";
 
-            const products = Array.isArray(order.products)
-                ? order.products
-                : Object.values(order.products || {});
 
-            const productsHtml =
-                products.map((product,productIndex)=>{
+                const products =
+                    Array.isArray(
+                        order.products
+                    )
+                    ? order.products
+                    : Object.values(
+                        order.products || {}
+                    );
 
-                    const price =
-                        Number(product.price || 0);
 
-                    const quantity =
-                        Number(product.quantity || 1);
-
-                    return `
-                    <div class="product">
-
-                        <div class="product-main">
-
-                            <img
-                                src="${product.image || ""}"
-                                alt="${product.name || "Məhsul"}"
-                                onerror="
-                                    this.style.display='none'
-                                "
-                            >
-
-                            <div class="product-info">
-
-                                <div class="product-name">
-                                    ${product.name || "Məhsul"}
-                                </div>
-
-                                <div>
-                                    💰 Qiymət:
-                                    ${price.toFixed(2)} AZN
-                                </div>
-
-                                <div>
-                                    📦 Say:
-                                    ${quantity}
-                                </div>
-
-                                <div>
-                                    💵 Məbləğ:
-                                    ${(price * quantity).toFixed(2)} AZN
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        ${returnSection(
-                            order,
+                const productsHtml =
+                    products.map(
+                        (
                             product,
                             productIndex
-                        )}
+                        )=>{
 
-                    </div>
-                    `;
-
-                }).join("");
-
-            return `
-            <div class="order">
-
-                <div
-                    class="order-top"
-                    onclick="toggleOrder(${index})"
-                >
-
-                    <div class="order-id">
-                        📦 Sifariş:
-                        ${order.orderId || order.id || order.firebaseKey}
-                    </div>
-
-                    ${
-                        isAdmin
-                        ? `
-                        <div class="customer">
-                            👤 ${order.name || "Müştəri"}
-                            <br>
-                            ✉️ ${order.email || ""}
-                            <br>
-                            📞 ${order.phone || ""}
-                        </div>
-                        `
-                        : ""
-                    }
-
-                    <div class="date">
-                        📅 ${order.date || ""}
-                    </div>
-
-                    <div class="status">
-                        ${status}
-                    </div>
-
-                    <span class="arrow">
-                        ›
-                    </span>
-
-                </div>
+                            const price =
+                                Number(
+                                    product.price || 0
+                                );
 
 
-                <div
-                    class="details"
-                    id="details-${index}"
-                >
+                            const quantity =
+                                Number(
+                                    product.quantity || 1
+                                );
 
-                    ${orderTimeline(status)}
 
-                    ${productsHtml}
+                            return `
 
-                    <div class="total">
-                        💰 Cəmi:
-                        ${Number(order.total || 0).toFixed(2)}
-                        AZN
-                    </div>
+                            <div class="product">
 
-                    ${
-                        order.trackingCode
-                        ? `
-                        <div class="tracking">
-                            🚚 İzləmə kodu:
-                            <b>${order.trackingCode}</b>
-                        </div>
-                        `
-                        : ""
-                    }
+                                <div class="product-main">
 
-                    ${
-                        order.address
-                        ? `
-                        <div class="tracking">
-                            📍 Ünvan:
-                            ${order.address}
-                        </div>
-                        `
-                        : ""
-                    }
+                                    <img
+                                        src="${
+                                            product.image || ""
+                                        }"
+                                        alt="${
+                                            product.name ||
+                                            "Məhsul"
+                                        }"
+                                        onerror="
+                                            this.style.display='none'
+                                        "
+                                    >
 
-                    ${
-                        isAdmin
-                        ? `
-                        <div class="admin-box">
 
-                            <div class="admin-title">
-                                🔧 Sifariş statusunu dəyiş
+                                    <div class="product-info">
+
+                                        <div class="product-name">
+
+                                            ${
+                                                product.name ||
+                                                "Məhsul"
+                                            }
+
+                                        </div>
+
+
+                                        <div>
+
+                                            💰 Qiymət:
+
+                                            ${
+                                                price.toFixed(2)
+                                            }
+
+                                            AZN
+
+                                        </div>
+
+
+                                        <div>
+
+                                            📦 Say:
+
+                                            ${quantity}
+
+                                        </div>
+
+
+                                        <div>
+
+                                            💵 Məbləğ:
+
+                                            ${
+                                                (
+                                                    price *
+                                                    quantity
+                                                ).toFixed(2)
+                                            }
+
+                                            AZN
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                ${returnSection(
+                                    order,
+                                    product,
+                                    productIndex
+                                )}
+
                             </div>
 
-                            <select id="status-${order.firebaseKey}">
+                            `;
 
-                                ${orderStatuses.map(x=>`
+                        }
+                    ).join("");
 
-                                    <option
-                                        value="${x}"
-                                        ${x === status ? "selected" : ""}
-                                    >
-                                        ${x}
-                                    </option>
 
-                                `).join("")}
+                return `
 
-                            </select>
+                <div class="order">
 
-                            <button
-                                class="save-button"
-                                onclick="
-                                    event.stopPropagation();
-                                    saveStatus(
-                                        '${order.firebaseKey}'
-                                    )
-                                "
-                            >
-                                Sifariş statusunu yadda saxla
-                            </button>
+
+                    <div
+                        class="order-top"
+                        onclick="
+                            toggleOrder(${index})
+                        "
+                    >
+
+                        <div class="order-id">
+
+                            📦 Sifariş:
+
+                            ${
+                                order.orderId ||
+                                order.id ||
+                                order.firebaseKey
+                            }
 
                         </div>
-                        `
-                        : ""
-                    }
+
+
+                        ${
+                            isAdmin
+                            ? `
+
+                            <div class="customer">
+
+                                👤 ${
+                                    order.name ||
+                                    "Müştəri"
+                                }
+
+                                <br>
+
+                                ✉️ ${
+                                    order.email ||
+                                    ""
+                                }
+
+                                <br>
+
+                                📞 ${
+                                    order.phone ||
+                                    ""
+                                }
+
+                            </div>
+
+                            `
+                            : ""
+                        }
+
+
+                        <div class="date">
+
+                            📅 ${
+                                order.date ||
+                                ""
+                            }
+
+                        </div>
+
+
+                        <div class="status">
+
+                            ${status}
+
+                        </div>
+
+
+                        <span class="arrow">
+                            ›
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="details"
+                        id="details-${index}"
+                    >
+
+                        ${orderTimeline(status)}
+
+
+                        ${productsHtml}
+
+
+                        <div class="total">
+
+                            💰 Cəmi:
+
+                            ${
+                                Number(
+                                    order.total || 0
+                                ).toFixed(2)
+                            }
+
+                            AZN
+
+                        </div>
+
+
+                        ${
+                            order.trackingCode
+                            ? `
+
+                            <div class="tracking">
+
+                                🚚 İzləmə kodu:
+
+                                <b>
+                                    ${
+                                        order.trackingCode
+                                    }
+                                </b>
+
+                            </div>
+
+                            `
+                            : ""
+                        }
+
+
+                        ${
+                            order.address
+                            ? `
+
+                            <div class="tracking">
+
+                                📍 Ünvan:
+
+                                ${
+                                    order.address
+                                }
+
+                            </div>
+
+                            `
+                            : ""
+                        }
+
+
+                        ${
+                            isAdmin
+                            ? `
+
+                            <div class="admin-box">
+
+                                <div class="admin-title">
+
+                                    🔧 Sifariş statusunu dəyiş
+
+                                </div>
+
+
+                                <select
+                                    id="status-${order.firebaseKey}"
+                                >
+
+                                    ${orderStatuses.map(
+                                        x=>`
+
+                                        <option
+                                            value="${x}"
+                                            ${
+                                                x === status
+                                                ? "selected"
+                                                : ""
+                                            }
+                                        >
+                                            ${x}
+                                        </option>
+
+                                    `
+                                    ).join("")}
+
+                                </select>
+
+
+                                <button
+                                    class="save-button"
+                                    onclick="
+                                        event.stopPropagation();
+                                        saveStatus(
+                                            '${order.firebaseKey}'
+                                        )
+                                    "
+                                >
+                                    Sifariş statusunu yadda saxla
+                                </button>
+
+                            </div>
+
+                            `
+                            : ""
+                        }
+
+                    </div>
 
                 </div>
 
-            </div>
-            `;
+                `;
 
-        }).join("");
+            }
+        ).join("");
+
 }
 
 
 /* FIREBASE-DƏN SİFARİŞLƏR */
 
-const ordersRef = ref(db,"orders");
+const ordersRef =
+    ref(
+        db,
+        "orders"
+    );
+
 
 onValue(
+
     ordersRef,
+
     snapshot => {
 
-        const data = snapshot.val();
+        const data =
+            snapshot.val();
+
 
         orders = [];
+
 
         if(data){
 
             Object.entries(data).forEach(
                 ([key,value])=>{
 
-                    if(!value) return;
+                    if(!value)
+                        return;
+
 
                     const order = {
+
                         ...value,
-                        firebaseKey:key
+
+                        firebaseKey:
+                            key
+
                     };
 
+
                     if(
+
                         isAdmin ||
-                        String(order.email || "")
-                            .toLowerCase()
-                            .trim()
-                            === currentEmail
+
+                        String(
+                            order.email || ""
+                        )
+                        .toLowerCase()
+                        .trim()
+                        ===
+                        currentEmail
+
                     ){
 
-                        orders.push(order);
+                        orders.push(
+                            order
+                        );
+
                     }
 
                 }
             );
+
         }
 
+
         orders.sort(
+
             (a,b)=>
-                Number(b.createdAt || 0)
+                Number(
+                    b.createdAt || 0
+                )
                 -
-                Number(a.createdAt || 0)
+                Number(
+                    a.createdAt || 0
+                )
+
         );
+
 
         renderOrders();
 
     },
 
+
     error => {
 
-        document.getElementById("ordersList").innerHTML = `
+        document.getElementById(
+            "ordersList"
+        ).innerHTML = `
+
             <div class="error">
 
                 ❌ Sifarişləri yükləmək olmadı.
@@ -1397,9 +2058,11 @@ onValue(
                 ${error.message}
 
             </div>
+
         `;
 
     }
+
 );
 
 </script>
