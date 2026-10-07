@@ -153,11 +153,36 @@ h1{
     font-size:14px;
 }
 
+.return-image-box{
+    margin-top:12px;
+    background:#fff;
+    border-radius:12px;
+    padding:10px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+.return-instruction{
+    font-size:16px;
+    font-weight:bold;
+    line-height:1.4;
+    margin-bottom:10px;
+    color:#111;
+}
+
+.return-image{
+    width:100%;
+    max-width:430px;
+    border-radius:10px;
+    display:block;
+    margin:0 auto;
+}
+
 .send-button{
     width:100%;
     border:0;
     border-radius:10px;
-    padding:12px;
+    padding:13px;
     margin-top:10px;
     background:#ff6b00;
     color:#fff;
@@ -301,8 +326,6 @@ h1{
     text-decoration:none;
 }
 
-/* MODAL */
-
 .modal{
     display:none;
     position:fixed;
@@ -389,25 +412,6 @@ h1{
     font-size:16px;
     font-weight:bold;
 }
-
-.return-label{
-    background:#fff3cd;
-    border:1px solid #f0d477;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:12px;
-    text-align:center;
-    font-weight:bold;
-    color:#7a5a00;
-}
-
-.return-photo{
-    width:100%;
-    display:block;
-    border-radius:12px;
-    border:1px solid #ddd;
-    margin-bottom:12px;
-}
 </style>
 </head>
 
@@ -435,7 +439,6 @@ h1{
 <div class="modal-content">
 
 <div class="modal-header">
-
     <h2>↩️ Geri qaytarma</h2>
 
     <button
@@ -444,7 +447,6 @@ h1{
     >
         ×
     </button>
-
 </div>
 
 <div class="modal-product">
@@ -457,17 +459,13 @@ h1{
 
 <div>
 
-    <b id="modalName">
-        Məhsul
-    </b>
+<b id="modalName">
+Məhsul
+</b>
 
-    <div style="
-        font-size:13px;
-        color:#777;
-        margin-top:5px;
-    ">
-        Geri qaytarma səbəbi
-    </div>
+<div style="font-size:13px;color:#777;margin-top:5px">
+Geri qaytarma səbəbi
+</div>
 
 </div>
 
@@ -539,16 +537,16 @@ Başqa səbəb
 </label>
 
 <textarea
-    id="returnNote"
-    class="note"
-    placeholder="Əlavə məlumat..."
+id="returnNote"
+class="note"
+placeholder="Əlavə məlumat..."
 ></textarea>
 
 <button
-    class="submit-return"
-    onclick="submitReturn()"
+class="submit-return"
+onclick="submitReturn()"
 >
-    ↩️ Sorğunu göndər
+↩️ Sorğunu göndər
 </button>
 
 </div>
@@ -595,11 +593,9 @@ const firebaseConfig = {
 };
 
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const db =
-    getDatabase(app);
+const db = getDatabase(app);
 
 
 const ADMIN_EMAIL =
@@ -607,7 +603,10 @@ const ADMIN_EMAIL =
 
 
 const currentEmail =
-    (localStorage.getItem("userEmail") || "")
+    (
+        localStorage.getItem("userEmail")
+        || ""
+    )
     .toLowerCase()
     .trim();
 
@@ -673,7 +672,7 @@ window.toggleOrder = function(index){
 };
 
 
-/* STATUS İNDEKSİ */
+/* STATUS */
 
 function statusIndex(status){
 
@@ -684,7 +683,7 @@ function statusIndex(status){
 }
 
 
-/* GERİ QAYTARMA İNDEKSİ */
+/* GERİ QAYTARMA STATUS */
 
 function returnIndex(status){
 
@@ -706,31 +705,29 @@ function orderTimeline(status){
 
     <div class="timeline">
 
-        ${orderStatuses.map((x,i)=>`
+    ${orderStatuses.map((x,i)=>`
 
-            <div
-                class="step ${
+        <div class="step ${
+            i <= current ? "active" : ""
+        }">
+
+            <div class="circle">
+
+                ${
                     i <= current
-                    ? "active"
+                    ? "✓"
                     : ""
-                }"
-            >
-
-                <div class="circle">
-                    ${
-                        i <= current
-                        ? "✓"
-                        : ""
-                    }
-                </div>
-
-                <div class="step-text">
-                    ${x}
-                </div>
+                }
 
             </div>
 
-        `).join("")}
+            <div class="step-text">
+                ${x}
+            </div>
+
+        </div>
+
+    `).join("")}
 
     </div>
 
@@ -749,31 +746,29 @@ function returnTimeline(info){
 
     <div>
 
-        ${returnStatuses.map((x,i)=>`
+    ${returnStatuses.map((x,i)=>`
 
-            <div
-                class="return-step ${
+        <div class="return-step ${
+            i <= current ? "active" : ""
+        }">
+
+            <div class="return-circle">
+
+                ${
                     i <= current
-                    ? "active"
+                    ? "✓"
                     : ""
-                }"
-            >
-
-                <div class="return-circle">
-                    ${
-                        i <= current
-                        ? "✓"
-                        : ""
-                    }
-                </div>
-
-                <div>
-                    ${x}
-                </div>
+                }
 
             </div>
 
-        `).join("")}
+            <div>
+                ${x}
+            </div>
+
+        </div>
+
+    `).join("")}
 
     </div>
 
@@ -781,10 +776,10 @@ function returnTimeline(info){
 }
 
 
-/* GERİ QAYTARMA MODALI */
+/* MODAL AÇ */
 
 window.openReturn =
-function(orderKey, productIndex){
+function(orderKey,productIndex){
 
     selectedOrderKey =
         orderKey;
@@ -796,8 +791,7 @@ function(orderKey, productIndex){
     const order =
         orders.find(
             x =>
-            x.firebaseKey ===
-            orderKey
+            x.firebaseKey === orderKey
         );
 
 
@@ -806,8 +800,10 @@ function(orderKey, productIndex){
 
     const products =
         Array.isArray(order.products)
-        ? order.products
-        : Object.values(
+        ?
+        order.products
+        :
+        Object.values(
             order.products || {}
         );
 
@@ -822,15 +818,13 @@ function(orderKey, productIndex){
     document.getElementById(
         "modalName"
     ).textContent =
-        product.name ||
-        "Məhsul";
+        product.name || "Məhsul";
 
 
     document.getElementById(
         "modalImage"
     ).src =
-        product.image ||
-        "";
+        product.image || "";
 
 
     document.getElementById(
@@ -838,9 +832,11 @@ function(orderKey, productIndex){
     ).value = "";
 
 
-    document.querySelectorAll(
+    document
+    .querySelectorAll(
         'input[name="reason"]'
-    ).forEach(
+    )
+    .forEach(
         x =>
         x.checked = false
     );
@@ -853,7 +849,7 @@ function(orderKey, productIndex){
 };
 
 
-/* MODALI BAĞLA */
+/* MODAL BAĞLA */
 
 window.closeReturnModal =
 function(){
@@ -903,8 +899,10 @@ async function(){
 
     const products =
         Array.isArray(order.products)
-        ? order.products
-        : Object.values(
+        ?
+        order.products
+        :
+        Object.values(
             order.products || {}
         );
 
@@ -964,7 +962,6 @@ async function(){
         updatedAt:
 
             now
-
     };
 
 
@@ -997,7 +994,6 @@ async function(){
 
         productImage:
             product.image || ""
-
     };
 
 
@@ -1050,8 +1046,10 @@ async function(
 
     const products =
         Array.isArray(order.products)
-        ? order.products
-        : Object.values(
+        ?
+        order.products
+        :
+        Object.values(
             order.products || {}
         );
 
@@ -1102,7 +1100,6 @@ async function(
             `returnRequests/${info.requestId}/updatedAt`
         ] =
             now;
-
     }
 
 
@@ -1115,7 +1112,7 @@ async function(
 
 
         alert(
-            "🚚 Məhsul yoldadır olaraq qeyd edildi."
+            "🚚 Məhsul yoldadır."
         );
 
 
@@ -1138,8 +1135,7 @@ async function(orderKey){
 
     const select =
         document.getElementById(
-            "status-" +
-            orderKey
+            "status-" + orderKey
         );
 
 
@@ -1216,8 +1212,10 @@ async function(
 
     const products =
         Array.isArray(order.products)
-        ? order.products
-        : Object.values(
+        ?
+        order.products
+        :
+        Object.values(
             order.products || {}
         );
 
@@ -1336,7 +1334,10 @@ function returnSection(
     let sendBox = "";
 
 
-    /* MƏHSUL GERİ GÖNDƏRİLMƏLİDİR */
+    /*
+    ADMIN "MƏHSUL GÖNDƏRİLMƏLİDİR"
+    STATUSU VERƏNDƏ ŞƏKİL GƏLİR
+    */
 
     if(
         info.status ===
@@ -1345,48 +1346,35 @@ function returnSection(
 
         sendBox = `
 
-        <div class="return-box">
+        <div class="return-image-box">
 
-            <div class="return-title">
-                📦 Məhsulu geri göndərin
-            </div>
+            <div class="return-instruction">
 
-
-            <div class="return-label">
-
-                📌 Bu şəkli çap edin
-                və malın üstünə
-                yapışdırın.
+                🖨️ Şəkili çap edin
+                və malın üstünə vurun.
 
             </div>
 
 
             <img
-                class="return-photo"
+                class="return-image"
                 src="geri-gonderme.jpg"
-                alt="Geri göndərmə ünvanı"
+                alt="Geri göndərmə etiketi"
             >
 
 
-            <div class="return-address">
+            <div
+                style="
+                margin-top:10px;
+                font-size:13px;
+                color:#666;
+                line-height:1.5;
+                "
+            >
 
-                <b>Kimdən:</b>
-                Amid Həmidov
-
-                <br>
-
-                <b>Ünvan:</b>
-                F.ƏMİROV 24
-
-                <br>
-
-                <b>İndeks:</b>
-                AZ 1020 TƏLƏBLİ
-
-                <br>
-
-                <b>Tel:</b>
-                0504535874
+                Bu şəkli çap edin və
+                geri göndərəcəyiniz məhsulun
+                üstünə yapışdırın.
 
             </div>
 
@@ -1401,7 +1389,9 @@ function returnSection(
                     )
                 "
             >
-                📦 Məhsulu göndərdim
+
+                📦 Məhsulu göndərdim — yoldadır
+
             </button>
 
         </div>
@@ -1438,103 +1428,143 @@ function returnSection(
         ${
             info.status ===
             "Məhsul yoldadır"
-            ? `
 
-            <div style="
+            ?
+
+            `
+
+            <div
+                style="
                 margin-top:10px;
-                padding:10px;
+                padding:12px;
                 border-radius:10px;
                 background:#e9f8ed;
                 color:#16833a;
-            ">
+                font-weight:bold;
+                "
+            >
 
                 🚚 Məhsul yoldadır.
 
             </div>
 
             `
-            : ""
+
+            :
+
+            ""
         }
 
 
         ${
             info.status ===
             "Məhsul satıcıya çatdı"
-            ? `
 
-            <div style="
+            ?
+
+            `
+
+            <div
+                style="
                 margin-top:10px;
-                padding:10px;
+                padding:12px;
                 border-radius:10px;
                 background:#e9f8ed;
                 color:#16833a;
-            ">
+                "
+            >
 
                 📍 Məhsul satıcıya çatdı.
 
-                <br>
+                <br><br>
 
                 💰 Pulun geri qaytarılması başlayır.
 
             </div>
 
             `
-            : ""
+
+            :
+
+            ""
         }
 
 
         ${
             info.status ===
             "Pul geri qaytarılır"
-            ? `
 
-            <div style="
+            ?
+
+            `
+
+            <div
+                style="
                 margin-top:10px;
-                padding:10px;
+                padding:12px;
                 border-radius:10px;
-                background:#e9f8ed;
-                color:#16833a;
-            ">
+                background:#fff4d6;
+                color:#a66a00;
+                font-weight:bold;
+                "
+            >
 
                 💰 Pul geri qaytarılır.
 
             </div>
 
             `
-            : ""
+
+            :
+
+            ""
         }
 
 
         ${
             info.status ===
             "Pul geri qaytarıldı"
-            ? `
 
-            <div style="
+            ?
+
+            `
+
+            <div
+                style="
                 margin-top:10px;
-                padding:10px;
+                padding:12px;
                 border-radius:10px;
                 background:#e9f8ed;
                 color:#16833a;
-            ">
+                font-weight:bold;
+                "
+            >
 
                 ✅ Pul geri qaytarıldı.
 
             </div>
 
             `
-            : ""
+
+            :
+
+            ""
         }
 
 
         ${
             isAdmin
-            ? `
+
+            ?
+
+            `
 
             <div class="admin-box">
 
                 <div class="admin-title">
+
                     🔧 Geri qaytarma statusı
+
                 </div>
 
 
@@ -1542,20 +1572,24 @@ function returnSection(
                     id="return-${order.firebaseKey}-${productIndex}"
                 >
 
-                    ${returnStatuses.map(x=>`
+                    ${
+                        returnStatuses.map(
+                            x => `
 
-                        <option
-                            value="${x}"
-                            ${
-                                x === info.status
-                                ? "selected"
-                                : ""
-                            }
-                        >
-                            ${x}
-                        </option>
+                            <option
+                                value="${x}"
+                                ${
+                                    x === info.status
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                ${x}
+                            </option>
 
-                    `).join("")}
+                            `
+                        ).join("")
+                    }
 
                 </select>
 
@@ -1564,20 +1598,27 @@ function returnSection(
                     class="save-button"
                     onclick="
                         event.stopPropagation();
+
                         saveReturnStatus(
                             '${order.firebaseKey}',
                             ${productIndex}
                         )
                     "
                 >
+
                     Yadda saxla
+
                 </button>
 
             </div>
 
             `
-            : ""
+
+            :
+
+            ""
         }
+
 
     </div>
 
@@ -1614,297 +1655,317 @@ function renderOrders(){
 
 
     list.innerHTML =
-        orders.map(
-            (order,index)=>{
 
-                const status =
-                    order.status ||
-                    "Sifariş qəbul edildi";
+    orders.map(
+        (order,index)=>{
 
-
-                const products =
-                    Array.isArray(
-                        order.products
-                    )
-                    ? order.products
-                    : Object.values(
-                        order.products || {}
-                    );
+            const status =
+                order.status ||
+                "Sifariş qəbul edildi";
 
 
-                const productsHtml =
-                    products.map(
-                        (
-                            product,
-                            productIndex
-                        )=>{
-
-                            const price =
-                                Number(
-                                    product.price || 0
-                                );
-
-
-                            const quantity =
-                                Number(
-                                    product.quantity || 1
-                                );
+            const products =
+                Array.isArray(
+                    order.products
+                )
+                ?
+                order.products
+                :
+                Object.values(
+                    order.products || {}
+                );
 
 
-                            return `
+            const productsHtml =
 
-                            <div class="product">
+            products.map(
+                (product,productIndex)=>{
 
-                                <div class="product-main">
-
-                                    <img
-                                        src="${
-                                            product.image || ""
-                                        }"
-                                        alt="${
-                                            product.name ||
-                                            "Məhsul"
-                                        }"
-                                        onerror="
-                                            this.style.display='none'
-                                        "
-                                    >
+                    const price =
+                        Number(
+                            product.price || 0
+                        );
 
 
-                                    <div class="product-info">
-
-                                        <div class="product-name">
-
-                                            ${
-                                                product.name ||
-                                                "Məhsul"
-                                            }
-
-                                        </div>
+                    const quantity =
+                        Number(
+                            product.quantity || 1
+                        );
 
 
-                                        <div>
+                    return `
 
-                                            💰 Qiymət:
+                    <div class="product">
 
-                                            ${
-                                                price.toFixed(2)
-                                            }
+                        <div class="product-main">
 
-                                            AZN
-
-                                        </div>
-
-
-                                        <div>
-
-                                            📦 Say:
-
-                                            ${quantity}
-
-                                        </div>
+                            <img
+                                src="${product.image || ""}"
+                                alt="${product.name || "Məhsul"}"
+                                onerror="
+                                    this.style.display='none'
+                                "
+                            >
 
 
-                                        <div>
+                            <div class="product-info">
 
-                                            💵 Məbləğ:
+                                <div class="product-name">
 
-                                            ${
-                                                (
-                                                    price *
-                                                    quantity
-                                                ).toFixed(2)
-                                            }
-
-                                            AZN
-
-                                        </div>
-
-                                    </div>
+                                    ${
+                                        product.name ||
+                                        "Məhsul"
+                                    }
 
                                 </div>
 
 
-                                ${returnSection(
-                                    order,
-                                    product,
-                                    productIndex
-                                )}
+                                <div>
+
+                                    💰 Qiymət:
+
+                                    ${price.toFixed(2)}
+
+                                    AZN
+
+                                </div>
+
+
+                                <div>
+
+                                    📦 Say:
+
+                                    ${quantity}
+
+                                </div>
+
+
+                                <div>
+
+                                    💵 Məbləğ:
+
+                                    ${
+                                        (
+                                            price *
+                                            quantity
+                                        ).toFixed(2)
+                                    }
+
+                                    AZN
+
+                                </div>
 
                             </div>
-
-                            `;
-
-                        }
-                    ).join("");
-
-
-                return `
-
-                <div class="order">
-
-
-                    <div
-                        class="order-top"
-                        onclick="
-                            toggleOrder(${index})
-                        "
-                    >
-
-                        <div class="order-id">
-
-                            📦 Sifariş:
-
-                            ${
-                                order.orderId ||
-                                order.id ||
-                                order.firebaseKey
-                            }
 
                         </div>
 
 
                         ${
-                            isAdmin
-                            ? `
-
-                            <div class="customer">
-
-                                👤 ${
-                                    order.name ||
-                                    "Müştəri"
-                                }
-
-                                <br>
-
-                                ✉️ ${
-                                    order.email ||
-                                    ""
-                                }
-
-                                <br>
-
-                                📞 ${
-                                    order.phone ||
-                                    ""
-                                }
-
-                            </div>
-
-                            `
-                            : ""
+                            returnSection(
+                                order,
+                                product,
+                                productIndex
+                            )
                         }
 
+                    </div>
 
-                        <div class="date">
+                    `;
 
-                            📅 ${
-                                order.date ||
+                }
+            ).join("");
+
+
+            return `
+
+            <div class="order">
+
+
+                <div
+                    class="order-top"
+                    onclick="
+                        toggleOrder(${index})
+                    "
+                >
+
+                    <div class="order-id">
+
+                        📦 Sifariş:
+
+                        ${
+                            order.orderId ||
+                            order.id ||
+                            order.firebaseKey
+                        }
+
+                    </div>
+
+
+                    ${
+                        isAdmin
+
+                        ?
+
+                        `
+
+                        <div class="customer">
+
+                            👤 ${
+                                order.name ||
+                                "Müştəri"
+                            }
+
+                            <br>
+
+                            ✉️ ${
+                                order.email ||
+                                ""
+                            }
+
+                            <br>
+
+                            📞 ${
+                                order.phone ||
                                 ""
                             }
 
                         </div>
 
+                        `
 
-                        <div class="status">
+                        :
 
-                            ${status}
+                        ""
+                    }
 
-                        </div>
 
+                    <div class="date">
 
-                        <span class="arrow">
-                            ›
-                        </span>
+                        📅 ${
+                            order.date ||
+                            ""
+                        }
 
                     </div>
 
 
-                    <div
-                        class="details"
-                        id="details-${index}"
-                    >
+                    <div class="status">
 
-                        ${orderTimeline(status)}
+                        ${status}
 
-
-                        ${productsHtml}
+                    </div>
 
 
-                        <div class="total">
+                    <span class="arrow">
+                        ›
+                    </span>
 
-                            💰 Cəmi:
+                </div>
 
-                            ${
-                                Number(
-                                    order.total || 0
-                                ).toFixed(2)
-                            }
 
-                            AZN
+                <div
+                    class="details"
+                    id="details-${index}"
+                >
+
+                    ${
+                        orderTimeline(
+                            status
+                        )
+                    }
+
+
+                    ${productsHtml}
+
+
+                    <div class="total">
+
+                        💰 Cəmi:
+
+                        ${
+                            Number(
+                                order.total || 0
+                            ).toFixed(2)
+                        }
+
+                        AZN
+
+                    </div>
+
+
+                    ${
+                        order.trackingCode
+
+                        ?
+
+                        `
+
+                        <div class="tracking">
+
+                            🚚 İzləmə kodu:
+
+                            <b>
+                                ${
+                                    order.trackingCode
+                                }
+                            </b>
 
                         </div>
 
+                        `
 
-                        ${
-                            order.trackingCode
-                            ? `
+                        :
 
-                            <div class="tracking">
+                        ""
+                    }
 
-                                🚚 İzləmə kodu:
 
-                                <b>
-                                    ${
-                                        order.trackingCode
-                                    }
-                                </b>
+                    ${
+                        order.address
+
+                        ?
+
+                        `
+
+                        <div class="tracking">
+
+                            📍 Ünvan:
+
+                            ${order.address}
+
+                        </div>
+
+                        `
+
+                        :
+
+                        ""
+                    }
+
+
+                    ${
+                        isAdmin
+
+                        ?
+
+                        `
+
+                        <div class="admin-box">
+
+                            <div class="admin-title">
+
+                                🔧 Sifariş statusunu dəyiş
 
                             </div>
 
-                            `
-                            : ""
-                        }
 
-
-                        ${
-                            order.address
-                            ? `
-
-                            <div class="tracking">
-
-                                📍 Ünvan:
+                            <select
+                                id="status-${order.firebaseKey}"
+                            >
 
                                 ${
-                                    order.address
-                                }
-
-                            </div>
-
-                            `
-                            : ""
-                        }
-
-
-                        ${
-                            isAdmin
-                            ? `
-
-                            <div class="admin-box">
-
-                                <div class="admin-title">
-
-                                    🔧 Sifariş statusunu dəyiş
-
-                                </div>
-
-
-                                <select
-                                    id="status-${order.firebaseKey}"
-                                >
-
-                                    ${orderStatuses.map(
-                                        x=>`
+                                    orderStatuses.map(
+                                        x => `
 
                                         <option
                                             value="${x}"
@@ -1917,43 +1978,51 @@ function renderOrders(){
                                             ${x}
                                         </option>
 
-                                    `
-                                    ).join("")}
+                                        `
+                                    ).join("")
+                                }
 
-                                </select>
+                            </select>
 
 
-                                <button
-                                    class="save-button"
-                                    onclick="
-                                        event.stopPropagation();
-                                        saveStatus(
-                                            '${order.firebaseKey}'
-                                        )
-                                    "
-                                >
-                                    Sifariş statusunu yadda saxla
-                                </button>
+                            <button
+                                class="save-button"
+                                onclick="
+                                    event.stopPropagation();
 
-                            </div>
+                                    saveStatus(
+                                        '${order.firebaseKey}'
+                                    )
+                                "
+                            >
 
-                            `
-                            : ""
-                        }
+                                Sifariş statusunu yadda saxla
 
-                    </div>
+                            </button>
+
+                        </div>
+
+                        `
+
+                        :
+
+                        ""
+                    }
+
 
                 </div>
 
-                `;
+            </div>
 
-            }
-        ).join("");
+            `;
+
+        }
+    ).join("");
 
 }
 
 
-/* FIREBASE-DƏN SİFARİŞLƏR */
+/* FIREBASE */
 
 const ordersRef =
     ref(
@@ -1977,40 +2046,41 @@ onValue(
 
         if(data){
 
-            Object.entries(data).forEach(
+            Object.entries(data)
+            .forEach(
                 ([key,value])=>{
 
-                    if(!value)
-                        return;
+                    if(!value) return;
 
 
                     const order = {
 
                         ...value,
 
-                        firebaseKey:
-                            key
+                        firebaseKey:key
 
                     };
 
 
                     if(
 
-                        isAdmin ||
+                        isAdmin
+
+                        ||
 
                         String(
                             order.email || ""
                         )
                         .toLowerCase()
                         .trim()
+
                         ===
+
                         currentEmail
 
                     ){
 
-                        orders.push(
-                            order
-                        );
+                        orders.push(order);
 
                     }
 
@@ -2021,16 +2091,17 @@ onValue(
 
 
         orders.sort(
-
             (a,b)=>
+
                 Number(
                     b.createdAt || 0
                 )
+
                 -
+
                 Number(
                     a.createdAt || 0
                 )
-
         );
 
 
@@ -2053,7 +2124,7 @@ onValue(
 
                 <b>Firebase xətası:</b>
 
-                <br>
+                <br><br>
 
                 ${error.message}
 
