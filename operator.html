@@ -65,25 +65,12 @@ button{
     color:white;
 }
 
-.notification{
-    display:none;
-    background:#fff3cd;
-    border:1px solid #ffcc00;
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:15px;
-}
-
 .order{
     background:white;
-    border-radius:18px;
     padding:18px;
+    border-radius:18px;
     margin-bottom:20px;
     box-shadow:0 3px 12px #ddd;
-}
-
-.order h3{
-    margin-top:0;
 }
 
 .info{
@@ -94,7 +81,7 @@ button{
     background:#f7f7f7;
     padding:12px;
     border-radius:12px;
-    margin:12px 0;
+    margin:15px 0;
 }
 
 .product{
@@ -106,33 +93,45 @@ button{
     border-bottom:0;
 }
 
-/* POÇT KODU */
-.tracking-area{
+/* POÇT VƏ İZLƏMƏ */
+.shipping-box{
     margin-top:18px;
     padding:18px;
-    background:#e8f4ff;
-    border:3px solid #2196f3;
+    background:#eef7ff;
+    border:2px solid #2196f3;
     border-radius:16px;
 }
 
-.tracking-area h3{
-    margin:0 0 10px 0;
-    color:#1565c0;
+.shipping-title{
+    font-size:19px;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
-.tracking{
+.shipping-label{
+    display:block;
+    margin-top:12px;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+.shipping-input{
     width:100%;
-    padding:15px;
-    border:2px solid #2196f3;
+    padding:14px;
+    border:2px solid #bbb;
     border-radius:10px;
-    font-size:18px;
+    font-size:17px;
     outline:none;
     background:white;
 }
 
+.shipping-input:focus{
+    border-color:#2196f3;
+}
+
 .start{
     width:100%;
-    margin-top:12px;
+    margin-top:18px;
     background:#111;
     color:white;
     font-size:18px;
@@ -143,17 +142,22 @@ button{
     background:#16a34a;
 }
 
-/* STATUS */
+/* STATUSLAR */
 .status-box{
     margin-top:18px;
-    padding:15px;
+    padding:16px;
     background:#f5f5f5;
     border-radius:15px;
 }
 
+.status-title{
+    font-size:18px;
+    font-weight:bold;
+}
+
 .current-status{
     margin-top:10px;
-    padding:12px;
+    padding:13px;
     background:white;
     border-radius:10px;
     font-size:18px;
@@ -162,7 +166,7 @@ button{
 
 .status-btn{
     width:100%;
-    margin-top:8px;
+    margin-top:9px;
     background:#2196f3;
     color:white;
 }
@@ -173,6 +177,7 @@ button{
 
 .status-btn:disabled{
     background:#aaa;
+    color:#eee;
     cursor:not-allowed;
 }
 
@@ -223,7 +228,6 @@ button{
 }
 
 .chat-row input{
-    margin:0;
     flex:1;
     padding:12px;
     border:1px solid #ccc;
@@ -234,8 +238,7 @@ button{
     background:#111;
     color:white;
 }
-
-</style></head><body><div class="login" id="loginPage"><div class="login-box">
+</style></head><body><!-- GİRİŞ --><div class="login" id="loginPage"><div class="login-box">
 
     <h2>Operator Paneli</h2>
 
@@ -247,7 +250,7 @@ button{
 
 </div>
 
-</div><div id="panel"><div class="top">
+</div><!-- PANEL --><div id="panel"><div class="top">
 
     <div>
         <b>Operator</b>
@@ -262,10 +265,7 @@ button{
 </div>
 
 
-<div class="notification" id="notification"></div>
-
 <div id="firebaseError"></div>
-
 
 <h2>📦 Bütün sifarişlər</h2>
 
@@ -277,6 +277,8 @@ button{
 
 </div>
 
+
+<!-- CHAT -->
 
 <div class="chat">
 
@@ -322,6 +324,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
+/* FIREBASE */
+
 const firebaseConfig = {
 
     apiKey:
@@ -348,22 +352,35 @@ const firebaseConfig = {
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+getAuth(app);
 
-const db = getDatabase(app);
+const db =
+getDatabase(app);
 
-const provider = new GoogleAuthProvider();
+const provider =
+new GoogleAuthProvider();
 
 
-const OPERATOR_EMAIL = "amidh365@gmail.com";
+/* OPERATOR */
+
+const OPERATOR_EMAIL =
+"amidh365@gmail.com";
 
 
-const ordersRef = ref(db,"orders");
+/* FIREBASE YOLLARI */
 
-const messagesRef = ref(db,"messages");
+const ordersRef =
+ref(db,"orders");
 
+const messagesRef =
+ref(db,"messages");
+
+
+/* ELEMENTLƏR */
 
 const loginPage =
 document.getElementById("loginPage");
@@ -381,15 +398,19 @@ const firebaseError =
 document.getElementById("firebaseError");
 
 
-let ordersLoaded = false;
-let messagesLoaded = false;
+let ordersStarted = false;
+let messagesStarted = false;
 
 
-/* GOOGLE GİRİŞ */
+/* =========================
+   GOOGLE GİRİŞ
+========================= */
 
 document
 .getElementById("googleLogin")
-.addEventListener("click",async()=>{
+.addEventListener(
+"click",
+async()=>{
 
     try{
 
@@ -404,6 +425,7 @@ document
         .toLowerCase()
         .trim();
 
+
         if(email !== OPERATOR_EMAIL){
 
             alert(
@@ -413,11 +435,15 @@ document
             await signOut(auth);
 
             return;
+
         }
+
 
         openPanel(result.user);
 
-    }catch(error){
+    }
+
+    catch(error){
 
         alert(
             "Giriş xətası:\n\n" +
@@ -429,16 +455,22 @@ document
 });
 
 
-/* AUTH */
+/* =========================
+   AUTH
+========================= */
 
-onAuthStateChanged(auth,user=>{
+onAuthStateChanged(
+auth,
+user=>{
 
     if(!user) return;
+
 
     const email =
     (user.email || "")
     .toLowerCase()
     .trim();
+
 
     if(email === OPERATOR_EMAIL){
 
@@ -449,30 +481,34 @@ onAuthStateChanged(auth,user=>{
 });
 
 
-/* PANEL */
+/* =========================
+   PANEL
+========================= */
 
 function openPanel(user){
 
-    loginPage.style.display = "none";
+    loginPage.style.display =
+    "none";
 
-    panel.style.display = "block";
+    panel.style.display =
+    "block";
 
     operatorEmail.textContent =
     user.email;
 
 
-    if(!ordersLoaded){
+    if(!ordersStarted){
 
-        ordersLoaded = true;
+        ordersStarted = true;
 
         loadOrders();
 
     }
 
 
-    if(!messagesLoaded){
+    if(!messagesStarted){
 
-        messagesLoaded = true;
+        messagesStarted = true;
 
         loadMessages();
 
@@ -481,44 +517,46 @@ function openPanel(user){
 }
 
 
-/* ÇIXIŞ */
+/* =========================
+   ÇIXIŞ
+========================= */
 
 document
 .getElementById("logout")
-.addEventListener("click",async()=>{
+.addEventListener(
+"click",
+async()=>{
 
     await signOut(auth);
 
-    ordersLoaded = false;
-    messagesLoaded = false;
+    ordersStarted = false;
+    messagesStarted = false;
 
-    panel.style.display = "none";
+    panel.style.display =
+    "none";
 
-    loginPage.style.display = "flex";
+    loginPage.style.display =
+    "flex";
 
 });
 
 
 /* =========================
-   BÜTÜN SİFARİŞLƏR
+   SİFARİŞLƏR
 ========================= */
 
 function loadOrders(){
 
-    ordersDiv.innerHTML = `
-        <div class="empty">
-            📦 Sifarişlər yüklənir...
-        </div>
-    `;
-
-
     onValue(
+
         ordersRef,
+
         snapshot=>{
 
             ordersDiv.innerHTML = "";
 
-            const data = snapshot.val();
+            const data =
+            snapshot.val();
 
 
             if(!data){
@@ -544,7 +582,10 @@ function loadOrders(){
 
                 count++;
 
-                showOrder(key,order);
+                createOrder(
+                    key,
+                    order
+                );
 
             });
 
@@ -560,6 +601,7 @@ function loadOrders(){
             }
 
         },
+
         error=>{
 
             firebaseError.innerHTML = `
@@ -571,6 +613,7 @@ function loadOrders(){
             `;
 
         }
+
     );
 
 }
@@ -580,20 +623,24 @@ function loadOrders(){
    SİFARİŞ KARTI
 ========================= */
 
-function showOrder(key,order){
+function createOrder(key,order){
 
     const card =
     document.createElement("div");
 
-    card.className = "order";
+    card.className =
+    "order";
 
+
+    /* MƏHSULLAR */
 
     let productsHTML = "";
 
 
     if(Array.isArray(order.products)){
 
-        order.products.forEach(product=>{
+        order.products.forEach(
+        product=>{
 
             productsHTML += `
 
@@ -639,41 +686,59 @@ function showOrder(key,order){
     order.started === true;
 
 
+    /* =========================
+       KART HTML
+    ========================= */
+
     card.innerHTML = `
 
-        <h3>🛒 Sifariş</h3>
+        <h3>
+            🛒 Sifariş
+        </h3>
 
 
         <div class="info">
 
             <b>Sifariş kodu:</b>
-            ${escapeHTML(order.orderId || "")}
+            ${escapeHTML(
+                order.orderId || ""
+            )}
 
             <br>
 
             <b>Müştəri:</b>
-            ${escapeHTML(order.name || "")}
+            ${escapeHTML(
+                order.name || ""
+            )}
 
             <br>
 
             <b>Email:</b>
-            ${escapeHTML(order.email || "")}
+            ${escapeHTML(
+                order.email || ""
+            )}
 
             <br>
 
             <b>Telefon:</b>
-            ${escapeHTML(order.phone || "")}
+            ${escapeHTML(
+                order.phone || ""
+            )}
 
             <br>
 
             <b>Ünvan:</b>
-            ${escapeHTML(order.address || "")}
+            ${escapeHTML(
+                order.address || ""
+            )}
 
             <br>
 
             <b>Məbləğ:</b>
             ${escapeHTML(
-                String(order.total || "0")
+                String(
+                    order.total || "0"
+                )
             )}
             AZN
 
@@ -682,7 +747,7 @@ function showOrder(key,order){
 
         <div class="products">
 
-            <b>📦 Məhsulu yığ:</b>
+            <b>📦 Məhsullar</b>
 
             <br><br>
 
@@ -694,20 +759,44 @@ function showOrder(key,order){
         </div>
 
 
-        <!-- ÇOX AÇIQ POÇT KODU HİSSƏSİ -->
+        <!-- =====================
+             POÇT + İZLƏMƏ
+        ====================== -->
 
-        <div class="tracking-area">
+        <div class="shipping-box">
 
-            <h3>📮 POÇT / İZLƏMƏ KODU</h3>
+            <div class="shipping-title">
+                📮 ÇATDIRILMA MƏLUMATLARI
+            </div>
+
+
+            <label class="shipping-label">
+                📬 Poçt kodunu qeyd et
+            </label>
 
             <input
                 type="text"
-                class="tracking"
+                class="shipping-input postal-code"
+                placeholder="Məsələn: AZ1000"
+                value="${escapeHTML(
+                    order.postalCode || ""
+                )}"
+            >
+
+
+            <label class="shipping-label">
+                🔎 İzləmə kodunu qeyd et
+            </label>
+
+            <input
+                type="text"
+                class="shipping-input tracking-code"
                 placeholder="Məsələn: AZ123456789"
                 value="${escapeHTML(
                     order.trackingCode || ""
                 )}"
             >
+
 
             <button
                 type="button"
@@ -723,28 +812,25 @@ function showOrder(key,order){
         </div>
 
 
-        <!-- STATUSLAR -->
+        <!-- =====================
+             STATUSLAR
+        ====================== -->
 
         <div class="status-box">
 
-            <b>📍 Sifarişin statusu</b>
+            <div class="status-title">
+                📍 Sifarişin statusu
+            </div>
+
 
             <div class="current-status">
+
                 ${escapeHTML(
                     order.status ||
                     "Sifariş qəbul olundu"
                 )}
+
             </div>
-
-
-            <button
-                type="button"
-                class="status-btn"
-                data-status="Sifariş qəbul olundu"
-                ${started ? "" : "disabled"}
-            >
-                📥 Sifariş qəbul olundu
-            </button>
 
 
             <button
@@ -760,10 +846,10 @@ function showOrder(key,order){
             <button
                 type="button"
                 class="status-btn"
-                data-status="Göndərildi"
+                data-status="Göndərilir"
                 ${started ? "" : "disabled"}
             >
-                🚚 Göndərildi
+                🚚 Göndərilir
             </button>
 
 
@@ -794,14 +880,16 @@ function showOrder(key,order){
     ordersDiv.appendChild(card);
 
 
+    /* ELEMENTLƏR */
+
+    const postalInput =
+    card.querySelector(".postal-code");
+
     const trackingInput =
-    card.querySelector(".tracking");
+    card.querySelector(".tracking-code");
 
     const startButton =
     card.querySelector(".start");
-
-    const currentStatus =
-    card.querySelector(".current-status");
 
     const statusButtons =
     card.querySelectorAll(".status-btn");
@@ -815,14 +903,30 @@ function showOrder(key,order){
     "click",
     async()=>{
 
-        const tracking =
+        const postalCode =
+        postalInput.value.trim();
+
+        const trackingCode =
         trackingInput.value.trim();
 
 
-        if(!tracking){
+        if(!postalCode){
 
             alert(
-                "❌ Poçt / izləmə kodunu yaz!"
+                "❌ Əvvəlcə poçt kodunu qeyd et!"
+            );
+
+            postalInput.focus();
+
+            return;
+
+        }
+
+
+        if(!trackingCode){
+
+            alert(
+                "❌ Əvvəlcə izləmə kodunu qeyd et!"
             );
 
             trackingInput.focus();
@@ -835,20 +939,34 @@ function showOrder(key,order){
         try{
 
             await update(
+
                 ref(
                     db,
                     "orders/" + key
                 ),
+
                 {
-                    trackingCode: tracking,
+
+                    postalCode:
+                    postalCode,
+
+                    trackingCode:
+                    trackingCode,
 
                     status:
                     "Sifariş qəbul olundu",
 
-                    started: true,
+                    started:
+                    true,
 
-                    startedAt: Date.now()
+                    startedAt:
+                    Date.now(),
+
+                    updatedAt:
+                    Date.now()
+
                 }
+
             );
 
 
@@ -860,23 +978,23 @@ function showOrder(key,order){
             );
 
 
-            currentStatus.textContent =
-            "Sifariş qəbul olundu";
+            statusButtons.forEach(
+            button=>{
 
-
-            statusButtons.forEach(btn=>{
-
-                btn.disabled = false;
+                button.disabled =
+                false;
 
             });
 
 
             alert(
-                "✅ BAŞLADI! İzləmə kodu yadda saxlanıldı."
+                "✅ BAŞLADI!\n\n" +
+                "Poçt kodu və izləmə kodu yadda saxlanıldı."
             );
 
+        }
 
-        }catch(error){
+        catch(error){
 
             alert(
                 "❌ BAŞLA işləmədi:\n\n" +
@@ -892,26 +1010,12 @@ function showOrder(key,order){
        STATUS DƏYİŞ
     ========================= */
 
-    statusButtons.forEach(button=>{
+    statusButtons.forEach(
+    button=>{
 
         button.addEventListener(
         "click",
         async()=>{
-
-            const tracking =
-            trackingInput.value.trim();
-
-
-            if(!tracking){
-
-                alert(
-                    "❌ Əvvəlcə poçt / izləmə kodunu yaz."
-                );
-
-                return;
-
-            }
-
 
             const status =
             button.dataset.status;
@@ -920,27 +1024,27 @@ function showOrder(key,order){
             try{
 
                 await update(
+
                     ref(
                         db,
                         "orders/" + key
                     ),
-                    {
-                        status: status,
 
-                        trackingCode:
-                        tracking,
+                    {
+
+                        status:
+                        status,
 
                         updatedAt:
                         Date.now()
+
                     }
+
                 );
 
 
-                currentStatus.textContent =
-                status;
-
-
-                statusButtons.forEach(btn=>{
+                statusButtons.forEach(
+                btn=>{
 
                     btn.classList.remove(
                         "active"
@@ -954,7 +1058,9 @@ function showOrder(key,order){
                 );
 
 
-            }catch(error){
+            }
+
+            catch(error){
 
                 alert(
                     "❌ Status dəyişmədi:\n\n" +
@@ -970,14 +1076,17 @@ function showOrder(key,order){
 
     /* AKTİV STATUS */
 
-    statusButtons.forEach(button=>{
+    statusButtons.forEach(
+    button=>{
 
         if(
             button.dataset.status ===
             order.status
         ){
 
-            button.classList.add("active");
+            button.classList.add(
+                "active"
+            );
 
         }
 
@@ -993,11 +1102,15 @@ function showOrder(key,order){
 function loadMessages(){
 
     const messages =
-    document.getElementById("messages");
+    document.getElementById(
+        "messages"
+    );
 
 
     onValue(
+
         messagesRef,
+
         snapshot=>{
 
             messages.innerHTML = "";
@@ -1009,7 +1122,8 @@ function loadMessages(){
             if(!data) return;
 
 
-            Object.values(data).forEach(item=>{
+            Object.values(data).forEach(
+            item=>{
 
                 if(!item) return;
 
@@ -1025,7 +1139,9 @@ function loadMessages(){
 
 
                 const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
                 div.className =
@@ -1065,6 +1181,7 @@ function loadMessages(){
             messages.scrollHeight;
 
         }
+
     );
 
 }
@@ -1096,23 +1213,33 @@ async()=>{
     try{
 
         await push(
+
             messagesRef,
+
             {
-                sender:"agent",
 
-                text:text,
+                sender:
+                "agent",
 
-                email:OPERATOR_EMAIL,
+                text:
+                text,
 
-                createdAt:Date.now()
+                email:
+                OPERATOR_EMAIL,
+
+                createdAt:
+                Date.now()
+
             }
+
         );
 
 
         input.value = "";
 
+    }
 
-    }catch(error){
+    catch(error){
 
         alert(
             "❌ Mesaj göndərilmədi:\n" +
@@ -1135,7 +1262,9 @@ event=>{
     if(event.key === "Enter"){
 
         document
-        .getElementById("sendMessage")
+        .getElementById(
+            "sendMessage"
+        )
         .click();
 
     }
