@@ -7,7 +7,9 @@
 <title>Operator Paneli</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -109,13 +111,20 @@ button{
     border-bottom:0;
 }
 
-input{
+.tracking-title{
+    display:block;
+    margin-top:15px;
+    font-size:17px;
+}
+
+.tracking{
     width:100%;
-    padding:13px;
-    border:1px solid #ccc;
+    padding:14px;
+    border:2px solid #2196f3;
     border-radius:10px;
-    font-size:16px;
+    font-size:17px;
     margin-top:8px;
+    outline:none;
 }
 
 .start{
@@ -123,6 +132,7 @@ input{
     background:#111;
     color:white;
     margin-top:12px;
+    font-weight:bold;
 }
 
 .start.started{
@@ -137,7 +147,7 @@ input{
 }
 
 .current-status{
-    margin-top:8px;
+    margin-top:10px;
     font-size:18px;
     font-weight:bold;
 }
@@ -173,15 +183,6 @@ input{
     margin-bottom:15px;
     font-weight:bold;
     word-break:break-word;
-}
-
-.success{
-    background:#dcfce7;
-    color:#166534;
-    padding:15px;
-    border-radius:15px;
-    margin-bottom:15px;
-    font-weight:bold;
 }
 
 .chat{
@@ -265,9 +266,7 @@ input{
     <div id="firebaseError"></div>
 
 
-    <h2 style="margin-bottom:15px;">
-        📦 Sifarişlər
-    </h2>
+    <h2>📦 Sifarişlər</h2>
 
     <div id="orders">
 
@@ -423,8 +422,7 @@ async()=>{
         if(email !== OPERATOR_EMAIL){
 
             alert(
-                "Bu hesab operator hesabı deyil.\n\nOperator hesabı:\n" +
-                OPERATOR_EMAIL
+                "Bu hesab operator hesabı deyil."
             );
 
             await signOut(auth);
@@ -561,7 +559,7 @@ function loadOrders(){
 
                     <div class="empty">
 
-                        📦 Hələ heç bir sifariş yoxdur.
+                        📦 Sifariş yoxdur.
 
                     </div>
 
@@ -595,9 +593,7 @@ function loadOrders(){
                 ordersDiv.innerHTML = `
 
                     <div class="empty">
-
-                        📦 Hələ heç bir sifariş yoxdur.
-
+                        📦 Sifariş yoxdur.
                     </div>
 
                 `;
@@ -608,21 +604,14 @@ function loadOrders(){
 
         error=>{
 
-            console.error(
-                "ORDERS ERROR:",
-                error
-            );
-
-
             firebaseError.innerHTML = `
 
                 <div class="error">
 
-                    ❌ Firebase sifarişləri oxumağa icazə vermədi.
+                    ❌ Firebase xətası:
 
                     <br><br>
 
-                    Xəta:
                     ${escapeHTML(
                         error.message
                     )}
@@ -645,10 +634,9 @@ function showNewOrderNotification(order){
     notification.style.display =
     "block";
 
-
     notification.innerHTML = `
 
-        🔔 <b>Yeni sifariş gəldi!</b>
+        🔔 <b>Yeni sifariş!</b>
 
         <br><br>
 
@@ -677,7 +665,9 @@ function showNewOrderNotification(order){
 }
 
 
-/* SİFARİŞİ GÖSTƏR */
+/* =========================
+   SİFARİŞ KARTI
+========================= */
 
 function showOrder(key,order){
 
@@ -740,12 +730,6 @@ function showOrder(key,order){
     order.started === true;
 
 
-    const trackingValue =
-    order.started
-    ? (order.trackingCode || "")
-    : "";
-
-
     card.innerHTML = `
 
         <h3>
@@ -755,7 +739,7 @@ function showOrder(key,order){
 
         <div class="info">
 
-            <b>Sifariş:</b>
+            <b>Sifariş kodu:</b>
             ${escapeHTML(
                 order.orderId || ""
             )}
@@ -796,72 +780,80 @@ function showOrder(key,order){
             )}
             AZN
 
-            <br>
-
-            <b>Tarix:</b>
-            ${escapeHTML(
-                order.date || ""
-            )}
-
         </div>
 
 
         <div class="products">
 
-            <b>📦 Məhsullar:</b>
+            <b>📦 Məhsulu yığ:</b>
 
             ${
                 productsHTML ||
-                "<div>Bu sifarişdə məhsul məlumatı yoxdur.</div>"
+                "Məhsul məlumatı yoxdur."
             }
 
         </div>
 
 
-        <label>
+        <!-- İZLƏMƏ KODU -->
 
-            <b>
-                📍 İzləmə kodu
-            </b>
+        <label class="tracking-title">
+
+            📮 <b>Poçt / İzləmə kodu</b>
 
         </label>
 
 
         <input
+            type="text"
             class="tracking"
-            value="${escapeHTML(
-                trackingValue
-            )}"
             placeholder="Məsələn: AZ123456789"
+            value="${
+                started
+                ? escapeHTML(
+                    order.trackingCode || ""
+                  )
+                : ""
+            }"
         >
 
 
-        <button class="start">
+        <!-- BAŞLA -->
+
+        <button
+            type="button"
+            class="start"
+        >
 
             ${
                 started
-                ? "BAŞLADI ✓"
-                : "BAŞLA"
+                ? "✅ BAŞLADI"
+                : "🚀 BAŞLA"
             }
 
         </button>
 
 
+        <!-- STATUSLAR -->
+
         <div class="status-box">
 
-            <b>Status:</b>
+            <b>📍 Sifarişin statusu</b>
 
             <div class="current-status">
 
-                ${escapeHTML(
-                    order.status ||
-                    "Yeni sifariş"
-                )}
+                ${
+                    escapeHTML(
+                        order.status ||
+                        "Yeni sifariş"
+                    )
+                }
 
             </div>
 
 
             <button
+                type="button"
                 class="status-btn"
                 data-status="Sifariş qəbul olundu"
                 ${started ? "" : "disabled"}
@@ -871,6 +863,7 @@ function showOrder(key,order){
 
 
             <button
+                type="button"
                 class="status-btn"
                 data-status="Hazırlanır"
                 ${started ? "" : "disabled"}
@@ -880,6 +873,7 @@ function showOrder(key,order){
 
 
             <button
+                type="button"
                 class="status-btn"
                 data-status="Göndərildi"
                 ${started ? "" : "disabled"}
@@ -889,6 +883,7 @@ function showOrder(key,order){
 
 
             <button
+                type="button"
                 class="status-btn"
                 data-status="Çatdırılır"
                 ${started ? "" : "disabled"}
@@ -898,6 +893,7 @@ function showOrder(key,order){
 
 
             <button
+                type="button"
                 class="status-btn"
                 data-status="Çatdırıldı"
                 ${started ? "" : "disabled"}
@@ -910,22 +906,19 @@ function showOrder(key,order){
     `;
 
 
-    ordersDiv.prepend(card);
+    ordersDiv.appendChild(card);
 
 
     const trackingInput =
     card.querySelector(".tracking");
 
-
     const startButton =
     card.querySelector(".start");
-
 
     const currentStatus =
     card.querySelector(
         ".current-status"
     );
-
 
     const statusButtons =
     card.querySelectorAll(
@@ -933,7 +926,9 @@ function showOrder(key,order){
     );
 
 
-    /* BAŞLA */
+    /* =========================
+       BAŞLA
+    ========================= */
 
     startButton.addEventListener(
     "click",
@@ -946,7 +941,7 @@ function showOrder(key,order){
         if(!tracking){
 
             alert(
-                "❌ Əvvəlcə izləmə kodunu yaz."
+                "❌ Əvvəlcə poçt / izləmə kodunu yaz!"
             );
 
             trackingInput.focus();
@@ -989,12 +984,16 @@ function showOrder(key,order){
 
 
             startButton.textContent =
-            "BAŞLADI ✓";
+            "✅ BAŞLADI";
 
 
             startButton.classList.add(
                 "started"
             );
+
+
+            trackingInput.value =
+            tracking;
 
 
             statusButtons.forEach(
@@ -1007,14 +1006,14 @@ function showOrder(key,order){
 
 
             alert(
-                "✅ İzləmə başladı."
+                "✅ İzləmə başladı!"
             );
 
 
         }catch(error){
 
             alert(
-                "❌ Sifariş başladılmadı:\n\n" +
+                "❌ BAŞLA işləmədi:\n\n" +
                 error.message
             );
 
@@ -1023,7 +1022,9 @@ function showOrder(key,order){
     });
 
 
-    /* STATUSLAR */
+    /* =========================
+       STATUS DƏYİŞ
+    ========================= */
 
     statusButtons.forEach(
     button=>{
@@ -1032,10 +1033,14 @@ function showOrder(key,order){
         "click",
         async()=>{
 
-            if(!trackingInput.value.trim()){
+            const tracking =
+            trackingInput.value.trim();
+
+
+            if(!tracking){
 
                 alert(
-                    "Əvvəlcə izləmə kodunu yaz və BAŞLA düyməsinə bas."
+                    "Əvvəlcə izləmə kodunu yaz."
                 );
 
                 return;
@@ -1062,7 +1067,10 @@ function showOrder(key,order){
                         status,
 
                         trackingCode:
-                        trackingInput.value.trim()
+                        tracking,
+
+                        updatedAt:
+                        Date.now()
 
                     }
 
@@ -1098,6 +1106,25 @@ function showOrder(key,order){
             }
 
         });
+
+    });
+
+
+    /* AKTİV STATUSU GÖSTƏR */
+
+    statusButtons.forEach(
+    button=>{
+
+        if(
+            button.dataset.status ===
+            order.status
+        ){
+
+            button.classList.add(
+                "active"
+            );
+
+        }
 
     });
 
@@ -1192,15 +1219,6 @@ function loadMessages(){
             messages.scrollTop =
             messages.scrollHeight;
 
-        },
-
-        error=>{
-
-            console.error(
-                "MESSAGES ERROR:",
-                error
-            );
-
         }
 
     );
@@ -1208,7 +1226,7 @@ function loadMessages(){
 }
 
 
-/* OPERATOR MESAJ */
+/* OPERATOR MESAJI */
 
 document
 .getElementById("sendMessage")
@@ -1260,7 +1278,7 @@ async()=>{
     }catch(error){
 
         alert(
-            "Mesaj göndərilmədi:\n" +
+            "❌ Mesaj göndərilmədi:\n" +
             error.message
         );
 
@@ -1306,4 +1324,3 @@ function escapeHTML(value){
 </script>
 
 </body>
-</html>
