@@ -7,9 +7,7 @@
 <title>Operator Paneli</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -70,10 +68,6 @@ button{
     color:white;
 }
 
-h2{
-    margin:0;
-}
-
 .notification{
     background:#fff3cd;
     border:1px solid #ffcc00;
@@ -96,7 +90,7 @@ h2{
 }
 
 .info{
-    line-height:1.7;
+    line-height:1.8;
 }
 
 .products{
@@ -158,6 +152,15 @@ input{
     padding:20px;
     border-radius:15px;
     text-align:center;
+}
+
+.error{
+    background:#ffdddd;
+    color:#b00000;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:15px;
+    font-weight:bold;
 }
 
 .chat{
@@ -238,15 +241,19 @@ input{
 
     <div class="notification" id="notification"></div>
 
+    <div id="firebaseError"></div>
+
 
     <h2 style="margin-bottom:15px;">
-        Sifarişlər
+        📦 Sifarişlər
     </h2>
 
     <div id="orders">
+
         <div class="empty">
-            Sifarişlər yüklənir...
+            Sifarişlər gözlənilir...
         </div>
+
     </div>
 
 
@@ -299,19 +306,23 @@ import {
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+    apiKey:
+    "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
 
-    authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+    authDomain:
+    "kendmehsullari-6a53d.firebaseapp.com",
 
     databaseURL:
     "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
 
-    projectId: "kendmehsullari-6a53d",
+    projectId:
+    "kendmehsullari-6a53d",
 
     storageBucket:
     "kendmehsullari-6a53d.firebasestorage.app",
 
-    messagingSenderId: "551607499773",
+    messagingSenderId:
+    "551607499773",
 
     appId:
     "1:551607499773:web:a84aa63dc5b55c38687794"
@@ -319,13 +330,17 @@ const firebaseConfig = {
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+getAuth(app);
 
-const db = getDatabase(app);
+const db =
+getDatabase(app);
 
-const provider = new GoogleAuthProvider();
+const provider =
+new GoogleAuthProvider();
 
 
 const OPERATOR_EMAIL =
@@ -354,12 +369,21 @@ document.getElementById("notification");
 const operatorEmail =
 document.getElementById("operatorEmail");
 
+const firebaseError =
+document.getElementById("firebaseError");
 
-/* GOOGLE LOGIN */
+
+let ordersLoaded = false;
+let messagesLoaded = false;
+
+
+/* GOOGLE GİRİŞ */
 
 document
 .getElementById("googleLogin")
-.addEventListener("click",async()=>{
+.addEventListener(
+"click",
+async()=>{
 
     try{
 
@@ -370,8 +394,10 @@ document
         );
 
         const email =
-        result.user.email
-        .toLowerCase();
+        (result.user.email || "")
+        .toLowerCase()
+        .trim();
+
 
         if(email !== OPERATOR_EMAIL){
 
@@ -384,12 +410,14 @@ document
             return;
         }
 
+
         openPanel(result.user);
+
 
     }catch(error){
 
         alert(
-            "Giriş xətası: " +
+            "Giriş xətası:\n" +
             error.message
         );
 
@@ -401,38 +429,56 @@ document
 /* AUTH */
 
 onAuthStateChanged(
-    auth,
-    user=>{
+auth,
+user=>{
 
-        if(!user) return;
+    if(!user) return;
 
-        const email =
-        user.email.toLowerCase();
+    const email =
+    (user.email || "")
+    .toLowerCase()
+    .trim();
 
-        if(email === OPERATOR_EMAIL){
 
-            openPanel(user);
+    if(email === OPERATOR_EMAIL){
 
-        }
+        openPanel(user);
 
     }
-);
+
+});
 
 
 /* PANEL */
 
 function openPanel(user){
 
-    loginPage.style.display="none";
+    loginPage.style.display =
+    "none";
 
-    panel.style.display="block";
+    panel.style.display =
+    "block";
 
     operatorEmail.textContent =
     user.email;
 
-    loadOrders();
 
-    loadMessages();
+    if(!ordersLoaded){
+
+        ordersLoaded = true;
+
+        loadOrders();
+
+    }
+
+
+    if(!messagesLoaded){
+
+        messagesLoaded = true;
+
+        loadMessages();
+
+    }
 
 }
 
@@ -441,66 +487,147 @@ function openPanel(user){
 
 document
 .getElementById("logout")
-.addEventListener("click",async()=>{
+.addEventListener(
+"click",
+async()=>{
 
     await signOut(auth);
 
-    panel.style.display="none";
+    ordersLoaded = false;
+    messagesLoaded = false;
 
-    loginPage.style.display="flex";
+    panel.style.display =
+    "none";
+
+    loginPage.style.display =
+    "flex";
 
 });
 
 
-/* SİFARİŞLƏR */
+/* =========================
+   SİFARİŞLƏR
+========================= */
 
 function loadOrders(){
 
-    ordersDiv.innerHTML="";
+    ordersDiv.innerHTML = `
+
+        <div class="empty">
+            📦 Sifarişlər yüklənir...
+        </div>
+
+    `;
+
 
     onChildAdded(
+
         ordersRef,
+
         snapshot=>{
 
             const order =
             snapshot.val();
 
+
             if(!order) return;
+
+
+            /* ilk sifariş gələndə
+               yüklənir yazısını sil */
+
+            const empty =
+            ordersDiv.querySelector(
+                ".empty"
+            );
+
+            if(empty){
+
+                empty.remove();
+
+            }
+
 
             showOrder(
                 snapshot.key,
                 order
             );
 
+
             showNewOrderNotification(
                 order
             );
 
+        },
+
+        error=>{
+
+            console.error(
+                "ORDERS ERROR:",
+                error
+            );
+
+
+            firebaseError.innerHTML = `
+
+                <div class="error">
+
+                    ❌ Sifarişləri Firebase-dən
+                    oxumaq mümkün olmadı.
+
+                    <br><br>
+
+                    Xəta:
+                    ${escapeHTML(
+                        error.message
+                    )}
+
+                </div>
+
+            `;
+
         }
+
     );
 
 }
 
 
-/* YENİ SİFARİŞ BİLDİRİŞİ */
+/* BİLDİRİŞ */
 
 function showNewOrderNotification(order){
 
-    notification.style.display="block";
+    notification.style.display =
+    "block";
 
-    notification.innerHTML =
 
-    "🔔 <b>Yeni sifariş gəldi!</b><br><br>" +
+    notification.innerHTML = `
 
-    "Müştəri: " +
-    escapeHTML(order.name || "Ad yoxdur") +
+        🔔 <b>Yeni sifariş gəldi!</b>
 
-    "<br>Sifariş: " +
-    escapeHTML(order.orderId || "") +
+        <br><br>
 
-    "<br>Məbləğ: " +
-    escapeHTML(String(order.total || "0")) +
-    " AZN";
+        Müştəri:
+        ${escapeHTML(
+            order.name || "Ad yoxdur"
+        )}
+
+        <br>
+
+        Sifariş:
+        ${escapeHTML(
+            order.orderId || ""
+        )}
+
+        <br>
+
+        Məbləğ:
+        ${escapeHTML(
+            String(order.total || "0")
+        )}
+        AZN
+
+    `;
 
 }
 
@@ -512,13 +639,17 @@ function showOrder(key,order){
     const card =
     document.createElement("div");
 
-    card.className="order";
+    card.className =
+    "order";
 
-    let productsHTML="";
+
+    let productsHTML = "";
+
 
     if(Array.isArray(order.products)){
 
-        order.products.forEach(product=>{
+        order.products.forEach(
+        product=>{
 
             productsHTML += `
 
@@ -546,9 +677,10 @@ function showOrder(key,order){
                     Qiymət:
                     ${escapeHTML(
                         String(
-                            product.price || ""
+                            product.price || "0"
                         )
-                    )} AZN
+                    )}
+                    AZN
 
                 </div>
 
@@ -562,8 +694,9 @@ function showOrder(key,order){
     card.innerHTML = `
 
         <h3>
-            🛒 Yeni sifariş
+            🛒 Sifariş
         </h3>
+
 
         <div class="info">
 
@@ -605,14 +738,15 @@ function showOrder(key,order){
             <b>Məbləğ:</b>
             ${escapeHTML(
                 String(order.total || "0")
-            )} AZN
+            )}
+            AZN
 
         </div>
 
 
         <div class="products">
 
-            <b>Məhsullar:</b>
+            <b>📦 Məhsullar:</b>
 
             ${productsHTML}
 
@@ -620,8 +754,13 @@ function showOrder(key,order){
 
 
         <label>
-            <b>📦 İzləmə kodu</b>
+
+            <b>
+                📍 İzləmə kodu
+            </b>
+
         </label>
+
 
         <input
             class="tracking"
@@ -643,7 +782,14 @@ function showOrder(key,order){
 
             <b>Status:</b>
 
-            <div class="current-status">
+            <div
+                class="current-status"
+                style="
+                    margin-top:8px;
+                    font-size:18px;
+                    font-weight:bold;
+                "
+            >
 
                 ${escapeHTML(
                     order.status ||
@@ -652,39 +798,44 @@ function showOrder(key,order){
 
             </div>
 
+
             <button
                 class="status-btn"
                 data-status="Sifariş qəbul edildi"
             >
-                Sifariş qəbul edildi
+                📥 Sifariş qəbul edildi
             </button>
+
 
             <button
                 class="status-btn"
                 data-status="Hazırlanır"
             >
-                Hazırlanır
+                📦 Hazırlanır
             </button>
+
 
             <button
                 class="status-btn"
                 data-status="Göndərildi"
             >
-                Göndərildi
+                🚚 Göndərildi
             </button>
+
 
             <button
                 class="status-btn"
                 data-status="Çatdırılır"
             >
-                Çatdırılır
+                🛵 Çatdırılır
             </button>
+
 
             <button
                 class="status-btn"
                 data-status="Çatdırıldı"
             >
-                Çatdırıldı
+                ✅ Çatdırıldı
             </button>
 
         </div>
@@ -698,85 +849,97 @@ function showOrder(key,order){
     const trackingInput =
     card.querySelector(".tracking");
 
+
     const startButton =
     card.querySelector(".start");
 
+
     const currentStatus =
-    card.querySelector(".current-status");
+    card.querySelector(
+        ".current-status"
+    );
 
 
     /* BAŞLA */
 
     startButton.addEventListener(
-        "click",
-        async()=>{
+    "click",
+    async()=>{
 
-            const tracking =
-            trackingInput.value.trim();
-
-            if(!tracking){
-
-                alert(
-                    "Əvvəlcə izləmə kodunu yaz."
-                );
-
-                return;
-            }
+        const tracking =
+        trackingInput.value.trim();
 
 
-            try{
+        if(!tracking){
 
-                await update(
-                    ref(
-                        db,
-                        "orders/" + key
-                    ),
-                    {
+            alert(
+                "Əvvəlcə izləmə kodunu yaz."
+            );
 
-                        trackingCode:
-                        tracking,
-
-                        status:
-                        "Sifariş qəbul edildi",
-
-                        started:
-                        true,
-
-                        startedAt:
-                        Date.now()
-
-                    }
-                );
-
-
-                currentStatus.textContent =
-                "Sifariş qəbul edildi";
-
-                startButton.textContent =
-                "BAŞLADI ✓";
-
-                startButton.classList.add(
-                    "started"
-                );
-
-                alert(
-                    "Sifariş başladı."
-                );
-
-            }catch(error){
-
-                alert(
-                    "Xəta: " +
-                    error.message
-                );
-
-            }
+            return;
 
         }
-    );
 
 
-    /* STATUS DƏYİŞDİR */
+        try{
+
+            await update(
+
+                ref(
+                    db,
+                    "orders/" + key
+                ),
+
+                {
+
+                    trackingCode:
+                    tracking,
+
+                    status:
+                    "Sifariş qəbul edildi",
+
+                    started:
+                    true,
+
+                    startedAt:
+                    Date.now()
+
+                }
+
+            );
+
+
+            currentStatus.textContent =
+            "Sifariş qəbul edildi";
+
+
+            startButton.textContent =
+            "BAŞLADI ✓";
+
+
+            startButton.classList.add(
+                "started"
+            );
+
+
+            alert(
+                "✅ Sifariş başladı."
+            );
+
+
+        }catch(error){
+
+            alert(
+                "❌ Xəta:\n" +
+                error.message
+            );
+
+        }
+
+    });
+
+
+    /* STATUSLAR */
 
     const statusButtons =
     card.querySelectorAll(
@@ -784,69 +947,77 @@ function showOrder(key,order){
     );
 
 
-    statusButtons.forEach(button=>{
+    statusButtons.forEach(
+    button=>{
 
         button.addEventListener(
-            "click",
-            async()=>{
+        "click",
+        async()=>{
 
-                const status =
-                button.dataset.status;
-
-                try{
-
-                    await update(
-                        ref(
-                            db,
-                            "orders/" + key
-                        ),
-                        {
-
-                            status:
-                            status,
-
-                            trackingCode:
-                            trackingInput.value.trim()
-
-                        }
-                    );
+            const status =
+            button.dataset.status;
 
 
-                    currentStatus.textContent =
-                    status;
+            try{
+
+                await update(
+
+                    ref(
+                        db,
+                        "orders/" + key
+                    ),
+
+                    {
+
+                        status:
+                        status,
+
+                        trackingCode:
+                        trackingInput.value.trim()
+
+                    }
+
+                );
 
 
-                    statusButtons
-                    .forEach(btn=>{
-                        btn.classList.remove(
-                            "active"
-                        );
-                    });
+                currentStatus.textContent =
+                status;
 
 
-                    button.classList.add(
+                statusButtons.forEach(
+                btn=>{
+
+                    btn.classList.remove(
                         "active"
                     );
 
+                });
 
-                }catch(error){
 
-                    alert(
-                        "Status dəyişmədi: " +
-                        error.message
-                    );
+                button.classList.add(
+                    "active"
+                );
 
-                }
+
+            }catch(error){
+
+                alert(
+                    "❌ Status dəyişmədi:\n" +
+                    error.message
+                );
 
             }
-        );
+
+        });
 
     });
 
 }
 
 
-/* MESAJLAR */
+/* =========================
+   MESAJLAR
+========================= */
 
 function loadMessages(){
 
@@ -855,26 +1026,35 @@ function loadMessages(){
         "messages"
     );
 
+
     onChildAdded(
+
         messagesRef,
+
         snapshot=>{
 
             const data =
             snapshot.val();
 
+
             if(!data) return;
+
 
             if(
                 data.sender !== "customer" &&
                 data.sender !== "agent"
             ){
+
                 return;
+
             }
+
 
             const div =
             document.createElement(
                 "div"
             );
+
 
             div.className =
             "message " +
@@ -884,14 +1064,17 @@ function loadMessages(){
                 : ""
             );
 
+
             div.innerHTML = `
 
                 <b>
-                ${
-                    data.sender === "agent"
-                    ? "Operator"
-                    : "Müştəri"
-                }
+
+                    ${
+                        data.sender === "agent"
+                        ? "Operator"
+                        : "Müştəri"
+                    }
+
                 </b>
 
                 <br>
@@ -902,38 +1085,56 @@ function loadMessages(){
 
             `;
 
+
             messages.appendChild(div);
+
 
             messages.scrollTop =
             messages.scrollHeight;
 
+        },
+
+        error=>{
+
+            console.error(
+                "MESSAGES ERROR:",
+                error
+            );
+
         }
+
     );
 
 }
 
 
-/* OPERATOR MESAJ GÖNDƏRİR */
+/* OPERATOR MESAJ */
 
 document
 .getElementById("sendMessage")
 .addEventListener(
-    "click",
-    async()=>{
+"click",
+async()=>{
 
-        const input =
-        document.getElementById(
-            "messageInput"
-        );
+    const input =
+    document.getElementById(
+        "messageInput"
+    );
 
-        const text =
-        input.value.trim();
 
-        if(!text) return;
+    const text =
+    input.value.trim();
 
+
+    if(!text) return;
+
+
+    try{
 
         await push(
+
             messagesRef,
+
             {
 
                 sender:
@@ -949,13 +1150,23 @@ document
                 Date.now()
 
             }
+
         );
 
 
-        input.value="";
+        input.value = "";
+
+
+    }catch(error){
+
+        alert(
+            "Mesaj göndərilmədi:\n" +
+            error.message
+        );
 
     }
-);
+
+});
 
 
 /* ENTER */
@@ -963,24 +1174,23 @@ document
 document
 .getElementById("messageInput")
 .addEventListener(
-    "keydown",
-    event=>{
+"keydown",
+event=>{
 
-        if(event.key === "Enter"){
+    if(event.key === "Enter"){
 
-            document
-            .getElementById(
-                "sendMessage"
-            )
-            .click();
-
-        }
+        document
+        .getElementById(
+            "sendMessage"
+        )
+        .click();
 
     }
-);
+
+});
 
 
-/* TƏHLÜKƏSİZ MƏTN */
+/* ESCAPE */
 
 function escapeHTML(value){
 
