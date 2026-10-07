@@ -73,6 +73,10 @@ button{
     box-shadow:0 3px 12px #ddd;
 }
 
+.order h3{
+    margin-top:0;
+}
+
 .info{
     line-height:1.8;
 }
@@ -175,12 +179,6 @@ button{
     background:#16a34a;
 }
 
-.status-btn:disabled{
-    background:#aaa;
-    color:#eee;
-    cursor:not-allowed;
-}
-
 .empty{
     background:white;
     padding:20px;
@@ -238,7 +236,7 @@ button{
     background:#111;
     color:white;
 }
-</style></head><body><!-- GİRİŞ --><div class="login" id="loginPage"><div class="login-box">
+</style></head><body><div class="login" id="loginPage"><div class="login-box">
 
     <h2>Operator Paneli</h2>
 
@@ -250,7 +248,7 @@ button{
 
 </div>
 
-</div><!-- PANEL --><div id="panel"><div class="top">
+</div><div id="panel"><div class="top">
 
     <div>
         <b>Operator</b>
@@ -267,6 +265,7 @@ button{
 
 <div id="firebaseError"></div>
 
+
 <h2>📦 Bütün sifarişlər</h2>
 
 <div id="orders">
@@ -277,8 +276,6 @@ button{
 
 </div>
 
-
-<!-- CHAT -->
 
 <div class="chat">
 
@@ -324,8 +321,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-/* FIREBASE */
-
 const firebaseConfig = {
 
     apiKey:
@@ -365,13 +360,9 @@ const provider =
 new GoogleAuthProvider();
 
 
-/* OPERATOR */
-
 const OPERATOR_EMAIL =
 "amidh365@gmail.com";
 
-
-/* FIREBASE YOLLARI */
 
 const ordersRef =
 ref(db,"orders");
@@ -379,8 +370,6 @@ ref(db,"orders");
 const messagesRef =
 ref(db,"messages");
 
-
-/* ELEMENTLƏR */
 
 const loginPage =
 document.getElementById("loginPage");
@@ -402,15 +391,11 @@ let ordersStarted = false;
 let messagesStarted = false;
 
 
-/* =========================
-   GOOGLE GİRİŞ
-========================= */
+/* GOOGLE GİRİŞ */
 
 document
 .getElementById("googleLogin")
-.addEventListener(
-"click",
-async()=>{
+.addEventListener("click",async()=>{
 
     try{
 
@@ -455,9 +440,7 @@ async()=>{
 });
 
 
-/* =========================
-   AUTH
-========================= */
+/* AUTH */
 
 onAuthStateChanged(
 auth,
@@ -481,9 +464,7 @@ user=>{
 });
 
 
-/* =========================
-   PANEL
-========================= */
+/* PANEL */
 
 function openPanel(user){
 
@@ -517,15 +498,11 @@ function openPanel(user){
 }
 
 
-/* =========================
-   ÇIXIŞ
-========================= */
+/* ÇIXIŞ */
 
 document
 .getElementById("logout")
-.addEventListener(
-"click",
-async()=>{
+.addEventListener("click",async()=>{
 
     await signOut(auth);
 
@@ -632,8 +609,6 @@ function createOrder(key,order){
     "order";
 
 
-    /* MƏHSULLAR */
-
     let productsHTML = "";
 
 
@@ -686,14 +661,10 @@ function createOrder(key,order){
     order.started === true;
 
 
-    /* =========================
-       KART HTML
-    ========================= */
-
     card.innerHTML = `
 
         <h3>
-            🛒 Sifariş
+            🛒 Yeni sifariş
         </h3>
 
 
@@ -747,7 +718,7 @@ function createOrder(key,order){
 
         <div class="products">
 
-            <b>📦 Məhsullar</b>
+            <b>📦 Sifariş olunan məhsullar</b>
 
             <br><br>
 
@@ -756,12 +727,14 @@ function createOrder(key,order){
                 "Məhsul məlumatı yoxdur."
             }
 
+            <br>
+
+            <b>👉 Məhsulu burada yığ.</b>
+
         </div>
 
 
-        <!-- =====================
-             POÇT + İZLƏMƏ
-        ====================== -->
+        <!-- POÇT VƏ İZLƏMƏ KODU -->
 
         <div class="shipping-box">
 
@@ -812,11 +785,14 @@ function createOrder(key,order){
         </div>
 
 
-        <!-- =====================
-             STATUSLAR
-        ====================== -->
+        <!-- STATUSLAR -->
 
-        <div class="status-box">
+        <div
+            class="status-box"
+            style="
+                display:${started ? "block" : "none"};
+            "
+        >
 
             <div class="status-title">
                 📍 Sifarişin statusu
@@ -836,20 +812,27 @@ function createOrder(key,order){
             <button
                 type="button"
                 class="status-btn"
-                data-status="Hazırlanır"
-                ${started ? "" : "disabled"}
+                data-status="Hazırlandı"
             >
-                📦 Hazırlanır
+                📦 Hazırlandı
             </button>
 
 
             <button
                 type="button"
                 class="status-btn"
-                data-status="Göndərilir"
-                ${started ? "" : "disabled"}
+                data-status="Göndərildi"
             >
-                🚚 Göndərilir
+                🚚 Göndərildi
+            </button>
+
+
+            <button
+                type="button"
+                class="status-btn"
+                data-status="Yoldadır"
+            >
+                🚚 Yoldadır
             </button>
 
 
@@ -857,7 +840,6 @@ function createOrder(key,order){
                 type="button"
                 class="status-btn"
                 data-status="Çatdırılır"
-                ${started ? "" : "disabled"}
             >
                 🛵 Çatdırılır
             </button>
@@ -867,7 +849,6 @@ function createOrder(key,order){
                 type="button"
                 class="status-btn"
                 data-status="Çatdırıldı"
-                ${started ? "" : "disabled"}
             >
                 ✅ Çatdırıldı
             </button>
@@ -880,8 +861,6 @@ function createOrder(key,order){
     ordersDiv.appendChild(card);
 
 
-    /* ELEMENTLƏR */
-
     const postalInput =
     card.querySelector(".postal-code");
 
@@ -890,6 +869,9 @@ function createOrder(key,order){
 
     const startButton =
     card.querySelector(".start");
+
+    const statusBox =
+    card.querySelector(".status-box");
 
     const statusButtons =
     card.querySelectorAll(".status-btn");
@@ -970,21 +952,22 @@ function createOrder(key,order){
             );
 
 
+            /*
+             * BAŞLA basıldıqdan sonra
+             * statuslar görünür
+             */
+
+            statusBox.style.display =
+            "block";
+
+
             startButton.textContent =
             "✅ BAŞLADI";
+
 
             startButton.classList.add(
                 "started"
             );
-
-
-            statusButtons.forEach(
-            button=>{
-
-                button.disabled =
-                false;
-
-            });
 
 
             alert(
@@ -1007,8 +990,8 @@ function createOrder(key,order){
 
 
     /* =========================
-       STATUS DƏYİŞ
-    ========================= */
+       STATUSLAR
+========================= */
 
     statusButtons.forEach(
     button=>{
@@ -1041,6 +1024,16 @@ function createOrder(key,order){
                     }
 
                 );
+
+
+                const currentStatus =
+                card.querySelector(
+                    ".current-status"
+                );
+
+
+                currentStatus.textContent =
+                status;
 
 
                 statusButtons.forEach(
@@ -1187,9 +1180,7 @@ function loadMessages(){
 }
 
 
-/* =========================
-   OPERATOR MESAJI
-========================= */
+/* OPERATOR MESAJI */
 
 document
 .getElementById("sendMessage")
