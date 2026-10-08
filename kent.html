@@ -1,25 +1,50 @@
 <!DOCTYPE html>
 <html lang="az">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        http-equiv="X-UA-Compatible"
+        content="IE=edge"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Kənd məhsulları</title>
 
-    <link rel="stylesheet" href="kentt.css">
+    <link
+        rel="stylesheet"
+        href="kentt.css"
+    >
+
 </head>
+
 
 <body>
 
+
 <section class="wrapper">
 
-    <!-- QEYDİYYAT -->
+
+    <!-- =========================
+         QEYDİYYAT
+    ========================== -->
+
     <div class="form signup">
 
-        <header>Qeydiyyatdan keç</header>
+        <header>
+            Qeydiyyatdan keç
+        </header>
 
-        <form onsubmit="qeydiyyat(event)">
+
+        <form
+            onsubmit="qeydiyyat(event)"
+        >
 
             <input
                 type="text"
@@ -28,6 +53,7 @@
                 required
             >
 
+
             <input
                 type="email"
                 id="signupEmail"
@@ -35,12 +61,14 @@
                 required
             >
 
+
             <input
                 type="password"
                 id="signupPassword"
                 placeholder="Parol"
                 required
             >
+
 
             <div class="checkbox">
 
@@ -56,35 +84,54 @@
 
             </div>
 
-            <input type="submit" value="Qeydiyyatdan keç">
+
+            <input
+                type="submit"
+                value="Qeydiyyatdan keç"
+            >
 
         </form>
 
     </div>
 
 
-    <br><br>
+
+    <br>
+    <br>
 
 
-    <!-- GOOGLE İLƏ GİRİŞ -->
 
-    <div id="g_id_onload"
-         data-client_id="963716048047-vd8sav5opcts81kssk3jieo7qtsb0c77.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse">
+    <!-- =========================
+         GOOGLE İLƏ GİRİŞ
+    ========================== -->
+
+    <div
+        id="g_id_onload"
+        data-client_id="963716048047-vd8sav5opcts81kssk3jieo7qtsb0c77.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+    >
     </div>
 
 
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="signin_with">
+    <div
+        class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="signin_with"
+    >
     </div>
 
 
-    <!-- GOOGLE PROFİLİ -->
 
-    <div id="userInfo" style="display:none;">
+    <!-- =========================
+         GOOGLE PROFİLİ
+    ========================== -->
+
+    <div
+        id="userInfo"
+        style="display:none;"
+    >
 
         <img
             id="userPhoto"
@@ -93,25 +140,40 @@
             style="border-radius:50%;"
         >
 
+
         <div>
+
             <span id="userName"></span>
+
             <br>
+
             <span id="userEmail"></span>
+
         </div>
 
     </div>
 
 
-    <br><br>
+
+    <br>
+    <br>
 
 
-    <!-- HESABA GİRİŞ -->
+
+    <!-- =========================
+         HESABA GİRİŞ
+    ========================== -->
 
     <div class="form login">
 
-        <header>Hesaba daxil ol</header>
+        <header>
+            Hesaba daxil ol
+        </header>
 
-        <form onsubmit="login(event)">
+
+        <form
+            onsubmit="login(event)"
+        >
 
             <input
                 type="text"
@@ -120,6 +182,7 @@
                 required
             >
 
+
             <input
                 type="password"
                 id="loginPassword"
@@ -127,7 +190,16 @@
                 required
             >
 
-            <a href="#">Parolu unutdun?</a>
+
+            <!-- PAROLU UNUTDUM -->
+
+            <a
+                href="javascript:void(0)"
+                onclick="forgotPassword()"
+            >
+                Parolu unutdun?
+            </a>
+
 
             <input
                 type="submit"
@@ -138,17 +210,42 @@
 
     </div>
 
+
 </section>
 
 
-<!-- GOOGLE GİRİŞ SİSTEMİ -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-<!-- JWT -->
-<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+<!-- =========================
+     GOOGLE GİRİŞ SİSTEMİ
+========================== -->
 
-<!-- SƏNİN JS FAYLIN -->
+<script
+    src="https://accounts.google.com/gsi/client"
+    async
+    defer
+>
+</script>
+
+
+
+<!-- =========================
+     JWT
+========================== -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"
+>
+</script>
+
+
+
+<!-- =========================
+     SƏNİN JS FAYLIN
+========================== -->
+
 <script src="kent.js"></script>
 
+
 </body>
+
 </html>
