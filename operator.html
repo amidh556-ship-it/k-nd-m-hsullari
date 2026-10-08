@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Operator - Kənd məhsulları</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#f5f5f5;
+    background:#f3f4f6;
     color:#222;
 }
 
 header{
-    background:#111;
+    background:#111827;
     color:white;
     padding:18px;
     text-align:center;
@@ -41,6 +32,7 @@ header{
 }
 
 .login-box,
+.user-box,
 .order-card,
 .chat-box{
     background:white;
@@ -50,47 +42,32 @@ header{
     box-shadow:0 3px 12px rgba(0,0,0,.10);
 }
 
-.login-box{
-    text-align:center;
-}
+.login-box{text-align:center}
 
-.google-btn{
+.google-btn,
+.logout,
+.start-btn,
+.send-status{
     width:100%;
+    padding:13px;
     border:0;
-    border-radius:10px;
-    padding:14px;
-    background:#4285f4;
+    border-radius:9px;
     color:white;
     font-size:16px;
     font-weight:bold;
 }
 
-.hidden{
-    display:none !important;
-}
+.google-btn{background:#4285f4}
+.logout{background:#d93025;margin-top:10px}
+.start-btn{background:#111;margin-top:5px}
+.send-status{background:#16803c;margin-top:8px}
 
-.user-box{
-    background:white;
-    border-radius:15px;
-    padding:15px;
-    margin-bottom:18px;
-}
+.hidden{display:none!important}
 
 .user-email{
-    font-size:14px;
+    margin-top:6px;
     color:#555;
-    margin-top:5px;
-}
-
-.logout{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:0;
-    border-radius:9px;
-    background:#d93025;
-    color:white;
-    font-weight:bold;
+    font-size:14px;
 }
 
 .order-title{
@@ -113,7 +90,6 @@ header{
 .product{
     display:flex;
     justify-content:space-between;
-    gap:10px;
     padding:8px 0;
     border-bottom:1px solid #eee;
 }
@@ -144,19 +120,6 @@ input{
     border:1px solid #ccc;
     border-radius:9px;
     font-size:15px;
-    outline:none;
-}
-
-.start-btn,
-.send-btn{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:9px;
-    background:#111;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
 }
 
 .status-box{
@@ -198,23 +161,23 @@ input{
     border:1px solid #ddd;
     border-radius:12px;
     padding:12px;
-    margin-bottom:12px;
+    margin-bottom:14px;
 }
 
 .message-list{
-    max-height:300px;
+    max-height:350px;
     overflow-y:auto;
     background:#f5f5f5;
     padding:10px;
     border-radius:10px;
-    margin-bottom:10px;
+    margin:10px 0;
 }
 
 .msg{
-    padding:8px 10px;
+    padding:9px 11px;
     border-radius:10px;
-    margin:6px 0;
-    max-width:85%;
+    margin:7px 0;
+    max-width:88%;
     word-break:break-word;
 }
 
@@ -228,6 +191,18 @@ input{
     margin-left:auto;
 }
 
+.msg small{
+    display:block;
+    font-size:10px;
+    opacity:.6;
+    margin-bottom:4px;
+}
+
+.audio-msg{
+    width:100%;
+    max-width:260px;
+}
+
 .chat-input{
     display:flex;
     gap:7px;
@@ -236,9 +211,10 @@ input{
 .chat-input input{
     margin:0;
     flex:1;
+    min-width:0;
 }
 
-.chat-input button{
+.reply-btn{
     width:90px;
     border:0;
     border-radius:9px;
@@ -248,1091 +224,912 @@ input{
 }
 
 </style>
-
 </head>
 
 <body>
 
-
 <header>
-    🛠️ Kənd məhsulları — Operator
+🛠️ Kənd məhsulları — Operator
 </header>
-
 
 <div class="container">
 
+<div id="loginBox" class="login-box">
 
-    <div
-        id="loginBox"
-        class="login-box"
-    >
+<h2>Operator hesabına daxil olun</h2>
 
-        <h2>
-            Operator hesabına daxil olun
-        </h2>
+<p>Operator Gmail hesabınızı seçin.</p>
 
-        <p>
-            Operator Gmail hesabınızı seçin.
-        </p>
-
-        <button
-            class="google-btn"
-            id="googleLogin"
-        >
-            🔵 Google ilə daxil ol
-        </button>
-
-    </div>
-
-
-
-    <div
-        id="panel"
-        class="hidden"
-    >
-
-
-        <div class="user-box">
-
-            <b>Operator:</b>
-
-            <div
-                class="user-email"
-                id="operatorEmail"
-            ></div>
-
-
-            <button
-                class="logout"
-                id="logoutBtn"
-            >
-                Çıxış
-            </button>
-
-        </div>
-
-
-
-        <div id="orders"></div>
-
-
-
-        <div class="chat-box">
-
-            <div class="chat-title">
-                💬 Müştərilərlə danışıq
-            </div>
-
-            <div id="chats">
-                Müştərilər yoxlanılır...
-            </div>
-
-        </div>
-
-
-    </div>
-
+<button id="googleLogin" class="google-btn">
+🔵 Google ilə daxil ol
+</button>
 
 </div>
 
 
+<div id="panel" class="hidden">
+
+<div class="user-box">
+
+<b>Operator:</b>
+
+<div id="operatorEmail" class="user-email"></div>
+
+<button id="logoutBtn" class="logout">
+Çıxış
+</button>
+
+</div>
+
+
+<div id="orders"></div>
+
+
+<div class="chat-box">
+
+<div class="chat-title">
+💬 Müştərilərlə danışıq
+</div>
+
+<div id="chats">
+Müştərilər yoxlanılır...
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 
 <script type="module">
 
-
 import {
-    initializeApp
+initializeApp
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
 import {
-    getDatabase,
-    ref,
-    onValue,
-    push,
-    update
+getDatabase,
+ref,
+onValue,
+update,
+push
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut,
+onAuthStateChanged
 }
 from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-
 const firebaseConfig = {
 
-    apiKey:
-    "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+apiKey:
+"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
 
-    authDomain:
-    "kendmehsullari-6a53d.firebaseapp.com",
+authDomain:
+"kendmehsullari-6a53d.firebaseapp.com",
 
-    databaseURL:
-    "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+databaseURL:
+"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
 
-    projectId:
-    "kendmehsullari-6a53d",
+projectId:
+"kendmehsullari-6a53d",
 
-    storageBucket:
-    "kendmehsullari-6a53d.firebasestorage.app",
+storageBucket:
+"kendmehsullari-6a53d.firebasestorage.app",
 
-    messagingSenderId:
-    "551607499773",
+messagingSenderId:
+"551607499773",
 
-    appId:
-    "1:551607499773:web:a84aa63dc5b55c38687794"
+appId:
+"1:551607499773:web:a84aa63dc5b55c38687794"
 
 };
 
 
+const app=initializeApp(firebaseConfig);
 
-const app =
-initializeApp(firebaseConfig);
+const db=getDatabase(app);
 
+const auth=getAuth(app);
 
-const db =
-getDatabase(app);
-
-
-const auth =
-getAuth(app);
+const provider=new GoogleAuthProvider();
 
 
-const provider =
-new GoogleAuthProvider();
+/* OPERATORLƏR */
 
-
-
-/* =========================
-   OPERATOR GMAIL-LƏRİ
-========================= */
-
-const OPERATOR_EMAILS = [
-
-    "amallizad72@gmail.com",
-
-    "ttiktok66006@gmail.com"
-
+const OPERATOR_EMAILS=[
+"amallizad72@gmail.com",
+"ttiktok66006@gmail.com"
 ];
-
 
 
 function isOperator(email){
 
-    if(!email){
-
-        return false;
-
-    }
-
-    return OPERATOR_EMAILS.includes(
-        email.toLowerCase().trim()
-    );
+return OPERATOR_EMAILS.includes(
+String(email || "").toLowerCase().trim()
+);
 
 }
 
 
+/* ELEMENTLƏR */
 
-/* =========================
-   ELEMENTLƏR
-========================= */
+const loginBox=
+document.getElementById("loginBox");
 
-const loginBox =
-document.getElementById(
-    "loginBox"
-);
+const panel=
+document.getElementById("panel");
 
+const operatorEmail=
+document.getElementById("operatorEmail");
 
-const panel =
-document.getElementById(
-    "panel"
-);
+const ordersDiv=
+document.getElementById("orders");
 
-
-const ordersDiv =
-document.getElementById(
-    "orders"
-);
+const chatsDiv=
+document.getElementById("chats");
 
 
-const chatsDiv =
-document.getElementById(
-    "chats"
-);
-
-
-const operatorEmail =
-document.getElementById(
-    "operatorEmail"
-);
-
-
-
-/* =========================
-   GOOGLE GİRİŞ
-========================= */
+/* GİRİŞ */
 
 document
 .getElementById("googleLogin")
-.addEventListener(
-    "click",
-    async () => {
+.addEventListener("click",async()=>{
 
-        try{
+try{
 
-            const result =
-            await signInWithPopup(
-                auth,
-                provider
-            );
-
-
-            const user =
-            result.user;
-
-
-            if(
-                !user.email ||
-                !isOperator(user.email)
-            ){
-
-                await signOut(auth);
-
-
-                alert(
-                    "Bu Gmail operator hesabı deyil."
-                );
-
-
-                return;
-
-            }
-
-
-            showPanel(user);
-
-        }
-        catch(error){
-
-            console.error(error);
-
-
-            alert(
-                "Giriş alınmadı:\n" +
-                error.message
-            );
-
-        }
-
-    }
+const result=
+await signInWithPopup(
+auth,
+provider
 );
 
+const user=result.user;
+
+if(!user.email || !isOperator(user.email)){
+
+await signOut(auth);
+
+alert(
+"Bu Gmail operator hesabı deyil."
+);
+
+return;
+
+}
+
+showPanel(user);
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Giriş alınmadı:\n"+error.message
+);
+
+}
+
+});
 
 
-/* =========================
-   AUTH YOXLANIŞI
-========================= */
+/* AUTH */
 
 onAuthStateChanged(
-    auth,
-    user => {
+auth,
+user=>{
 
-        if(
-            user &&
-            user.email &&
-            isOperator(user.email)
-        ){
+if(
+user &&
+user.email &&
+isOperator(user.email)
+){
 
-            showPanel(user);
+showPanel(user);
 
-        }
-        else{
+}else{
 
-            loginBox.classList.remove(
-                "hidden"
-            );
+loginBox.classList.remove("hidden");
 
-            panel.classList.add(
-                "hidden"
-            );
+panel.classList.add("hidden");
 
-        }
+}
 
-    }
-);
+});
 
 
-
-/* =========================
-   PANELİ AÇ
-========================= */
+/* PANEL */
 
 function showPanel(user){
 
-    loginBox.classList.add(
-        "hidden"
-    );
+loginBox.classList.add("hidden");
 
+panel.classList.remove("hidden");
 
-    panel.classList.remove(
-        "hidden"
-    );
+operatorEmail.textContent=user.email;
 
+loadOrders();
 
-    operatorEmail.textContent =
-    user.email;
-
-
-    loadOrders();
-
-
-    loadChats();
+loadChats();
 
 }
 
 
-
-/* =========================
-   ÇIXIŞ
-========================= */
+/* ÇIXIŞ */
 
 document
 .getElementById("logoutBtn")
-.addEventListener(
-    "click",
-    async () => {
+.addEventListener("click",async()=>{
 
-        await signOut(auth);
+await signOut(auth);
 
-    }
-);
+});
 
 
-
-/* =========================
-   HTML TƏHLÜKƏSİZLİYİ
-========================= */
+/* HTML TƏHLÜKƏSİZLİYİ */
 
 function escapeHTML(value){
 
-    if(
-        value === null ||
-        value === undefined
-    ){
+if(value===null || value===undefined)
+return "";
 
-        return "";
-
-    }
-
-
-    return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-
 /* =========================
-   SİFARİŞLƏRİ GƏTİR
+SİFARİŞLƏR
 ========================= */
 
 function loadOrders(){
 
-    onValue(
-        ref(db,"orders"),
-        snapshot => {
+onValue(
+ref(db,"orders"),
+snapshot=>{
 
-            ordersDiv.innerHTML = "";
+ordersDiv.innerHTML="";
 
+if(!snapshot.exists()){
 
-            if(!snapshot.exists()){
+ordersDiv.innerHTML=
+`<div class="empty">Hələ sifariş yoxdur.</div>`;
 
-                ordersDiv.innerHTML = `
+return;
 
-                    <div class="empty">
-                        Hələ sifariş yoxdur.
-                    </div>
+}
 
-                `;
+const data=snapshot.val();
 
-                return;
+Object.entries(data)
+.reverse()
+.forEach(([key,order])=>{
 
-            }
+createOrderCard(key,order);
 
+});
 
-            const data =
-            snapshot.val();
-
-
-            const entries =
-            Object.entries(data);
-
-
-            entries.reverse();
-
-
-            entries.forEach(
-                ([key,order]) => {
-
-                    createOrderCard(
-                        key,
-                        order
-                    );
-
-                }
-            );
-
-        }
-    );
+});
 
 }
 
 
+/* SİFARİŞ KARTI */
 
-/* =========================
-   SİFARİŞ KARTI
-========================= */
+function createOrderCard(key,order){
 
-function createOrderCard(
-    key,
-    order
-){
+const status=
+order.status || "Məhsul yığılır";
 
-    const currentStatus =
-    order.status ||
-    "Məhsul yığılır";
 
+let productsHTML="";
 
-    let productsHTML = "";
+const products=
+Array.isArray(order.products)
+? order.products
+: Object.values(order.products || {});
 
 
-    const products =
-    Array.isArray(order.products)
-    ? order.products
-    : Object.values(
-        order.products || {}
-    );
+products.forEach(product=>{
 
+const name=
+product.name ||
+product.title ||
+"Məhsul";
 
-    products.forEach(
-        product => {
+const qty=
+Number(product.quantity || 1);
 
-            const name =
-            product.name ||
-            product.title ||
-            "Məhsul";
+const price=
+Number(product.price || 0);
 
+productsHTML+=`
 
-            const qty =
-            Number(
-                product.quantity || 1
-            );
+<div class="product">
 
+<span>
+${escapeHTML(name)} × ${qty}
+</span>
 
-            const price =
-            Number(
-                product.price || 0
-            );
+<b>
+${(price*qty).toFixed(2)} AZN
+</b>
 
+</div>
 
-            productsHTML += `
+`;
 
-                <div class="product">
+});
 
-                    <span>
-                        ${escapeHTML(name)}
-                        × ${qty}
-                    </span>
 
-                    <b>
-                        ${(price * qty).toFixed(2)}
-                        AZN
-                    </b>
+const card=document.createElement("div");
 
-                </div>
+card.className="order-card";
 
-            `;
 
-        }
-    );
+card.innerHTML=`
 
+<div class="order-title">
+📦 Sifariş ${escapeHTML(order.orderId || key)}
+</div>
 
+<div class="info">
 
-    const card =
-    document.createElement(
-        "div"
-    );
+<b>Müştəri:</b>
+${escapeHTML(order.name || "-")}
 
+<br>
 
-    card.className =
-    "order-card";
+<b>Gmail:</b>
+${escapeHTML(order.email || "-")}
 
+<br>
 
+<b>Telefon:</b>
+${escapeHTML(order.phone || "-")}
 
-    card.innerHTML = `
+<br>
 
-        <div class="order-title">
+<b>Ünvan:</b>
+${escapeHTML(order.address || "-")}
 
-            📦 Sifariş
+<br>
 
-            ${escapeHTML(
-                order.orderId || key
-            )}
+<b>Tarix:</b>
+${escapeHTML(order.date || "-")}
 
-        </div>
+<br>
 
+<b>Status:</b>
+${escapeHTML(status)}
 
-        <div class="info">
+</div>
 
-            <b>Müştəri:</b>
-            ${escapeHTML(
-                order.name || "-"
-            )}
 
-            <br>
+<div class="products">
 
+<b>🛒 Məhsullar:</b>
 
-            <b>Gmail:</b>
-            ${escapeHTML(
-                order.email || "-"
-            )}
+${productsHTML}
 
-            <br>
+<div class="total">
 
+Ümumi:
+${Number(order.total || 0).toFixed(2)}
+AZN
 
-            <b>Telefon:</b>
-            ${escapeHTML(
-                order.phone || "-"
-            )}
+</div>
 
-            <br>
+</div>
 
 
-            <b>Ünvan:</b>
-            ${escapeHTML(
-                order.address || "-"
-            )}
+<div class="shipping">
 
-            <br>
+<div class="shipping-title">
+🚚 Sifarişi hazırlamaq
+</div>
 
 
-            <b>Tarix:</b>
-            ${escapeHTML(
-                order.date || "-"
-            )}
+<label>📬 Poçt kodu</label>
 
-            <br>
+<input
+class="postal-code"
+placeholder="Poçt kodunu yaz"
+value="${escapeHTML(order.postalCode || "")}"
+>
 
 
-            <b>Status:</b>
-            ${escapeHTML(
-                currentStatus
-            )}
+<label>🔎 İzləmə kodu</label>
 
-        </div>
+<input
+class="tracking-code"
+placeholder="İzləmə kodunu yaz"
+value="${escapeHTML(order.trackingCode || "")}"
+>
 
 
+<button class="start-btn">
+📦 BAŞLA
+</button>
 
-        <div class="products">
 
-            <b>🛒 Məhsullar:</b>
+<div class="status-box">
 
-            ${productsHTML}
+<div class="status-title">
+📍 Sifariş statusu
+</div>
 
 
-            <div class="total">
+<button
+class="status-btn"
+data-status="Məhsul yığılır">
+🟡 Məhsul yığılır
+</button>
 
-                Ümumi:
 
-                ${Number(
-                    order.total || 0
-                ).toFixed(2)}
+<button
+class="status-btn"
+data-status="Hazırdır">
+🟢 Hazırdır
+</button>
 
-                AZN
 
-            </div>
+<button
+class="status-btn"
+data-status="Yoldadır">
+🚚 Yoldadır
+</button>
 
-        </div>
 
+<button
+class="status-btn"
+data-status="Çatdırılır">
+🚴 Çatdırılır
+</button>
 
 
-        <div class="shipping">
+<button
+class="status-btn"
+data-status="Çatdırıldı">
+✅ Çatdırıldı
+</button>
 
-            <div class="shipping-title">
-                🚚 Sifarişi hazırlamaq
-            </div>
+</div>
 
+</div>
 
-            <label>
-                📬 Poçt kodu
-            </label>
+`;
 
 
-            <input
-                class="postal-code"
-                placeholder="Poçt kodunu yaz"
-                value="${escapeHTML(
-                    order.postalCode || ""
-                )}"
-            >
+ordersDiv.appendChild(card);
 
 
+const postalInput=
+card.querySelector(".postal-code");
 
-            <label>
-                🔎 İzləmə kodu
-            </label>
+const trackingInput=
+card.querySelector(".tracking-code");
 
 
-            <input
-                class="tracking-code"
-                placeholder="İzləmə kodunu yaz"
-                value="${escapeHTML(
-                    order.trackingCode || ""
-                )}"
-            >
+card.querySelector(".start-btn")
+.addEventListener("click",async()=>{
 
+try{
 
+await update(
+ref(db,"orders/"+key),
+{
 
-            <button
-                class="start-btn"
-            >
-                📦 BAŞLA
-            </button>
+status:"Məhsul yığılır",
 
+postalCode:
+postalInput.value.trim(),
 
+trackingCode:
+trackingInput.value.trim(),
 
-            <div class="status-box">
+started:true,
 
-                <div class="status-title">
-                    📍 Sifariş statusu
-                </div>
+startedAt:Date.now(),
 
+updatedAt:Date.now(),
 
+updatedBy:
+auth.currentUser?.email || ""
 
-                <button
-                    class="status-btn"
-                    data-status="Məhsul yığılır"
-                >
-                    🟡 Məhsul yığılır
-                </button>
+}
+);
 
+alert("✅ Məhsul yığılır statusu göndərildi.");
 
+}catch(error){
 
-                <button
-                    class="status-btn"
-                    data-status="Hazırdır"
-                >
-                    🟢 Hazırdır
-                </button>
+alert("Xəta: "+error.message);
 
+}
 
+});
 
-                <button
-                    class="status-btn"
-                    data-status="Yoldadır"
-                >
-                    🚚 Yoldadır
-                </button>
 
+card
+.querySelectorAll(".status-btn")
+.forEach(button=>{
 
+button.addEventListener("click",async()=>{
 
-                <button
-                    class="status-btn"
-                    data-status="Çatdırılır"
-                >
-                    🚴 Çatdırılır
-                </button>
+const newStatus=
+button.dataset.status;
 
+try{
 
+await update(
+ref(db,"orders/"+key),
+{
 
-                <button
-                    class="status-btn"
-                    data-status="Çatdırıldı"
-                >
-                    ✅ Çatdırıldı
-                </button>
+status:newStatus,
 
-            </div>
+postalCode:
+postalInput.value.trim(),
 
-        </div>
+trackingCode:
+trackingInput.value.trim(),
 
-    `;
+updatedAt:Date.now(),
 
+updatedBy:
+auth.currentUser?.email || ""
 
+}
+);
 
-    ordersDiv.appendChild(
-        card
-    );
+alert(
+"✅ Status müştəriyə göndərildi."
+);
 
+}catch(error){
 
+alert(
+"Status dəyişmədi: "+
+error.message
+);
 
-    const postalInput =
-    card.querySelector(
-        ".postal-code"
-    );
+}
 
+});
 
-    const trackingInput =
-    card.querySelector(
-        ".tracking-code"
-    );
-
-
-    const startBtn =
-    card.querySelector(
-        ".start-btn"
-    );
-
-
-
-    /* =========================
-       BAŞLA
-    ========================= */
-
-    startBtn.addEventListener(
-        "click",
-        async () => {
-
-            try{
-
-                await update(
-                    ref(
-                        db,
-                        "orders/" + key
-                    ),
-                    {
-
-                        status:
-                        "Məhsul yığılır",
-
-                        postalCode:
-                        postalInput.value.trim(),
-
-                        trackingCode:
-                        trackingInput.value.trim(),
-
-                        started:
-                        true,
-
-                        startedAt:
-                        Date.now(),
-
-                        updatedAt:
-                        Date.now()
-
-                    }
-                );
-
-
-                alert(
-                    "✅ Məhsul yığılır statusu göndərildi."
-                );
-
-            }
-            catch(error){
-
-                console.error(error);
-
-
-                alert(
-                    "Xəta: " +
-                    error.message
-                );
-
-            }
-
-        }
-    );
-
-
-
-    /* =========================
-       STATUS DÜYMƏLƏRİ
-    ========================= */
-
-    card
-    .querySelectorAll(
-        ".status-btn"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                async () => {
-
-                    const status =
-                    button.dataset.status;
-
-
-                    try{
-
-                        await update(
-                            ref(
-                                db,
-                                "orders/" + key
-                            ),
-                            {
-
-                                status:
-                                status,
-
-                                postalCode:
-                                postalInput.value.trim(),
-
-                                trackingCode:
-                                trackingInput.value.trim(),
-
-                                updatedAt:
-                                Date.now()
-
-                            }
-                        );
-
-
-                        alert(
-                            "✅ Status müştəriyə göndərildi."
-                        );
-
-                    }
-                    catch(error){
-
-                        console.error(error);
-
-
-                        alert(
-                            "Status dəyişmədi: " +
-                            error.message
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-    );
+});
 
 }
 
 
-
 /* =========================
-   MÜŞTƏRİ MESAJLARI
+MÜŞTƏRİ ÇATLARI
 ========================= */
 
 function loadChats(){
 
-    onValue(
-        ref(db,"messages"),
-        snapshot => {
+onValue(
+ref(db,"messages"),
+snapshot=>{
 
-            chatsDiv.innerHTML = "";
+chatsDiv.innerHTML="";
 
+if(!snapshot.exists()){
 
-            if(!snapshot.exists()){
+chatsDiv.innerHTML=
+`<div class="empty">Hələ mesaj yoxdur.</div>`;
 
-                chatsDiv.innerHTML = `
+return;
 
-                    <div class="empty">
-                        Hələ mesaj yoxdur.
-                    </div>
+}
 
-                `;
+const data=snapshot.val();
 
-                return;
-
-            }
+const groups={};
 
 
-            const data =
-            snapshot.val();
+Object.entries(data)
+.forEach(([key,message])=>{
+
+const email=
+String(
+message.email ||
+message.userEmail ||
+message.customerEmail ||
+"namelum"
+)
+.toLowerCase()
+.trim();
 
 
-            const groups = {};
+if(!groups[email])
+groups[email]=[];
 
 
+groups[email].push({
 
-            Object.entries(data)
-            .forEach(
-                ([key,message]) => {
+key:key,
+...message
 
-                    const email =
-                    String(
-                        message.email ||
-                        message.userEmail ||
-                        message.customerEmail ||
-                        "namelum"
-                    )
-                    .toLowerCase()
-                    .trim();
+});
+
+});
 
 
+Object.entries(groups)
+.forEach(([email,messages])=>{
 
-                    if(!groups[email]){
+createChat(email,messages);
 
-                        groups[email] = [];
+});
 
-                    }
-
-
-
-                    groups[email].push({
-
-                        key:key,
-
-                        ...message
-
-                    });
-
-                }
-            );
-
-
-
-            Object.entries(groups)
-            .forEach(
-                ([email,messages]) => {
-
-                    createChat(
-                        email,
-                        messages
-                    );
-
-                }
-            );
-
-        }
-    );
+});
 
 }
 
 
+/* CHAT */
 
-/* =========================
-   CHAT YARAT
-========================= */
+function createChat(email,messages){
 
-function createChat(
-    email,
-    messages
+const box=
+document.createElement("div");
+
+box.className="customer-chat";
+
+
+const list=
+document.createElement("div");
+
+list.className="message-list";
+
+
+messages.sort((a,b)=>{
+
+return Number(
+a.time ||
+a.timestamp ||
+a.createdAt ||
+0
+)
+-
+Number(
+b.time ||
+b.timestamp ||
+b.createdAt ||
+0
+);
+
+});
+
+
+messages.forEach(message=>{
+
+const from=
+String(
+message.sender ||
+message.from ||
+""
+)
+.toLowerCase();
+
+
+const isOperator=
+from==="operator" ||
+from==="agent" ||
+from==="admin";
+
+
+const msg=
+document.createElement("div");
+
+msg.className=
+"msg "+
+(isOperator ? "operator" : "customer");
+
+
+const small=
+document.createElement("small");
+
+small.textContent=
+isOperator
+? "Operator"
+: "Müştəri";
+
+
+msg.appendChild(small);
+
+
+/* SƏS MESAJI */
+
+if(
+message.type==="audio" &&
+message.audioURL
 ){
 
-    const box =
-    document.createElement(
-        "div"
-    );
+const audio=
+document.createElement("audio");
+
+audio.controls=true;
+
+audio.className="audio-msg";
+
+audio.src=message.audioURL;
+
+msg.appendChild(audio);
+
+}
 
 
-    box.className =
-    "customer-chat";
+/* YAZILI MESAJ */
+
+else{
+
+const text=
+document.createElement("div");
+
+text.textContent=
+message.message ||
+message.text ||
+"";
+
+msg.appendChild(text);
+
+}
 
 
+list.appendChild(msg);
 
-    let html = `
-
-        <b>
-            👤 ${escapeHTML(email)}
-        </b>
+});
 
 
-        <div
-            class="message-list"
-        >
+const title=
+document.createElement("div");
 
-    `;
-
-
-
-    messages
-    .sort(
-        (a,b) =>
-
-        Number(
-            a.timestamp ||
-            a.createdAt ||
-            0
-        )
-
-        -
-
-        Number(
-            b.timestamp ||
-            b.createdAt ||
-            0
-        )
-    )
-    .forEach(
-        message => {
-
-            const from =
-            String(
-                message.from ||
-                message.sender ||
-                ""
-            ).toLowerCase();
+title.innerHTML=
+"<b>👤 "+
+escapeHTML(email)+
+"</b>";
 
 
-            const isOperator =
-            from === "operator" ||
-            from === "admin";
+const chatInput=
+document.createElement("div");
+
+chatInput.className="chat-input";
 
 
+const input=
+document.createElement("input");
 
-            html += `
-
-                <div class="
-                    msg
-                    ${
-                        isOperator
-                        ? "operator"
-                        : "customer"
-                    }
-                ">
-
-                    ${escapeHTML(
-                        message.text ||
-                        message.message ||
-                        ""
-                    )}
-
-                </div>
-
-            `;
-
-        }
-    );
+input.placeholder=
+"Müştəriyə yaz...";
 
 
+const button=
+document.createElement("button");
 
-    html += `
+button.className="reply-btn";
 
-        </div>
-
-
-        <div class="chat-input">
-
-            <input
-                class="reply-input"
-                placeholder="Müştəriyə yaz..."
-            >
+button.textContent="Göndər";
 
 
-            <button
-                class="reply-btn"
- 
+button.addEventListener(
+"click",
+async()=>{
+
+const text=
+input.value.trim();
+
+if(!text)
+return;
+
+
+try{
+
+await push(
+ref(db,"messages"),
+{
+
+sender:"agent",
+
+from:"operator",
+
+type:"text",
+
+message:text,
+
+text:text,
+
+email:email,
+
+customerEmail:email,
+
+operatorEmail:
+auth.currentUser?.email || "",
+
+time:Date.now(),
+
+timestamp:Date.now(),
+
+createdAt:Date.now()
+
+}
+);
+
+
+input.value="";
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Mesaj göndərilmədi:\n"+
+error.message
+);
+
+}
+
+});
+
+
+input.addEventListener(
+"keydown",
+e=>{
+
+if(e.key==="Enter"){
+
+e.preventDefault();
+
+button.click();
+
+}
+
+});
+
+
+chatInput.appendChild(input);
+
+chatInput.appendChild(button);
+
+
+box.appendChild(title);
+
+box.appendChild(list);
+
+box.appendChild(chatInput);
+
+chatsDiv.appendChild(box);
+
+
+setTimeout(()=>{
+
+list.scrollTop=list.scrollHeight;
+
+},50);
+
+}
+
+</script>
+
+</body>
+</html>
