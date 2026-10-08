@@ -154,28 +154,56 @@ body{
 
 .admin-box{
     margin-top:15px;
-    padding:12px;
+    padding:14px;
     background:#fff5d8;
     border-radius:12px;
 }
 
-.admin-box select{
+.admin-box b{
+    display:block;
+    margin-bottom:8px;
+}
+
+.admin-box select,
+.admin-box input{
     width:100%;
-    padding:11px;
+    padding:12px;
     border-radius:8px;
     border:1px solid #ccc;
     margin-top:7px;
+    font-size:15px;
 }
 
 .save-button{
     width:100%;
-    margin-top:8px;
-    padding:11px;
+    margin-top:10px;
+    padding:12px;
     border:0;
     border-radius:8px;
     background:#16851d;
     color:white;
     font-size:15px;
+    font-weight:bold;
+}
+
+.tracking-box{
+    margin-top:12px;
+    padding:12px;
+    background:#f1f7ff;
+    border-radius:10px;
+    border:1px solid #dbeaff;
+}
+
+.tracking-title{
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.tracking-code{
+    font-size:17px;
+    font-weight:bold;
+    color:#145db2;
+    word-break:break-all;
 }
 
 .return-status{
@@ -353,7 +381,6 @@ body{
 
 <body>
 
-
 <div class="header">
 
     <a class="back" href="index.html">←</a>
@@ -364,11 +391,9 @@ body{
 
 </div>
 
-
 <div id="loading">
     Sifarişlər yoxlanılır...
 </div>
-
 
 <div id="orders"></div>
 
@@ -401,7 +426,6 @@ body{
 
 
 <script type="module">
-
 
 import {
     initializeApp
@@ -455,8 +479,10 @@ const db =
 getDatabase(app);
 
 
+/* SƏNİN ADMİN HESABIN */
+
 const ADMIN_EMAIL =
-"amidh365@gmail.com";
+"amid.h556@gmail.com";
 
 
 const currentEmail =
@@ -476,11 +502,24 @@ ref(db,"orders");
 let allOrders = {};
 
 
+/*
+YENİ SİFARİŞ MƏRHƏLƏLƏRİ
+
+İLK MƏRHƏLƏ:
+Məhsul yığılır
+
+SONRA:
+Hazırdır
+Yoldadır
+Çatdırılır
+Çatdırıldı
+*/
+
 const orderStatuses = [
 
-    "Sifariş qəbul edildi",
-    "Hazırlanır",
-    "Yola verildi",
+    "Məhsul yığılır",
+    "Hazırdır",
+    "Yoldadır",
     "Çatdırılır",
     "Çatdırıldı"
 
@@ -543,6 +582,13 @@ function renderOrders(data){
     let entries =
     Object.entries(data);
 
+
+    /*
+    MÜŞTƏRİ YALNIZ ÖZ SİFARİŞİNİ GÖRÜR.
+
+    ADMİN BÜTÜN MÜŞTƏRİLƏRİN
+    SİFARİŞİNİ GÖRÜR.
+    */
 
     if(!isAdmin){
 
@@ -626,9 +672,31 @@ function createOrder(
     );
 
 
-    const orderStatus =
+    /*
+    KÖHNƏ SİFARİŞLƏR ÜÇÜN DƏ
+    YENİ İLK STATUS GÖRÜNSÜN.
+    */
+
+    let orderStatus =
     order.status ||
-    "Sifariş qəbul edildi";
+    "Məhsul yığılır";
+
+
+    /*
+    KÖHNƏ "Sifariş qəbul edildi"
+    STATUSU GƏLSƏ, ONU YENİ
+    İLK MƏRHƏLƏYƏ ÇEVİRİRİK.
+    */
+
+    if(
+        orderStatus ===
+        "Sifariş qəbul edildi"
+    ){
+
+        orderStatus =
+        "Məhsul yığılır";
+
+    }
 
 
     let productsHTML = "";
@@ -699,6 +767,7 @@ function createOrder(
 
                     </div>
 
+
                     ${
                         returnRequest
                         ?
@@ -744,6 +813,42 @@ function createOrder(
     "0";
 
 
+    /*
+    İZLƏMƏ KODU
+    */
+
+    let trackingHTML = "";
+
+
+    if(order.trackingCode){
+
+        trackingHTML = `
+
+            <div class="tracking-box">
+
+                <div class="tracking-title">
+                    📦 İzləmə kodu
+                </div>
+
+                <div class="tracking-code">
+                    ${escapeHTML(
+                        String(
+                            order.trackingCode
+                        )
+                    )}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+    ADMİN PANELİ
+    */
+
     let adminHTML = "";
 
 
@@ -753,7 +858,15 @@ function createOrder(
 
             <div class="admin-box">
 
-                <b>⚙️ Admin statusu</b>
+                <b>
+                    ⚙️ Sifariş idarəsi
+                </b>
+
+
+                <label>
+                    Status
+                </label>
+
 
                 <select
                     id="status-${firebaseKey}"
@@ -785,15 +898,54 @@ function createOrder(
                 </select>
 
 
+                <label
+                    style="
+                        display:block;
+                        margin-top:10px;
+                    "
+                >
+                    📦 İzləmə kodu
+                </label>
+
+
+                <input
+                    type="text"
+                    id="tracking-${firebaseKey}"
+                    value="${
+                        escapeHTML(
+                            String(
+                                order.trackingCode || ""
+                            )
+                        )
+                    }"
+                    placeholder="İzləmə kodunu yazın"
+                >
+
+
                 <button
                     class="save-button"
+                    onclick="
+                        sendOrder(
+                            '${firebaseKey}'
+                        )
+                    "
+                >
+                    📤 Göndər
+                </button>
+
+
+                <button
+                    class="save-button"
+                    style="
+                        background:#555;
+                    "
                     onclick="
                         saveOrderStatus(
                             '${firebaseKey}'
                         )
                     "
                 >
-                    Statusu yadda saxla
+                    Statusu yalnız yadda saxla
                 </button>
 
             </div>
@@ -829,7 +981,11 @@ function createOrder(
 
 
                 <div class="status">
-                    ${escapeHTML(orderStatus)}
+
+                    ${escapeHTML(
+                        orderStatus
+                    )}
+
                 </div>
 
             </div>
@@ -880,6 +1036,9 @@ function createOrder(
             </div>
 
 
+            ${trackingHTML}
+
+
             ${productsHTML}
 
 
@@ -901,7 +1060,193 @@ function createOrder(
 }
 
 
-/* GERİ QAYTARMA MƏLUMATI */
+/* =========================
+   ADMİN GÖNDƏR DÜYMƏSİ
+   ========================= */
+
+window.sendOrder =
+async function(firebaseKey){
+
+    if(!isAdmin){
+
+        alert(
+            "Bu əməliyyat yalnız admin üçündür."
+        );
+
+        return;
+
+    }
+
+
+    const statusSelect =
+    document.getElementById(
+        "status-" + firebaseKey
+    );
+
+
+    const trackingInput =
+    document.getElementById(
+        "tracking-" + firebaseKey
+    );
+
+
+    if(!statusSelect ||
+       !trackingInput){
+
+        alert(
+            "Məlumat sahəsi tapılmadı."
+        );
+
+        return;
+
+    }
+
+
+    const selectedStatus =
+    statusSelect.value;
+
+
+    const trackingCode =
+    trackingInput.value.trim();
+
+
+    /*
+    HAZIRDIR SEÇİLƏNDƏ
+    İZLƏMƏ KODU MƏCBURİDİR.
+    */
+
+    if(
+        selectedStatus === "Hazırdır" &&
+        !trackingCode
+    ){
+
+        alert(
+            "Zəhmət olmasa izləmə kodunu yazın."
+        );
+
+        return;
+
+    }
+
+
+    const path =
+    "orders/" +
+    firebaseKey;
+
+
+    try{
+
+        await update(
+
+            ref(db,path),
+
+            {
+
+                status:
+                selectedStatus,
+
+                trackingCode:
+                trackingCode,
+
+                trackingSent:
+                true,
+
+                trackingSentAt:
+                new Date().toISOString()
+
+            }
+
+        );
+
+
+        alert(
+            "✅ Sifariş göndərildi. İzləmə kodu yadda saxlanıldı."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "❌ Sifariş göndərilmədi."
+        );
+
+    }
+
+};
+
+
+/* =========================
+   ADMİN STATUSU YADDA SAXLA
+   ========================= */
+
+window.saveOrderStatus =
+async function(firebaseKey){
+
+    if(!isAdmin){
+
+        alert(
+            "Bu əməliyyat yalnız admin üçündür."
+        );
+
+        return;
+
+    }
+
+
+    const select =
+    document.getElementById(
+        "status-" + firebaseKey
+    );
+
+
+    if(!select) return;
+
+
+    const path =
+    "orders/" +
+    firebaseKey;
+
+
+    try{
+
+        await update(
+
+            ref(
+                db,
+                path
+            ),
+
+            {
+                status:
+                select.value
+            }
+
+        );
+
+
+        alert(
+            "Sifariş statusu yadda saxlanıldı."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "Status yadda saxlanmadı."
+        );
+
+    }
+
+};
+
+
+/* =========================
+   GERİ QAYTARMA MƏLUMATI
+   ========================= */
 
 function returnInfo(
     firebaseKey,
@@ -1140,7 +1485,9 @@ function returnInfo(
 }
 
 
-/* 1-Cİ PƏNCƏRƏ */
+/* =========================
+   GERİ QAYTARMA PƏNCƏRƏSİ
+   ========================= */
 
 window.openReturn =
 function(
@@ -1344,7 +1691,9 @@ function(
 };
 
 
-/* SƏBƏBİ YADDA SAXLA + 2-Cİ PƏNCƏRƏ */
+/* =========================
+   GERİ QAYTARMA YARAT
+   ========================= */
 
 window.submitReturn =
 async function(
@@ -1492,8 +1841,6 @@ async function(
         );
 
 
-        /* İNDİ 2-Cİ PƏNCƏRƏ AÇILIR */
-
         document.getElementById(
             "modalTitle"
         ).innerHTML =
@@ -1596,7 +1943,9 @@ async function(
 };
 
 
-/* MÜŞTƏRİ MƏHSULU GÖNDƏRDİ */
+/* =========================
+   GERİ QAYTARMA MƏHSULU YOLDADIR
+   ========================= */
 
 window.productSent =
 async function(
@@ -1648,72 +1997,9 @@ async function(
 };
 
 
-/* ADMİN SİFARİŞ STATUSU */
-
-window.saveOrderStatus =
-async function(firebaseKey){
-
-    if(!isAdmin){
-
-        alert(
-            "Bu əməliyyat yalnız admin üçündür."
-        );
-
-        return;
-
-    }
-
-
-    const select =
-    document.getElementById(
-        "status-" + firebaseKey
-    );
-
-
-    if(!select) return;
-
-
-    const path =
-    "orders/" +
-    firebaseKey;
-
-
-    try{
-
-        await update(
-
-            ref(
-                db,
-                path
-            ),
-
-            {
-                status:
-                select.value
-            }
-
-        );
-
-
-        alert(
-            "Sifariş statusu yadda saxlanıldı."
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Status yadda saxlanmadı."
-        );
-
-    }
-
-};
-
-
-/* ADMİN GERİ QAYTARMA STATUSU */
+/* =========================
+   GERİ QAYTARMA STATUSU
+   ========================= */
 
 window.saveReturnStatus =
 async function(
