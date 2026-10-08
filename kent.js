@@ -19,7 +19,7 @@ const ADMIN_PASSWORD =
 
 
 /* =========================
-   KÖHNƏ OPERATOR HESABLARI
+   OPERATOR HESABLARI
 ========================= */
 
 const operators = {
@@ -103,18 +103,14 @@ function qeydiyyat(e) {
 
     if (!name || !email || !password) {
 
-        alert(
-            "Bütün xanaları doldur."
-        );
+        alert("Bütün xanaları doldur.");
 
         return;
 
     }
 
 
-    /* =========================
-       İDARƏÇİ GMAIL İLƏ QEYDİYYAT OLMAZ
-    ========================= */
+    /* İDARƏÇİ */
 
     if (email === ADMIN_EMAIL) {
 
@@ -127,9 +123,7 @@ function qeydiyyat(e) {
     }
 
 
-    /* =========================
-       OPERATOR
-    ========================= */
+    /* OPERATOR */
 
     if (
         operators[email] &&
@@ -142,20 +136,18 @@ function qeydiyyat(e) {
 
         const operatorAccount = {
 
-            name:name,
+            name: name,
 
-            email:email,
+            email: email,
 
-            password:password
+            password: password
 
         };
 
 
         localStorage.setItem(
             "account_" + key,
-            JSON.stringify(
-                operatorAccount
-            )
+            JSON.stringify(operatorAccount)
         );
 
 
@@ -209,9 +201,7 @@ function qeydiyyat(e) {
     }
 
 
-    /* =========================
-       MÜŞTƏRİ
-    ========================= */
+    /* MÜŞTƏRİ */
 
     const key =
         accountKey(email);
@@ -236,11 +226,11 @@ function qeydiyyat(e) {
 
     const account = {
 
-        name:name,
+        name: name,
 
-        email:email,
+        email: email,
 
-        password:password
+        password: password
 
     };
 
@@ -331,7 +321,7 @@ function login(e) {
 
 
     /* =========================
-       İDARƏÇİ GİRİŞİ
+       İDARƏÇİ
     ========================= */
 
     if (
@@ -363,6 +353,11 @@ function login(e) {
         );
 
 
+        localStorage.removeItem(
+            "operatorEmail"
+        );
+
+
         window.location.href =
             "admin.html";
 
@@ -372,66 +367,33 @@ function login(e) {
 
 
     /* =========================
-       İDARƏÇİ GMAIL, SƏHV PAROL
+       TTIKTOK OPERATOR
     ========================= */
 
     if (
-        email === ADMIN_EMAIL &&
-        password !== ADMIN_PASSWORD
-    ) {
-
-        alert(
-            "İdarəçi parolu səhvdir."
-        );
-
-        return;
-
-    }
-
-
-    /* =========================
-       KÖHNƏ OPERATOR
-    ========================= */
-
-    if (
-        operators[email] &&
-        operators[email] === password
+        email === "ttiktok66006@gmail.com" &&
+        password === "a1m2i3d42006"
     ) {
 
         const key =
             accountKey(email);
 
 
-        let saved =
-            localStorage.getItem(
-                "account_" + key
-            );
+        const operatorAccount = {
+
+            name: "Operator",
+
+            email: "ttiktok66006@gmail.com",
+
+            password: "a1m2i3d42006"
+
+        };
 
 
-        if (!saved) {
-
-            const operatorAccount = {
-
-                name:
-                    "Operator",
-
-                email:
-                    email,
-
-                password:
-                    password
-
-            };
-
-
-            localStorage.setItem(
-                "account_" + key,
-                JSON.stringify(
-                    operatorAccount
-                )
-            );
-
-        }
+        localStorage.setItem(
+            "account_" + key,
+            JSON.stringify(operatorAccount)
+        );
 
 
         localStorage.setItem(
@@ -448,7 +410,7 @@ function login(e) {
 
         localStorage.setItem(
             "userEmail",
-            email
+            "ttiktok66006@gmail.com"
         );
 
 
@@ -460,12 +422,95 @@ function login(e) {
 
         localStorage.setItem(
             "operatorEmail",
-            email
+            "ttiktok66006@gmail.com"
         );
 
 
         window.location.href =
             "operator.html";
+
+        return;
+
+    }
+
+
+    /* =========================
+       AMALLIZAD OPERATOR
+    ========================= */
+
+    if (
+        email === "amallizad72@gmail.com" &&
+        password === "amal2005"
+    ) {
+
+        const key =
+            accountKey(email);
+
+
+        const operatorAccount = {
+
+            name: "Operator",
+
+            email: "amallizad72@gmail.com",
+
+            password: "amal2005"
+
+        };
+
+
+        localStorage.setItem(
+            "account_" + key,
+            JSON.stringify(operatorAccount)
+        );
+
+
+        localStorage.setItem(
+            "login",
+            "true"
+        );
+
+
+        localStorage.setItem(
+            "userName",
+            "Operator"
+        );
+
+
+        localStorage.setItem(
+            "userEmail",
+            "amallizad72@gmail.com"
+        );
+
+
+        localStorage.setItem(
+            "operator",
+            "true"
+        );
+
+
+        localStorage.setItem(
+            "operatorEmail",
+            "amallizad72@gmail.com"
+        );
+
+
+        window.location.href =
+            "operator.html";
+
+        return;
+
+    }
+
+
+    /* =========================
+       OPERATOR EMAIL, SƏHV PAROL
+    ========================= */
+
+    if (operators[email]) {
+
+        alert(
+            "Operator parolu səhvdir."
+        );
 
         return;
 
@@ -497,8 +542,22 @@ function login(e) {
     }
 
 
-    const account =
-        JSON.parse(saved);
+    let account;
+
+    try {
+
+        account =
+            JSON.parse(saved);
+
+    } catch (error) {
+
+        alert(
+            "Hesab məlumatında xəta var."
+        );
+
+        return;
+
+    }
 
 
     if (
@@ -623,9 +682,7 @@ function handleCredentialResponse(
             accountKey(email);
 
 
-        /* =========================
-           GOOGLE İDARƏÇİ
-        ========================= */
+        /* GOOGLE İDARƏÇİ */
 
         if (
             email === ADMIN_EMAIL
@@ -662,6 +719,11 @@ function handleCredentialResponse(
             );
 
 
+            localStorage.removeItem(
+                "operatorEmail"
+            );
+
+
             window.location.href =
                 "admin.html";
 
@@ -670,9 +732,7 @@ function handleCredentialResponse(
         }
 
 
-        /* =========================
-           GOOGLE OPERATOR
-        ========================= */
+        /* GOOGLE OPERATOR */
 
         if (
             operators[email]
@@ -756,9 +816,7 @@ function handleCredentialResponse(
         }
 
 
-        /* =========================
-           GOOGLE MÜŞTƏRİ
-        ========================= */
+        /* GOOGLE MÜŞTƏRİ */
 
         let saved =
             localStorage.getItem(
@@ -776,7 +834,7 @@ function handleCredentialResponse(
                 email:
                     email,
 
-                password:""
+                password: ""
 
             };
 
