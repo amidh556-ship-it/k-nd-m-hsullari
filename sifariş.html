@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -13,22 +12,27 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5}
 .box{background:white;padding:18px;border-radius:12px;margin-bottom:15px}
 .product{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #ddd}
 .product img{width:70px;height:70px;object-fit:cover;border-radius:8px}
-.product-info{flex:1}
+.product-info{flex:1;overflow-wrap:anywhere}
 input,textarea{width:100%;padding:13px;margin-top:10px;border:1px solid #ccc;border-radius:8px;font-size:16px}
 textarea{height:90px;resize:none}
 .total{margin-top:15px;font-size:20px;font-weight:bold}
 button{width:100%;padding:14px;margin-top:12px;border:0;border-radius:9px;background:#2e7d32;color:white;font-size:16px;font-weight:bold}
+button:disabled{opacity:.6}
 .reject{background:#c62828}
 .back{display:block;text-align:center;padding:20px;color:#222;text-decoration:none}
 .empty{text-align:center;padding:25px}
 .small{font-size:13px;color:#555;line-height:1.5}
-.status{padding:10px;background:#fff3cd;border-radius:8px;margin-top:10px}
+.status{padding:10px;background:#fff3cd;border-radius:8px;margin-top:10px;overflow-wrap:anywhere}
 .card{border:1px solid #ddd;border-radius:10px;padding:12px;margin-top:12px;overflow-wrap:anywhere}
-.card img{max-width:100%;max-height:300px;display:block;margin-top:10px}
+.card img{max-width:100%;max-height:350px;object-fit:contain;display:block;margin-top:10px;border-radius:8px}
 .hidden{display:none}
 .bank{display:flex;align-items:center;gap:10px;margin-top:12px}
 .bank input{width:auto;margin:0}
 .bank img{width:45px;height:45px;object-fit:contain}
+.error{background:#ffebee;color:#b71c1c;padding:12px;border-radius:8px;margin-top:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.success{background:#e8f5e9;color:#1b5e20;padding:12px;border-radius:8px;margin-top:10px}
+.order-actions{display:flex;gap:8px;flex-wrap:wrap}
+.order-actions button{flex:1;min-width:140px}
 </style>
 </head>
 
@@ -36,384 +40,623 @@ button{width:100%;padding:14px;margin-top:12px;border:0;border-radius:9px;backgr
 <div class="container">
 <h1>📦 Sifariş et</h1>
 
+<div id="pageMessage" class="hidden"></div>
+
 <div id="customerPage">
-<div class="box">
-<h3>Sifariş etdiyiniz məhsullar</h3>
-<div id="products"></div>
-<div class="total">Ümumi: <span id="total">0.00</span> AZN</div>
-</div>
+  <div class="box">
+    <h3>Sifariş etdiyiniz məhsullar</h3>
+    <div id="products"></div>
+    <div class="total">Ümumi: <span id="total">0.00</span> AZN</div>
+  </div>
 
-<div class="box">
-<h3>Müştəri məlumatları</h3>
-<input id="name" placeholder="Ad və soyad">
-<input id="phone" type="tel" placeholder="Telefon nömrəsi">
-<textarea id="address" placeholder="Çatdırılacaq ünvan"></textarea>
-</div>
+  <div class="box">
+    <h3>Müştəri məlumatları</h3>
+    <input id="name" placeholder="Ad və soyad" autocomplete="name">
+    <input id="phone" type="tel" placeholder="Telefon nömrəsi" autocomplete="tel">
+    <textarea id="address" placeholder="Çatdırılacaq ünvan" autocomplete="street-address"></textarea>
+  </div>
 
-<div class="box">
-<h3>🏦 Ödəniş bankı</h3>
-<p class="small">Köçürmə etməzdən əvvəl satıcının düzgün bank hesabı məlumatlarını əldə et.</p>
-<div id="bankInfo" class="status">Bank seçimi hesablanır...</div>
+  <div class="box">
+    <h3>🏦 Ödəniş bankı</h3>
+    <p class="small">Köçürmə etməzdən əvvəl satıcının düzgün bank hesabı məlumatlarını əldə et.</p>
+    <div id="bankInfo" class="status">Bank məlumatı yüklənir...</div>
 
-<label class="bank">
-<input type="radio" name="bank" value="Kapital Bank">
-<span>Kapital Bank</span>
-</label>
+    <label class="bank">
+      <input type="radio" name="bank" value="Kapital Bank">
+      <span>Kapital Bank</span>
+    </label>
 
-<label class="bank">
-<input type="radio" name="bank" value="Leo Bank">
-<img src="leo.png" alt="Leo Bank">
-<span>Leo Bank</span>
-</label>
+    <label class="bank">
+      <input type="radio" name="bank" value="Leo Bank">
+      <img src="leo.png" alt="Leo Bank">
+      <span>Leo Bank</span>
+    </label>
 
-<label class="bank">
-<input type="radio" name="bank" value="PAŞA Bank">
-<span>PAŞA Bank</span>
-</label>
+    <label class="bank">
+      <input type="radio" name="bank" value="PAŞA Bank">
+      <span>PAŞA Bank</span>
+    </label>
 
-<h3>🧾 Ödəniş qəbzi</h3>
-<input id="receipt" type="file" accept="image/*">
-<img id="preview" class="hidden" style="max-width:100%;max-height:250px;margin-top:10px" alt="Qəbz önizləməsi">
+    <h3>🧾 Ödəniş qəbzi</h3>
+    <input id="receipt" type="file" accept="image/*">
+    <img id="preview" class="hidden" style="max-width:100%;max-height:250px;margin-top:10px" alt="Qəbz önizləməsi">
 
-<button id="submitButton" onclick="placeOrder()">🧾 Qəbzi göndər və sifariş et</button>
-<p class="small">Sifariş ödəniş yoxlanılanadək gözləmədə qalacaq.</p>
-</div>
+    <div id="customerMessage" class="hidden"></div>
+    <button id="submitButton" type="button">🧾 Qəbzi göndər və sifariş et</button>
+    <p class="small">Sifariş ödəniş yoxlanılanadək gözləmədə qalacaq.</p>
+  </div>
 
-<a class="back" href="sebet.html">← Səbətə qayıt</a>
+  <a class="back" href="sebet.html">← Səbətə qayıt</a>
 </div>
 
 <div id="adminPage" class="hidden">
-<div class="box">
-<h2>🛡️ Ödəniş yoxlaması</h2>
-<p class="small">Qəbzi faktiki ödənişlə müqayisə et. Ödəniş hesaba çatdıqda təsdiqlə.</p>
-<button onclick="loadOrders()">🔄 Siyahını yenilə</button>
-<div id="ordersList">Yüklənir...</div>
-</div>
+  <div class="box">
+    <h2>🛡️ Ödəniş yoxlaması</h2>
+    <p class="small">İdarəçi hesabı: amid.h556@gmail.com</p>
+    <p class="small">Qəbzi faktiki ödənişlə müqayisə et. Pul hesaba çatmadan ödənişi təsdiqləmə.</p>
+    <button id="refreshButton" type="button">🔄 Siyahını yenilə</button>
+    <div id="adminMessage" class="hidden"></div>
+    <div id="ordersList">Sifarişlər yüklənir...</div>
+  </div>
 </div>
 </div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getDatabase,ref,push,set,get,update} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {
+  initializeApp,
+  getApps
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-const firebaseConfig={
-apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-authDomain:"kendmehsullari-6a53d.firebaseapp.com",
-databaseURL:"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-projectId:"kendmehsullari-6a53d",
-storageBucket:"kendmehsullari-6a53d.firebasestorage.app",
-messagingSenderId:"551607499773",
-appId:"1:551607499773:web:a84aa63dc5b55c38687794"
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  get,
+  update,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+  authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+  databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+  projectId: "kendmehsullari-6a53d",
+  storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
+  messagingSenderId: "551607499773",
+  appId: "1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
-const app=initializeApp(firebaseConfig);
-const db=getDatabase(app);
-const email=(localStorage.getItem("userEmail")||"").trim().toLowerCase();
-const ADMIN_EMAIL="amid.h556@gmail.com";
+const ADMIN_EMAIL = "amid.h556@gmail.com";
 
-if(!email){
- alert("Əvvəlcə hesabına giriş et.");
- location.href="index.html";
+const email = (localStorage.getItem("userEmail") || "")
+  .trim()
+  .toLowerCase();
+
+const customerPage = document.getElementById("customerPage");
+const adminPage = document.getElementById("adminPage");
+const pageMessage = document.getElementById("pageMessage");
+const customerMessage = document.getElementById("customerMessage");
+const adminMessage = document.getElementById("adminMessage");
+const ordersList = document.getElementById("ordersList");
+const submitButton = document.getElementById("submitButton");
+const refreshButton = document.getElementById("refreshButton");
+
+function showMessage(element, message, type = "error") {
+  element.className = type;
+  element.textContent = message;
 }
 
-const isAdmin=email===ADMIN_EMAIL;
-document.getElementById("customerPage").classList.toggle("hidden",isAdmin);
-document.getElementById("adminPage").classList.toggle("hidden",!isAdmin);
-
-function getKey(){
- return email.toLowerCase().trim().replace(/[^a-z0-9]/g,"_");
+function clearMessage(element) {
+  element.className = "hidden";
+  element.textContent = "";
 }
 
-const key=getKey();
+if (!email) {
+  customerPage.classList.add("hidden");
+  adminPage.classList.add("hidden");
+  showMessage(
+    pageMessage,
+    "Hesab məlumatı tapılmadı. Sayta daxil ol, sonra sifariş səhifəsini yenidən aç."
+  );
+} else {
+  const isAdmin = email === ADMIN_EMAIL;
 
-function getCart(){
- try{return JSON.parse(localStorage.getItem("cart_"+key))||[]}
- catch(e){return []}
-}
+  customerPage.classList.toggle("hidden", isAdmin);
+  adminPage.classList.toggle("hidden", !isAdmin);
 
-let cart=getCart();
-let total=0;
-const productsBox=document.getElementById("products");
+  let app;
 
-function renderCart(){
- total=0;
- productsBox.innerHTML="";
- if(!cart.length){
-  productsBox.innerHTML='<div class="empty">🛒 Səbət boşdur</div>';
- }
- cart.forEach(item=>{
-  const qty=Number(item.quantity)||1;
-  const price=Number(item.price)||0;
-  total+=qty*price;
+  try {
+    app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  } catch (error) {
+    showMessage(
+      isAdmin ? adminMessage : customerMessage,
+      "Firebase tətbiqi başladılmadı: " + error.message
+    );
+  }
 
-  const row=document.createElement("div");
-  row.className="product";
+  if (app) {
+    const db = getDatabase(app);
 
-  const img=document.createElement("img");
-  img.src=item.image||"";
-  img.alt="Məhsul";
-
-  const info=document.createElement("div");
-  info.className="product-info";
-
-  const name=document.createElement("b");
-  name.textContent=item.name||"Məhsul";
-
-  info.append(name,document.createElement("br"),
-   document.createTextNode(qty+" ədəd"),
-   document.createElement("br"),
-   document.createTextNode(price.toFixed(2)+" AZN / ədəd"));
-
-  row.append(img,info);
-  productsBox.append(row);
- });
- document.getElementById("total").textContent=total.toFixed(2);
-}
-renderCart();
-
-async function refreshBank(){
- try{
-  const snap=await get(ref(db,"orders"));
-  let approvedTotal=0;
-
-  if(snap.exists()){
-   Object.values(snap.val()).forEach(o=>{
-    if(o.paymentStatus==="Təsdiqləndi"){
-     approvedTotal+=Number(o.total)||0;
+    function getKey() {
+      return email.replace(/[^a-z0-9]/g, "_");
     }
-   });
+
+    const key = getKey();
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem("cart_" + key)) || [];
+      } catch (error) {
+        console.error("Səbət oxunmadı:", error);
+        return [];
+      }
+    }
+
+    let cart = getCart();
+    let total = 0;
+    let receiptData = "";
+    let submitting = false;
+
+    const productsBox = document.getElementById("products");
+    const receiptInput = document.getElementById("receipt");
+    const preview = document.getElementById("preview");
+
+    function renderCart() {
+      total = 0;
+      productsBox.replaceChildren();
+
+      if (!cart.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "🛒 Səbət boşdur";
+        productsBox.append(empty);
+      }
+
+      cart.forEach(item => {
+        const qty = Math.max(1, Number(item.quantity) || 1);
+        const price = Math.max(0, Number(item.price) || 0);
+        total += qty * price;
+
+        const row = document.createElement("div");
+        row.className = "product";
+
+        const img = document.createElement("img");
+        img.src = item.image || "";
+        img.alt = item.name || "Məhsul";
+        img.onerror = () => {
+          img.style.display = "none";
+        };
+
+        const info = document.createElement("div");
+        info.className = "product-info";
+
+        const name = document.createElement("b");
+        name.textContent = item.name || "Məhsul";
+
+        info.append(
+          name,
+          document.createElement("br"),
+          document.createTextNode(qty + " ədəd"),
+          document.createElement("br"),
+          document.createTextNode(price.toFixed(2) + " AZN / ədəd")
+        );
+
+        row.append(img, info);
+        productsBox.append(row);
+      });
+
+      document.getElementById("total").textContent = total.toFixed(2);
+    }
+
+    renderCart();
+
+    async function refreshBank() {
+      const bankInfo = document.getElementById("bankInfo");
+
+      try {
+        const snap = await get(ref(db, "orders"));
+        let approvedTotal = 0;
+
+        if (snap.exists()) {
+          Object.values(snap.val()).forEach(order => {
+            if (order && order.paymentStatus === "Təsdiqləndi") {
+              approvedTotal += Number(order.total) || 0;
+            }
+          });
+        }
+
+        const suggestedBank =
+          approvedTotal < 2000 ? "Kapital Bank" :
+          approvedTotal < 4000 ? "Leo Bank" : "PAŞA Bank";
+
+        bankInfo.textContent =
+          "Təklif olunan bank: " + suggestedBank +
+          " | Təsdiqlənmiş sifariş məbləği: " +
+          approvedTotal.toFixed(2) + " AZN";
+
+        const radio = document.querySelector(
+          'input[name="bank"][value="' + suggestedBank + '"]'
+        );
+
+        if (radio && !document.querySelector('input[name="bank"]:checked')) {
+          radio.checked = true;
+        }
+      } catch (error) {
+        console.error("Bank məlumatı oxunmadı:", error);
+        bankInfo.textContent = "Firebase xətası: " + error.message;
+      }
+    }
+
+    refreshBank();
+
+    function compressImage(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onerror = () => reject(new Error("Fayl oxunmadı."));
+
+        reader.onload = () => {
+          const img = new Image();
+
+          img.onerror = () => reject(new Error("Şəkil açıla bilmədi."));
+
+          img.onload = () => {
+            const max = 800;
+            const scale = Math.min(
+              1,
+              max / Math.max(img.width, img.height)
+            );
+
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(img.width * scale));
+            canvas.height = Math.max(1, Math.round(img.height * scale));
+
+            const ctx = canvas.getContext("2d");
+
+            if (!ctx) {
+              reject(new Error("Şəkil emalı mümkün olmadı."));
+              return;
+            }
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            try {
+              resolve(canvas.toDataURL("image/jpeg", 0.55));
+            } catch (error) {
+              reject(error);
+            }
+          };
+
+          img.src = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    receiptInput.addEventListener("change", async () => {
+      receiptData = "";
+      preview.removeAttribute("src");
+      preview.classList.add("hidden");
+      clearMessage(customerMessage);
+
+      const file = receiptInput.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        showMessage(customerMessage, "Zəhmət olmasa şəkil faylı seç.");
+        receiptInput.value = "";
+        return;
+      }
+
+      if (file.size > 8 * 1024 * 1024) {
+        showMessage(customerMessage, "Şəkil 8 MB-dan kiçik olmalıdır.");
+        receiptInput.value = "";
+        return;
+      }
+
+      try {
+        receiptData = await compressImage(file);
+        preview.src = receiptData;
+        preview.classList.remove("hidden");
+        showMessage(customerMessage, "Qəbz şəkli hazırdır.", "success");
+      } catch (error) {
+        console.error("Şəkil hazırlanmadı:", error);
+        receiptData = "";
+        showMessage(customerMessage, "Şəkil xətası: " + error.message);
+      }
+    });
+
+    async function placeOrder() {
+      if (isAdmin || submitting) return;
+
+      clearMessage(customerMessage);
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const bank = document.querySelector('input[name="bank"]:checked')?.value;
+
+      if (!cart.length) {
+        showMessage(customerMessage, "Səbət boşdur.");
+        return;
+      }
+
+      if (!name || !phone || !address) {
+        showMessage(customerMessage, "Ad, telefon və ünvanı doldur.");
+        return;
+      }
+
+      if (!bank) {
+        showMessage(customerMessage, "Ödəniş bankını seç.");
+        return;
+      }
+
+      if (!receiptData) {
+        showMessage(customerMessage, "Əvvəlcə qəbz şəklini seç.");
+        return;
+      }
+
+      if (receiptData.length > 900000) {
+        showMessage(
+          customerMessage,
+          "Qəbz şəkli böyükdür. Daha kiçik şəkil seç."
+        );
+        return;
+      }
+
+      submitting = true;
+      submitButton.disabled = true;
+      submitButton.textContent = "Göndərilir...";
+
+      const order = {
+        orderId: "SIF-" + Date.now(),
+        email,
+        name,
+        phone,
+        address,
+        products: cart,
+        total: Number(total.toFixed(2)),
+        bank,
+        receiptImage: receiptData,
+        paymentStatus: "Yoxlanılır",
+        status: "Ödəniş yoxlanılır",
+        trackingCode: "",
+        date: new Date().toLocaleString("az-AZ"),
+        createdAt: Date.now()
+      };
+
+      try {
+        const newOrder = push(ref(db, "orders"));
+        order.firebaseKey = newOrder.key;
+
+        await set(newOrder, order);
+
+        try {
+          const storageKey = "orders_" + key;
+          const oldOrders = JSON.parse(
+            localStorage.getItem(storageKey) || "[]"
+          );
+
+          oldOrders.push({ ...order, receiptImage: "" });
+          localStorage.setItem(storageKey, JSON.stringify(oldOrders));
+          localStorage.setItem("cart_" + key, JSON.stringify([]));
+        } catch (storageError) {
+          console.error("Yerli yaddaş xətası:", storageError);
+        }
+
+        alert(
+          "Sifariş Firebase-ə göndərildi. Ödəniş yoxlanıldıqdan sonra nəticəni sifarişlər səhifəsində yoxla."
+        );
+
+        location.href = "orders.html";
+      } catch (error) {
+        console.error("Sifariş yazılmadı:", error);
+
+        showMessage(
+          customerMessage,
+          "SİFARİŞ GÖNDƏRİLMƏDİ.\nFirebase xətası: " +
+          error.message +
+          "\nDatabase qaydalarını və internet bağlantısını yoxla."
+        );
+
+        submitting = false;
+        submitButton.disabled = false;
+        submitButton.textContent = "🧾 Qəbzi göndər və sifariş et";
+      }
+    }
+
+    submitButton.addEventListener("click", placeOrder);
+
+    function createText(tag, value) {
+      const element = document.createElement(tag);
+      element.textContent = value;
+      return element;
+    }
+
+    async function reviewOrder(id, approved, button) {
+      if (!isAdmin) return;
+
+      const question = approved
+        ? "Pulun hesaba çatdığını yoxlayıb ödənişi təsdiqləyirsən?"
+        : "Bu ödənişi rədd etmək istəyirsən?";
+
+      if (!confirm(question)) return;
+
+      button.disabled = true;
+
+      try {
+        await update(ref(db, "orders/" + id), {
+          paymentStatus: approved ? "Təsdiqləndi" : "Rədd edildi",
+          status: approved ? "Sifariş qəbul edildi" : "Ödəniş rədd edildi",
+          reviewedAt: Date.now()
+        });
+
+        showMessage(
+          adminMessage,
+          approved ? "Ödəniş təsdiqləndi." : "Ödəniş rədd edildi.",
+          "success"
+        );
+
+        await refreshBank();
+      } catch (error) {
+        console.error("Ödəniş statusu dəyişmədi:", error);
+
+        showMessage(
+          adminMessage,
+          "STATUS DƏYİŞMƏDİ.\nFirebase xətası: " + error.message
+        );
+
+        button.disabled = false;
+      }
+    }
+
+    function renderOrders(data) {
+      ordersList.replaceChildren();
+
+      if (!data) {
+        ordersList.textContent = "Firebase-də sifariş yoxdur.";
+        return;
+      }
+
+      const orders = Object.entries(data)
+        .map(([id, order]) => ({ ...order, _id: id }))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      if (!orders.length) {
+        ordersList.textContent = "Firebase-də sifariş yoxdur.";
+        return;
+      }
+
+      orders.forEach(order => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.append(
+          createText("h3", order.orderId || order._id),
+          createText("p", "Müştəri: " + (order.name || "")),
+          createText("p", "E-poçt: " + (order.email || "")),
+          createText("p", "Telefon: " + (order.phone || "")),
+          createText("p", "Ünvan: " + (order.address || "")),
+          createText("p", "Məbləğ: " + Number(order.total || 0).toFixed(2) + " AZN"),
+          createText("p", "Bank: " + (order.bank || "Göstərilməyib")),
+          createText("p", "Ödəniş statusu: " + (order.paymentStatus || "Naməlum")),
+          createText("p", "Sifariş statusu: " + (order.status || "Naməlum")),
+          createText("p", "Tarix: " + (order.date || "Göstərilməyib"))
+        );
+
+        if (Array.isArray(order.products)) {
+          card.append(createText("h4", "Məhsullar"));
+
+          order.products.forEach(product => {
+            card.append(
+              createText(
+                "p",
+                (product.name || "Məhsul") +
+                " — " + (Number(product.quantity) || 1) +
+                " ədəd"
+              )
+            );
+          });
+        }
+
+        if (order.receiptImage && typeof order.receiptImage === "string") {
+          const receiptTitle = createText("h4", "🧾 Ödəniş qəbzi");
+          const img = document.createElement("img");
+          img.alt = "Ödəniş qəbzi";
+          img.src = order.receiptImage;
+
+          img.onerror = () => {
+            img.removeAttribute("src");
+            img.alt = "Qəbz şəkli yüklənmədi";
+            showMessage(
+              adminMessage,
+              "Qəbz şəkli açıla bilmədi. Firebase-də receiptImage dəyərini yoxla."
+            );
+          };
+
+          card.append(receiptTitle, img);
+        } else {
+          card.append(
+            createText("p", "⚠️ Bu sifarişdə receiptImage şəkli yoxdur.")
+          );
+        }
+
+        if (order.paymentStatus === "Yoxlanılır") {
+          const actions = document.createElement("div");
+          actions.className = "order-actions";
+
+          const approve = document.createElement("button");
+          approve.textContent = "✅ Ödənişi təsdiqlə";
+          approve.onclick = () => reviewOrder(order._id, true, approve);
+
+          const reject = document.createElement("button");
+          reject.className = "reject";
+          reject.textContent = "❌ Ödənişi rədd et";
+          reject.onclick = () => reviewOrder(order._id, false, reject);
+
+          actions.append(approve, reject);
+          card.append(actions);
+        }
+
+        ordersList.append(card);
+      });
+    }
+
+    async function loadOrders() {
+      if (!isAdmin) return;
+
+      clearMessage(adminMessage);
+      ordersList.textContent = "Firebase sifarişləri yüklənir...";
+      refreshButton.disabled = true;
+
+      try {
+        const snap = await get(ref(db, "orders"));
+
+        if (!snap.exists()) {
+          renderOrders(null);
+        } else {
+          renderOrders(snap.val());
+        }
+      } catch (error) {
+        console.error("Sifarişlər oxunmadı:", error);
+        ordersList.textContent = "";
+        showMessage(
+          adminMessage,
+          "SİFARİŞLƏR YÜKLƏNMƏDİ.\nFirebase xətası: " +
+          error.message +
+          "\nRealtime Database qaydalarını və internet bağlantısını yoxla."
+        );
+      } finally {
+        refreshButton.disabled = false;
+      }
+    }
+
+    refreshButton.addEventListener("click", loadOrders);
+
+    if (isAdmin) {
+      loadOrders();
+
+      // Yeni sifarişləri və dəyişiklikləri avtomatik izləyir.
+      onValue(
+        ref(db, "orders"),
+        snapshot => {
+          renderOrders(snapshot.exists() ? snapshot.val() : null);
+          clearMessage(adminMessage);
+        },
+        error => {
+          console.error("Canlı sifariş oxuma xətası:", error);
+          showMessage(
+            adminMessage,
+            "FIREBASE SİFARİŞLƏRİ OXUNA BİLMƏDİ.\n" + error.message
+          );
+        }
+      );
+    }
   }
-
-  const bank=approvedTotal<2000?"Kapital Bank":
-             approvedTotal<4000?"Leo Bank":"PAŞA Bank";
-
-  document.getElementById("bankInfo").textContent=
-   "Təklif olunan bank: "+bank+
-   " | Təsdiqlənmiş ödənişlər: "+approvedTotal.toFixed(2)+" AZN";
-
-  const radio=document.querySelector('input[name="bank"][value="'+bank+'"]');
-  if(radio)radio.checked=true;
- }catch(e){
-  document.getElementById("bankInfo").textContent=
-   "Bank məlumatı yüklənmədi. Firebase bağlantısını yoxla.";
- }
 }
-refreshBank();
-
-const receiptInput=document.getElementById("receipt");
-let receiptData="";
-
-receiptInput.addEventListener("change",async()=>{
- receiptData="";
- const file=receiptInput.files[0];
- const preview=document.getElementById("preview");
- preview.classList.add("hidden");
- if(!file)return;
-
- if(!file.type.startsWith("image/")){
-  alert("Şəkil faylı seç.");
-  receiptInput.value="";
-  return;
- }
-
- if(file.size>8*1024*1024){
-  alert("Şəkil 8 MB-dan kiçik olmalıdır.");
-  receiptInput.value="";
-  return;
- }
-
- try{
-  receiptData=await compressImage(file);
-  preview.src=receiptData;
-  preview.classList.remove("hidden");
- }catch(e){
-  alert("Şəkli oxumaq mümkün olmadı.");
- }
-});
-
-function compressImage(file){
- return new Promise((resolve,reject)=>{
-  const reader=new FileReader();
-  reader.onerror=reject;
-  reader.onload=()=>{
-   const img=new Image();
-   img.onerror=reject;
-   img.onload=()=>{
-    const max=800;
-    const scale=Math.min(1,max/Math.max(img.width,img.height));
-    const canvas=document.createElement("canvas");
-    canvas.width=Math.round(img.width*scale);
-    canvas.height=Math.round(img.height*scale);
-    const ctx=canvas.getContext("2d");
-    ctx.drawImage(img,0,0,canvas.width,canvas.height);
-    resolve(canvas.toDataURL("image/jpeg",0.55));
-   };
-   img.src=reader.result;
-  };
-  reader.readAsDataURL(file);
- });
-}
-
-window.placeOrder=async function(){
- if(isAdmin)return;
-
- const name=document.getElementById("name").value.trim();
- const phone=document.getElementById("phone").value.trim();
- const address=document.getElementById("address").value.trim();
- const bank=document.querySelector('input[name="bank"]:checked')?.value;
- const button=document.getElementById("submitButton");
-
- if(!cart.length){alert("🛒 Səbət boşdur.");return}
- if(!name||!phone||!address){alert("Ad, telefon və çatdırılacaq ünvanı doldur.");return}
- if(!bank){alert("Ödəniş bankını seç.");return}
- if(!receiptData){alert("Əvvəlcə ödəniş qəbzinin şəklini seç.");return}
-
- if(receiptData.length>900000){
-  alert("Qəbz şəkli böyükdür. Daha kiçik şəkil seç.");
-  return;
- }
-
- button.disabled=true;
- button.textContent="Göndərilir...";
-
- const order={
-  orderId:"SIF-"+Date.now(),
-  email,
-  name,
-  phone,
-  address,
-  products:cart,
-  total:Number(total.toFixed(2)),
-  bank,
-  receiptImage:receiptData,
-  paymentStatus:"Yoxlanılır",
-  status:"Ödəniş yoxlanılır",
-  trackingCode:"",
-  date:new Date().toLocaleString("az-AZ"),
-  createdAt:Date.now()
- };
-
- try{
-  const newOrder=push(ref(db,"orders"));
-  order.firebaseKey=newOrder.key;
-  await set(newOrder,order);
-
-  let oldOrders=[];
-  try{
-   oldOrders=JSON.parse(localStorage.getItem("orders_"+key))||[];
-  }catch(e){}
-
-  oldOrders.push({...order,receiptImage:""});
-  localStorage.setItem("orders_"+key,JSON.stringify(oldOrders));
-  localStorage.setItem("cart_"+key,JSON.stringify([]));
-
-  alert("Qəbz göndərildi. Ödəniş yoxlanıldıqdan sonra sifarişin təsdiqlənəcək.");
-  location.href="orders.html";
- }catch(e){
-  console.error(e);
-  alert("Sifariş göndərilmədi. Firebase Database bağlantısını və qaydalarını yoxla.");
-  button.disabled=false;
-  button.textContent="🧾 Qəbzi göndər və sifariş et";
- }
-};
-
-window.loadOrders=async function(){
- if(!isAdmin)return;
-
- const box=document.getElementById("ordersList");
- box.textContent="Yüklənir...";
-
- try{
-  const snap=await get(ref(db,"orders"));
-  box.innerHTML="";
-
-  if(!snap.exists()){
-   box.textContent="Sifariş yoxdur.";
-   return;
-  }
-
-  const orders=Object.entries(snap.val())
-   .map(([id,o])=>({...o,_id:id}))
-   .filter(o=>o.paymentStatus==="Yoxlanılır")
-   .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-
-  if(!orders.length){
-   box.textContent="Yoxlanılacaq ödəniş yoxdur.";
-   return;
-  }
-
-  orders.forEach(o=>{
-   const card=document.createElement("div");
-   card.className="card";
-
-   const title=document.createElement("h3");
-   title.textContent=o.orderId||o._id;
-
-   const details=document.createElement("p");
-   details.textContent=
-    "Müştəri: "+(o.name||"")+
-    "\nE-poçt: "+(o.email||"")+
-    "\nTelefon: "+(o.phone||"")+
-    "\nÜnvan: "+(o.address||"")+
-    "\nMəbləğ: "+Number(o.total||0).toFixed(2)+" AZN"+
-    "\nBank: "+(o.bank||"")+
-    "\nStatus: "+(o.paymentStatus||"");
-   details.style.whiteSpace="pre-line";
-   card.append(title,details);
-
-   if(o.receiptImage){
-    const img=document.createElement("img");
-    img.src=o.receiptImage;
-    img.alt="Ödəniş qəbzi";
-    card.append(img);
-   }
-
-   const approve=document.createElement("button");
-   approve.textContent="✅ Ödənişi təsdiqlə";
-   approve.onclick=()=>reviewOrder(o._id,true);
-
-   const reject=document.createElement("button");
-   reject.className="reject";
-   reject.textContent="❌ Ödənişi rədd et";
-   reject.onclick=()=>reviewOrder(o._id,false);
-
-   card.append(approve,reject);
-   box.append(card);
-  });
- }catch(e){
-  console.error(e);
-  box.textContent="Sifarişlər yüklənmədi. Firebase qaydalarını yoxla.";
- }
-};
-
-async function reviewOrder(id,approved){
- if(!isAdmin)return;
-
- const message=approved
-  ?"Ödənişin hesaba gəldiyini yoxlayıb təsdiqləyirsən?"
-  :"Bu ödənişi rədd etmək istəyirsən?";
-
- if(!confirm(message))return;
-
- try{
-  await update(ref(db,"orders/"+id),{
-   paymentStatus:approved?"Təsdiqləndi":"Rədd edildi",
-   status:approved?"Sifariş qəbul edildi":"Ödəniş rədd edildi",
-   reviewedAt:Date.now(),
-   trackingCode:approved?
-    "TRK-"+Math.random().toString(36).substring(2,10).toUpperCase():""
-  });
-
-  alert(approved?"Ödəniş təsdiqləndi.":"Ödəniş rədd edildi.");
-  await loadOrders();
-  await refreshBank();
- }catch(e){
-  console.error(e);
-  alert("Dəyişiklik saxlanmadı. Firebase qaydalarını yoxla.");
- }
-}
-
-if(isAdmin)loadOrders();
 </script>
 </body>
 </html>
