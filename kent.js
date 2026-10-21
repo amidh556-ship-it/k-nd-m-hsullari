@@ -1,6 +1,4 @@
-
 const wrapper = document.querySelector(".wrapper");
-
 const signupHeader = document.querySelector(".signup header");
 const loginHeader = document.querySelector(".login header");
 
@@ -14,25 +12,24 @@ const operators = {
     "amallizad72@gmail.com": "amal2005"
 };
 
-/* HESAB AÇARI */
 function accountKey(email) {
     return email.toLowerCase().trim().replace(/[^a-z0-9]/g, "_");
 }
 
-/* QEYDİYYAT VƏ GİRİŞ KEÇİDİ */
+/* QEYDİYYAT / GİRİŞ KEÇİDİ */
 if (loginHeader && wrapper) {
-    loginHeader.addEventListener("click", function () {
+    loginHeader.addEventListener("click", () => {
         wrapper.classList.add("active");
     });
 }
 
 if (signupHeader && wrapper) {
-    signupHeader.addEventListener("click", function () {
+    signupHeader.addEventListener("click", () => {
         wrapper.classList.remove("active");
     });
 }
 
-/* ÜMUMİ YÖNLƏNDİRMƏ */
+/* GİRİŞ MƏLUMATLARINI SAXLA */
 function setLogin(email, name, isOperator, photo = "") {
     email = email.toLowerCase().trim();
 
@@ -44,14 +41,16 @@ function setLogin(email, name, isOperator, photo = "") {
 
     if (photo) {
         localStorage.setItem("userPhoto", photo);
+    } else {
+        localStorage.removeItem("userPhoto");
     }
 
     if (isOperator) {
         localStorage.setItem("operatorEmail", email);
-        window.location.replace("operator.html");
+        window.location.href = "./operator.html";
     } else {
         localStorage.removeItem("operatorEmail");
-        window.location.replace("index.html");
+        window.location.href = "./index.html";
     }
 }
 
@@ -68,27 +67,23 @@ function qeydiyyat(e) {
         return;
     }
 
-    if (email === ADMIN_EMAIL) {
-        alert("Bu idarəçi hesabıdır. Hesaba giriş bölməsindən daxil ol.");
-        return;
-    }
-
-    if (operators[email]) {
-        alert("Bu operator hesabıdır. Qeydiyyat yox, Hesaba daxil ol bölməsindən giriş et.");
+    if (email === ADMIN_EMAIL || Object.hasOwn(operators, email)) {
+        alert("Bu idarəçi və ya operator hesabıdır. Qeydiyyat etmə, giriş bölməsindən daxil ol.");
         return;
     }
 
     const key = accountKey(email);
-    const saved = localStorage.getItem("account_" + key);
-
-    if (saved) {
-        alert("Bu Gmail artıq qeydiyyatdan keçib. Hesaba giriş et.");
+    if (localStorage.getItem("account_" + key)) {
+        alert("Bu Gmail artıq qeydiyyatdan keçib. Hesaba daxil ol.");
         return;
     }
 
-    const account = { name, email, password };
+    localStorage.setItem("account_" + key, JSON.stringify({
+        name,
+        email,
+        password
+    }));
 
-    localStorage.setItem("account_" + key, JSON.stringify(account));
     localStorage.setItem("cart_" + key, JSON.stringify([]));
     localStorage.setItem("orders_" + key, JSON.stringify([]));
 
@@ -96,7 +91,7 @@ function qeydiyyat(e) {
     document.querySelector(".login header")?.click();
 }
 
-/* EMAIL VƏ PAROL İLƏ GİRİŞ */
+/* EMAIL VƏ ŞİFRƏ İLƏ GİRİŞ */
 function login(e) {
     e.preventDefault();
 
@@ -118,33 +113,34 @@ function login(e) {
         localStorage.setItem("login", "true");
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userName", "İdarəçi");
-        localStorage.setItem("userEmail", ADMIN_EMAIL);
+        localStorage.setItem("userEmail", email);
         localStorage.setItem("operator", "false");
         localStorage.removeItem("operatorEmail");
-        window.location.replace("admin.html");
+
+        window.location.href = "./admin.html";
         return;
     }
 
     /* OPERATOR — HƏR İKİ HESAB */
-    if (Object.prototype.hasOwnProperty.call(operators, email)) {
+    if (Object.hasOwn(operators, email)) {
         if (password !== operators[email]) {
             alert("Operator parolu səhvdir.");
             return;
         }
 
-        const key = accountKey(email);
-        const operatorName = email === "amallizad72@gmail.com"
+        const name = email === "amallizad72@gmail.com"
             ? "Operator Amal"
             : "Operator";
 
-        const operatorAccount = {
-            name: operatorName,
-            email: email,
-            password: operators[email]
-        };
+        const key = accountKey(email);
 
-        localStorage.setItem("account_" + key, JSON.stringify(operatorAccount));
-        setLogin(email, operatorName, true);
+        localStorage.setItem("account_" + key, JSON.stringify({
+            name,
+            email,
+            password: operators[email]
+        }));
+
+        setLogin(email, name, true);
         return;
     }
 
@@ -158,15 +154,17 @@ function login(e) {
     }
 
     let account;
-
     try {
         account = JSON.parse(saved);
-    } catch (error) {
+    } catch {
         alert("Hesab məlumatında xəta var.");
         return;
     }
 
-    if (account.email?.toLowerCase() !== email || account.password !== password) {
+    if (
+        account.email?.toLowerCase() !== email ||
+        account.password !== password
+    ) {
         alert("Email və ya parol səhvdir.");
         return;
     }
@@ -186,7 +184,7 @@ function logout() {
         "operatorEmail"
     ].forEach(key => localStorage.removeItem(key));
 
-    window.location.replace("index.html");
+    window.location.href = "./index.html";
 }
 
 /* GOOGLE İLƏ GİRİŞ */
@@ -205,52 +203,31 @@ function handleCredentialResponse(response) {
             return;
         }
 
-        /* İDARƏÇİ */
         if (email === ADMIN_EMAIL) {
             localStorage.setItem("login", "true");
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("userName", data.name || "İdarəçi");
             localStorage.setItem("userEmail", email);
-            localStorage.setItem("userPhoto", data.picture || "");
             localStorage.setItem("operator", "false");
             localStorage.removeItem("operatorEmail");
-            window.location.replace("admin.html");
+            window.location.href = "./admin.html";
             return;
         }
 
-        /* OPERATOR */
-        if (Object.prototype.hasOwnProperty.call(operators, email)) {
-            const key = accountKey(email);
-            const operatorAccount = {
-                name: data.name || "Operator",
-                email: email,
-                password: operators[email]
-            };
-
-            localStorage.setItem("account_" + key, JSON.stringify(operatorAccount));
-            localStorage.setItem("login", "true");
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userName", data.name || "Operator");
-            localStorage.setItem("userEmail", email);
-            localStorage.setItem("userPhoto", data.picture || "");
-            localStorage.setItem("operator", "true");
-            localStorage.setItem("operatorEmail", email);
-            window.location.replace("operator.html");
+        if (Object.hasOwn(operators, email)) {
+            setLogin(email, data.name || "Operator", true, data.picture || "");
             return;
         }
 
-        /* GOOGLE MÜŞTƏRİ */
         const key = accountKey(email);
         let saved = localStorage.getItem("account_" + key);
 
         if (!saved) {
-            const account = {
+            localStorage.setItem("account_" + key, JSON.stringify({
                 name: data.name || "Müştəri",
-                email: email,
+                email,
                 password: ""
-            };
-
-            localStorage.setItem("account_" + key, JSON.stringify(account));
+            }));
             localStorage.setItem("cart_" + key, JSON.stringify([]));
             localStorage.setItem("orders_" + key, JSON.stringify([]));
         }
@@ -262,11 +239,11 @@ function handleCredentialResponse(response) {
         localStorage.setItem("userPhoto", data.picture || "");
         localStorage.setItem("operator", "false");
         localStorage.removeItem("operatorEmail");
-        window.location.replace("index.html");
 
+        window.location.href = "./index.html";
     } catch (error) {
         console.error("Google giriş xətası:", error);
-        alert("Google ilə giriş alınmadı. Səhifəni yenilə və yenidən yoxla.");
+        alert("Google ilə giriş alınmadı. Səhifəni yenilə.");
     }
 }
 
