@@ -1,1135 +1,311 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Operator - Kənd məhsulları</title>
-
 <style>
 *{box-sizing:border-box}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f3f4f6;
-    color:#222;
-}
-
-header{
-    background:#111827;
-    color:white;
-    padding:18px;
-    text-align:center;
-    font-size:21px;
-    font-weight:bold;
-}
-
-.container{
-    width:94%;
-    max-width:700px;
-    margin:20px auto;
-}
-
-.login-box,
-.user-box,
-.order-card,
-.chat-box{
-    background:white;
-    border-radius:15px;
-    padding:18px;
-    margin-bottom:18px;
-    box-shadow:0 3px 12px rgba(0,0,0,.10);
-}
-
-.login-box{text-align:center}
-
-.google-btn,
-.logout,
-.start-btn,
-.send-status{
-    width:100%;
-    padding:13px;
-    border:0;
-    border-radius:9px;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-}
-
-.google-btn{background:#4285f4}
-.logout{background:#d93025;margin-top:10px}
-.start-btn{background:#111;margin-top:5px}
-.send-status{background:#16803c;margin-top:8px}
-
+body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#222}
+header{background:#111827;color:white;padding:18px;text-align:center;font-size:21px;font-weight:bold}
+.container{width:94%;max-width:700px;margin:20px auto}
+.login-box,.user-box,.order-card,.chat-box{background:white;border-radius:15px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px #0001}
+input{width:100%;padding:13px;margin:7px 0;border:1px solid #ccc;border-radius:9px;font-size:15px}
+button{cursor:pointer}
+.login-btn,.logout,.start-btn,.send-status,.reply-btn{width:100%;padding:13px;border:0;border-radius:9px;color:white;font-size:16px;font-weight:bold;margin-top:7px}
+.login-btn{background:#16803c}.logout{background:#d93025}.start-btn{background:#111}.send-status,.reply-btn{background:#16803c}
 .hidden{display:none!important}
-
-.user-email{
-    margin-top:6px;
-    color:#555;
-    font-size:14px;
-}
-
-.order-title{
-    font-size:18px;
-    font-weight:bold;
-    margin-bottom:12px;
-}
-
-.info{
-    line-height:1.7;
-    font-size:15px;
-}
-
-.products{
-    margin-top:15px;
-    padding-top:12px;
-    border-top:1px solid #ddd;
-}
-
-.product{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px solid #eee;
-}
-
-.total{
-    font-size:18px;
-    font-weight:bold;
-    margin-top:12px;
-}
-
-.shipping{
-    margin-top:18px;
-    padding:15px;
-    background:#f3f7ff;
-    border-radius:12px;
-}
-
-.shipping-title{
-    font-size:17px;
-    font-weight:bold;
-    margin-bottom:12px;
-}
-
-input{
-    width:100%;
-    padding:13px;
-    margin-bottom:10px;
-    border:1px solid #ccc;
-    border-radius:9px;
-    font-size:15px;
-}
-
-.status-box{
-    margin-top:15px;
-    padding-top:15px;
-    border-top:1px solid #ddd;
-}
-
-.status-title{
-    font-weight:bold;
-    margin-bottom:10px;
-}
-
-.status-btn{
-    width:100%;
-    padding:12px;
-    margin:5px 0;
-    border:0;
-    border-radius:9px;
-    background:#e9e9e9;
-    font-size:15px;
-    font-weight:bold;
-}
-
-.empty{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    text-align:center;
-}
-
-.chat-title{
-    font-size:19px;
-    font-weight:bold;
-    margin-bottom:12px;
-}
-
-.customer-chat{
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:12px;
-    margin-bottom:14px;
-}
-
-.message-list{
-    max-height:350px;
-    overflow-y:auto;
-    background:#f5f5f5;
-    padding:10px;
-    border-radius:10px;
-    margin:10px 0;
-}
-
-.msg{
-    padding:9px 11px;
-    border-radius:10px;
-    margin:7px 0;
-    max-width:88%;
-    word-break:break-word;
-}
-
-.msg.customer{
-    background:white;
-    border:1px solid #ddd;
-}
-
-.msg.operator{
-    background:#dff5df;
-    margin-left:auto;
-}
-
-.msg small{
-    display:block;
-    font-size:10px;
-    opacity:.6;
-    margin-bottom:4px;
-}
-
-.audio-msg{
-    width:100%;
-    max-width:260px;
-}
-
-.chat-input{
-    display:flex;
-    gap:7px;
-}
-
-.chat-input input{
-    margin:0;
-    flex:1;
-    min-width:0;
-}
-
-.reply-btn{
-    width:90px;
-    border:0;
-    border-radius:9px;
-    background:#16803c;
-    color:white;
-    font-weight:bold;
-}
-
+.user-email{margin-top:6px;color:#555;font-size:14px}
+.order-title,.chat-title{font-size:19px;font-weight:bold;margin-bottom:12px}
+.info{line-height:1.7;font-size:15px}
+.products{margin-top:15px;padding-top:12px;border-top:1px solid #ddd}
+.product{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #eee}
+.total{font-size:18px;font-weight:bold;margin-top:12px}
+.shipping{margin-top:18px;padding:15px;background:#f3f7ff;border-radius:12px}
+.status-box{margin-top:15px;padding-top:15px;border-top:1px solid #ddd}
+.status-btn{width:100%;padding:12px;margin:5px 0;border:0;border-radius:9px;background:#e9e9e9;font-size:15px;font-weight:bold}
+.empty{background:white;padding:20px;border-radius:15px;text-align:center}
+.customer-chat{border:1px solid #ddd;border-radius:12px;padding:12px;margin-bottom:14px}
+.message-list{max-height:350px;overflow-y:auto;background:#f5f5f5;padding:10px;border-radius:10px;margin:10px 0}
+.msg{padding:9px 11px;border-radius:10px;margin:7px 0;max-width:88%;word-break:break-word;white-space:pre-wrap}
+.msg.customer{background:white;border:1px solid #ddd}
+.msg.operator{background:#dff5df;margin-left:auto}
+.msg small{display:block;font-size:10px;opacity:.6;margin-bottom:4px}
+.audio-msg{width:100%;max-width:260px}
+.chat-input{display:flex;gap:7px}
+.chat-input input{margin:0;flex:1;min-width:0}
+.chat-input button{width:90px;flex-shrink:0;border:0;border-radius:9px;background:#16803c;color:white;font-weight:bold}
 </style>
 </head>
-
 <body>
-
-<header>
-🛠️ Kənd məhsulları — Operator
-</header>
-
+<header>🛠️ Kənd məhsulları — Operator</header>
 <div class="container">
 
 <div id="loginBox" class="login-box">
-
 <h2>Operator hesabına daxil olun</h2>
-
-<p>Operator Gmail hesabınızı seçin.</p>
-
-<button id="googleLogin" class="google-btn">
-🔵 Google ilə daxil ol
-</button>
-
+<p>Email və parolunuzu daxil edin.</p>
+<form id="operatorLogin">
+<input id="loginEmail" type="email" placeholder="Operator Gmail" autocomplete="username" required>
+<input id="loginPassword" type="password" placeholder="Parol" autocomplete="current-password" required>
+<button class="login-btn" type="submit">Operator kimi daxil ol</button>
+</form>
 </div>
-
 
 <div id="panel" class="hidden">
-
 <div class="user-box">
-
 <b>Operator:</b>
-
 <div id="operatorEmail" class="user-email"></div>
-
-<button id="logoutBtn" class="logout">
-Çıxış
-</button>
-
+<button id="logoutBtn" class="logout">Çıxış</button>
 </div>
-
-
+<div id="notice"></div>
 <div id="orders"></div>
-
-
 <div class="chat-box">
-
-<div class="chat-title">
-💬 Müştərilərlə danışıq
+<div class="chat-title">💬 Müştərilərlə danışıq</div>
+<div id="chats">Müştərilər yoxlanılır...</div>
 </div>
-
-<div id="chats">
-Müştərilər yoxlanılır...
 </div>
-
 </div>
-
-</div>
-
-</div>
-
 
 <script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,onValue,update,push} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-
-import {
-getDatabase,
-ref,
-onValue,
-update,
-push
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-
-import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-signOut,
-onAuthStateChanged
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
-
-authDomain:
-"kendmehsullari-6a53d.firebaseapp.com",
-
-databaseURL:
-"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-
-projectId:
-"kendmehsullari-6a53d",
-
-storageBucket:
-"kendmehsullari-6a53d.firebasestorage.app",
-
-messagingSenderId:
-"551607499773",
-
-appId:
-"1:551607499773:web:a84aa63dc5b55c38687794"
-
+const firebaseConfig={
+ apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+ authDomain:"kendmehsullari-6a53d.firebaseapp.com",
+ databaseURL:"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+ projectId:"kendmehsullari-6a53d",
+ storageBucket:"kendmehsullari-6a53d.firebasestorage.app",
+ messagingSenderId:"551607499773",
+ appId:"1:551607499773:web:a84aa63dc5b55c38687794"
 };
 
-
 const app=initializeApp(firebaseConfig);
-
 const db=getDatabase(app);
 
-const auth=getAuth(app);
+/* Operator siyahısı */
+const operators={
+ "ttiktok66006@gmail.com":"a1m2i3d42006",
+ "amallizad72@gmail.com":"amal2005"
+};
 
-const provider=new GoogleAuthProvider();
+const loginBox=document.getElementById("loginBox");
+const panel=document.getElementById("panel");
+const emailLabel=document.getElementById("operatorEmail");
+const ordersDiv=document.getElementById("orders");
+const chatsDiv=document.getElementById("chats");
+const notice=document.getElementById("notice");
 
+let currentOperator="";
+let ordersStarted=false;
+let chatsStarted=false;
 
-/* OPERATORLƏR */
-
-const OPERATOR_EMAILS=[
-"amallizad72@gmail.com",
-"ttiktok66006@gmail.com"
-];
-
-
-function isOperator(email){
-
-return OPERATOR_EMAILS.includes(
-String(email || "").toLowerCase().trim()
-);
-
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 
+/* Email və parolla giriş */
+document.getElementById("operatorLogin").addEventListener("submit",e=>{
+ e.preventDefault();
+ const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+ const password=document.getElementById("loginPassword").value;
 
-/* ELEMENTLƏR */
+ if(!Object.prototype.hasOwnProperty.call(operators,email)){
+  alert("Bu Gmail operator siyahısında yoxdur.");
+  return;
+ }
+ if(operators[email]!==password){
+  alert("Operator parolu səhvdir.");
+  return;
+ }
 
-const loginBox=
-document.getElementById("loginBox");
-
-const panel=
-document.getElementById("panel");
-
-const operatorEmail=
-document.getElementById("operatorEmail");
-
-const ordersDiv=
-document.getElementById("orders");
-
-const chatsDiv=
-document.getElementById("chats");
-
-
-/* GİRİŞ */
-
-document
-.getElementById("googleLogin")
-.addEventListener("click",async()=>{
-
-try{
-
-const result=
-await signInWithPopup(
-auth,
-provider
-);
-
-const user=result.user;
-
-if(!user.email || !isOperator(user.email)){
-
-await signOut(auth);
-
-alert(
-"Bu Gmail operator hesabı deyil."
-);
-
-return;
-
-}
-
-showPanel(user);
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Giriş alınmadı:\n"+error.message
-);
-
-}
-
+ currentOperator=email;
+ localStorage.setItem("login","true");
+ localStorage.setItem("isLoggedIn","true");
+ localStorage.setItem("userName",email==="amallizad72@gmail.com"?"Operator Amal":"Operator");
+ localStorage.setItem("userEmail",email);
+ localStorage.setItem("operator","true");
+ localStorage.setItem("operatorEmail",email);
+ showPanel();
 });
 
-
-/* AUTH */
-
-onAuthStateChanged(
-auth,
-user=>{
-
-if(
-user &&
-user.email &&
-isOperator(user.email)
-){
-
-showPanel(user);
-
-}else{
-
-loginBox.classList.remove("hidden");
-
-panel.classList.add("hidden");
-
+function showPanel(){
+ loginBox.classList.add("hidden");
+ panel.classList.remove("hidden");
+ emailLabel.textContent=currentOperator;
+ if(!ordersStarted){ordersStarted=true;loadOrders();}
+ if(!chatsStarted){chatsStarted=true;loadChats();}
 }
 
+/* Çıxış */
+document.getElementById("logoutBtn").addEventListener("click",()=>{
+ localStorage.removeItem("login");
+ localStorage.removeItem("isLoggedIn");
+ localStorage.removeItem("userName");
+ localStorage.removeItem("userEmail");
+ localStorage.removeItem("operator");
+ localStorage.removeItem("operatorEmail");
+ currentOperator="";
+ panel.classList.add("hidden");
+ loginBox.classList.remove("hidden");
+ document.getElementById("loginPassword").value="";
 });
 
-
-/* PANEL */
-
-function showPanel(user){
-
-loginBox.classList.add("hidden");
-
-panel.classList.remove("hidden");
-
-operatorEmail.textContent=user.email;
-
-loadOrders();
-
-loadChats();
-
-}
-
-
-/* ÇIXIŞ */
-
-document
-.getElementById("logoutBtn")
-.addEventListener("click",async()=>{
-
-await signOut(auth);
-
-});
-
-
-/* HTML TƏHLÜKƏSİZLİYİ */
-
-function escapeHTML(value){
-
-if(value===null || value===undefined)
-return "";
-
-return String(value)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================
-SİFARİŞLƏR
-========================= */
-
+/* Sifarişləri göstər */
 function loadOrders(){
-
-onValue(
-ref(db,"orders"),
-snapshot=>{
-
-ordersDiv.innerHTML="";
-
-if(!snapshot.exists()){
-
-ordersDiv.innerHTML=
-`<div class="empty">Hələ sifariş yoxdur.</div>`;
-
-return;
-
+ onValue(ref(db,"orders"),snapshot=>{
+  ordersDiv.innerHTML="";
+  if(!snapshot.exists()){
+   ordersDiv.innerHTML='<div class="empty">Hələ sifariş yoxdur.</div>';
+   return;
+  }
+  Object.entries(snapshot.val()).reverse().forEach(([key,order])=>createOrderCard(key,order));
+ },error=>{
+  notice.textContent="Sifarişlər yüklənmədi: "+error.message;
+ });
 }
-
-const data=snapshot.val();
-
-Object.entries(data)
-.reverse()
-.forEach(([key,order])=>{
-
-createOrderCard(key,order);
-
-});
-
-});
-
-}
-
-
-/* SİFARİŞ KARTI */
 
 function createOrderCard(key,order){
-
-const status=
-order.status || "Məhsul yığılır";
-
-
-let productsHTML="";
-
-const products=
-Array.isArray(order.products)
-? order.products
-: Object.values(order.products || {});
-
-
-products.forEach(product=>{
-
-const name=
-product.name ||
-product.title ||
-"Məhsul";
-
-const qty=
-Number(product.quantity || 1);
-
-const price=
-Number(product.price || 0);
-
-productsHTML+=`
-
-<div class="product">
-
-<span>
-${escapeHTML(name)} × ${qty}
-</span>
-
-<b>
-${(price*qty).toFixed(2)} AZN
-</b>
-
-</div>
-
-`;
-
-});
-
-
-const card=document.createElement("div");
-
-card.className="order-card";
-
-
-card.innerHTML=`
-
-<div class="order-title">
-📦 Sifariş ${escapeHTML(order.orderId || key)}
-</div>
-
-<div class="info">
-
-<b>Müştəri:</b>
-${escapeHTML(order.name || "-")}
-
-<br>
-
-<b>Gmail:</b>
-${escapeHTML(order.email || "-")}
-
-<br>
-
-<b>Telefon:</b>
-${escapeHTML(order.phone || "-")}
-
-<br>
-
-<b>Ünvan:</b>
-${escapeHTML(order.address || "-")}
-
-<br>
-
-<b>Tarix:</b>
-${escapeHTML(order.date || "-")}
-
-<br>
-
-<b>Status:</b>
-${escapeHTML(status)}
-
-</div>
-
-
-<div class="products">
-
-<b>🛒 Məhsullar:</b>
-
-${productsHTML}
-
-<div class="total">
-
-Ümumi:
-${Number(order.total || 0).toFixed(2)}
-AZN
-
-</div>
-
-</div>
-
-
-<div class="shipping">
-
-<div class="shipping-title">
-🚚 Sifarişi hazırlamaq
-</div>
-
-
-<label>📬 Poçt kodu</label>
-
-<input
-class="postal-code"
-placeholder="Poçt kodunu yaz"
-value="${escapeHTML(order.postalCode || "")}"
->
-
-
-<label>🔎 İzləmə kodu</label>
-
-<input
-class="tracking-code"
-placeholder="İzləmə kodunu yaz"
-value="${escapeHTML(order.trackingCode || "")}"
->
-
-
-<button class="start-btn">
-📦 BAŞLA
-</button>
-
-
-<div class="status-box">
-
-<div class="status-title">
-📍 Sifariş statusu
-</div>
-
-
-<button
-class="status-btn"
-data-status="Məhsul yığılır">
-🟡 Məhsul yığılır
-</button>
-
-
-<button
-class="status-btn"
-data-status="Hazırdır">
-🟢 Hazırdır
-</button>
-
-
-<button
-class="status-btn"
-data-status="Yoldadır">
-🚚 Yoldadır
-</button>
-
-
-<button
-class="status-btn"
-data-status="Çatdırılır">
-🚴 Çatdırılır
-</button>
-
-
-<button
-class="status-btn"
-data-status="Çatdırıldı">
-✅ Çatdırıldı
-</button>
-
-</div>
-
-</div>
-
-`;
-
-
-ordersDiv.appendChild(card);
-
-
-const postalInput=
-card.querySelector(".postal-code");
-
-const trackingInput=
-card.querySelector(".tracking-code");
-
-
-card.querySelector(".start-btn")
-.addEventListener("click",async()=>{
-
-try{
-
-await update(
-ref(db,"orders/"+key),
-{
-
-status:"Məhsul yığılır",
-
-postalCode:
-postalInput.value.trim(),
-
-trackingCode:
-trackingInput.value.trim(),
-
-started:true,
-
-startedAt:Date.now(),
-
-updatedAt:Date.now(),
-
-updatedBy:
-auth.currentUser?.email || ""
-
-}
-);
-
-alert("✅ Məhsul yığılır statusu göndərildi.");
-
-}catch(error){
-
-alert("Xəta: "+error.message);
-
+ const card=document.createElement("div");
+ card.className="order-card";
+ const products=Array.isArray(order.products)?order.products:Object.values(order.products||{});
+ const productsHTML=products.map(p=>{
+  const name=p.name||p.title||"Məhsul";
+  const qty=Number(p.quantity||1);
+  const price=Number(p.price||0);
+  return `<div class="product"><span>${esc(name)} × ${qty}</span><b>${(price*qty).toFixed(2)} AZN</b></div>`;
+ }).join("");
+
+ card.innerHTML=`
+ <div class="order-title">📦 Sifariş ${esc(order.orderId||key)}</div>
+ <div class="info">
+ <b>Müştəri:</b> ${esc(order.name||"-")}<br>
+ <b>Gmail:</b> ${esc(order.email||"-")}<br>
+ <b>Telefon:</b> ${esc(order.phone||"-")}<br>
+ <b>Ünvan:</b> ${esc(order.address||"-")}<br>
+ <b>Tarix:</b> ${esc(order.date||"-")}<br>
+ <b>Status:</b> <span class="order-status">${esc(order.status||"Məhsul yığılır")}</span>
+ </div>
+ <div class="products"><b>🛒 Məhsullar:</b>${productsHTML}
+ <div class="total">Ümumi: ${Number(order.total||0).toFixed(2)} AZN</div></div>
+ <div class="shipping">
+ <b>🚚 Sifarişi hazırlamaq</b>
+ <label>📬 Poçt kodu</label>
+ <input class="postal-code" placeholder="Poçt kodunu yaz" value="${esc(order.postalCode||"")}">
+ <label>🔎 İzləmə kodu</label>
+ <input class="tracking-code" placeholder="İzləmə kodunu yaz" value="${esc(order.trackingCode||"")}">
+ <button class="start-btn">📦 BAŞLA</button>
+ <div class="status-box"><b>📍 Sifariş statusu</b>
+ ${["Məhsul yığılır","Hazırdır","Yoldadır","Çatdırılır","Çatdırıldı"].map((s,i)=>`<button class="status-btn" data-status="${s}">${["🟡","🟢","🚚","🚴","✅"][i]} ${s}</button>`).join("")}
+ </div></div>`;
+
+ ordersDiv.appendChild(card);
+ const postal=card.querySelector(".postal-code");
+ const tracking=card.querySelector(".tracking-code");
+
+ async function saveStatus(status){
+  try{
+   await update(ref(db,"orders/"+key),{
+    status,
+    postalCode:postal.value.trim(),
+    trackingCode:tracking.value.trim(),
+    updatedAt:Date.now(),
+    updatedBy:currentOperator
+   });
+   alert("Status müştəriyə göndərildi.");
+  }catch(err){alert("Status dəyişmədi: "+err.message);}
+ }
+
+ card.querySelector(".start-btn").addEventListener("click",()=>{
+  saveStatus("Məhsul yığılır");
+ });
+ card.querySelectorAll(".status-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>saveStatus(btn.dataset.status));
+ });
 }
 
-});
-
-
-card
-.querySelectorAll(".status-btn")
-.forEach(button=>{
-
-button.addEventListener("click",async()=>{
-
-const newStatus=
-button.dataset.status;
-
-try{
-
-await update(
-ref(db,"orders/"+key),
-{
-
-status:newStatus,
-
-postalCode:
-postalInput.value.trim(),
-
-trackingCode:
-trackingInput.value.trim(),
-
-updatedAt:Date.now(),
-
-updatedBy:
-auth.currentUser?.email || ""
-
-}
-);
-
-alert(
-"✅ Status müştəriyə göndərildi."
-);
-
-}catch(error){
-
-alert(
-"Status dəyişmədi: "+
-error.message
-);
-
-}
-
-});
-
-});
-
-}
-
-
-/* =========================
-MÜŞTƏRİ ÇATLARI
-========================= */
-
+/* Müştəri çatları */
 function loadChats(){
-
-onValue(
-ref(db,"messages"),
-snapshot=>{
-
-chatsDiv.innerHTML="";
-
-if(!snapshot.exists()){
-
-chatsDiv.innerHTML=
-`<div class="empty">Hələ mesaj yoxdur.</div>`;
-
-return;
-
+ onValue(ref(db,"messages"),snapshot=>{
+  chatsDiv.innerHTML="";
+  if(!snapshot.exists()){
+   chatsDiv.innerHTML='<div class="empty">Hələ mesaj yoxdur.</div>';
+   return;
+  }
+  const groups={};
+  Object.entries(snapshot.val()).forEach(([key,m])=>{
+   const email=String(m.email||m.userEmail||m.customerEmail||"namelum").toLowerCase().trim();
+   if(email==="namelum")return;
+   if(!groups[email])groups[email]=[];
+   groups[email].push({key,...m});
+  });
+  Object.entries(groups).forEach(([email,messages])=>createChat(email,messages));
+ },error=>{
+  chatsDiv.textContent="Çatlar yüklənmədi: "+error.message;
+ });
 }
-
-const data=snapshot.val();
-
-const groups={};
-
-
-Object.entries(data)
-.forEach(([key,message])=>{
-
-const email=
-String(
-message.email ||
-message.userEmail ||
-message.customerEmail ||
-"namelum"
-)
-.toLowerCase()
-.trim();
-
-
-if(!groups[email])
-groups[email]=[];
-
-
-groups[email].push({
-
-key:key,
-...message
-
-});
-
-});
-
-
-Object.entries(groups)
-.forEach(([email,messages])=>{
-
-createChat(email,messages);
-
-});
-
-});
-
-}
-
-
-/* CHAT */
 
 function createChat(email,messages){
+ const box=document.createElement("div");
+ box.className="customer-chat";
+ const title=document.createElement("div");
+ title.innerHTML="<b>👤 "+esc(email)+"</b>";
+ const list=document.createElement("div");
+ list.className="message-list";
 
-const box=
-document.createElement("div");
+ messages.sort((a,b)=>Number(a.time||a.timestamp||a.createdAt||0)-Number(b.time||b.timestamp||b.createdAt||0));
 
-box.className="customer-chat";
+ messages.forEach(m=>{
+  const from=String(m.sender||m.from||"").toLowerCase();
+  const isOp=["operator","agent","admin"].includes(from);
+  const msg=document.createElement("div");
+  msg.className="msg "+(isOp?"operator":"customer");
+  const small=document.createElement("small");
+  small.textContent=isOp?"Operator":"Müştəri";
+  msg.appendChild(small);
 
+  if(m.type==="audio"&&m.audioURL){
+   const audio=document.createElement("audio");
+   audio.controls=true;
+   audio.className="audio-msg";
+   audio.src=m.audioURL;
+   msg.appendChild(audio);
+  }else{
+   const text=document.createElement("div");
+   text.textContent=m.message||m.text||(m.type==="operator_request"?"Müştəri operatorla danışmaq istəyir":"");
+   msg.appendChild(text);
+  }
+  list.appendChild(msg);
+ });
 
-const list=
-document.createElement("div");
-
-list.className="message-list";
-
-
-messages.sort((a,b)=>{
-
-return Number(
-a.time ||
-a.timestamp ||
-a.createdAt ||
-0
-)
--
-Number(
-b.time ||
-b.timestamp ||
-b.createdAt ||
-0
-);
-
-});
-
-
-messages.forEach(message=>{
-
-const from=
-String(
-message.sender ||
-message.from ||
-""
-)
-.toLowerCase();
-
-
-const isOperator=
-from==="operator" ||
-from==="agent" ||
-from==="admin";
-
-
-const msg=
-document.createElement("div");
-
-msg.className=
-"msg "+
-(isOperator ? "operator" : "customer");
-
-
-const small=
-document.createElement("small");
-
-small.textContent=
-isOperator
-? "Operator"
-: "Müştəri";
-
-
-msg.appendChild(small);
-
-
-/* SƏS MESAJI */
-
-if(
-message.type==="audio" &&
-message.audioURL
-){
-
-const audio=
-document.createElement("audio");
-
-audio.controls=true;
-
-audio.className="audio-msg";
-
-audio.src=message.audioURL;
-
-msg.appendChild(audio);
-
+ const row=document.createElement("div");
+ row.className="chat-input";
+ const input=document.createElement("input");
+ input.placeholder="Müştəriyə yaz...";
+ const btn=document.createElement("button");
+ btn.className="reply-btn";
+ btn.textContent="Göndər";
+ btn.addEventListener("click",async()=>{
+  const text=input.value.trim();
+  if(!text)return;
+  try{
+   await push(ref(db,"messages"),{
+    sender:"agent",from:"operator",type:"text",
+    message:text,text,email,customerEmail:email,
+    operatorEmail:currentOperator,
+    time:Date.now(),timestamp:Date.now(),createdAt:Date.now()
+   });
+   input.value="";
+  }catch(err){alert("Mesaj göndərilmədi: "+err.message);}
+ });
+ input.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){e.preventDefault();btn.click();}
+ });
+ row.append(input,btn);
+ box.append(title,list,row);
+ chatsDiv.appendChild(box);
 }
-
-
-/* YAZILI MESAJ */
-
-else{
-
-const text=
-document.createElement("div");
-
-text.textContent=
-message.message ||
-message.text ||
-"";
-
-msg.appendChild(text);
-
-}
-
-
-list.appendChild(msg);
-
-});
-
-
-const title=
-document.createElement("div");
-
-title.innerHTML=
-"<b>👤 "+
-escapeHTML(email)+
-"</b>";
-
-
-const chatInput=
-document.createElement("div");
-
-chatInput.className="chat-input";
-
-
-const input=
-document.createElement("input");
-
-input.placeholder=
-"Müştəriyə yaz...";
-
-
-const button=
-document.createElement("button");
-
-button.className="reply-btn";
-
-button.textContent="Göndər";
-
-
-button.addEventListener(
-"click",
-async()=>{
-
-const text=
-input.value.trim();
-
-if(!text)
-return;
-
-
-try{
-
-await push(
-ref(db,"messages"),
-{
-
-sender:"agent",
-
-from:"operator",
-
-type:"text",
-
-message:text,
-
-text:text,
-
-email:email,
-
-customerEmail:email,
-
-operatorEmail:
-auth.currentUser?.email || "",
-
-time:Date.now(),
-
-timestamp:Date.now(),
-
-createdAt:Date.now()
-
-}
-);
-
-
-input.value="";
-
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Mesaj göndərilmədi:\n"+
-error.message
-);
-
-}
-
-});
-
-
-input.addEventListener(
-"keydown",
-e=>{
-
-if(e.key==="Enter"){
-
-e.preventDefault();
-
-button.click();
-
-}
-
-});
-
-
-chatInput.appendChild(input);
-
-chatInput.appendChild(button);
-
-
-box.appendChild(title);
-
-box.appendChild(list);
-
-box.appendChild(chatInput);
-
-chatsDiv.appendChild(box);
-
-
-setTimeout(()=>{
-
-list.scrollTop=list.scrollHeight;
-
-},50);
-
-}
-
 </script>
-
 </body>
 </html>
