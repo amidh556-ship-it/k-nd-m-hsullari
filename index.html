@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -106,8 +107,12 @@ const defaultProducts=[
 ];
 
 function getSavedProducts(){
- try{return JSON.parse(localStorage.getItem(PRODUCTS_KEY)||"[]")}catch(e){return []}
+ try{
+  const data=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||"[]");
+  return Array.isArray(data)?data:[];
+ }catch(e){return []}
 }
+
 function getAllProducts(){
  return [...defaultProducts,...getSavedProducts()];
 }
@@ -126,6 +131,11 @@ imageInput.addEventListener("change",()=>{
  const file=imageInput.files[0];
  if(!file)return;
  if(!file.type.startsWith("image/")){alert("Şəkil faylı seç.");return;}
+ if(file.size>300*1024){
+  alert("Zəhmət olmasa 300 KB-dan kiçik şəkil seç.");
+  imageInput.value="";
+  return;
+ }
  const reader=new FileReader();
  reader.onload=()=>{
   selectedImage=reader.result;
@@ -141,6 +151,7 @@ function addProduct(){
   alert("İdarəçi hesabı ilə daxil olmalısan.");
   return;
  }
+
  const name=document.getElementById("name").value.trim();
  const price=Number(document.getElementById("price").value);
  const description=document.getElementById("description").value.trim();
@@ -150,10 +161,6 @@ function addProduct(){
   status.textContent="Məhsulun adını, düzgün qiymətini və şəklini daxil et.";
   return;
  }
- if(imageInput.files[0]&&imageInput.files[0].size>300*1024){
-  status.textContent="Şəkil 300 KB-dan kiçik olmalıdır.";
-  return;
- }
 
  const saved=getSavedProducts();
  saved.push({id:"p"+Date.now(),name,price,description,image:selectedImage});
@@ -161,7 +168,7 @@ function addProduct(){
  try{
   localStorage.setItem(PRODUCTS_KEY,JSON.stringify(saved));
  }catch(e){
-  status.textContent="Şəkil böyükdür və ya yaddaş dolub. Daha kiçik şəkil seç.";
+  status.textContent="Yaddaş doludur. Köhnə məhsul şəkillərini kiçilt və yenidən yoxla.";
   return;
  }
 
@@ -197,23 +204,21 @@ function addToCart(productId){
  }
 
  const key=getAccountCartKey();
- let cart=[];
+ if(!key)return;
 
+ let cart=[];
  try{
   cart=JSON.parse(localStorage.getItem(key)||"[]");
   if(!Array.isArray(cart))cart=[];
- }catch(e){
-  cart=[];
- }
+ }catch(e){cart=[];}
 
  const existing=cart.find(item=>String(item.id)===String(p.id));
 
  if(existing){
   existing.quantity=(Number(existing.quantity)||1)+1;
-  existing.name=p.name;
-  existing.price=Number(p.price);
-  existing.image=p.image;
  }else{
+  /* Şəkilin base64 məlumatını səbətə köçürmürük;
+     yalnız şəkil faylının yolunu saxlayırıq. */
   cart.push({
    id:p.id,
    name:p.name,
@@ -225,8 +230,12 @@ function addToCart(productId){
 
  try{
   localStorage.setItem(key,JSON.stringify(cart));
+  const saved=JSON.parse(localStorage.getItem(key)||"[]");
+  if(!Array.isArray(saved)||!saved.some(item=>String(item.id)===String(p.id))){
+   throw new Error("Yadda saxlama alınmadı");
+  }
  }catch(e){
-  alert("Səbət yadda saxlanmadı. Telefon yaddaşını yoxla.");
+  alert("Səbət yadda saxlanmadı. Brauzerin yaddaşı dolu ola bilər.");
   return;
  }
 
@@ -289,10 +298,6 @@ function renderProducts(){
   card.append(link,info,button);
   container.appendChild(card);
  });
-}
-
-if((localStorage.getItem("userEmail")||"").trim().toLowerCase()===ADMIN_EMAIL){
- document.getElementById("admin").style.display="none";
 }
 
 renderProducts();
