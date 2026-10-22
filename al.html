@@ -1,1490 +1,356 @@
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Məhsul - Kənd məhsulları</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
-    color:#222;
-    padding-bottom:100px;
-}
-
-.product-page{
-    width:100%;
-    max-width:600px;
-    margin:auto;
-    background:white;
-}
-
-.product{
-    background:white;
-}
-
-
-/* =========================
-   GALEREYA
-========================= */
-
-.gallery{
-    position:relative;
-    width:100%;
-    height:430px;
-    background:white;
-    overflow:hidden;
-}
-
-.gallery-track{
-    display:flex;
-    width:100%;
-    height:100%;
-    transition:transform .3s ease;
-}
-
-.gallery-slide{
-    min-width:100%;
-    height:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.gallery-slide img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
-
-.gallery-btn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:42px;
-    height:42px;
-    border:none;
-    border-radius:50%;
-    background:rgba(255,255,255,.9);
-    box-shadow:0 2px 8px rgba(0,0,0,.25);
-    font-size:28px;
-    z-index:5;
-    cursor:pointer;
-}
-
-.gallery-left{
-    left:10px;
-}
-
-.gallery-right{
-    right:10px;
-}
-
-.dots{
-    position:absolute;
-    bottom:12px;
-    left:0;
-    right:0;
-    display:flex;
-    justify-content:center;
-    gap:7px;
-    z-index:5;
-}
-
-.dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:#aaa;
-}
-
-.dot.active{
-    background:#111;
-}
-
-
-/* =========================
-   ENDİRİM
-========================= */
-
-.discount-bar{
-    display:flex;
-    gap:20px;
-    overflow:hidden;
-    white-space:nowrap;
-    background:#fff1df;
-    padding:12px 20px;
-    color:#222;
-    font-size:15px;
-    font-weight:bold;
-}
-
-
-/* =========================
-   MƏHSUL
-========================= */
-
-.product-info{
-    padding:20px;
-}
-
-.product-name{
-    font-size:25px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-.rating{
-    font-size:16px;
-    color:#333;
-}
-
-.stars{
-    letter-spacing:1px;
-}
-
-.sold{
-    color:#777;
-    margin-left:5px;
-}
-
-.product-price{
-    font-size:28px;
-    color:#263b2b;
-    font-weight:bold;
-    margin-top:15px;
-}
-
-.discount-text{
-    margin-top:8px;
-    color:#222;
-    font-size:15px;
-    font-weight:bold;
-}
-
-.description{
-    color:#666;
-    margin-top:12px;
-    line-height:1.5;
-}
-
-
-/* =========================
-   SƏBƏT
-========================= */
-
-.cart-button{
-    position:fixed;
-    bottom:15px;
-    left:20px;
-    right:20px;
-    max-width:560px;
-    margin:auto;
-    padding:17px;
-    border:none;
-    border-radius:35px;
-    background:#263b2b;
-    color:white;
-    font-size:20px;
-    font-weight:bold;
-    z-index:1000;
-    cursor:pointer;
-    box-shadow:0 3px 10px rgba(0,0,0,.2);
-}
-
-.cart-button:active{
-    transform:scale(.98);
-}
-
-.cart-link{
-    position:fixed;
-    right:18px;
-    bottom:90px;
-    width:105px;
-    height:105px;
-    border-radius:50%;
-    background:#e8b84b;
-    color:#263b2b;
-    text-decoration:none;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    font-size:17px;
-    font-weight:bold;
-    z-index:900;
-    box-shadow:0 3px 10px rgba(0,0,0,.2);
-}
-
-.cart-link span{
-    font-size:30px;
-}
-
-
-/* =========================
-   RƏYLƏR
-========================= */
-
-.reviews{
-    margin-top:10px;
-    padding:20px;
-    background:#f5f5f5;
-}
-
-.reviews-title{
-    font-size:23px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-.review-form{
-    background:white;
-    padding:16px;
-    border-radius:16px;
-    box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.review-form h3{
-    margin:0 0 12px;
-}
-
-.star-select{
-    display:flex;
-    gap:5px;
-    margin-bottom:12px;
-}
-
-.star-select span{
-    font-size:32px;
-    color:#bbb;
-    cursor:pointer;
-}
-
-.star-select span.active{
-    color:#e5a91d;
-}
-
-.review-form textarea{
-    width:100%;
-    min-height:90px;
-    resize:none;
-    border:1px solid #ccc;
-    border-radius:12px;
-    padding:12px;
-    font-size:15px;
-    outline:none;
-}
-
-.photo-label{
-    display:inline-block;
-    margin-top:10px;
-    padding:10px 14px;
-    border:1px solid #263b2b;
-    border-radius:12px;
-    color:#263b2b;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-#reviewPhoto{
-    display:none;
-}
-
-#photoName{
-    margin-top:7px;
-    color:#777;
-    font-size:13px;
-}
-
-.review-submit{
-    width:100%;
-    margin-top:12px;
-    padding:13px;
-    border:none;
-    border-radius:12px;
-    background:#263b2b;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.review-item{
-    margin-top:15px;
-    background:white;
-    padding:15px;
-    border-radius:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.07);
-}
-
-.review-user{
-    font-weight:bold;
-    font-size:16px;
-}
-
-.review-stars{
-    color:#e5a91d;
-    margin-top:5px;
-}
-
-.review-text{
-    margin-top:9px;
-    line-height:1.45;
-    color:#444;
-}
-
-.review-image{
-    width:100%;
-    max-height:300px;
-    object-fit:contain;
-    margin-top:10px;
-    border-radius:12px;
-    background:#f5f5f5;
-}
-
-.no-reviews{
-    margin-top:15px;
-    color:#777;
-    text-align:center;
-}
-
-
-/* TELEFON */
-
-@media(max-width:380px){
-
-    .gallery{
-        height:380px;
-    }
-
-    .product-name{
-        font-size:23px;
-    }
-
-}
-
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding-bottom:100px}
+.product-page{width:100%;max-width:600px;margin:auto;background:white}
+.product{background:white}
+.gallery{position:relative;width:100%;height:430px;background:white;overflow:hidden}
+.gallery-track{display:flex;width:100%;height:100%;transition:transform .3s ease}
+.gallery-slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.gallery-slide img{width:100%;height:100%;object-fit:contain}
+.gallery-btn{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border:none;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:28px;z-index:5;cursor:pointer}
+.gallery-left{left:10px}
+.gallery-right{right:10px}
+.dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:7px;z-index:5}
+.dot{width:8px;height:8px;border-radius:50%;background:#aaa;cursor:pointer}
+.dot.active{background:#111}
+.discount-bar{display:flex;gap:20px;overflow:hidden;white-space:nowrap;background:#fff1df;padding:12px 20px;color:#222;font-size:15px;font-weight:bold}
+.product-info{padding:20px}
+.product-name{font-size:25px;font-weight:bold;margin-bottom:15px}
+.rating{font-size:16px;color:#333}
+.stars{letter-spacing:1px}
+.sold{color:#777;margin-left:5px}
+.product-price{font-size:28px;color:#263b2b;font-weight:bold;margin-top:15px}
+.discount-text{margin-top:8px;color:#222;font-size:15px;font-weight:bold}
+.description{color:#666;margin-top:12px;line-height:1.5}
+.cart-button{position:fixed;bottom:15px;left:20px;right:20px;max-width:560px;margin:auto;padding:17px;border:none;border-radius:35px;background:#263b2b;color:white;font-size:20px;font-weight:bold;z-index:1000;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.cart-button:active{transform:scale(.98)}
+.cart-link{position:fixed;right:18px;bottom:90px;width:105px;height:105px;border-radius:50%;background:#e8b84b;color:#263b2b;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:17px;font-weight:bold;z-index:900;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+.cart-link span{font-size:30px}
+.reviews{margin-top:10px;padding:20px;background:#f5f5f5}
+.reviews-title{font-size:23px;font-weight:bold;margin-bottom:15px}
+.review-form{background:white;padding:16px;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.review-form h3{margin:0 0 12px}
+.star-select{display:flex;gap:5px;margin-bottom:12px}
+.star-select span{font-size:32px;color:#bbb;cursor:pointer}
+.star-select span.active{color:#e5a91d}
+.review-form textarea{width:100%;min-height:90px;resize:none;border:1px solid #ccc;border-radius:12px;padding:12px;font-size:15px;outline:none}
+.photo-label{display:inline-block;margin-top:10px;padding:10px 14px;border:1px solid #263b2b;border-radius:12px;color:#263b2b;font-weight:bold;cursor:pointer}
+#reviewPhoto{display:none}
+#photoName{margin-top:7px;color:#777;font-size:13px}
+.review-submit{width:100%;margin-top:12px;padding:13px;border:none;border-radius:12px;background:#263b2b;color:white;font-size:16px;font-weight:bold;cursor:pointer}
+.review-item{margin-top:15px;background:white;padding:15px;border-radius:15px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.review-user{font-weight:bold;font-size:16px}
+.review-stars{color:#e5a91d;margin-top:5px}
+.review-text{margin-top:9px;line-height:1.45;color:#444;overflow-wrap:anywhere}
+.review-image{width:100%;max-height:300px;object-fit:contain;margin-top:10px;border-radius:12px;background:#f5f5f5}
+.no-reviews{margin-top:15px;color:#777;text-align:center}
+.error-message{padding:30px 20px;text-align:center;color:#b42318;font-weight:bold}
+@media(max-width:380px){.gallery{height:380px}.product-name{font-size:23px}}
 </style>
-
 </head>
 
-
 <body>
-
-
 <div class="product-page">
-
 <div class="product">
 
-
-<!-- =========================
-     4 ŞƏKİL
-========================= -->
-
 <div class="gallery">
-
-<div
-class="gallery-track"
-id="galleryTrack"
->
-
-<div class="gallery-slide">
-<img id="image1" src="1.png">
+<div class="gallery-track" id="galleryTrack">
+<div class="gallery-slide"><img id="image1" src="1.png" alt="Məhsul şəkli 1"></div>
+<div class="gallery-slide"><img id="image2" src="2.png" alt="Məhsul şəkli 2"></div>
+<div class="gallery-slide"><img id="image3" src="3.png" alt="Məhsul şəkli 3"></div>
+<div class="gallery-slide"><img id="image4" src="4.png" alt="Məhsul şəkli 4"></div>
 </div>
-
-<div class="gallery-slide">
-<img id="image2" src="2.png">
-</div>
-
-<div class="gallery-slide">
-<img id="image3" src="3.png">
-</div>
-
-<div class="gallery-slide">
-<img id="image4" src="4.png">
-</div>
-
-</div>
-
-
-<button
-class="gallery-btn gallery-left"
-onclick="previousImage()"
-type="button"
->
-‹
-</button>
-
-
-<button
-class="gallery-btn gallery-right"
-onclick="nextImage()"
-type="button"
->
-›
-</button>
-
-
+<button class="gallery-btn gallery-left" onclick="previousImage()" type="button">‹</button>
+<button class="gallery-btn gallery-right" onclick="nextImage()" type="button">›</button>
 <div class="dots">
-
-<span
-class="dot active"
-onclick="goToImage(0)"
-></span>
-
-<span
-class="dot"
-onclick="goToImage(1)"
-></span>
-
-<span
-class="dot"
-onclick="goToImage(2)"
-></span>
-
-<span
-class="dot"
-onclick="goToImage(3)"
-></span>
-
+<span class="dot active" onclick="goToImage(0)"></span>
+<span class="dot" onclick="goToImage(1)"></span>
+<span class="dot" onclick="goToImage(2)"></span>
+<span class="dot" onclick="goToImage(3)"></span>
 </div>
-
 </div>
-
-
-<!-- ENDİRİM -->
 
 <div class="discount-bar">
-
 <span>✓ 20% endirim</span>
-
 <span>▣ Sifarişlərdə 20% ENDİRİM</span>
-
 <span>✓ Gecikməyə görə</span>
-
 </div>
-
-
-<!-- MƏHSUL -->
 
 <div class="product-info">
-
-<div
-id="productName"
-class="product-name"
-></div>
-
-
+<div id="productName" class="product-name">Məhsul yüklənir...</div>
 <div class="rating">
-
-<span class="stars">
-★★★★☆
-</span>
-
-<span>
-4.7 ★
-</span>
-
-<span class="sold">
-487 ədəd satılıb
-</span>
-
+<span class="stars">★★★★☆</span>
+<span>4.7 ★</span>
+<span class="sold">487 ədəd satılıb</span>
 </div>
-
-
-<div
-id="productPrice"
-class="product-price"
-></div>
-
-
-<div class="discount-text">
-🔥 Çatdırılmada 20% endirim
+<div id="productPrice" class="product-price"></div>
+<div class="discount-text">🔥 Çatdırılmada 20% endirim</div>
+<div id="productDescription" class="description"></div>
+<div id="productError"></div>
 </div>
-
-
-<div
-id="productDescription"
-class="description"
-></div>
-
 </div>
-
-</div>
-
-
-<!-- =========================
-     RƏYLƏR
-========================= -->
 
 <div class="reviews">
-
-<div class="reviews-title">
-Müştəri rəyləri
-</div>
-
-
+<div class="reviews-title">Müştəri rəyləri</div>
 <div class="review-form">
-
 <h3>Rəy yaz</h3>
-
-
 <div class="star-select">
-
 <span onclick="selectStar(1)">★</span>
 <span onclick="selectStar(2)">★</span>
 <span onclick="selectStar(3)">★</span>
 <span onclick="selectStar(4)">★</span>
 <span onclick="selectStar(5)">★</span>
-
 </div>
-
-
-<textarea
-id="reviewText"
-placeholder="Məhsul haqqında fikrinizi yazın..."
-></textarea>
-
-
-<label
-class="photo-label"
-for="reviewPhoto"
->
-🖼️ Şəkil əlavə et
-</label>
-
-<input
-type="file"
-id="reviewPhoto"
-accept="image/*"
->
-
+<textarea id="reviewText" placeholder="Məhsul haqqında fikrinizi yazın..."></textarea>
+<label class="photo-label" for="reviewPhoto">🖼️ Şəkil əlavə et</label>
+<input type="file" id="reviewPhoto" accept="image/*">
 <div id="photoName"></div>
-
-
-<button
-class="review-submit"
-onclick="sendReview()"
-type="button"
->
-Rəyi göndər
-</button>
-
+<button class="review-submit" onclick="sendReview()" type="button">Rəyi göndər</button>
 </div>
-
-
 <div id="reviewsList"></div>
-
 </div>
 
-
-<a
-class="cart-link"
-href="sebet.html"
->
-
-<span>🛒</span>
-
-Səbət
-
-</a>
-
-
-<button
-class="cart-button"
-onclick="addCurrentProduct()"
-type="button"
->
-
-🛒 Səbətə əlavə et
-
-</button>
-
-
+<a class="cart-link" href="sebet.html"><span>🛒</span>Səbət</a>
+<button class="cart-button" onclick="addCurrentProduct()" type="button">🛒 Səbətə əlavə et</button>
 </div>
-
-
-<!-- =========================
-     FIREBASE
-========================= -->
 
 <script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,push,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {getStorage,ref as storageRef,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-
-import {
-getDatabase,
-ref,
-push,
-onValue
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-
-import {
-getStorage,
-ref as storageRef,
-uploadBytes,
-getDownloadURL
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0",
-
-authDomain:
-"kendmehsullari-6a53d.firebaseapp.com",
-
-databaseURL:
-"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
-
-projectId:
-"kendmehsullari-6a53d",
-
-storageBucket:
-"kendmehsullari-6a53d.appspot.com",
-
-messagingSenderId:
-"",
-
-appId:
-""
-
+const firebaseConfig={
+ apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0",
+ authDomain:"kendmehsullari-6a53d.firebaseapp.com",
+ databaseURL:"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+ projectId:"kendmehsullari-6a53d",
+ storageBucket:"kendmehsullari-6a53d.appspot.com",
+ messagingSenderId:"",
+ appId:""
 };
 
+const app=initializeApp(firebaseConfig);
+const database=getDatabase(app);
+const storage=getStorage(app);
 
-const app =
-initializeApp(firebaseConfig);
-
-
-const database =
-getDatabase(app);
-
-
-const storage =
-getStorage(app);
-
-
-/* =========================
-   MƏHSULLAR
-========================= */
-
-const products = {
-
-masin: {
-
-name:"Maşın oyuncaq",
-
-price:3.80,
-
-images:[
-"foto.png",
-"foto2.png",
-"foto3.png",
-"foto4.png"
-],
-
-description:
-"Keyfiyyətli məhsul."
-
-},
-
-
-tato: {
-
-name:"Tato",
-
-price:4.80,
-
-images:[
-"1.png",
-"2.png",
-"3.png",
-"4.png"
-],
-
-description:
-"Təbii və keyfiyyətli məhsul."
-
-}
-
+const products={
+ masin:{
+  name:"Maşın oyuncaq",price:3.80,
+  images:["foto.png","foto2.png","foto3.png","foto4.png"],
+  description:"Keyfiyyətli məhsul."
+ },
+ tato:{
+  name:"Tato",price:4.80,
+  images:["1.png","2.png","3.png","4.png"],
+  description:"Təbii və keyfiyyətli məhsul."
+ }
 };
 
+const params=new URLSearchParams(window.location.search);
+const productId=params.get("id");
 
-/* =========================
-   MƏHSUL ID
-========================= */
+/* Əvvəl hazır məhsulları yoxla, sonra admin məhsullarını tap */
+let product=products[productId]||null;
 
-const params =
-new URLSearchParams(
-window.location.search
-);
+function getSavedProducts(){
+ const sources=["myProducts","products"];
+ for(const source of sources){
+  try{
+   const data=JSON.parse(localStorage.getItem(source)||"[]");
+   if(Array.isArray(data)){
+    const found=data.find(item=>String(item.id)===String(productId));
+    if(found)return found;
+   }
+  }catch(e){}
+ }
+ return null;
+}
 
-const productId =
-params.get("id");
-
-const product =
-products[productId];
-
-
-/* =========================
-   TARİXÇƏYƏ ƏLAVƏ ET
-========================= */
+if(!product && productId){
+ const saved=getSavedProducts();
+ if(saved){
+  const firstImage=saved.image||saved.imageUrl||saved.photo||"1.png";
+  product={
+   name:saved.name||saved.title||"Məhsul",
+   price:Number(saved.price)||0,
+   images:[
+    firstImage,
+    saved.image2||firstImage,
+    saved.image3||firstImage,
+    saved.image4||firstImage
+   ],
+   description:saved.description||saved.name||"Keyfiyyətli məhsul."
+  };
+ }
+}
 
 function saveToHistory(){
-
-    const email =
-        localStorage.getItem("userEmail");
-
-    /* Hesaba daxil olmayıbsa yazmır */
-    if(!email){
-        return;
-    }
-
-    const key =
-        email
-        .toLowerCase()
-        .trim()
-        .replace(
-            /[^a-z0-9]/g,
-            "_"
-        );
-
-    let history = [];
-
-    try{
-
-        history =
-            JSON.parse(
-                localStorage.getItem(
-                    "history_" + key
-                )
-            ) || [];
-
-    }catch(error){
-
-        history = [];
-
-    }
-
-
-    /* Eyni məhsul varsa sil */
-    history =
-        history.filter(
-            function(item){
-
-                return item.productId !== productId;
-
-            }
-        );
-
-
-    /* İndi baxılan məhsulu əvvələ qoy */
-    history.unshift({
-
-        productId:
-            productId,
-
-        name:
-            product.name,
-
-        price:
-            product.price,
-
-        image:
-            product.images[0],
-
-        time:
-            Date.now()
-
-    });
-
-
-    /* Maksimum 30 məhsul */
-    history =
-        history.slice(0,30);
-
-
-    localStorage.setItem(
-
-        "history_" + key,
-
-        JSON.stringify(history)
-
-    );
-
+ const email=localStorage.getItem("userEmail");
+ if(!email||!product)return;
+ const key=email.toLowerCase().trim().replace(/[^a-z0-9]/g,"_");
+ let history=[];
+ try{history=JSON.parse(localStorage.getItem("history_"+key)||"[]")||[];}catch(e){}
+ history=history.filter(item=>String(item.productId)!==String(productId));
+ history.unshift({
+  productId:productId,
+  name:product.name,
+  price:product.price,
+  image:product.images[0],
+  time:Date.now()
+ });
+ localStorage.setItem("history_"+key,JSON.stringify(history.slice(0,30)));
 }
-
-
-/* =========================
-   MƏHSULU GÖSTƏR
-========================= */
 
 if(product){
-
-document.getElementById(
-"productName"
-).innerText =
-product.name;
-
-
-document.getElementById(
-"productPrice"
-).innerText =
-product.price.toFixed(2)
-+
-" AZN";
-
-
-document.getElementById(
-"productDescription"
-).innerText =
-product.description;
-
-
-/* MAŞIN / TATO ŞƏKİLLƏRİ */
-
-document.getElementById("image1").src =
-product.images[0];
-
-document.getElementById("image2").src =
-product.images[1];
-
-document.getElementById("image3").src =
-product.images[2];
-
-document.getElementById("image4").src =
-product.images[3];
-
-
-/* TARİXÇƏYƏ YAZ */
-saveToHistory();
-
+ document.getElementById("productName").innerText=product.name;
+ document.getElementById("productPrice").innerText=Number(product.price).toFixed(2)+" AZN";
+ document.getElementById("productDescription").innerText=product.description||"";
+ for(let i=1;i<=4;i++){
+  document.getElementById("image"+i).src=product.images[i-1]||product.images[0]||"1.png";
+ }
+ saveToHistory();
+}else{
+ document.getElementById("productName").innerText="Məhsul tapılmadı";
+ document.getElementById("productError").className="error-message";
+ document.getElementById("productError").innerText="Bu məhsul tapılmadı. Ana səhifəyə qayıdıb məhsulu yenidən seç.";
+ document.getElementById("productPrice").innerText="";
+ document.getElementById("productDescription").innerText="";
 }
-
-
-/* =========================
-   GALEREYA
-========================= */
 
 let currentImage=0;
-
-const track =
-document.getElementById(
-"galleryTrack"
-);
-
-const dots =
-document.querySelectorAll(
-".dot"
-);
-
+const track=document.getElementById("galleryTrack");
+const dots=document.querySelectorAll(".dot");
 
 function updateGallery(){
-
-track.style.transform =
-"translateX(-"+
-(currentImage*100)+
-"%)";
-
-
-dots.forEach(
-function(dot,index){
-
-dot.classList.toggle(
-"active",
-index===currentImage
-);
-
-});
-
+ track.style.transform="translateX(-"+(currentImage*100)+"%)";
+ dots.forEach((dot,index)=>dot.classList.toggle("active",index===currentImage));
 }
-
-
-window.nextImage=function(){
-
-currentImage++;
-
-if(currentImage>=4){
-currentImage=0;
-}
-
-updateGallery();
-
-};
-
-
-window.previousImage=function(){
-
-currentImage--;
-
-if(currentImage<0){
-currentImage=3;
-}
-
-updateGallery();
-
-};
-
-
-window.goToImage=function(index){
-
-currentImage=index;
-
-updateGallery();
-
-};
-
-
-/* =========================
-   SÜRÜŞDÜRMƏ
-========================= */
+window.nextImage=function(){currentImage=(currentImage+1)%4;updateGallery();};
+window.previousImage=function(){currentImage=(currentImage+3)%4;updateGallery();};
+window.goToImage=function(index){currentImage=index;updateGallery();};
 
 let touchStartX=0;
-
-track.addEventListener(
-"touchstart",
-function(e){
-
-touchStartX =
-e.changedTouches[0].screenX;
-
-}
-);
-
-
-track.addEventListener(
-"touchend",
-function(e){
-
-const touchEndX =
-e.changedTouches[0].screenX;
-
-
-if(
-touchStartX-touchEndX>50
-){
-
-nextImage();
-
-}
-
-
-if(
-touchEndX-touchStartX>50
-){
-
-previousImage();
-
-}
-
-}
-);
-
-
-/* =========================
-   ULDUZ
-========================= */
+track.addEventListener("touchstart",e=>{touchStartX=e.changedTouches[0].screenX;});
+track.addEventListener("touchend",e=>{
+ const endX=e.changedTouches[0].screenX;
+ if(touchStartX-endX>50)window.nextImage();
+ if(endX-touchStartX>50)window.previousImage();
+});
 
 let selectedStar=0;
-
-
 window.selectStar=function(star){
+ selectedStar=star;
+ document.querySelectorAll(".star-select span").forEach((el,index)=>el.classList.toggle("active",index<star));
+};
 
-selectedStar=star;
-
-
-document
-.querySelectorAll(
-".star-select span"
-)
-.forEach(
-function(el,index){
-
-el.classList.toggle(
-"active",
-index<star
-);
-
+document.getElementById("reviewPhoto").addEventListener("change",function(){
+ document.getElementById("photoName").innerText=this.files.length?this.files[0].name:"";
 });
 
+window.sendReview=async function(){
+ if(!product){alert("Məhsul tapılmadı.");return;}
+ const text=document.getElementById("reviewText").value.trim();
+ if(!selectedStar){alert("Ulduz seç.");return;}
+ if(!text){alert("Rəyini yaz.");return;}
+
+ const email=localStorage.getItem("userEmail")||"Anonim müştəri";
+ const name=localStorage.getItem("userName")||email;
+ const photoInput=document.getElementById("reviewPhoto");
+ const reviewRef=ref(database,"reviews/"+productId);
+
+ try{
+  let imageUrl="";
+  if(photoInput.files.length){
+   const file=photoInput.files[0];
+   const fileRef=storageRef(storage,"reviews/"+productId+"/"+Date.now()+"_"+file.name);
+   await uploadBytes(fileRef,file);
+   imageUrl=await getDownloadURL(fileRef);
+  }
+  await push(reviewRef,{
+   name:name,email:email,stars:selectedStar,text:text,image:imageUrl,time:Date.now()
+  });
+  alert("✅ Rəyiniz göndərildi!");
+  document.getElementById("reviewText").value="";
+  photoInput.value="";
+  document.getElementById("photoName").innerText="";
+  window.selectStar(0);
+ }catch(error){
+  console.error(error);
+  alert("Rəy göndərilmədi. Firebase ayarlarını yoxla.");
+ }
 };
-
-
-/* =========================
-   ŞƏKİL ADI
-========================= */
-
-document
-.getElementById("reviewPhoto")
-.addEventListener(
-"change",
-function(){
-
-if(this.files.length){
-
-document.getElementById(
-"photoName"
-).innerText =
-this.files[0].name;
-
-}
-
-}
-);
-
-
-/* =========================
-   RƏY GÖNDƏR
-========================= */
-
-window.sendReview=
-async function(){
-
-const text =
-document.getElementById(
-"reviewText"
-).value.trim();
-
-
-if(!selectedStar){
-
-alert("Ulduz seç.");
-
-return;
-
-}
-
-
-if(!text){
-
-alert("Rəyini yaz.");
-
-return;
-
-}
-
-
-const email =
-localStorage.getItem(
-"userEmail"
-)
-||
-"Anonim müştəri";
-
-
-const name =
-localStorage.getItem(
-"userName"
-)
-||
-email;
-
-
-const photoInput =
-document.getElementById(
-"reviewPhoto"
-);
-
-
-const reviewRef =
-ref(
-database,
-"reviews/"+productId
-);
-
-
-try{
-
-let imageUrl="";
-
-
-/* ŞƏKİL YÜKLƏ */
-
-if(photoInput.files.length){
-
-const file =
-photoInput.files[0];
-
-
-const fileName =
-Date.now()
-+
-"_"
-+
-file.name;
-
-
-const fileRef =
-storageRef(
-storage,
-"reviews/"
-+
-productId+
-"/"+
-fileName
-);
-
-
-await uploadBytes(
-fileRef,
-file
-);
-
-
-imageUrl =
-await getDownloadURL(
-fileRef
-);
-
-}
-
-
-/* RƏYİ YAZ */
-
-await push(
-reviewRef,
-{
-
-name:name,
-
-email:email,
-
-stars:selectedStar,
-
-text:text,
-
-image:imageUrl,
-
-time:Date.now()
-
-}
-);
-
-
-alert(
-"✅ Rəyiniz göndərildi!"
-);
-
-
-document.getElementById(
-"reviewText"
-).value="";
-
-
-photoInput.value="";
-
-
-document.getElementById(
-"photoName"
-).innerText="";
-
-
-selectStar(0);
-
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"Rəy göndərilmədi. Firebase ayarlarını yoxla."
-);
-
-}
-
-};
-
-
-/* =========================
-   RƏYLƏRİ OXU
-========================= */
-
-const reviewsRef =
-ref(
-database,
-"reviews/"+productId
-);
-
-
-onValue(
-reviewsRef,
-function(snapshot){
-
-const list =
-document.getElementById(
-"reviewsList"
-);
-
-list.innerHTML="";
-
-
-if(!snapshot.exists()){
-
-list.innerHTML =
-'<div class="no-reviews">Hələ rəy yoxdur.</div>';
-
-return;
-
-}
-
-
-const data =
-snapshot.val();
-
-
-Object
-.values(data)
-.reverse()
-.forEach(
-function(review){
-
-const item =
-document.createElement(
-"div"
-);
-
-item.className =
-"review-item";
-
-
-let stars="";
-
-for(
-let i=1;
-i<=5;
-i++
-){
-
-stars +=
-i<=Number(review.stars)
-?
-"★"
-:
-"☆";
-
-}
-
-
-item.innerHTML =
-
-'<div class="review-user">'
-+
-escapeHtml(
-review.name ||
-"Anonim"
-)
-+
-'</div>'+
-
-'<div class="review-stars">'
-+
-stars
-+
-'</div>'+
-
-'<div class="review-text">'
-+
-escapeHtml(
-review.text ||
-""
-)
-+
-'</div>'+
-
-(
-review.image
-?
-'<img class="review-image" src="'
-+
-review.image
-+
-'">'
-:
-""
-);
-
-
-list.appendChild(item);
-
-}
-
-);
-
-}
-);
-
-
-/* =========================
-   TƏHLÜKƏSİZ MƏTN
-========================= */
 
 function escapeHtml(text){
-
-return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
+ return String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
-
-/* =========================
-   SƏBƏT
-========================= */
+if(product){
+ const reviewsRef=ref(database,"reviews/"+productId);
+ onValue(reviewsRef,snapshot=>{
+  const list=document.getElementById("reviewsList");
+  list.innerHTML="";
+  if(!snapshot.exists()){
+   list.innerHTML='<div class="no-reviews">Hələ rəy yoxdur.</div>';
+   return;
+  }
+  Object.values(snapshot.val()).reverse().forEach(review=>{
+   const item=document.createElement("div");
+   item.className="review-item";
+   let stars="";
+   for(let i=1;i<=5;i++)stars+=i<=Number(review.stars)?"★":"☆";
+   item.innerHTML='<div class="review-user">'+escapeHtml(review.name||"Anonim")+'</div>'+
+    '<div class="review-stars">'+stars+'</div>'+
+    '<div class="review-text">'+escapeHtml(review.text||"")+'</div>'+
+    (review.image?'<img class="review-image" src="'+escapeHtml(review.image)+'" alt="Müştəri rəyi şəkli">':"");
+   list.appendChild(item);
+  });
+ });
+}else{
+ document.getElementById("reviewsList").innerHTML='<div class="no-reviews">Məhsul tapılmadığı üçün rəylər göstərilmir.</div>';
+}
 
 function getAccountKey(){
-
-const email =
-localStorage.getItem(
-"userEmail"
-);
-
-
-if(!email){
-
-return null;
-
+ const email=localStorage.getItem("userEmail");
+ if(!email)return null;
+ return email.toLowerCase().trim().replace(/[^a-z0-9]/g,"_");
 }
 
-
-return email
-.toLowerCase()
-.trim()
-.replace(
-/[^a-z0-9]/g,
-"_"
-);
-
-}
-
-
-window.addCurrentProduct=
-function(){
-
-const key =
-getAccountKey();
-
-
-if(!key){
-
-alert(
-"Əvvəlcə hesabına daxil ol."
-);
-
-window.location.href =
-"kent.html";
-
-return;
-
-}
-
-
-if(!product){
-
-alert(
-"Məhsul tapılmadı."
-);
-
-return;
-
-}
-
-
-let cart=[];
-
-
-try{
-
-cart =
-JSON.parse(
-localStorage.getItem(
-"cart_"+key
-)
-)
-||
-[];
-
-}catch(error){
-
-cart=[];
-
-}
-
-
-const existing =
-cart.find(
-function(item){
-
-return item.productId===
-productId;
-
-}
-);
-
-
-if(existing){
-
-existing.quantity =
-(Number(
-existing.quantity
-)||1)+1;
-
-}else{
-
-cart.push({
-
-productId:productId,
-
-name:product.name,
-
-price:product.price,
-
-image:product.images[0],
-
-quantity:1
-
-});
-
-}
-
-
-localStorage.setItem(
-"cart_"+key,
-JSON.stringify(cart)
-);
-
-
-alert(
-"✅ "+
-product.name+
-" səbətə əlavə edildi!"
-);
-
+window.addCurrentProduct=function(){
+ const key=getAccountKey();
+ if(!key){
+  alert("Əvvəlcə hesabına daxil ol.");
+  window.location.href="kent.html";
+  return;
+ }
+ if(!product){
+  alert("Məhsul tapılmadı.");
+  return;
+ }
+ let cart=[];
+ try{cart=JSON.parse(localStorage.getItem("cart_"+key)||"[]")||[];}catch(e){}
+ const existing=cart.find(item=>String(item.productId||item.id)===String(productId));
+ if(existing){
+  existing.quantity=(Number(existing.quantity)||1)+1;
+ }else{
+  cart.push({
+   productId:productId,
+   id:productId,
+   name:product.name,
+   price:Number(product.price),
+   image:product.images[0],
+   quantity:1
+  });
+ }
+ localStorage.setItem("cart_"+key,JSON.stringify(cart));
+ alert("✅ "+product.name+" səbətə əlavə edildi!");
 };
-
 </script>
-
 </body>
 </html>
