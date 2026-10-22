@@ -30,7 +30,7 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .stars{color:#e5a91d;font-size:12px;margin-top:5px}
 .price{font-size:21px;font-weight:bold;color:#263b2b;margin-top:9px}
 .price small{font-size:13px}
-.cart{display:block;width:calc(100% - 18px);background:#263b2b;color:white;text-align:center;padding:12px;margin:9px;border:0;border-radius:12px;text-decoration:none;font-size:13px;cursor:pointer}
+.cart{display:block;width:calc(100% - 18px);background:#263b2b;color:white;text-align:center;padding:12px;margin:9px;border:0;border-radius:12px;font-size:13px;cursor:pointer}
 #admin{display:none;background:white;margin:16px 12px;padding:16px;border-radius:18px;box-shadow:0 3px 12px #0001}
 #admin h2{font-size:20px;color:#263b2b;margin-bottom:12px}
 #admin input,#admin textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:15px}
@@ -83,7 +83,7 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
   <input id="price" type="number" min="0.01" step="0.01" placeholder="3.80">
   <label>Məhsul haqqında</label>
   <textarea id="description" placeholder="Məhsulun təsviri"></textarea>
-  <button onclick="addProduct()">Məhsulu əlavə et</button>
+  <button type="button" onclick="addProduct()">Məhsulu əlavə et</button>
   <div id="status"></div>
 </section>
 
@@ -130,9 +130,13 @@ function openAdmin(){
 imageInput.addEventListener("change",()=>{
  const file=imageInput.files[0];
  if(!file)return;
- if(!file.type.startsWith("image/")){alert("Şəkil faylı seç.");return;}
+ if(!file.type.startsWith("image/")){
+  alert("Şəkil faylı seç.");
+  imageInput.value="";
+  return;
+ }
  if(file.size>300*1024){
-  alert("Zəhmət olmasa 300 KB-dan kiçik şəkil seç.");
+  alert("Şəkil 300 KB-dan kiçik olmalıdır.");
   imageInput.value="";
   return;
  }
@@ -168,7 +172,7 @@ function addProduct(){
  try{
   localStorage.setItem(PRODUCTS_KEY,JSON.stringify(saved));
  }catch(e){
-  status.textContent="Yaddaş doludur. Köhnə məhsul şəkillərini kiçilt və yenidən yoxla.";
+  status.textContent="Brauzer yaddaşı doludur. Şəkli kiçilt və ya əvvəlki əlavə məhsulların şəkillərini azalt.";
   return;
  }
 
@@ -182,6 +186,7 @@ function addProduct(){
  document.getElementById("preview").hidden=true;
 }
 
+/* Səbət açarı sebet.html ilə eyni olmalıdır */
 function getAccountCartKey(){
  const email=(localStorage.getItem("userEmail")||"").trim().toLowerCase();
  if(!email)return null;
@@ -208,17 +213,21 @@ function addToCart(productId){
 
  let cart=[];
  try{
-  cart=JSON.parse(localStorage.getItem(key)||"[]");
-  if(!Array.isArray(cart))cart=[];
- }catch(e){cart=[];}
+  const old=JSON.parse(localStorage.getItem(key)||"[]");
+  if(Array.isArray(old))cart=old;
+ }catch(e){
+  cart=[];
+ }
 
  const existing=cart.find(item=>String(item.id)===String(p.id));
 
  if(existing){
   existing.quantity=(Number(existing.quantity)||1)+1;
+  existing.name=p.name;
+  existing.price=Number(p.price);
+  /* Şəkli təkrar saxlamırıq, mövcud şəkil yolunu saxlayırıq */
+  existing.image=p.image;
  }else{
-  /* Şəkilin base64 məlumatını səbətə köçürmürük;
-     yalnız şəkil faylının yolunu saxlayırıq. */
   cart.push({
    id:p.id,
    name:p.name,
@@ -230,16 +239,11 @@ function addToCart(productId){
 
  try{
   localStorage.setItem(key,JSON.stringify(cart));
-  const saved=JSON.parse(localStorage.getItem(key)||"[]");
-  if(!Array.isArray(saved)||!saved.some(item=>String(item.id)===String(p.id))){
-   throw new Error("Yadda saxlama alınmadı");
-  }
  }catch(e){
-  alert("Səbət yadda saxlanmadı. Brauzerin yaddaşı dolu ola bilər.");
+  alert("Səbət yadda saxlanmadı. Brauzerin yaddaşı doludur. Əlavə məhsul şəkilləri yaddaşı doldurmuş ola bilər.");
   return;
  }
 
- alert(p.name+" səbətə əlavə edildi!");
  window.location.href="sebet.html";
 }
 
