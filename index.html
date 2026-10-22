@@ -1,667 +1,308 @@
+
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Kənd məhsulları</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-    background:#f4f1ea;
-    color:#252525;
-    padding-bottom:80px;
-}
-
-.top{
-    background:#263b2b;
-    padding:15px 14px 13px;
-    border-radius:0 0 24px 24px;
-    box-shadow:0 4px 15px rgba(0,0,0,.18);
-}
-
-.logo-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:14px;
-}
-
-.logo{
-    color:white;
-    font-size:24px;
-    font-weight:bold;
-}
-
-.logo span{
-    color:#e8b84b;
-}
-
-.profile{
-    width:43px;
-    height:43px;
-    border-radius:50%;
-    background:#e8b84b;
-    color:#263b2b;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-decoration:none;
-    font-size:20px;
-}
-
-.search{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-.search-box{
-    flex:1;
-    height:47px;
-    background:white;
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    padding:0 14px;
-}
-
-.search-box i{
-    color:#263b2b;
-    font-size:19px;
-    margin-right:8px;
-}
-
-.search-box a{
-    width:100%;
-    text-decoration:none;
-    color:#777;
-}
-
-.search-text{
-    font-size:15px;
-}
-
-.camera{
-    width:47px;
-    height:47px;
-    border-radius:15px;
-    background:#e8b84b;
-    color:#263b2b;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:19px;
-}
-
-.categories{
-    display:flex;
-    gap:9px;
-    overflow-x:auto;
-    padding:15px 2px 2px;
-    white-space:nowrap;
-}
-
-.categories::-webkit-scrollbar{
-    display:none;
-}
-
-.category{
-    flex:none;
-    padding:9px 14px;
-    border-radius:20px;
-    background:rgba(255,255,255,.12);
-    color:#e9eee9;
-    font-size:14px;
-    font-weight:bold;
-}
-
-.category.active{
-    background:#e8b84b;
-    color:#263b2b;
-}
-
-.hero{
-    margin:16px 14px;
-    min-height:150px;
-    padding:22px;
-    border-radius:24px;
-    background:#e8b84b;
-    position:relative;
-    overflow:hidden;
-}
-
-.hero h1{
-    color:#263b2b;
-    font-size:27px;
-    line-height:1.15;
-    max-width:230px;
-}
-
-.hero p{
-    color:#435744;
-    font-size:14px;
-    margin-top:9px;
-    max-width:235px;
-    line-height:1.4;
-}
-
-.hero-button{
-    display:inline-block;
-    margin-top:13px;
-    background:#263b2b;
-    color:white;
-    padding:9px 14px;
-    border-radius:20px;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.hero-circle{
-    position:absolute;
-    right:-50px;
-    bottom:-65px;
-    width:190px;
-    height:190px;
-    border-radius:50%;
-    background:rgba(255,255,255,.2);
-}
-
-.banner{
-    margin:0 14px 15px;
-    background:white;
-    border-radius:15px;
-    padding:14px;
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    overflow:hidden;
-    white-space:nowrap;
-    box-shadow:0 2px 9px rgba(0,0,0,.06);
-}
-
-.banner span{
-    color:#222;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.section{
-    padding:3px 15px 12px;
-}
-
-.section-title{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    font-size:22px;
-    font-weight:bold;
-}
-
-.section-title span{
-    font-size:12px;
-    color:#777;
-    font-weight:normal;
-}
-
-.products{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:12px;
-    padding:0 12px;
-}
-
-.card{
-    background:white;
-    border-radius:20px;
-    overflow:hidden;
-    position:relative;
-    box-shadow:0 3px 12px rgba(0,0,0,.07);
-}
-
-.card-image{
-    width:100%;
-    height:185px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#faf9f5;
-}
-
-.card-image img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
-
-.card-info{
-    padding:11px;
-}
-
-.card-name{
-    font-size:16px;
-    min-height:38px;
-    line-height:19px;
-    font-weight:500;
-}
-
-.stars{
-    margin-top:5px;
-    font-size:12px;
-    color:#e5a91d;
-}
-
-.sold{
-    color:#777;
-    margin-left:4px;
-}
-
-.price{
-    margin-top:9px;
-    font-size:21px;
-    font-weight:bold;
-    color:#263b2b;
-}
-
-.price small{
-    font-size:13px;
-}
-
-.cart-btn{
-    position:absolute;
-    right:9px;
-    bottom:9px;
-    width:40px;
-    height:40px;
-    border-radius:13px;
-    background:#263b2b;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-decoration:none;
-    font-size:17px;
-}
-
-.support{
-    position:fixed;
-    right:15px;
-    bottom:88px;
-    width:56px;
-    height:56px;
-    border-radius:50%;
-    background:#e8b84b;
-    color:#263b2b;
-    box-shadow:0 4px 15px rgba(0,0,0,.22);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-    text-decoration:none;
-    z-index:2000;
-}
-
-.bottom{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    height:70px;
-    background:white;
-    border-top:1px solid #ddd;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    z-index:1500;
-    box-shadow:0 -3px 15px rgba(0,0,0,.08);
-}
-
-.bottom a{
-    text-decoration:none;
-    color:#69716b;
-    text-align:center;
-    font-size:11px;
-}
-
-.bottom i{
-    display:block;
-    font-size:21px;
-    margin-bottom:4px;
-}
-
-.bottom .home{
-    color:#263b2b;
-    font-weight:bold;
-}
-
-@media(max-width:380px){
-
-    .hero{
-        margin:13px 10px;
-    }
-
-    .card-image{
-        height:165px;
-    }
-
-    .products{
-        gap:9px;
-        padding:0 9px;
-    }
-
-    .section{
-        padding-left:12px;
-        padding-right:12px;
-    }
-
-}
-
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{background:#f4f1ea;color:#252525;padding-bottom:80px}
+.top{background:#263b2b;padding:15px 14px 13px;border-radius:0 0 24px 24px;box-shadow:0 4px 15px #0002}
+.logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.logo{color:white;font-size:24px;font-weight:bold}
+.logo span{color:#e8b84b}
+.profile{width:43px;height:43px;border-radius:50%;background:#e8b84b;color:#263b2b;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:20px}
+.search{display:flex;align-items:center;gap:8px}
+.search-box{flex:1;height:47px;background:white;border-radius:15px;display:flex;align-items:center;padding:0 14px}
+.search-box i{color:#263b2b;font-size:19px;margin-right:8px}
+.search-box a{width:100%;text-decoration:none;color:#777}
+.search-text{font-size:15px}
+.camera{width:47px;height:47px;border-radius:15px;background:#e8b84b;color:#263b2b;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer}
+.categories{display:flex;gap:9px;overflow-x:auto;padding:15px 2px 2px;white-space:nowrap}
+.categories::-webkit-scrollbar{display:none}
+.category{flex:none;padding:9px 14px;border-radius:20px;background:#ffffff1f;color:#e9eee9;font-size:14px;font-weight:bold}
+.category.active{background:#e8b84b;color:#263b2b}
+.hero{margin:16px 14px;min-height:150px;padding:22px;border-radius:24px;background:#e8b84b;position:relative;overflow:hidden}
+.hero h1{color:#263b2b;font-size:27px;line-height:1.15;max-width:230px}
+.hero p{color:#435744;font-size:14px;margin-top:9px;max-width:235px;line-height:1.4}
+.hero-button{display:inline-block;margin-top:13px;background:#263b2b;color:white;padding:9px 14px;border-radius:20px;font-size:13px;font-weight:bold}
+.hero-circle{position:absolute;right:-50px;bottom:-65px;width:190px;height:190px;border-radius:50%;background:#ffffff33}
+.banner{margin:0 14px 15px;background:white;border-radius:15px;padding:14px;display:flex;justify-content:space-between;gap:12px;overflow:hidden;white-space:nowrap;box-shadow:0 2px 9px #0001}
+.banner span{color:#222;font-size:13px;font-weight:bold}
+.section{padding:3px 15px 12px}
+.section-title{display:flex;align-items:center;justify-content:space-between;font-size:22px;font-weight:bold}
+.section-title span{font-size:12px;color:#777;font-weight:normal}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 12px}
+.card{background:white;border-radius:20px;overflow:hidden;position:relative;box-shadow:0 3px 12px #0001}
+.card-image{width:100%;height:185px;display:flex;align-items:center;justify-content:center;background:#faf9f5}
+.card-image img{width:100%;height:100%;object-fit:contain}
+.card-info{padding:11px}
+.card-name{font-size:16px;min-height:38px;line-height:19px;font-weight:500}
+.stars{margin-top:5px;font-size:12px;color:#e5a91d}
+.sold{color:#777;margin-left:4px}
+.price{margin-top:9px;font-size:21px;font-weight:bold;color:#263b2b}
+.price small{font-size:13px}
+.cart-btn{position:absolute;right:9px;bottom:9px;width:40px;height:40px;border-radius:13px;background:#263b2b;color:white;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:17px}
+.support{position:fixed;right:15px;bottom:88px;width:56px;height:56px;border-radius:50%;background:#e8b84b;color:#263b2b;box-shadow:0 4px 15px #0004;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;z-index:2000}
+.bottom{position:fixed;left:0;right:0;bottom:0;height:70px;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;align-items:center;z-index:1500;box-shadow:0 -3px 15px #0001}
+.bottom a{text-decoration:none;color:#69716b;text-align:center;font-size:11px}
+.bottom i{display:block;font-size:21px;margin-bottom:4px}
+.bottom .home{color:#263b2b;font-weight:bold}
+#adminPhotoBox{display:none;background:white;margin:16px 12px;padding:15px;border-radius:16px;box-shadow:0 2px 9px #0001}
+#adminPhotoBox h2{font-size:19px;color:#263b2b;margin-bottom:10px}
+#adminPhotoBox input{width:100%;margin:10px 0}
+.action-btn{border:0;border-radius:10px;background:#263b2b;color:white;padding:12px 15px;font-weight:bold;cursor:pointer;margin:5px 0}
+#photoStatus{font-size:13px;line-height:1.5;margin-top:8px;overflow-wrap:anywhere}
+.public-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 12px;margin-bottom:18px}
+.public-photo{background:white;border-radius:14px;overflow:hidden}
+.public-photo img{width:100%;height:180px;object-fit:contain;background:#faf9f5}
+.public-photo p{padding:8px;font-size:13px}
+@media(max-width:380px){.hero{margin:13px 10px}.card-image{height:165px}.products{gap:9px;padding:0 9px}.section{padding-left:12px;padding-right:12px}}
 </style>
-
 </head>
-
 <body>
 
-
 <div class="top">
-
-    <div class="logo-row">
-
-        <div class="logo">
-            Kənd <span>məhsulları</span>
-        </div>
-
-        <a href="profile.html" class="profile">
-            <i class="fa-regular fa-user"></i>
-        </a>
-
+  <div class="logo-row">
+    <div class="logo">Kənd <span>məhsulları</span></div>
+    <a href="profile.html" class="profile"><i class="fa-regular fa-user"></i></a>
+  </div>
+  <div class="search">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <a href="axtar.html"><span class="search-text">Nə axtarırsınız?</span></a>
     </div>
-
-
-    <div class="search">
-
-        <div class="search-box">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <a href="axtar.html">
-
-                <span class="search-text">
-                    Nə axtarırsınız?
-                </span>
-
-            </a>
-
-        </div>
-
-        <i class="fa-solid fa-camera camera"></i>
-
-    </div>
-
-
-    <div class="categories">
-
-        <div class="category active">
-            Hamısı
-        </div>
-
-        <div class="category">
-            Qadın
-        </div>
-
-        <div class="category">
-            Kişi
-        </div>
-
-        <div class="category">
-            Ev
-        </div>
-
-        <div class="category">
-            Zinət əşyaları
-        </div>
-
-        <div class="category">
-            İdman
-        </div>
-
-    </div>
-
+    <label class="camera" for="photoFile" title="Şəkil seç">
+      <i class="fa-solid fa-camera"></i>
+    </label>
+  </div>
+  <div class="categories">
+    <div class="category active">Hamısı</div>
+    <div class="category">Qadın</div>
+    <div class="category">Kişi</div>
+    <div class="category">Ev</div>
+    <div class="category">Zinət əşyaları</div>
+    <div class="category">İdman</div>
+  </div>
 </div>
-
 
 <div class="hero">
-
-    <h1>
-        Bizdən birbaşa sizə 🌿
-    </h1>
-
-    <p>
-        Sevdiyin məhsulları
-        rahat və təhlükəsiz sifariş et.
-    </p>
-
-    <span class="hero-button">
-        20% çatdırılma endirimi
-    </span>
-
-    <div class="hero-circle"></div>
-
+  <h1>Bizdən birbaşa sizə 🌿</h1>
+  <p>Sevdiyin məhsulları rahat və təhlükəsiz sifariş et.</p>
+  <span class="hero-button">20% çatdırılma endirimi</span>
+  <div class="hero-circle"></div>
 </div>
-
 
 <div class="banner">
-
-    <span>
-        ✓ Çatdırılmada 20% endirim
-    </span>
-
-    <span>
-        ✓ 10% endirim
-    </span>
-
-    <span>
-        ›
-    </span>
-
+  <span>✓ Çatdırılmada 20% endirim</span>
+  <span>✓ 10% endirim</span>
+  <span>›</span>
 </div>
-
 
 <div class="section">
-
-    <div class="section-title">
-
-        <span style="font-size:22px;color:#252525;font-weight:bold;">
-            Məhsullar
-        </span>
-
-        <span>
-            ★ Ən çox satılan
-        </span>
-
-    </div>
-
+  <div class="section-title">
+    <span style="font-size:22px;color:#252525;font-weight:bold">Məhsullar</span>
+    <span>★ Ən çox satılan</span>
+  </div>
 </div>
-
 
 <div class="products">
-
-
-    <div class="card">
-
-        <a href="al.html?id=masin">
-
-            <div class="card-image">
-
-                <img
-                    src="foto.png"
-                    alt="Maşın"
-                >
-
-            </div>
-
-        </a>
-
-        <div class="card-info">
-
-            <div class="card-name">
-                Maşın oyuncaq
-            </div>
-
-            <div class="stars">
-
-                ★★★★★
-
-                <span class="sold">
-                    100+ satılıb
-                </span>
-
-            </div>
-
-            <div class="price">
-
-                3.80
-                <small>AZN</small>
-
-            </div>
-
-        </div>
-
-        <a
-            href="al.html?id=masin"
-            class="cart-btn"
-        >
-
-            <i class="fa-solid fa-cart-plus"></i>
-
-        </a>
-
+  <div class="card">
+    <a href="al.html?id=masin">
+      <div class="card-image"><img src="foto.png" alt="Maşın"></div>
+    </a>
+    <div class="card-info">
+      <div class="card-name">Maşın oyuncaq</div>
+      <div class="stars">★★★★★ <span class="sold">100+ satılıb</span></div>
+      <div class="price">3.80 <small>AZN</small></div>
     </div>
+    <a href="al.html?id=masin" class="cart-btn"><i class="fa-solid fa-cart-plus"></i></a>
+  </div>
 
-
-    <div class="card">
-
-        <a href="al.html?id=tato">
-
-            <div class="card-image">
-
-                <img
-                    src="1.png"
-                    alt="Tato"
-                >
-
-            </div>
-
-        </a>
-
-        <div class="card-info">
-
-            <div class="card-name">
-                Tato
-            </div>
-
-            <div class="stars">
-
-                ★★★★★
-
-                <span class="sold">
-                    100+ satılıb
-                </span>
-
-            </div>
-
-            <div class="price">
-
-                4.80
-                <small>AZN</small>
-
-            </div>
-
-        </div>
-
-        <a
-            href="al.html?id=tato"
-            class="cart-btn"
-        >
-
-            <i class="fa-solid fa-cart-plus"></i>
-
-        </a>
-
+  <div class="card">
+    <a href="al.html?id=tato">
+      <div class="card-image"><img src="1.png" alt="Tato"></div>
+    </a>
+    <div class="card-info">
+      <div class="card-name">Tato</div>
+      <div class="stars">★★★★★ <span class="sold">100+ satılıb</span></div>
+      <div class="price">4.80 <small>AZN</small></div>
     </div>
-
+    <a href="al.html?id=tato" class="cart-btn"><i class="fa-solid fa-cart-plus"></i></a>
+  </div>
 </div>
 
+<!-- İdarəçinin əlavə etdiyi şəkillər hamıya görünə bilər -->
+<div class="section" id="uploadedHeading" style="display:none">
+  <div class="section-title"><span style="font-size:22px;color:#252525;font-weight:bold">Yeni şəkillər</span></div>
+</div>
+<div class="public-photos" id="publicPhotos"></div>
 
-<a
-    href="bot.html"
-    class="support"
->
+<!-- İdarəçi paneli -->
+<section id="adminPhotoBox">
+  <h2><i class="fa-solid fa-camera"></i> Sayta şəkil əlavə et</h2>
+  <p>Telefonundan şəkil çək və ya qalereyadan seç.</p>
+  <input id="photoFile" type="file" accept="image/*" capture="environment">
+  <input id="photoCaption" type="text" maxlength="80" placeholder="Şəkil üçün ad (istəyə görə)">
+  <div id="photoPreview"></div>
+  <button class="action-btn" id="uploadPhotoBtn">Şəkli sayta əlavə et</button>
+  <div id="photoStatus"></div>
+</section>
 
-    <i class="fa-solid fa-comment"></i>
-
-</a>
-
+<a href="bot.html" class="support"><i class="fa-solid fa-comment"></i></a>
 
 <div class="bottom">
-
-    <a
-        href="index.html"
-        class="home"
-    >
-
-        <i class="fa-solid fa-house"></i>
-
-        Ana səhifə
-
-    </a>
-
-
-    <a href="axtar.html">
-
-        <i class="fa-solid fa-magnifying-glass"></i>
-
-        Axtar
-
-    </a>
-
-
-    <!-- SƏBƏT İNDİ PROFİLİN YERİNDƏ -->
-
-    <a href="sebet.html">
-
-        <i class="fa-solid fa-cart-shopping"></i>
-
-        Səbət
-
-    </a>
-
-
-    <!-- PROFİL İNDİ SƏBƏTİN YERİNDƏ -->
-
-    <a href="profile.html">
-
-        <i class="fa-regular fa-user"></i>
-
-        Profil
-
-    </a>
-
+  <a href="index.html" class="home"><i class="fa-solid fa-house"></i>Ana səhifə</a>
+  <a href="axtar.html"><i class="fa-solid fa-magnifying-glass"></i>Axtar</a>
+  <a href="sebet.html"><i class="fa-solid fa-cart-shopping"></i>Səbət</a>
+  <a href="profile.html"><i class="fa-regular fa-user"></i>Profil</a>
 </div>
 
+<script>
+const ADMIN_EMAIL = "amidh365@gmail.com";
+const DB_URL = "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com";
+const adminBox = document.getElementById("adminPhotoBox");
+const photoFile = document.getElementById("photoFile");
+const preview = document.getElementById("photoPreview");
+const statusBox = document.getElementById("photoStatus");
+const uploadBtn = document.getElementById("uploadPhotoBtn");
+let selectedImage = "";
+
+function currentEmail(){
+  return (localStorage.getItem("userEmail") || "").trim().toLowerCase();
+}
+
+if(currentEmail() === ADMIN_EMAIL){
+  adminBox.style.display = "block";
+}
+
+photoFile.addEventListener("change", async function(){
+  const file = this.files && this.files[0];
+  selectedImage = "";
+  preview.innerHTML = "";
+  statusBox.textContent = "";
+
+  if(!file) return;
+  if(!file.type.startsWith("image/")){
+    statusBox.textContent = "Yalnız şəkil seçmək olar.";
+    return;
+  }
+
+  try{
+    selectedImage = await compressImage(file);
+    const img = document.createElement("img");
+    img.src = selectedImage;
+    img.style.cssText = "width:100%;max-height:300px;object-fit:contain;border-radius:10px;background:#f4f1ea";
+    preview.appendChild(img);
+    statusBox.textContent = "Şəkil hazırdır. Sayta əlavə etmək üçün düyməyə bas.";
+  }catch(e){
+    statusBox.textContent = "Şəkli oxumaq olmadı. Başqa şəkil yoxla.";
+  }
+});
+
+function compressImage(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = ()=>{
+      const image = new Image();
+      image.onerror = reject;
+      image.onload = ()=>{
+        const max = 900;
+        const ratio = Math.min(1,max/Math.max(image.width,image.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(image.width*ratio);
+        canvas.height = Math.round(image.height*ratio);
+        canvas.getContext("2d").drawImage(image,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL("image/jpeg",0.65));
+      };
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function loadPhotos(){
+  const heading = document.getElementById("uploadedHeading");
+  const container = document.getElementById("publicPhotos");
+  try{
+    const response = await fetch(DB_URL + "/sitePhotos.json");
+    if(!response.ok) throw new Error("Oxuma icazəsi yoxdur");
+    const data = await response.json();
+    container.innerHTML = "";
+    const photos = data ? Object.entries(data).reverse() : [];
+
+    if(photos.length){
+      heading.style.display = "block";
+      photos.forEach(([id,item])=>{
+        if(!item || !item.image) return;
+        const card = document.createElement("div");
+        card.className = "public-photo";
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.caption || "Yeni şəkil";
+        const caption = document.createElement("p");
+        caption.textContent = item.caption || "Yeni şəkil";
+        card.append(img,caption);
+        container.appendChild(card);
+      });
+    }else{
+      heading.style.display = "none";
+    }
+  }catch(error){
+    console.error("Şəkilləri oxuma xətası:",error);
+  }
+}
+
+uploadBtn.addEventListener("click", async ()=>{
+  if(currentEmail() !== ADMIN_EMAIL){
+    statusBox.textContent = "Bu bölmə yalnız idarəçi hesabı üçündür.";
+    return;
+  }
+  if(!selectedImage){
+    statusBox.textContent = "Əvvəl şəkil çək və ya seç.";
+    return;
+  }
+  if(selectedImage.length > 900000){
+    statusBox.textContent = "Şəkil böyükdür. Daha kiçik şəkil seç.";
+    return;
+  }
+
+  uploadBtn.disabled = true;
+  statusBox.textContent = "Şəkil əlavə olunur...";
+
+  try{
+    const response = await fetch(DB_URL + "/sitePhotos.json",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        image:selectedImage,
+        caption:document.getElementById("photoCaption").value.trim(),
+        createdAt:Date.now()
+      })
+    });
+
+    if(!response.ok) throw new Error("Firebase yazma icazəsi vermədi.");
+    const result = await response.json();
+    if(!result || !result.name) throw new Error("Şəkil yadda saxlanmadı.");
+
+    statusBox.textContent = "Şəkil yadda saxlandı. Saytı yenilə və yoxla.";
+    photoFile.value = "";
+    document.getElementById("photoCaption").value = "";
+    selectedImage = "";
+    preview.innerHTML = "";
+    await loadPhotos();
+  }catch(error){
+    statusBox.textContent = "Yükləmə alınmadı. Firebase Realtime Database qaydaları yazmağa icazə verməyə bilər. Xəta: " + error.message;
+  }finally{
+    uploadBtn.disabled = false;
+  }
+});
+
+loadPhotos();
+</script>
 
 </body>
 </html>
