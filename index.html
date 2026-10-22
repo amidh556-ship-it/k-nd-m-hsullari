@@ -30,6 +30,7 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .price{font-size:21px;font-weight:bold;color:#263b2b;margin-top:9px}
 .price small{font-size:13px}
 .cart{display:block;width:calc(100% - 18px);background:#263b2b;color:white;text-align:center;padding:12px;margin:9px;border:0;border-radius:12px;font-size:13px;cursor:pointer}
+.delete-product{display:none;width:calc(100% - 18px);background:#c62828;color:white;text-align:center;padding:11px;margin:0 9px 10px;border:0;border-radius:12px;font-size:14px;font-weight:bold;cursor:pointer}
 #admin{display:none;background:white;margin:16px 12px;padding:16px;border-radius:18px;box-shadow:0 3px 12px #0001}
 #admin h2{font-size:20px;color:#263b2b;margin-bottom:12px}
 #admin input,#admin textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:15px}
@@ -105,6 +106,10 @@ const defaultProducts=[
  {id:"tato",name:"Tato",price:4.80,description:"Tato",image:"1.png"}
 ];
 
+function isAdmin(){
+ return (localStorage.getItem("userEmail")||"").trim().toLowerCase()===ADMIN_EMAIL;
+}
+
 function getSavedProducts(){
  try{
   const data=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||"[]");
@@ -117,7 +122,7 @@ function getAllProducts(){
 }
 
 function openAdmin(){
- if((localStorage.getItem("userEmail")||"").trim().toLowerCase()!==ADMIN_EMAIL){
+ if(!isAdmin()){
   alert("Məhsul əlavə etmək üçün idarəçi hesabına daxil ol.");
   return;
  }
@@ -138,10 +143,8 @@ imageInput.addEventListener("change",()=>{
  }
 
  const reader=new FileReader();
-
  reader.onload=()=>{
   const img=new Image();
-
   img.onload=()=>{
    const canvas=document.createElement("canvas");
    const maxSize=500;
@@ -160,26 +163,21 @@ imageInput.addEventListener("change",()=>{
    canvas.height=height;
    const ctx=canvas.getContext("2d");
    ctx.drawImage(img,0,0,width,height);
-
    selectedImage=canvas.toDataURL("image/jpeg",0.55);
-
    const preview=document.getElementById("preview");
    preview.src=selectedImage;
    preview.hidden=false;
   };
-
   img.onerror=()=>{
    document.getElementById("status").textContent="Şəkli oxumaq olmadı. Başqa şəkil seç.";
   };
-
   img.src=reader.result;
  };
-
  reader.readAsDataURL(file);
 });
 
 function addProduct(){
- if((localStorage.getItem("userEmail")||"").trim().toLowerCase()!==ADMIN_EMAIL){
+ if(!isAdmin()){
   alert("İdarəçi hesabı ilə daxil olmalısan.");
   return;
  }
@@ -200,19 +198,46 @@ function addProduct(){
  try{
   localStorage.setItem(PRODUCTS_KEY,JSON.stringify(saved));
  }catch(e){
-  status.textContent="Yaddaş doludur. Brauzer ayarlarından bu saytın məlumatlarını təmizlə, sonra məhsulu yenidən əlavə et.";
+  status.textContent="Yaddaş doludur. Brauzer yaddaşını yoxla və yenidən cəhd et.";
   return;
  }
 
  renderProducts();
  status.textContent="Məhsul əlavə edildi.";
-
  document.getElementById("name").value="";
  document.getElementById("price").value="";
  document.getElementById("description").value="";
  imageInput.value="";
  selectedImage="";
  document.getElementById("preview").hidden=true;
+}
+
+/* YALNIZ ADMININ ƏLAVƏ ETDİYİ MƏHSULU SİL */
+function deleteProduct(productId){
+ if(!isAdmin()){
+  alert("Məhsulu yalnız idarəçi silə bilər.");
+  return;
+ }
+
+ const saved=getSavedProducts();
+ const chosen=saved.find(p=>String(p.id)===String(productId));
+
+ if(!chosen){
+  alert("Bu məhsul admin paneldə əlavə olunan məhsullar arasında tapılmadı.");
+  return;
+ }
+
+ if(!confirm('"' + chosen.name + '" məhsulunu silmək istəyirsən?'))return;
+
+ const updated=saved.filter(p=>String(p.id)!==String(productId));
+
+ try{
+  localStorage.setItem(PRODUCTS_KEY,JSON.stringify(updated));
+  renderProducts();
+  document.getElementById("status").textContent="Məhsul silindi: "+chosen.name;
+ }catch(e){
+  alert("Məhsulu silmək olmadı. Yenidən cəhd et.");
+ }
 }
 
 function getAccountCartKey(){
@@ -240,13 +265,10 @@ function addToCart(productId){
  if(!key)return;
 
  let cart=[];
-
  try{
   const old=JSON.parse(localStorage.getItem(key)||"[]");
   if(Array.isArray(old))cart=old;
- }catch(e){
-  cart=[];
- }
+ }catch(e){cart=[]}
 
  const existing=cart.find(item=>String(item.id)===String(p.id));
 
@@ -256,19 +278,13 @@ function addToCart(productId){
   existing.price=Number(p.price);
   existing.image=p.image;
  }else{
-  cart.push({
-   id:p.id,
-   name:p.name,
-   price:Number(p.price),
-   image:p.image,
-   quantity:1
-  });
+  cart.push({id:p.id,name:p.name,price:Number(p.price),image:p.image,quantity:1});
  }
 
  try{
   localStorage.setItem(key,JSON.stringify(cart));
  }catch(e){
-  alert("Səbət yadda saxlanmadı. Brauzer yaddaşı doludur. Saytın yaddaşını təmizlə və yenidən yoxla.");
+  alert("Səbət yadda saxlanmadı. Brauzer yaddaşı doludur.");
   return;
  }
 
@@ -328,6 +344,18 @@ function renderProducts(){
   button.addEventListener("click",()=>addToCart(p.id));
 
   card.append(link,info,button);
+
+  /* Sil düyməsi yalnız adminə və əlavə etdiyi məhsullara görünür */
+  if(isAdmin()&&getSavedProducts().some(saved=>String(saved.id)===String(p.id))){
+   const del=document.createElement("button");
+   del.type="button";
+   del.className="delete-product";
+   del.style.display="block";
+   del.innerHTML='🗑️ Sil';
+   del.addEventListener("click",()=>deleteProduct(p.id));
+   card.appendChild(del);
+  }
+
   container.appendChild(card);
  });
 }
