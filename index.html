@@ -1,310 +1,171 @@
-
 <!DOCTYPE html>
 <html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kənd məhsulları</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<title>Səbətim</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#f4f1ea;color:#252525;padding-bottom:85px}
-header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
-.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.logo{font-size:23px;font-weight:bold}.logo span{color:#e8b84b}
-.profile,.plus{width:44px;height:44px;border-radius:14px;background:#e8b84b;color:#263b2b;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:21px;border:0}
-.search{display:flex;gap:9px}
-.search a{background:white;color:#777;border-radius:13px;padding:15px;text-decoration:none;flex:1}
-.categories{display:flex;gap:8px;overflow:auto;padding-top:14px}
-.category{padding:9px 13px;border-radius:20px;background:#ffffff20;white-space:nowrap}
-.category:first-child{background:#e8b84b;color:#263b2b}
-.hero{background:#e8b84b;border-radius:22px;margin:15px;padding:22px}
-.hero h1{font-size:26px;color:#263b2b}.hero p{margin-top:9px;line-height:1.5}
-.discount{margin:15px;background:white;padding:14px;border-radius:13px;font-weight:bold}
-.heading{padding:12px 15px;font-size:22px;font-weight:bold}
-.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 12px}
-.card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 3px 12px #0001;position:relative}
-.photo{height:180px;background:#faf9f5;display:flex;align-items:center;justify-content:center}
-.photo img{width:100%;height:100%;object-fit:contain}
-.info{padding:11px}.name{font-size:16px;min-height:38px;line-height:20px}
-.stars{color:#e5a91d;font-size:12px;margin-top:5px}
-.price{font-size:21px;font-weight:bold;color:#263b2b;margin-top:9px}
-.price small{font-size:13px}
-.cart{display:block;width:calc(100% - 18px);background:#263b2b;color:white;text-align:center;padding:12px;margin:9px;border:0;border-radius:12px;font-size:13px;cursor:pointer}
-#admin{display:none;background:white;margin:16px 12px;padding:16px;border-radius:18px;box-shadow:0 3px 12px #0001}
-#admin h2{font-size:20px;color:#263b2b;margin-bottom:12px}
-#admin input,#admin textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:15px}
-#admin button{padding:12px 15px;background:#263b2b;color:white;border:0;border-radius:10px;font-weight:bold;margin:4px 0}
-#preview{width:100%;max-height:230px;object-fit:contain;background:#f4f1ea;border-radius:10px}
-#status{font-size:13px;line-height:1.5;margin-top:8px}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:70px;background:white;display:flex;justify-content:space-around;align-items:center;box-shadow:0 -2px 10px #0001}
-.bottom a{text-decoration:none;text-align:center;color:#69716b;font-size:11px}
-.bottom i{display:block;font-size:21px;margin-bottom:5px}
-.support{position:fixed;right:14px;bottom:85px;background:#e8b84b;color:#263b2b;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:22px}
-@media(max-width:380px){.photo{height:155px}.products{gap:8px;padding:0 8px}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+.container{max-width:600px;margin:auto;padding:15px}
+h1{background:white;padding:20px;margin:0 0 12px;border-radius:10px}
+.cart-item{background:white;margin-bottom:10px;padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center}
+.cart-item img{width:90px;height:90px;object-fit:contain;border-radius:8px;background:#fafafa}
+.info{flex:1;min-width:0}
+.name{font-size:17px;font-weight:bold;overflow-wrap:anywhere}
+.price{margin-top:6px;color:#2e7d32;font-weight:bold}
+.quantity{display:flex;align-items:center;gap:10px;margin-top:10px}
+.quantity button{width:34px;height:34px;border:0;border-radius:7px;background:#eee;font-size:21px}
+.delete{margin-top:9px;padding:8px 12px;border:0;border-radius:7px;background:#e53935;color:white}
+.total{background:white;margin-top:15px;padding:18px;border-radius:10px;font-size:20px;font-weight:bold}
+.order{display:block;background:#2e7d32;color:white;text-align:center;padding:16px;margin-top:12px;border-radius:9px;text-decoration:none;font-weight:bold}
+.empty{background:white;padding:35px 15px;text-align:center;border-radius:10px;font-size:18px}
+.back{display:block;text-align:center;padding:20px;color:#222;text-decoration:none}
+.login-warning{background:white;padding:25px;text-align:center;border-radius:10px}
+.login-warning a{display:block;margin-top:15px;padding:14px;background:#2e7d32;color:white;text-decoration:none;border-radius:8px}
 </style>
 </head>
 <body>
-
-<header>
-  <div class="head">
-    <div class="logo">Kənd <span>məhsulları</span></div>
-    <a class="profile" href="profile.html"><i class="fa-regular fa-user"></i></a>
-  </div>
-  <div class="search">
-    <a href="axtar.html"><i class="fa-solid fa-magnifying-glass"></i> Nə axtarırsınız?</a>
-    <button class="plus" onclick="openAdmin()" aria-label="Məhsul əlavə et">+</button>
-  </div>
-  <div class="categories">
-    <div class="category">Hamısı</div><div class="category">Qadın</div>
-    <div class="category">Kişi</div><div class="category">Ev</div>
-    <div class="category">Zinət əşyaları</div><div class="category">İdman</div>
-  </div>
-</header>
-
-<div class="hero">
-  <h1>Bizdən birbaşa sizə 🌿</h1>
-  <p>Sevdiyin məhsulları rahat və təhlükəsiz sifariş et.</p>
-  <p><b>20% çatdırılma endirimi</b></p>
+<div class="container">
+<h1>🛒 Səbətim</h1>
+<div id="cart"></div>
+<div class="total">Ümumi: <span id="total">0.00</span> AZN</div>
+<a id="orderButton" class="order" href="sifaris.html">📦 Sifariş et</a>
+<a class="back" href="index.html">← Alış-verişə qayıt</a>
 </div>
 
-<div class="discount">✓ Çatdırılmada 20% endirim　 ✓ 10% endirim</div>
-<div class="heading">Məhsullar</div>
-<div class="products" id="products"></div>
-
-<section id="admin">
-  <h2><i class="fa-solid fa-plus"></i> Yeni məhsul əlavə et</h2>
-  <label>Məhsulun şəkli</label>
-  <input type="file" id="image" accept="image/*" capture="environment">
-  <img id="preview" hidden alt="Şəkil önbaxışı">
-  <label>Məhsulun adı</label>
-  <input id="name" placeholder="Məsələn: Oyuncaq maşın">
-  <label>Qiymət (AZN)</label>
-  <input id="price" type="number" min="0.01" step="0.01" placeholder="3.80">
-  <label>Məhsul haqqında</label>
-  <textarea id="description" placeholder="Məhsulun təsviri"></textarea>
-  <button type="button" onclick="addProduct()">Məhsulu əlavə et</button>
-  <div id="status"></div>
-</section>
-
-<a href="bot.html" class="support"><i class="fa-solid fa-comment"></i></a>
-<nav class="bottom">
-  <a href="index.html"><i class="fa-solid fa-house"></i>Ana səhifə</a>
-  <a href="axtar.html"><i class="fa-solid fa-magnifying-glass"></i>Axtar</a>
-  <a href="sebet.html"><i class="fa-solid fa-cart-shopping"></i>Səbət</a>
-  <a href="profile.html"><i class="fa-regular fa-user"></i>Profil</a>
-</nav>
-
 <script>
-const ADMIN_EMAIL="amidh365@gmail.com";
-const PRODUCTS_KEY="myProducts";
-const imageInput=document.getElementById("image");
-let selectedImage="";
-
-const defaultProducts=[
- {id:"masin",name:"Maşın oyuncaq",price:3.80,description:"Oyuncaq maşın",image:"foto.png"},
- {id:"tato",name:"Tato",price:4.80,description:"Tato",image:"1.png"}
-];
-
-function getSavedProducts(){
- try{
-  const data=JSON.parse(localStorage.getItem(PRODUCTS_KEY)||"[]");
-  return Array.isArray(data)?data:[];
- }catch(e){return []}
-}
-
-function getAllProducts(){
- return [...defaultProducts,...getSavedProducts()];
-}
-
-function openAdmin(){
- if((localStorage.getItem("userEmail")||"").trim().toLowerCase()!==ADMIN_EMAIL){
-  alert("Məhsul əlavə etmək üçün idarəçi hesabına daxil ol.");
-  return;
- }
- const box=document.getElementById("admin");
- box.style.display=box.style.display==="block"?"none":"block";
- if(box.style.display==="block")box.scrollIntoView({behavior:"smooth"});
-}
-
-imageInput.addEventListener("change",()=>{
- const file=imageInput.files[0];
- if(!file)return;
- if(!file.type.startsWith("image/")){
-  alert("Şəkil faylı seç.");
-  imageInput.value="";
-  return;
- }
- if(file.size>300*1024){
-  alert("Şəkil 300 KB-dan kiçik olmalıdır.");
-  imageInput.value="";
-  return;
- }
- const reader=new FileReader();
- reader.onload=()=>{
-  selectedImage=reader.result;
-  const preview=document.getElementById("preview");
-  preview.src=selectedImage;
-  preview.hidden=false;
- };
- reader.readAsDataURL(file);
-});
-
-function addProduct(){
- if((localStorage.getItem("userEmail")||"").trim().toLowerCase()!==ADMIN_EMAIL){
-  alert("İdarəçi hesabı ilə daxil olmalısan.");
-  return;
- }
-
- const name=document.getElementById("name").value.trim();
- const price=Number(document.getElementById("price").value);
- const description=document.getElementById("description").value.trim();
- const status=document.getElementById("status");
-
- if(!name||!Number.isFinite(price)||price<=0||!selectedImage){
-  status.textContent="Məhsulun adını, düzgün qiymətini və şəklini daxil et.";
-  return;
- }
-
- const saved=getSavedProducts();
- saved.push({id:"p"+Date.now(),name,price,description,image:selectedImage});
-
- try{
-  localStorage.setItem(PRODUCTS_KEY,JSON.stringify(saved));
- }catch(e){
-  status.textContent="Brauzer yaddaşı doludur. Şəkli kiçilt və ya əvvəlki əlavə məhsulların şəkillərini azalt.";
-  return;
- }
-
- renderProducts();
- status.textContent="Məhsul əlavə edildi.";
- document.getElementById("name").value="";
- document.getElementById("price").value="";
- document.getElementById("description").value="";
- imageInput.value="";
- selectedImage="";
- document.getElementById("preview").hidden=true;
-}
-
-/* Səbət açarı sebet.html ilə eyni olmalıdır */
-function getAccountCartKey(){
+function getAccountKey(){
  const email=(localStorage.getItem("userEmail")||"").trim().toLowerCase();
  if(!email)return null;
  return "cart_"+email.replace(/[^a-z0-9]/g,"_");
 }
 
-function addToCart(productId){
- const email=(localStorage.getItem("userEmail")||"").trim().toLowerCase();
-
- if(!email){
-  alert("Səbətə məhsul əlavə etmək üçün əvvəlcə hesabına daxil ol.");
-  window.location.href="kent.html";
-  return;
- }
-
- const p=getAllProducts().find(x=>String(x.id)===String(productId));
- if(!p){
-  alert("Məhsul tapılmadı.");
-  return;
- }
-
- const key=getAccountCartKey();
- if(!key)return;
-
- let cart=[];
+function getCart(){
+ const key=getAccountKey();
+ if(!key)return [];
  try{
-  const old=JSON.parse(localStorage.getItem(key)||"[]");
-  if(Array.isArray(old))cart=old;
- }catch(e){
-  cart=[];
- }
-
- const existing=cart.find(item=>String(item.id)===String(p.id));
-
- if(existing){
-  existing.quantity=(Number(existing.quantity)||1)+1;
-  existing.name=p.name;
-  existing.price=Number(p.price);
-  /* Şəkli təkrar saxlamırıq, mövcud şəkil yolunu saxlayırıq */
-  existing.image=p.image;
- }else{
-  cart.push({
-   id:p.id,
-   name:p.name,
-   price:Number(p.price),
-   image:p.image,
-   quantity:1
-  });
- }
-
- try{
-  localStorage.setItem(key,JSON.stringify(cart));
- }catch(e){
-  alert("Səbət yadda saxlanmadı. Brauzerin yaddaşı doludur. Əlavə məhsul şəkilləri yaddaşı doldurmuş ola bilər.");
-  return;
- }
-
- window.location.href="sebet.html";
+  const cart=JSON.parse(localStorage.getItem(key)||"[]");
+  return Array.isArray(cart)?cart:[];
+ }catch(e){return []}
 }
 
-function renderProducts(){
- const container=document.getElementById("products");
- container.innerHTML="";
+function saveCart(cart){
+ const key=getAccountKey();
+ if(!key)return false;
+ try{
+  localStorage.setItem(key,JSON.stringify(cart));
+  return true;
+ }catch(e){
+  alert("Səbət yadda saxlanmadı. Brauzer yaddaşı doludur.");
+  return false;
+ }
+}
 
- getAllProducts().forEach(p=>{
-  const card=document.createElement("div");
-  card.className="card";
+function showCart(){
+ const box=document.getElementById("cart");
+ const totalBox=document.getElementById("total");
+ const orderButton=document.getElementById("orderButton");
+ box.innerHTML="";
+ const email=localStorage.getItem("userEmail");
 
-  const link=document.createElement("a");
-  link.href="al.html?id="+encodeURIComponent(p.id);
+ if(!email){
+  box.innerHTML='<div class="login-warning">🔐 Səbəti görmək üçün hesabına daxil ol.<a href="kent.html">Hesaba giriş et</a></div>';
+  totalBox.textContent="0.00";
+  orderButton.style.display="none";
+  return;
+ }
 
-  const photo=document.createElement("div");
-  photo.className="photo";
+ const cart=getCart();
+ if(cart.length===0){
+  box.innerHTML='<div class="empty">🛒 Səbətin boşdur</div>';
+  totalBox.textContent="0.00";
+  orderButton.style.display="none";
+  return;
+ }
+
+ orderButton.style.display="block";
+ let total=0;
+
+ cart.forEach((item,index)=>{
+  const quantity=Math.max(1,Number(item.quantity)||1);
+  const price=Math.max(0,Number(item.price)||0);
+  total+=price*quantity;
+
+  const row=document.createElement("div");
+  row.className="cart-item";
 
   const img=document.createElement("img");
-  img.src=p.image;
-  img.alt=p.name;
-  photo.appendChild(img);
-  link.appendChild(photo);
+  img.alt=item.name||"Məhsul";
+  img.src=item.image||"";
+  img.onerror=()=>{img.style.display="none"};
 
   const info=document.createElement("div");
   info.className="info";
 
-  const n=document.createElement("div");
-  n.className="name";
-  n.textContent=p.name;
+  const name=document.createElement("div");
+  name.className="name";
+  name.textContent=item.name||"Məhsul";
 
-  const stars=document.createElement("div");
-  stars.className="stars";
-  stars.textContent="★★★★★ ";
+  const priceEl=document.createElement("div");
+  priceEl.className="price";
+  priceEl.textContent=price.toFixed(2)+" AZN";
 
-  const sold=document.createElement("span");
-  sold.style.color="#777";
-  sold.textContent="100+ satılıb";
-  stars.appendChild(sold);
+  const quantityBox=document.createElement("div");
+  quantityBox.className="quantity";
 
-  const price=document.createElement("div");
-  price.className="price";
-  price.textContent=Number(p.price).toFixed(2)+" ";
+  const minus=document.createElement("button");
+  minus.type="button";
+  minus.textContent="−";
+  minus.onclick=()=>changeQuantity(index,-1);
 
-  const small=document.createElement("small");
-  small.textContent="AZN";
-  price.appendChild(small);
+  const count=document.createElement("b");
+  count.textContent=quantity;
 
-  info.append(n,stars,price);
+  const plus=document.createElement("button");
+  plus.type="button";
+  plus.textContent="+";
+  plus.onclick=()=>changeQuantity(index,1);
 
-  const button=document.createElement("button");
-  button.className="cart";
-  button.type="button";
-  button.textContent="🛒 Səbətə əlavə et";
-  button.addEventListener("click",()=>addToCart(p.id));
+  quantityBox.append(minus,count,plus);
 
-  card.append(link,info,button);
-  container.appendChild(card);
+  const del=document.createElement("button");
+  del.className="delete";
+  del.type="button";
+  del.textContent="🗑️ Sil";
+  del.onclick=()=>deleteItem(index);
+
+  info.append(name,priceEl,quantityBox,del);
+  row.append(img,info);
+  box.appendChild(row);
  });
+
+ totalBox.textContent=total.toFixed(2);
 }
 
-renderProducts();
+function changeQuantity(index,amount){
+ const cart=getCart();
+ if(!cart[index])return;
+
+ const oldQuantity=Math.max(1,Number(cart[index].quantity)||1);
+ const newQuantity=oldQuantity+amount;
+
+ if(newQuantity<=0){
+  cart.splice(index,1);
+ }else{
+  cart[index].quantity=newQuantity;
+ }
+
+ if(saveCart(cart))showCart();
+}
+
+function deleteItem(index){
+ const cart=getCart();
+ cart.splice(index,1);
+ if(saveCart(cart))showCart();
+}
+
+showCart();
 </script>
 </body>
 </html>
