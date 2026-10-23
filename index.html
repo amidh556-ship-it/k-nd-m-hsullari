@@ -22,11 +22,8 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .heading{padding:12px 15px;font-size:22px;font-weight:bold}
 .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 12px}
 .card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 3px 12px #0001;position:relative}
-.photo{height:180px;background:#faf9f5;display:flex;align-items:center;justify-content:center;position:relative}
+.photo{height:180px;background:#faf9f5;display:flex;align-items:center;justify-content:center}
 .photo img{width:100%;height:100%;object-fit:contain}
-.photo-arrow{position:absolute;top:50%;transform:translateY(-50%);border:0;border-radius:50%;background:#263b2b;color:white;width:30px;height:30px;z-index:3;cursor:pointer}
-.photo-prev{left:5px}.photo-next{right:5px}
-.photo-count{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);background:#263b2bcc;color:white;border-radius:10px;padding:3px 8px;font-size:11px;z-index:3}
 .info{padding:11px}.name{font-size:16px;min-height:38px;line-height:20px}
 .stars{color:#e5a91d;font-size:12px;margin-top:5px}
 .price{font-size:21px;font-weight:bold;color:#263b2b;margin-top:9px}
@@ -122,7 +119,7 @@ function openAdmin(){
  if(box.style.display==="block")box.scrollIntoView({behavior:"smooth"});
 }
 
-/* BİRDƏFƏYƏ BİRDƏN ÇOX ŞƏKİL SEÇ VƏ HAZIRLA */
+/* QALEREYADAN BİRDƏFƏYƏ ÇOX ŞƏKİL SEÇ */
 imageInput.addEventListener("change",async()=>{
  selectedImages=[];
 
@@ -334,57 +331,10 @@ function renderProducts(){
   const photo=document.createElement("div");
   photo.className="photo";
 
-  /* ÇOX ŞƏKİL ÜÇÜN OXLAR */
-  const images=Array.isArray(p.images)&&p.images.length
-   ?p.images
-   :[p.image];
-
-  let currentImage=0;
-
   const img=document.createElement("img");
-  img.src=images[0];
+  img.src=p.image;
   img.alt=p.name;
   photo.appendChild(img);
-
-  if(images.length>1){
-   const prev=document.createElement("button");
-   prev.type="button";
-   prev.className="photo-arrow photo-prev";
-   prev.textContent="❮";
-   prev.setAttribute("aria-label","Əvvəlki şəkil");
-
-   const next=document.createElement("button");
-   next.type="button";
-   next.className="photo-arrow photo-next";
-   next.textContent="❯";
-   next.setAttribute("aria-label","Növbəti şəkil");
-
-   const count=document.createElement("span");
-   count.className="photo-count";
-   count.textContent="1 / "+images.length;
-
-   function showImage(){
-    img.src=images[currentImage];
-    count.textContent=(currentImage+1)+" / "+images.length;
-   }
-
-   prev.addEventListener("click",e=>{
-    e.preventDefault();
-    e.stopPropagation();
-    currentImage=(currentImage-1+images.length)%images.length;
-    showImage();
-   });
-
-   next.addEventListener("click",e=>{
-    e.preventDefault();
-    e.stopPropagation();
-    currentImage=(currentImage+1)%images.length;
-    showImage();
-   });
-
-   photo.append(prev,next,count);
-  }
-
   link.appendChild(photo);
 
   const info=document.createElement("div");
