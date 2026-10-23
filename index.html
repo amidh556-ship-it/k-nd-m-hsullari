@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="az">
+<!DOCTYPE html><html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -44,9 +43,7 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 @media(max-width:380px){.photo{height:155px}.products{gap:8px;padding:0 8px}}
 </style>
 </head>
-<body>
-
-<header>
+<body><header>
   <div class="head">
     <div class="logo">Kənd <span>məhsulları</span></div>
     <a class="profile" href="profile.html"><i class="fa-regular fa-user"></i></a>
@@ -60,22 +57,16 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
     <div class="category">Kişi</div><div class="category">Ev</div>
     <div class="category">Zinət əşyaları</div><div class="category">İdman</div>
   </div>
-</header>
-
-<div class="hero">
+</header><div class="hero">
   <h1>Bizdən birbaşa sizə 🌿</h1>
   <p>Sevdiyin məhsulları rahat və təhlükəsiz sifariş et.</p>
   <p><b>20% çatdırılma endirimi</b></p>
-</div>
-
-<div class="discount">✓ Çatdırılmada 20% endirim　 ✓ 10% endirim</div>
+</div><div class="discount">✓ Çatdırılmada 20% endirim　 ✓ 10% endirim</div>
 <div class="heading">Məhsullar</div>
-<div class="products" id="products"></div>
-
-<section id="admin">
+<div class="products" id="products"></div><section id="admin">
   <h2><i class="fa-solid fa-plus"></i> Yeni məhsul əlavə et</h2>
-  <label>Məhsulun şəkli</label>
-  <input type="file" id="image" accept="image/*">
+  <label>Məhsulun şəkilləri (bir neçə şəkil seçə bilərsən)</label>
+  <input type="file" id="image" accept="image/*" multiple>
   <img id="preview" hidden alt="Şəkil önbaxışı">
   <label>Məhsulun adı</label>
   <input id="name" placeholder="Məsələn: Oyuncaq maşın">
@@ -85,21 +76,18 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
   <textarea id="description" placeholder="Məhsulun təsviri"></textarea>
   <button type="button" onclick="addProduct()">Məhsulu əlavə et</button>
   <div id="status"></div>
-</section>
+</section><a href="bot.html" class="support"><i class="fa-solid fa-comment"></i></a>
 
-<a href="bot.html" class="support"><i class="fa-solid fa-comment"></i></a>
 <nav class="bottom">
   <a href="index.html"><i class="fa-solid fa-house"></i>Ana səhifə</a>
   <a href="axtar.html"><i class="fa-solid fa-magnifying-glass"></i>Axtar</a>
   <a href="sebet.html"><i class="fa-solid fa-cart-shopping"></i>Səbət</a>
   <a href="profile.html"><i class="fa-regular fa-user"></i>Profil</a>
-</nav>
-
-<script>
+</nav><script>
 const ADMIN_EMAIL="amidh365@gmail.com";
 const PRODUCTS_KEY="myProducts";
 const imageInput=document.getElementById("image");
-let selectedImage="";
+let selectedImages=[];
 
 const defaultProducts=[
  {id:"masin",name:"Maşın oyuncaq",price:3.80,description:"Oyuncaq maşın",image:"foto.png"},
@@ -131,49 +119,80 @@ function openAdmin(){
  if(box.style.display==="block")box.scrollIntoView({behavior:"smooth"});
 }
 
-/* ŞƏKLİ KİÇİLT */
-imageInput.addEventListener("change",()=>{
- const file=imageInput.files[0];
- if(!file)return;
+/* QALEREYADAN BİRDƏFƏYƏ ÇOX ŞƏKİL SEÇ */
+imageInput.addEventListener("change",async()=>{
+ selectedImages=[];
 
- if(!file.type.startsWith("image/")){
-  alert("Şəkil faylı seç.");
+ const files=Array.from(imageInput.files||[]);
+ const status=document.getElementById("status");
+ const preview=document.getElementById("preview");
+
+ if(!files.length)return;
+
+ const imageFiles=files.filter(file=>file.type.startsWith("image/"));
+
+ if(!imageFiles.length){
+  alert("Şəkil faylları seç.");
   imageInput.value="";
   return;
  }
 
- const reader=new FileReader();
- reader.onload=()=>{
-  const img=new Image();
-  img.onload=()=>{
-   const canvas=document.createElement("canvas");
-   const maxSize=500;
-   let width=img.width;
-   let height=img.height;
+ status.textContent="Şəkillər hazırlanır...";
 
-   if(width>height&&width>maxSize){
-    height=Math.round(height*maxSize/width);
-    width=maxSize;
-   }else if(height>maxSize){
-    width=Math.round(width*maxSize/height);
-    height=maxSize;
-   }
+ for(const file of imageFiles){
+  try{
+   const data=await new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(new Error("Fayl oxunmadı"));
+    reader.readAsDataURL(file);
+   });
 
-   canvas.width=width;
-   canvas.height=height;
-   const ctx=canvas.getContext("2d");
-   ctx.drawImage(img,0,0,width,height);
-   selectedImage=canvas.toDataURL("image/jpeg",0.55);
-   const preview=document.getElementById("preview");
-   preview.src=selectedImage;
-   preview.hidden=false;
-  };
-  img.onerror=()=>{
-   document.getElementById("status").textContent="Şəkli oxumaq olmadı. Başqa şəkil seç.";
-  };
-  img.src=reader.result;
- };
- reader.readAsDataURL(file);
+   const imageData=await new Promise((resolve,reject)=>{
+    const img=new Image();
+
+    img.onload=()=>{
+     const canvas=document.createElement("canvas");
+     const maxSize=500;
+     let width=img.width;
+     let height=img.height;
+
+     if(width>height&&width>maxSize){
+      height=Math.round(height*maxSize/width);
+      width=maxSize;
+     }else if(height>maxSize){
+      width=Math.round(width*maxSize/height);
+      height=maxSize;
+     }
+
+     canvas.width=width;
+     canvas.height=height;
+
+     const ctx=canvas.getContext("2d");
+     ctx.drawImage(img,0,0,width,height);
+
+     resolve(canvas.toDataURL("image/jpeg",0.55));
+    };
+
+    img.onerror=()=>reject(new Error("Şəkil açıla bilmədi"));
+    img.src=data;
+   });
+
+   selectedImages.push(imageData);
+  }catch(error){
+   console.error(error);
+  }
+ }
+
+ if(selectedImages.length){
+  preview.src=selectedImages[0];
+  preview.hidden=false;
+  status.textContent=selectedImages.length+
+   " şəkil seçildi. Birinci şəkil önbaxışda göstərilir.";
+ }else{
+  status.textContent="Şəkilləri oxumaq olmadı. Yenidən seç.";
+  imageInput.value="";
+ }
 });
 
 function addProduct(){
@@ -187,13 +206,20 @@ function addProduct(){
  const description=document.getElementById("description").value.trim();
  const status=document.getElementById("status");
 
- if(!name||!Number.isFinite(price)||price<=0||!selectedImage){
+ if(!name||!Number.isFinite(price)||price<=0||!selectedImages.length){
   status.textContent="Məhsulun adını, düzgün qiymətini və şəklini daxil et.";
   return;
  }
 
  const saved=getSavedProducts();
- saved.push({id:"p"+Date.now(),name,price,description,image:selectedImage});
+ saved.push({
+  id:"p"+Date.now(),
+  name,
+  price,
+  description,
+  image:selectedImages[0],
+  images:selectedImages
+ });
 
  try{
   localStorage.setItem(PRODUCTS_KEY,JSON.stringify(saved));
@@ -208,7 +234,7 @@ function addProduct(){
  document.getElementById("price").value="";
  document.getElementById("description").value="";
  imageInput.value="";
- selectedImage="";
+ selectedImages=[];
  document.getElementById("preview").hidden=true;
 }
 
@@ -361,6 +387,5 @@ function renderProducts(){
 }
 
 renderProducts();
-</script>
-</body>
+</script></body>
 </html>
