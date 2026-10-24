@@ -2,99 +2,346 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>İdarəetmə</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>İdarəçi paneli</title>
 
 <style>
+*{box-sizing:border-box}
 body{
-    margin:0;
-    font-family:Arial;
-    background:#f5f5f5;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f4f6;
+  color:#222;
 }
-
 .box{
-    max-width:500px;
-    margin:50px auto;
-    padding:25px;
-    background:white;
-    border-radius:15px;
-    text-align:center;
+  max-width:500px;
+  margin:25px auto;
+  padding:20px;
 }
-
+.card{
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px #00000010;
+}
+input,select,button{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border:1px solid #ddd;
+  border-radius:9px;
+  font-size:16px;
+}
 button{
-    width:100%;
-    padding:15px;
-    margin-top:15px;
-    border:0;
-    border-radius:10px;
-    background:#2e7d32;
-    color:white;
-    font-size:17px;
+  border:0;
+  background:#2e7d32;
+  color:white;
+  font-weight:bold;
 }
+.remove{background:#c62828}
+.item{
+  padding:12px;
+  margin-top:10px;
+  background:#f4f5f7;
+  border-radius:9px;
+  overflow-wrap:anywhere;
+}
+small{color:#555}
 </style>
 </head>
 
 <body>
-
 <div class="box">
 
-<h2>⚙️ Sifariş idarəetməsi</h2>
+  <div class="card">
+    <h2>⚙️ İdarəçi paneli</h2>
+    <p id="message">Yoxlanılır...</p>
+    <button id="orders" hidden>Sifarişlərə bax 📦</button>
+  </div>
 
-<div id="result"></div>
+  <div class="card" id="staffCard" hidden>
+    <h3>➕ Operator / Agent əlavə et</h3>
+
+    <label>Şəxsin Gmail ünvanı</label>
+    <input id="staffEmail"
+           type="email"
+           placeholder="operator@gmail.com">
+
+    <label>Rol seç</label>
+    <select id="staffRole">
+      <option value="operator">Operator</option>
+      <option value="agent">Agent</option>
+    </select>
+
+    <button id="add">Yadda saxla</button>
+    <p><small>Şəxs həmin Gmail hesabı ilə daxil olmalıdır.</small></p>
+  </div>
+
+  <div class="card" id="listCard" hidden>
+    <h3>👥 Operatorlar və agentlər</h3>
+    <div id="staffList">Yüklənir...</div>
+  </div>
+
+  <div class="card" id="noticeCard" hidden>
+    <h3>🔔 Yeni sifariş bildirişləri</h3>
+    <div id="notices">Sifarişlər gözlənilir...</div>
+  </div>
 
 </div>
 
-<script>
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-const email =
-    localStorage.getItem("userEmail");
+import {
+  getAuth,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const result =
-    document.getElementById("result");
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  remove,
+  onValue
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+const firebaseConfig = {
+  apiKey: "FIREBASE_API_KEY",
+  authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+  databaseURL:
+    "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+  projectId: "kendmehsullari-6a53d",
+  appId: "FIREBASE_APP_ID"
+};
 
-if(!email){
+const ADMIN = "amid.h556@gmail.com";
 
-    result.innerHTML = `
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-        <p>❌ Hesaba daxil olmamısan.</p>
+const message = document.getElementById("message");
+const staffCard = document.getElementById("staffCard");
+const listCard = document.getElementById("listCard");
+const noticeCard = document.getElementById("noticeCard");
 
-        <button onclick="
-            window.location.href='index.html'
-        ">
-            Hesaba daxil ol
-        </button>
+let currentUser = null;
 
-    `;
-
-}else if(
-    email.toLowerCase().trim()
-    === "amidh365@gmail.com"
-){
-
-    result.innerHTML = `
-
-        <p>✅ Xoş gəldin, idarəçi!</p>
-
-        <button onclick="
-            window.location.href='orders.html'
-        ">
-            📦 Sifarişlərə bax
-        </button>
-
-    `;
-
-}else{
-
-    result.innerHTML = `
-
-        <p>❌ Bu hesabın icazəsi yoxdur.</p>
-
-    `;
-
+function show(text){
+  message.textContent = text;
 }
 
-</script>
+function emailKey(email){
+  return email.toLowerCase().trim()
+    .replace(/\./g, ",");
+}
 
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+
+  if(!user){
+    show("❌ Firebase hesabına daxil olmalısan.");
+    return;
+  }
+
+  const email = (user.email || "").toLowerCase().trim();
+
+  if(email === ADMIN){
+    show("✅ Xoş gəldin, idarəçi!");
+    staffCard.hidden = false;
+    listCard.hidden = false;
+    noticeCard.hidden = false;
+
+    document.getElementById("orders").hidden = false;
+
+    loadStaff();
+    loadOrders();
+    return;
+  }
+
+  try{
+    const snapshot = await get(
+      ref(db, "staff/" + emailKey(email))
+    );
+
+    if(!snapshot.exists() || snapshot.val().active !== true){
+      show("❌ Bu hesaba icazə verilməyib.");
+      return;
+    }
+
+    const role = snapshot.val().role;
+
+    if(role !== "operator" && role !== "agent"){
+      show("❌ Hesabın rolu düzgün deyil.");
+      return;
+    }
+
+    show("✅ Xoş gəldin! Rolun: " +
+      (role === "operator" ? "Operator" : "Agent"));
+
+    document.getElementById("orders").hidden = false;
+
+    if(role === "operator"){
+      noticeCard.hidden = false;
+      loadOrders();
+    }
+
+  }catch(error){
+    show("Xəta: " + error.message);
+  }
+});
+
+document.getElementById("orders").onclick = () => {
+  location.href = "orders.html";
+};
+
+document.getElementById("add").onclick = async () => {
+  if(!currentUser ||
+     currentUser.email.toLowerCase().trim() !== ADMIN){
+    alert("Bu əməliyyatı yalnız idarəçi edə bilər.");
+    return;
+  }
+
+  const email = document.getElementById("staffEmail")
+    .value.toLowerCase().trim();
+
+  const role = document.getElementById("staffRole").value;
+
+  if(!email || !email.includes("@")){
+    alert("Düzgün Gmail ünvanı yaz.");
+    return;
+  }
+
+  if(email === ADMIN){
+    alert("İdarəçinin rolunu dəyişmək olmaz.");
+    return;
+  }
+
+  try{
+    await set(ref(db, "staff/" + emailKey(email)), {
+      email: email,
+      role: role,
+      active: true,
+      addedAt: Date.now()
+    });
+
+    alert("✅ " + email + " əlavə edildi!");
+    document.getElementById("staffEmail").value = "";
+    loadStaff();
+
+  }catch(error){
+    alert("Xəta: " + error.message);
+  }
+};
+
+async function loadStaff(){
+  const area = document.getElementById("staffList");
+
+  try{
+    const snapshot = await get(ref(db, "staff"));
+    area.replaceChildren();
+
+    if(!snapshot.exists()){
+      area.textContent = "Hələ heç kim əlavə edilməyib.";
+      return;
+    }
+
+    snapshot.forEach(child => {
+      const person = child.val();
+      const item = document.createElement("div");
+      item.className = "item";
+
+      const info = document.createElement("div");
+      info.textContent =
+        person.email + " — " +
+        (person.role === "operator" ? "Operator" : "Agent") +
+        (person.active ? "" : " — Deaktiv");
+
+      const button = document.createElement("button");
+      button.className = "remove";
+      button.textContent = person.active
+        ? "İcazəni ləğv et"
+        : "Siyahıdan sil";
+
+      button.onclick = async () => {
+        if(!currentUser ||
+           currentUser.email.toLowerCase().trim() !== ADMIN){
+          alert("İcazə yoxdur.");
+          return;
+        }
+
+        try{
+          if(person.active){
+            await set(ref(db, "staff/" + child.key), {
+              ...person,
+              active: false
+            });
+          }else{
+            await remove(ref(db, "staff/" + child.key));
+          }
+
+          loadStaff();
+        }catch(error){
+          alert("Xəta: " + error.message);
+        }
+      };
+
+      item.append(info, button);
+      area.appendChild(item);
+    });
+
+  }catch(error){
+    area.textContent = "Siyahı açıla bilmədi: " + error.message;
+  }
+}
+
+function loadOrders(){
+  onValue(ref(db, "orders"), snapshot => {
+    const area = document.getElementById("notices");
+    area.replaceChildren();
+
+    if(!snapshot.exists()){
+      area.textContent = "Yeni sifariş yoxdur.";
+      return;
+    }
+
+    const orders = [];
+
+    snapshot.forEach(child => {
+      orders.push({
+        id: child.key,
+        ...child.val()
+      });
+    });
+
+    orders.reverse();
+
+    orders.slice(0, 10).forEach(order => {
+      const item = document.createElement("div");
+      item.className = "item";
+
+      const title = document.createElement("strong");
+      title.textContent = "🔔 Sifariş: " +
+        (order.orderId || order.id);
+
+      const details = document.createElement("p");
+      details.textContent =
+        "Müştəri: " + (order.name || "Ad göstərilməyib") +
+        " | Status: " + (order.status || "Yeni sifariş");
+
+      item.append(title, details);
+      area.appendChild(item);
+    });
+  }, error => {
+    document.getElementById("notices").textContent =
+      "Sifarişlər oxunmadı: " + error.message;
+  });
+}
+</script>
 </body>
 </html>
