@@ -392,11 +392,16 @@ function searchProducts(){
         `;
 
 
-        /* MƏHSULA BASANDA ANA SƏHİFƏ */
+        /* MƏHSULA BASANDA MƏHSUL SƏHİFƏSİ */
 
         card.onclick=function(){
 
-            window.location.href="index.html";
+            if(product.name==="Maşın oyuncaq"){
+                window.location.href="al.html?id=masin";
+            }
+            else if(product.name==="Tato"){
+                window.location.href="al.html?id=tato";
+            }
 
         };
 
