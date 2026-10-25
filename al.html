@@ -1,8 +1,10 @@
-<!DOCTYPE html><html lang="az">
+<!DOCTYPE html>
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Məhsul - Kənd məhsulları</title><style>
+<title>Məhsul - Kənd məhsulları</title>
+<style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding-bottom:100px}
 .product-page{width:100%;max-width:600px;margin:auto;background:white}
@@ -50,18 +52,25 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 .no-reviews{margin-top:15px;color:#777;text-align:center}
 .error-message{padding:30px 20px;text-align:center;color:#b42318;font-weight:bold}
 @media(max-width:380px){.gallery{height:380px}.product-name{font-size:23px}}
-</style></head><body>
+</style>
+</head>
+<body>
 <div class="product-page">
-<div class="product"><div class="gallery">
- <div class="gallery-track" id="galleryTrack"></div>
- <button class="gallery-btn gallery-left" id="prevButton" type="button" aria-label="Əvvəlki şəkil">‹</button>
- <button class="gallery-btn gallery-right" id="nextButton" type="button" aria-label="Növbəti şəkil">›</button>
- <div class="dots" id="galleryDots"></div>
-</div><div class="discount-bar">
+<div class="product">
+<div class="gallery">
+<div class="gallery-track" id="galleryTrack"></div>
+<button class="gallery-btn gallery-left" id="prevButton" type="button" aria-label="Əvvəlki şəkil">‹</button>
+<button class="gallery-btn gallery-right" id="nextButton" type="button" aria-label="Növbəti şəkil">›</button>
+<div class="dots" id="galleryDots"></div>
+</div>
+
+<div class="discount-bar">
 <span>✓ 20% endirim</span>
 <span>▣ Sifarişlərdə 20% ENDİRİM</span>
 <span>✓ Gecikməyə görə</span>
-</div><div class="product-info">
+</div>
+
+<div class="product-info">
 <div id="productName" class="product-name">Məhsul yüklənir...</div>
 <div class="rating">
 <span class="stars">★★★★☆</span>
@@ -73,7 +82,9 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 <div id="productDescription" class="description"></div>
 <div id="productError"></div>
 </div>
-</div><div class="reviews">
+</div>
+
+<div class="reviews">
 <div class="reviews-title">Müştəri rəyləri</div>
 <div class="review-form">
 <h3>Rəy yaz</h3>
@@ -91,10 +102,13 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 <button class="review-submit" onclick="sendReview()" type="button">Rəyi göndər</button>
 </div>
 <div id="reviewsList"></div>
-</div><a class="cart-link" href="sebet.html"><span>🛒</span>Səbət</a>
-<button class="cart-button" onclick="addCurrentProduct()" type="button">🛒 Səbətə əlavə et</button>
+</div>
 
-</div><script type="module">
+<a class="cart-link" href="sebet.html"><span>🛒</span>Səbət</a>
+<button class="cart-button" onclick="addCurrentProduct()" type="button">🛒 Səbətə əlavə et</button>
+</div>
+
+<script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getDatabase,ref,push,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
@@ -130,7 +144,6 @@ const products={
 
 const params=new URLSearchParams(window.location.search);
 const productId=params.get("id");
-
 let product=products[productId]||null;
 
 function getSavedProducts(){
@@ -143,7 +156,7 @@ function getSavedProducts(){
  return null;
 }
 
-/* Adminin əlavə etdiyi bütün şəkilləri götür */
+/* Adminin əlavə etdiyi məhsulları və şəkillərini oxu */
 if(!product&&productId){
  const saved=getSavedProducts();
 
@@ -171,9 +184,7 @@ if(!product&&productId){
  }
 }
 
-/* Şəkilləri qalereyaya avtomatik əlavə et */
 let currentImage=0;
-
 const track=document.getElementById("galleryTrack");
 const dotsContainer=document.getElementById("galleryDots");
 const prevButton=document.getElementById("prevButton");
@@ -189,7 +200,7 @@ function setupGallery(){
   :[];
 
  if(!images.length){
-  images=["1.png"];
+  images=["foto.png"];
  }
 
  images.forEach((image,index)=>{
@@ -199,6 +210,12 @@ function setupGallery(){
   const img=document.createElement("img");
   img.src=image;
   img.alt=(product?product.name:"Məhsul")+" — şəkil "+(index+1);
+
+  /* Şəkil açıla bilməsə, ehtiyat şəkli yoxla */
+  img.onerror=function(){
+   this.onerror=null;
+   this.src="foto.png";
+  };
 
   slide.appendChild(img);
   track.appendChild(slide);
@@ -293,7 +310,6 @@ if(product){
  document.getElementById("productName").innerText=product.name;
  document.getElementById("productPrice").innerText=Number(product.price).toFixed(2)+" AZN";
  document.getElementById("productDescription").innerText=product.description||"";
-
  setupGallery();
  saveToHistory();
 }else{
@@ -467,5 +483,6 @@ window.addCurrentProduct=function(){
   alert("Səbət yadda saxlanmadı. Brauzer yaddaşını yoxla.");
  }
 };
-</script></body>
+</script>
+</body>
 </html>
