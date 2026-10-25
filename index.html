@@ -1,15 +1,19 @@
-<!DOCTYPE html><html lang="az">
+
+<!DOCTYPE html>
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kənd məhsulları</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
 body{background:#f4f1ea;color:#252525;padding-bottom:85px}
 header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.logo{font-size:23px;font-weight:bold}.logo span{color:#e8b84b}
+.logo{font-size:23px;font-weight:bold}
+.logo span{color:#e8b84b}
 .profile,.plus{width:44px;height:44px;border-radius:14px;background:#e8b84b;color:#263b2b;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:21px;border:0}
 .search{display:flex;gap:9px}
 .search a{background:white;color:#777;border-radius:13px;padding:15px;text-decoration:none;flex:1}
@@ -17,14 +21,16 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .category{padding:9px 13px;border-radius:20px;background:#ffffff20;white-space:nowrap}
 .category:first-child{background:#e8b84b;color:#263b2b}
 .hero{background:#e8b84b;border-radius:22px;margin:15px;padding:22px}
-.hero h1{font-size:26px;color:#263b2b}.hero p{margin-top:9px;line-height:1.5}
+.hero h1{font-size:26px;color:#263b2b}
+.hero p{margin-top:9px;line-height:1.5}
 .discount{margin:15px;background:white;padding:14px;border-radius:13px;font-weight:bold}
 .heading{padding:12px 15px;font-size:22px;font-weight:bold}
 .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 12px}
 .card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 3px 12px #0001;position:relative}
 .photo{height:180px;background:#faf9f5;display:flex;align-items:center;justify-content:center}
 .photo img{width:100%;height:100%;object-fit:contain}
-.info{padding:11px}.name{font-size:16px;min-height:38px;line-height:20px}
+.info{padding:11px}
+.name{font-size:16px;min-height:38px;line-height:20px}
 .stars{color:#e5a91d;font-size:12px;margin-top:5px}
 .price{font-size:21px;font-weight:bold;color:#263b2b;margin-top:9px}
 .price small{font-size:13px}
@@ -43,47 +49,69 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 @media(max-width:380px){.photo{height:155px}.products{gap:8px;padding:0 8px}}
 </style>
 </head>
-<body><header>
+
+<body>
+<header>
   <div class="head">
     <div class="logo">Kənd <span>məhsulları</span></div>
     <a class="profile" href="profile.html"><i class="fa-regular fa-user"></i></a>
   </div>
+
   <div class="search">
     <a href="axtar.html"><i class="fa-solid fa-magnifying-glass"></i> Nə axtarırsınız?</a>
     <button class="plus" onclick="openAdmin()" aria-label="Məhsul əlavə et">+</button>
   </div>
+
   <div class="categories">
-    <div class="category">Hamısı</div><div class="category">Qadın</div>
-    <div class="category">Kişi</div><div class="category">Ev</div>
-    <div class="category">Zinət əşyaları</div><div class="category">İdman</div>
+    <div class="category">Hamısı</div>
+    <div class="category">Qadın</div>
+    <div class="category">Kişi</div>
+    <div class="category">Ev</div>
+    <div class="category">Zinət əşyaları</div>
+    <div class="category">İdman</div>
   </div>
-</header><div class="hero">
+</header>
+
+<div class="hero">
   <h1>Bizdən birbaşa sizə 🌿</h1>
   <p>Sevdiyin məhsulları rahat və təhlükəsiz sifariş et.</p>
   <p><b>20% çatdırılma endirimi</b></p>
-</div><div class="discount">✓ Çatdırılmada 20% endirim　 ✓ 10% endirim</div>
+</div>
+
+<div class="discount">✓ Çatdırılmada 20% endirim　 ✓ 10% endirim</div>
 <div class="heading">Məhsullar</div>
-<div class="products" id="products"></div><section id="admin">
+<div class="products" id="products"></div>
+
+<section id="admin">
   <h2><i class="fa-solid fa-plus"></i> Yeni məhsul əlavə et</h2>
+
   <label>Məhsulun şəkilləri (bir neçə şəkil seçə bilərsən)</label>
   <input type="file" id="image" accept="image/*" multiple>
   <img id="preview" hidden alt="Şəkil önbaxışı">
+
   <label>Məhsulun adı</label>
   <input id="name" placeholder="Məsələn: Oyuncaq maşın">
+
   <label>Qiymət (AZN)</label>
   <input id="price" type="number" min="0.01" step="0.01" placeholder="3.80">
+
   <label>Məhsul haqqında</label>
   <textarea id="description" placeholder="Məhsulun təsviri"></textarea>
+
   <button type="button" onclick="addProduct()">Məhsulu əlavə et</button>
   <div id="status"></div>
-</section><a href="bot.html" class="support"><i class="fa-solid fa-comment"></i></a>
+</section>
+
+<a href="bot.html" class="support"><i class="fa-solid fa-comment"></i></a>
 
 <nav class="bottom">
   <a href="index.html"><i class="fa-solid fa-house"></i>Ana səhifə</a>
   <a href="axtar.html"><i class="fa-solid fa-magnifying-glass"></i>Axtar</a>
   <a href="sebet.html"><i class="fa-solid fa-cart-shopping"></i>Səbət</a>
   <a href="profile.html"><i class="fa-regular fa-user"></i>Profil</a>
-</nav><script>
+</nav>
+
+<script>
 const ADMIN_EMAIL="amid.h556@gmail.com";
 const PRODUCTS_KEY="myProducts";
 const imageInput=document.getElementById("image");
@@ -119,7 +147,6 @@ function openAdmin(){
  if(box.style.display==="block")box.scrollIntoView({behavior:"smooth"});
 }
 
-/* QALEREYADAN BİRDƏFƏYƏ ÇOX ŞƏKİL SEÇ */
 imageInput.addEventListener("change",async()=>{
  selectedImages=[];
 
@@ -238,7 +265,6 @@ function addProduct(){
  document.getElementById("preview").hidden=true;
 }
 
-/* YALNIZ ADMININ ƏLAVƏ ETDİYİ MƏHSULU SİL */
 function deleteProduct(productId){
  if(!isAdmin()){
   alert("Məhsulu yalnız idarəçi silə bilər.");
@@ -253,7 +279,7 @@ function deleteProduct(productId){
   return;
  }
 
- if(!confirm('"' + chosen.name + '" məhsulunu silmək istəyirsən?'))return;
+ if(!confirm('"'+chosen.name+'" məhsulunu silmək istəyirsən?'))return;
 
  const updated=saved.filter(p=>String(p.id)!==String(productId));
 
@@ -304,7 +330,13 @@ function addToCart(productId){
   existing.price=Number(p.price);
   existing.image=p.image;
  }else{
-  cart.push({id:p.id,name:p.name,price:Number(p.price),image:p.image,quantity:1});
+  cart.push({
+   id:p.id,
+   name:p.name,
+   price:Number(p.price),
+   image:p.image,
+   quantity:1
+  });
  }
 
  try{
@@ -332,8 +364,15 @@ function renderProducts(){
   photo.className="photo";
 
   const img=document.createElement("img");
-  img.src=p.image;
-  img.alt=p.name;
+  img.alt=p.name||"Məhsul";
+
+  /* ƏLAVƏ EDİLƏN ŞƏKİL DÜZƏLTMƏSİ */
+  img.onerror=function(){
+   this.onerror=null;
+   this.src="https://placehold.co/300x300?text=Sekil+yoxdur";
+  };
+  img.src=p.image||"https://placehold.co/300x300?text=Mehsul";
+
   photo.appendChild(img);
   link.appendChild(photo);
 
@@ -342,7 +381,7 @@ function renderProducts(){
 
   const n=document.createElement("div");
   n.className="name";
-  n.textContent=p.name;
+  n.textContent=p.name||"Adsız məhsul";
 
   const stars=document.createElement("div");
   stars.className="stars";
@@ -371,13 +410,12 @@ function renderProducts(){
 
   card.append(link,info,button);
 
-  /* Sil düyməsi yalnız adminə və əlavə etdiyi məhsullara görünür */
   if(isAdmin()&&getSavedProducts().some(saved=>String(saved.id)===String(p.id))){
    const del=document.createElement("button");
    del.type="button";
    del.className="delete-product";
    del.style.display="block";
-   del.innerHTML='🗑️ Sil';
+   del.textContent="🗑️ Sil";
    del.addEventListener("click",()=>deleteProduct(p.id));
    card.appendChild(del);
   }
@@ -387,5 +425,6 @@ function renderProducts(){
 }
 
 renderProducts();
-</script></body>
+</script>
+</body>
 </html>
