@@ -2,36 +2,40 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Operator - Kənd məhsulları</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kənd məhsulları — Operator</title>
 
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#222}
-header{background:#111827;color:white;padding:18px;text-align:center;font-size:20px;font-weight:bold}
-.container{width:94%;max-width:700px;margin:20px auto}
-.login-box,.user-box,.chat-box{background:white;border-radius:15px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px #0001}
-input{width:100%;padding:13px;margin:7px 0;border:1px solid #ccc;border-radius:9px;font-size:15px}
-button{cursor:pointer}
-.login-btn,.logout{width:100%;padding:13px;border:0;border-radius:9px;color:white;font-size:16px;font-weight:bold;margin-top:7px}
+header{background:#111827;color:white;padding:17px;text-align:center;font-size:20px;font-weight:bold}
+.container{width:94%;max-width:700px;margin:18px auto}
+.box{background:white;border-radius:15px;padding:16px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
+input{width:100%;padding:13px;border:1px solid #ccc;border-radius:10px;font-size:16px}
+button{cursor:pointer;font-size:16px}
+.login-btn,.logout{width:100%;padding:13px;border:0;border-radius:9px;color:white;font-weight:bold;margin-top:8px}
 .login-btn{background:#16803c}
 .logout{background:#d93025}
 .hidden{display:none!important}
-.user-email{margin-top:6px;color:#555;font-size:14px}
-.chat-title{font-size:19px;font-weight:bold;margin-bottom:12px}
-.customer-chat{border:1px solid #ddd;border-radius:12px;padding:12px;margin-bottom:14px;background:#fff}
-.customer-name{font-weight:bold;overflow-wrap:anywhere}
-.message-list{height:250px;overflow-y:auto;background:#f5f5f5;padding:10px;border-radius:10px;margin:10px 0}
-.msg{padding:9px 11px;border-radius:10px;margin:7px 0;max-width:88%;word-break:break-word;white-space:pre-wrap}
-.msg.customer{background:white;border:1px solid #ddd}
-.msg.operator{background:#dff5df;margin-left:auto}
-.msg small{display:block;font-size:10px;opacity:.6;margin-bottom:4px}
-.chat-input{display:flex;gap:7px;align-items:center}
-.chat-input input{margin:0;flex:1;min-width:0}
-.chat-input button{width:85px;flex-shrink:0;border:0;border-radius:9px;background:#16803c;color:white;font-weight:bold;padding:13px}
-.empty{text-align:center;background:white;padding:20px;border-radius:12px}
-.search{margin-bottom:14px}
+.email{font-weight:bold;overflow-wrap:anywhere}
 .error{color:#c00;margin-top:10px}
+.customer-row{padding:15px;border:1px solid #ddd;border-radius:12px;margin-top:12px;cursor:pointer;background:#fff}
+.customer-row:active{background:#eaf5ec}
+.preview{font-size:14px;color:#666;margin-top:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-time{font-size:12px;color:#888;margin-top:5px}
+#conversation{position:fixed;inset:0;background:#f3f4f6;z-index:1000;display:flex;flex-direction:column}
+.chat-header{background:#111827;color:white;padding:12px;display:flex;align-items:center;gap:12px;min-height:65px}
+.back-btn{background:transparent;color:white;border:0;font-size:25px;padding:5px 10px}
+.chat-email{font-size:15px;overflow-wrap:anywhere;flex:1}
+.messages{flex:1;overflow-y:auto;padding:12px;background:#f3f4f6}
+.msg{max-width:88%;padding:12px;border-radius:13px;margin:9px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.customer{background:white;border:1px solid #ddd;margin-right:auto}
+.msg.operator{background:#dff5df;margin-left:auto}
+.msg small{display:block;font-size:11px;color:#777;margin-bottom:8px}
+.send-area{display:flex;gap:8px;padding:10px;background:white;border-top:1px solid #ddd;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+.send-area input{flex:1;min-width:0}
+.send-area button{background:#16803c;color:white;border:0;border-radius:10px;padding:0 18px;font-weight:bold}
+.empty{text-align:center;background:white;padding:20px;border-radius:12px}
 </style>
 </head>
 
@@ -40,41 +44,48 @@ button{cursor:pointer}
 
 <div class="container">
 
-<div id="loginBox" class="login-box">
+<div id="loginBox" class="box">
 <h2>Operator hesabına daxil olun</h2>
-<p>Email və parolunuzu daxil edin.</p>
-
-<form id="operatorLogin">
-<input id="loginEmail" type="email" placeholder="Operator Gmail" autocomplete="username" required>
-<input id="loginPassword" type="password" placeholder="Parol" autocomplete="current-password" required>
-<button class="login-btn" type="submit">Daxil ol</button>
+<form id="loginForm">
+<input id="loginEmail" type="email" placeholder="Operator Gmail" required autocomplete="username">
+<br><br>
+<input id="loginPassword" type="password" placeholder="Parol" required autocomplete="current-password">
+<button class="login-btn">Daxil ol</button>
 </form>
-
 <div id="loginError" class="error"></div>
 </div>
 
 <div id="panel" class="hidden">
-
-<div class="user-box">
+<div class="box">
 <b>Operator:</b>
-<div id="operatorEmail" class="user-email"></div>
-<button id="logoutBtn" class="logout">Çıxış</button>
+<div id="operatorEmail" class="email"></div>
+<button id="logout" class="logout">Çıxış</button>
 </div>
 
-<div class="chat-box">
-<div class="chat-title">💬 Müştərilərlə yazışma</div>
-<input id="searchCustomer" class="search" type="search" placeholder="Müştəri emaili ilə axtar">
-<div id="chats">Yazışmalar yüklənir...</div>
+<div class="box">
+<h3>💬 Müştərilərlə yazışma</h3>
+<input id="search" placeholder="Müştəri emaili ilə axtar">
+<div id="customerList" style="margin-top:12px">Yazışmalar yüklənir...</div>
+</div>
 </div>
 
 </div>
+
+<div id="conversation" class="hidden">
+<div class="chat-header">
+<button id="back" class="back-btn">‹</button>
+<div id="chatEmail" class="chat-email"></div>
+</div>
+<div id="messages" class="messages"></div>
+<form id="sendForm" class="send-area">
+<input id="messageInput" placeholder="Mesajınızı yazın..." autocomplete="off" required>
+<button type="submit">Göndər</button>
+</form>
 </div>
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
- getDatabase,ref,onValue,push
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {getDatabase,ref,onValue,push} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
@@ -89,56 +100,42 @@ const firebaseConfig={
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
 
-/* Operator giriş məlumatları */
 const operators={
  "ttik66006@gmail.com":"a1m2i3d42006",
  "amallizad72@gmail.com":"amal2005"
 };
 
 const $=id=>document.getElementById(id);
-
 let currentOperator="";
+let selectedEmail="";
 let allMessages={};
-let messagesListener=null;
-let chatListenerStarted=false;
+let stopMessages=null;
 
-function esc(value){
- return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#039;"
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
  }[c]));
 }
 
-function getCustomerEmail(message){
- return String(
-  message.email ||
-  message.userEmail ||
-  message.customerEmail ||
-  ""
- ).trim().toLowerCase();
+function customerEmail(m){
+ return String(m.email||m.userEmail||m.customerEmail||"").trim().toLowerCase();
 }
 
-function isOperatorMessage(message){
- const sender=String(message.sender||message.from||"").toLowerCase();
- return ["operator","agent","admin"].includes(sender);
+function isOperator(m){
+ return ["operator","agent","admin"].includes(
+ String(m.sender||m.from||"").toLowerCase()
+ );
 }
 
-$("operatorLogin").addEventListener("submit",event=>{
- event.preventDefault();
-
+$("loginForm").addEventListener("submit",e=>{
+ e.preventDefault();
  const email=$("loginEmail").value.trim().toLowerCase();
  const password=$("loginPassword").value;
-
- $("loginError").textContent="";
 
  if(!Object.prototype.hasOwnProperty.call(operators,email)){
   $("loginError").textContent="Bu email operator hesabı deyil.";
   return;
  }
-
  if(operators[email]!==password){
   $("loginError").textContent="Parol yanlışdır.";
   return;
@@ -147,135 +144,135 @@ $("operatorLogin").addEventListener("submit",event=>{
  currentOperator=email;
  $("operatorEmail").textContent=email;
  $("loginPassword").value="";
+ $("loginError").textContent="";
  $("loginBox").classList.add("hidden");
  $("panel").classList.remove("hidden");
 
- loadChats();
+ if(!stopMessages){
+  stopMessages=onValue(ref(db,"messages"),snap=>{
+   allMessages=snap.val()||{};
+   renderList();
+   if(selectedEmail)renderConversation();
+  },error=>{
+   $("customerList").textContent="Mesajları yükləmək olmadı. Firebase qaydalarını yoxlayın.";
+   console.error(error);
+  });
+ }
 });
 
-$("logoutBtn").addEventListener("click",()=>{
+$("logout").addEventListener("click",()=>{
+ if(stopMessages){stopMessages();stopMessages=null;}
  currentOperator="";
+ selectedEmail="";
+ allMessages={};
  $("panel").classList.add("hidden");
  $("loginBox").classList.remove("hidden");
- $("chats").innerHTML="";
+ $("conversation").classList.add("hidden");
+ $("customerList").innerHTML="";
  $("loginEmail").value="";
  $("loginPassword").value="";
- $("loginError").textContent="";
-
- if(messagesListener){
-  messagesListener();
-  messagesListener=null;
- }
- chatListenerStarted=false;
 });
 
-function loadChats(){
- if(chatListenerStarted)return;
- chatListenerStarted=true;
-
- messagesListener=onValue(ref(db,"messages"),snapshot=>{
-  allMessages=snapshot.val()||{};
-  renderChats();
- },error=>{
-  $("chats").innerHTML=
-   '<div class="empty">Yazışmalar yüklənmədi. Firebase Database qaydalarını yoxlayın.</div>';
-  console.error(error);
- });
-}
-
-function renderChats(){
- const chats=$("chats");
- const filter=$("searchCustomer").value.trim().toLowerCase();
+function groupedMessages(){
  const groups={};
 
- Object.entries(allMessages).forEach(([id,message])=>{
-  if(!message || typeof message!=="object")return;
-
-  const email=getCustomerEmail(message);
+ Object.entries(allMessages).forEach(([id,m])=>{
+  if(!m||typeof m!=="object")return;
+  const email=customerEmail(m);
   if(!email)return;
-
   if(!groups[email])groups[email]=[];
-
-  groups[email].push({
-   id,
-   ...message
-  });
+  groups[email].push({id,...m});
  });
+
+ for(const email in groups){
+  groups[email].sort((a,b)=>
+   Number(a.time||a.timestamp||a.createdAt||0)-
+   Number(b.time||b.timestamp||b.createdAt||0)
+  );
+ }
+ return groups;
+}
+
+function renderList(){
+ const list=$("customerList");
+ const groups=groupedMessages();
+ const filter=$("search").value.trim().toLowerCase();
 
  const emails=Object.keys(groups)
   .filter(email=>email.includes(filter))
   .sort((a,b)=>{
-   const ta=Math.max(...groups[a].map(m=>Number(m.time||m.timestamp||m.createdAt||0)));
-   const tb=Math.max(...groups[b].map(m=>Number(m.time||m.timestamp||m.createdAt||0)));
-   return tb-ta;
+   const aa=groups[a],bb=groups[b];
+   return Number(bb.at(-1)?.time||bb.at(-1)?.timestamp||0)-
+          Number(aa.at(-1)?.time||aa.at(-1)?.timestamp||0);
   });
 
  if(!emails.length){
-  chats.innerHTML='<div class="empty">Hələ yazışma yoxdur.</div>';
+  list.innerHTML='<div class="empty">Yazışma tapılmadı.</div>';
   return;
  }
 
- chats.innerHTML=emails.map(email=>{
-  const messages=groups[email].sort((a,b)=>
-   Number(a.time||a.timestamp||a.createdAt||0)-
-   Number(b.time||b.timestamp||b.createdAt||0)
-  );
-
-  const content=messages.map(m=>{
-   const operator=isOperatorMessage(m);
-   const text=m.message??m.text??m.content??"";
-   const rawTime=Number(m.time||m.timestamp||m.createdAt||0);
-   const date=rawTime
-    ?new Date(rawTime).toLocaleString("az-AZ")
-    :"";
-
-   return `
-    <div class="msg ${operator?"operator":"customer"}">
-     <small>${operator?"Operator":"Müştəri"} ${esc(date)}</small>
-     ${esc(text)}
-    </div>`;
-  }).join("");
-
-  const safeEmail=esc(email);
+ list.innerHTML=emails.map(email=>{
+  const last=groups[email].at(-1);
+  const text=last.message??last.text??last.content??"";
+  const time=Number(last.time||last.timestamp||last.createdAt||0);
+  const date=time?new Date(time).toLocaleString("az-AZ"):"";
 
   return `
-   <div class="customer-chat">
-    <div class="customer-name">👤 ${safeEmail}</div>
-    <div class="message-list" id="list-${encodeURIComponent(email)}">
-     ${content}
-    </div>
-    <form class="chat-input" data-email="${safeEmail}">
-     <input type="text" name="message" placeholder="Mesajınızı yazın..." autocomplete="off" required>
-     <button type="submit">Göndər</button>
-    </form>
+   <div class="customer-row" data-email="${esc(email)}">
+    <div class="email">👤 ${esc(email)}</div>
+    <div class="preview">${isOperator(last)?"Siz: ":""}${esc(text||"Mesaj")}</div>
+    <div class="row-time">${esc(date)} · Söhbəti açmaq üçün basın</div>
    </div>`;
  }).join("");
 
- chats.querySelectorAll(".message-list").forEach(list=>{
-  list.scrollTop=list.scrollHeight;
- });
-
- chats.querySelectorAll(".chat-input").forEach(form=>{
-  form.addEventListener("submit",sendMessage);
+ list.querySelectorAll(".customer-row").forEach(row=>{
+  row.addEventListener("click",()=>{
+   selectedEmail=row.dataset.email;
+   $("chatEmail").textContent=selectedEmail;
+   $("conversation").classList.remove("hidden");
+   renderConversation();
+  });
  });
 }
 
-async function sendMessage(event){
- event.preventDefault();
+function renderConversation(){
+ const groups=groupedMessages();
+ const messages=groups[selectedEmail]||[];
+ const box=$("messages");
 
- if(!currentOperator){
-  alert("Əvvəlcə operator hesabına daxil olun.");
-  return;
- }
+ box.innerHTML=messages.map(m=>{
+  const operator=isOperator(m);
+  const text=m.message??m.text??m.content??"";
+  const time=Number(m.time||m.timestamp||m.createdAt||0);
+  const date=time?new Date(time).toLocaleString("az-AZ"):"";
 
- const form=event.currentTarget;
- const email=form.dataset.email;
- const input=form.elements.message;
+  return `<div class="msg ${operator?"operator":"customer"}">
+   <small>${operator?"Operator":"Müştəri"} ${esc(date)}</small>
+   ${esc(text)}
+  </div>`;
+ }).join("")||'<div class="empty">Bu söhbətdə mesaj yoxdur.</div>';
+
+ box.scrollTop=box.scrollHeight;
+}
+
+$("back").addEventListener("click",()=>{
+ selectedEmail="";
+ $("conversation").classList.add("hidden");
+ renderList();
+});
+
+$("search").addEventListener("input",renderList);
+
+$("sendForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ if(!currentOperator||!selectedEmail)return;
+
+ const input=$("messageInput");
  const message=input.value.trim();
+ if(!message)return;
 
- if(!message || !email)return;
-
- const button=form.querySelector("button");
+ const button=e.submitter;
  button.disabled=true;
 
  const now=Date.now();
@@ -285,16 +282,15 @@ async function sendMessage(event){
    sender:"agent",
    from:"operator",
    type:"text",
-   message:message,
+   message,
    text:message,
-   email:email,
-   customerEmail:email,
+   email:selectedEmail,
+   customerEmail:selectedEmail,
    operatorEmail:currentOperator,
    time:now,
    timestamp:now,
    createdAt:now
   });
-
   input.value="";
  }catch(error){
   console.error(error);
@@ -303,10 +299,7 @@ async function sendMessage(event){
   button.disabled=false;
   input.focus();
  }
-}
-
-$("searchCustomer").addEventListener("input",renderChats);
+});
 </script>
-
 </body>
 </html>
