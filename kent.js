@@ -47,10 +47,18 @@ function setLogin(email, name, isOperator, photo = "") {
 
     if (isOperator) {
         localStorage.setItem("operatorEmail", email);
-        window.location.href = "./operator.html";
+
+        // Operator birbaşa operator səhifəsinə gedir
+        window.location.replace(
+            new URL("operator.html", window.location.href).href
+        );
     } else {
         localStorage.removeItem("operatorEmail");
-        window.location.href = "./index.html";
+
+        // Adi müştəri ana səhifəsinə gedir
+        window.location.replace(
+            new URL("index.html", window.location.href).href
+        );
     }
 }
 
@@ -73,15 +81,16 @@ function qeydiyyat(e) {
     }
 
     const key = accountKey(email);
+
     if (localStorage.getItem("account_" + key)) {
         alert("Bu Gmail artıq qeydiyyatdan keçib. Hesaba daxil ol.");
         return;
     }
 
     localStorage.setItem("account_" + key, JSON.stringify({
-        name,
-        email,
-        password
+        name: name,
+        email: email,
+        password: password
     }));
 
     localStorage.setItem("cart_" + key, JSON.stringify([]));
@@ -91,7 +100,7 @@ function qeydiyyat(e) {
     document.querySelector(".login header")?.click();
 }
 
-/* EMAIL VƏ ŞİFRƏ İLƏ GİRİŞ */
+/* EMAIL VƏ PAROL İLƏ GİRİŞ */
 function login(e) {
     e.preventDefault();
 
@@ -117,12 +126,14 @@ function login(e) {
         localStorage.setItem("operator", "false");
         localStorage.removeItem("operatorEmail");
 
-        window.location.href = "./admin.html";
+        window.location.replace(
+            new URL("admin.html", window.location.href).href
+        );
         return;
     }
 
-    /* OPERATOR — HƏR İKİ HESAB */
-    if (Object.hasOwn(operators, email)) {
+    /* OPERATOR HESABLARI */
+    if (Object.prototype.hasOwnProperty.call(operators, email)) {
         if (password !== operators[email]) {
             alert("Operator parolu səhvdir.");
             return;
@@ -132,19 +143,11 @@ function login(e) {
             ? "Operator Amal"
             : "Operator";
 
-        const key = accountKey(email);
-
-        localStorage.setItem("account_" + key, JSON.stringify({
-            name,
-            email,
-            password: operators[email]
-        }));
-
         setLogin(email, name, true);
         return;
     }
 
-    /* MÜŞTƏRİ */
+    /* MÜŞTƏRİ GİRİŞİ */
     const key = accountKey(email);
     const saved = localStorage.getItem("account_" + key);
 
@@ -154,9 +157,10 @@ function login(e) {
     }
 
     let account;
+
     try {
         account = JSON.parse(saved);
-    } catch {
+    } catch (error) {
         alert("Hesab məlumatında xəta var.");
         return;
     }
@@ -203,6 +207,7 @@ function handleCredentialResponse(response) {
             return;
         }
 
+        /* İDARƏÇİ */
         if (email === ADMIN_EMAIL) {
             localStorage.setItem("login", "true");
             localStorage.setItem("isLoggedIn", "true");
@@ -210,24 +215,34 @@ function handleCredentialResponse(response) {
             localStorage.setItem("userEmail", email);
             localStorage.setItem("operator", "false");
             localStorage.removeItem("operatorEmail");
-            window.location.href = "./admin.html";
+
+            window.location.replace(
+                new URL("admin.html", window.location.href).href
+            );
             return;
         }
 
-        if (Object.hasOwn(operators, email)) {
-            setLogin(email, data.name || "Operator", true, data.picture || "");
+        /* OPERATOR */
+        if (Object.prototype.hasOwnProperty.call(operators, email)) {
+            const name = email === "amallizad72@gmail.com"
+                ? "Operator Amal"
+                : "Operator";
+
+            setLogin(email, name, true, data.picture || "");
             return;
         }
 
+        /* MÜŞTƏRİ */
         const key = accountKey(email);
-        let saved = localStorage.getItem("account_" + key);
+        const saved = localStorage.getItem("account_" + key);
 
         if (!saved) {
             localStorage.setItem("account_" + key, JSON.stringify({
                 name: data.name || "Müştəri",
-                email,
+                email: email,
                 password: ""
             }));
+
             localStorage.setItem("cart_" + key, JSON.stringify([]));
             localStorage.setItem("orders_" + key, JSON.stringify([]));
         }
@@ -240,7 +255,10 @@ function handleCredentialResponse(response) {
         localStorage.setItem("operator", "false");
         localStorage.removeItem("operatorEmail");
 
-        window.location.href = "./index.html";
+        window.location.replace(
+            new URL("index.html", window.location.href).href
+        );
+
     } catch (error) {
         console.error("Google giriş xətası:", error);
         alert("Google ilə giriş alınmadı. Səhifəni yenilə.");
