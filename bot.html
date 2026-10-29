@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -146,6 +147,51 @@ function productCount(products){
  },0);
 }
 
+/* ƏLAVƏ: SİFARİŞ STATUSUNU MÜŞTƏRİYƏ AÇIQLA */
+function sifarisStatusunuIzahEt(status,trackingCode,paymentStatus){
+ const s=normalize(status);
+ const p=normalize(paymentStatus);
+
+ if(/rədd|redd edildi|ləğv|legv edildi/.test(s)){
+  return "❌ Sifarişiniz rədd edilib və ya ləğv olunub. Ətraflı məlumat üçün operatora müraciət edin.";
+ }
+
+ if(/çatdırıldı|catdirildi/.test(s)){
+  return "✅ Məhsulunuz çatdırılıb.";
+ }
+
+ if(/çatdırılır|catdirilir/.test(s)){
+  return "🚚 Məhsulunuz çatdırılma mərhələsindədir.";
+ }
+
+ if(/yoldadır|yoldadi|yola verildi|yoldadir/.test(s)){
+  return "🚚 Məhsulunuz yoldadır.";
+ }
+
+ if(/hazırdır|hazirdir/.test(s)){
+  return "📦 Məhsulunuz hazırdır.";
+ }
+
+ if(/hazırlanır|hazirlanir|yığılır|yigil/.test(s)){
+  return "📦 Məhsulunuz hazırlanır.";
+ }
+
+ if(/sifariş qəbul edildi|sifaris qebul edildi/.test(s)){
+  return "✅ Sifarişiniz qəbul edilib.";
+ }
+
+ if(/ödəniş yoxlanılır|odenis yoxlanilir/.test(s)||/yoxlanılır|yoxlanilir/.test(p)){
+  return "💳 Ödənişiniz yoxlanılır. Təsdiq gözləyin.";
+ }
+
+ if(/təsdiqləndi|tesdiqlendi/.test(s)||/təsdiqləndi|tesdiqlendi/.test(p)){
+  return "✅ Ödənişiniz təsdiqlənib.";
+ }
+
+ return "ℹ️ Sifariş statusu: "+(status||"Hələ qeyd edilməyib")+
+  (trackingCode?"\n🔎 İzləmə kodu: "+trackingCode:"");
+}
+
 async function readByEmail(path){
  if(!email)return [];
 
@@ -179,7 +225,7 @@ async function getAccountData(){
 function orderSummary(o,index){
  const id=o.orderId||o._key||("Sifariş "+(index+1));
  const products=productText(o.products);
- const status=o.status||"Status qeyd edilməyib";
+ const status=sifarisStatusunuIzahEt(o.status,o.trackingCode,o.paymentStatus);
  const payment=o.paymentStatus||"Ödəniş statusu qeyd edilməyib";
  const tracking=o.trackingCode||"İzləmə kodu əlavə edilməyib";
  const total=o.total!=null?money(o.total):"Məbləğ qeyd edilməyib";
@@ -225,7 +271,7 @@ async function answer(text){
   /(geri qaytar|qaytarma|qaytarmaq|qaytarım|qaytarim|pulumu geri|refund)/i.test(t);
 
  const asksStatus=
-  /(harada|hardadır|hardadi|haradadır|çatıb|catib|gəlib|gelib|yoldadır|yoldadi|çatdırılıb|catdirilib|vəziyyət|veziyyet|status|nə vaxt|ne vaxt|nə yerdə|ne yerde|hazırdır|hazirdi)/i.test(t);
+  /(harada|hardadır|hardadi|haradadır|yoldadır|yoldadi|çatıb|catib|gəlib|gelib|çatdırılıb|catdirilib|vəziyyət|veziyyet|status|nə vaxt|ne vaxt|nə yerdə|ne yerde|hazırdır|hazirdi)/i.test(t);
 
  const asksDelivery=
   /(çatdırılma|catdirilma|kuryer|çatdır|catdir|gətir|getir)/i.test(t);
@@ -276,7 +322,7 @@ async function answer(text){
     result+="📦 Sifariş "+(i+1)+": "+(o.orderId||o._key||"Nömrə yoxdur")+"\n";
     result+="🛍️ Məhsullar: "+productText(o.products)+"\n";
     result+="🔢 Bu sifarişdə məhsul sayı: "+count+"\n";
-    result+="🚚 Status: "+status+"\n";
+    result+="🚚 Status: "+sifarisStatusunuIzahEt(o.status,o.trackingCode,o.paymentStatus)+"\n";
     result+="💳 Ödəniş: "+(o.paymentStatus||"Qeyd edilməyib")+"\n";
 
     if(o.trackingCode){
@@ -303,7 +349,7 @@ async function answer(text){
   }
  }
 
- if(asksOrder||asksPayment||asksReturn||asksDelivery||asksAccount){
+ if(asksOrder||asksPayment||asksReturn||asksDelivery||asksAccount||asksStatus){
   if(!email){
    return "Sifariş və hesab məlumatlarını yoxlamaq üçün əvvəlcə saytınıza daxil olun. Sonra sualınızı yenidən yazın.";
   }
@@ -344,6 +390,7 @@ async function answer(text){
      String(o.orderId||o._key||"").toLowerCase()===orderIdMatch[0].toLowerCase()
     );
     if(found.length)chosen=found;
+    else return "Bu nömrə ilə sifariş tapılmadı. Sifariş nömrəsini yoxlayın.";
    }
 
    const sorted=chosen.slice().sort((a,b)=>
@@ -355,7 +402,7 @@ async function answer(text){
      sorted.map((o,i)=>orderSummary(o,i)).join("\n\n");
    }
 
-   if(asksDelivery||asksStatus||asksOrder||asksAccount){
+   if(asksStatus||asksDelivery||asksOrder||asksAccount){
     return "Hesabınızdakı sifariş məlumatları:\n\n"+
      sorted.map((o,i)=>orderSummary(o,i)).join("\n\n")+
      "\n\nDəqiq çatdırılma tarixi bazada qeyd edilməyibsə, onu təxmin edə bilmirəm.";
