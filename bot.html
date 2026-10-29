@@ -16,6 +16,7 @@ header{background:#168b45;color:white;padding:17px;text-align:center;font-weight
 #bottom{position:fixed;bottom:0;left:0;right:0;background:white;padding:10px;display:flex;gap:7px}
 #input{flex:1;min-width:0;padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px}
 button{padding:12px;border:0;border-radius:9px;background:#168b45;color:white;font-weight:bold}
+button:disabled{opacity:.6}
 </style>
 </head>
 <body>
@@ -26,6 +27,8 @@ button{padding:12px;border:0;border-radius:9px;background:#168b45;color:white;fo
  <div class="msg bot">Salam! 😊 Mən Kənd məhsullarının köməkçi botuyam.
 
 Sifarişiniz, malınız, ödənişiniz və geri qaytarma haqqında suallarınızı yaza bilərsiniz.
+
+Sifariş tarixçənizi görmək üçün “Neçə mal sifariş etmişəm?” yaza bilərsiniz.
 
 Operatora qoşulmaq üçün operator istəyinizi 3 dəfə bildirin.</div>
 </div>
@@ -65,6 +68,7 @@ let operatorRequests=0;
 let requestSent=false;
 let lastOperatorMessage="";
 let busy=false;
+const displayedOperatorMessages=new Set();
 
 function show(text,cls="bot"){
  const el=document.createElement("div");
@@ -94,41 +98,70 @@ function money(value){
 
 function dateText(value){
  if(!value)return "";
- const d=typeof value==="number" ? new Date(value) : new Date(value);
- if(Number.isNaN(d.getTime()))return "";
+ let d;
+
+ if(typeof value==="number"){
+  d=new Date(value);
+ }else if(/^\d+$/.test(String(value))){
+  d=new Date(Number(value));
+ }else{
+  d=new Date(value);
+ }
+
+ if(Number.isNaN(d.getTime()))return String(value);
  return d.toLocaleDateString("az-AZ");
 }
 
 function productText(products){
- if(Array.isArray(products)){
-  return products.map(p=>{
+ const list=Array.isArray(products)
+  ? products
+  : products&&typeof products==="object"
+   ? Object.values(products)
+   : [];
+
+ if(list.length){
+  return list.map(p=>{
    if(typeof p==="string")return p;
    if(!p)return "";
-   return (p.name||p.title||p.productName||p.mehsul||"Məhsul")+
-    (p.quantity ? " × "+p.quantity : "");
+   const name=p.name||p.title||p.productName||p.mehsul||"Məhsul";
+   const qty=Number(p.quantity)||1;
+   return name+" × "+qty;
   }).filter(Boolean).join(", ");
  }
- if(products && typeof products==="object"){
-  return Object.values(products).map(p=>{
-   if(typeof p==="string")return p;
-   if(!p)return "";
-   return (p.name||p.title||p.productName||"Məhsul")+
-    (p.quantity ? " × "+p.quantity : "");
-  }).filter(Boolean).join(", ");
- }
+
  return String(products||"Məhsul məlumatı yoxdur");
 }
 
-// Firebase-dən yalnız e-poçt sahəsi uyğun gələn qeydləri soruşur.
-// Bu sorğunun işləməsi Firebase Database Rules-dan asılıdır.
+function productCount(products){
+ const list=Array.isArray(products)
+  ? products
+  : products&&typeof products==="object"
+   ? Object.values(products)
+   : [];
+
+ return list.reduce((sum,p)=>{
+  if(!p)return sum;
+  if(typeof p==="string")return sum+1;
+  return sum+Math.max(1,Number(p.quantity)||1);
+ },0);
+}
+
 async function readByEmail(path){
  if(!email)return [];
- const q=query(ref(db,path),orderByChild("email"),equalTo(email));
+
+ const q=query(
+  ref(db,path),
+  orderByChild("email"),
+  equalTo(email)
+ );
+
  const snap=await get(q);
  const rows=[];
+
  snap.forEach(child=>{
   rows.push({...child.val(),_key:child.key});
  });
+
  return rows;
 }
 
@@ -149,23 +182,23 @@ function orderSummary(o,index){
  const status=o.status||"Status qeyd edilməyib";
  const payment=o.paymentStatus||"Ödəniş statusu qeyd edilməyib";
  const tracking=o.trackingCode||"İzləmə kodu əlavə edilməyib";
- const total=o.total!=null ? money(o.total) : "Məbləğ qeyd edilməyib";
+ const total=o.total!=null?money(o.total):"Məbləğ qeyd edilməyib";
  const date=dateText(o.createdAt||o.date);
 
  return "📦 Sifariş: "+id+
-  "\nMəhsul: "+products+
-  "\nStatus: "+status+
-  "\nÖdəniş: "+payment+
-  "\nİzləmə kodu: "+tracking+
-  "\nMəbləğ: "+total+
-  (date ? "\nTarix: "+date : "");
+  "\n🛍️ Məhsul: "+products+
+  "\n🚚 Status: "+status+
+  "\n💳 Ödəniş: "+payment+
+  "\n🔎 İzləmə kodu: "+tracking+
+  "\n💰 Məbləğ: "+total+
+  (date?"\n📅 Tarix: "+date:"");
 }
 
 function returnSummary(r){
- return "Geri qaytarma sorğusu:"+
+ return "↩️ Geri qaytarma sorğusu:"+
   "\nMəhsul: "+productText(r.products||r.product||r.productName)+
   "\nStatus: "+(r.status||r.returnStatus||"Status qeyd edilməyib")+
-  (r.orderId ? "\nSifariş: "+r.orderId : "");
+  (r.orderId?"\nSifariş: "+r.orderId:"");
 }
 
 async function answer(text){
@@ -178,6 +211,9 @@ async function answer(text){
  if(/^(necəsən|necesen|necəsiz|necesiz)$/.test(t)){
   return "Yaxşıyam, təşəkkür edirəm! 😊 Sizə necə kömək edim?";
  }
+
+ const asksHistory=
+  /(neçə mal|nece mal|neçə məhsul|nece mehsul|neçə sifariş|nece sifaris|nə sifariş etmişəm|ne sifaris etmisem|hamısı|hamisini|bütün sifariş|butun sifaris|nə almışam|ne almisam|ümumi məbləğ|umumi mebleg|tarixçəm|tarixcem|sifariş tarixç|sifaris tarixc|ne qeder mal|nə qədər mal|ne qeder mehsul|nə qədər məhsul|zakas etmişəm|zakas etmisem)/i.test(t);
 
  const asksOrder=
   /(sifariş|sifaris|sifarişim|sifarishim|malım|malim|malımın|malimin|malım harda|malim harda|məhsulum|mehsulum|bağlamam|baglamam)/i.test(t);
@@ -200,8 +236,73 @@ async function answer(text){
  const asksProduct=
   /(məhsul|mehsul|mal|qiymət|qiymet|neçəyə|neceye|tato|maşın|masin)/i.test(t);
 
- // Sifariş, ödəniş, mal və geri qaytarma suallarında
- // əvvəlcə müştərinin öz məlumatlarını oxumağa çalışır.
+ if(asksHistory){
+  if(!email){
+   return "Sifariş tarixçənizi görmək üçün əvvəlcə saytınıza daxil olun.";
+  }
+
+  try{
+   const data=await getAccountData();
+   const orders=data.orders;
+
+   if(!orders.length){
+    return "Hesabınıza uyğun sifariş tapılmadı. Sifariş zamanı istifadə etdiyiniz hesabla daxil olduğunuzu yoxlayın.";
+   }
+
+   orders.sort((a,b)=>{
+    const da=Number(a.createdAt)||new Date(a.date||0).getTime()||0;
+    const dbb=Number(b.createdAt)||new Date(b.date||0).getTime()||0;
+    return dbb-da;
+   });
+
+   let totalProducts=0;
+   let totalMoney=0;
+   let delivered=0;
+   let otherStatus=0;
+   let result="📦 SİFARİŞ TARİXÇƏNİZ\n\n";
+
+   orders.forEach((o,i)=>{
+    const count=productCount(o.products);
+    totalProducts+=count;
+    totalMoney+=Number(o.total)||0;
+
+    const status=String(o.status||"Status qeyd edilməyib");
+    if(/çatdırıldı|catdirildi/i.test(status)){
+     delivered++;
+    }else{
+     otherStatus++;
+    }
+
+    result+="📦 Sifariş "+(i+1)+": "+(o.orderId||o._key||"Nömrə yoxdur")+"\n";
+    result+="🛍️ Məhsullar: "+productText(o.products)+"\n";
+    result+="🔢 Bu sifarişdə məhsul sayı: "+count+"\n";
+    result+="🚚 Status: "+status+"\n";
+    result+="💳 Ödəniş: "+(o.paymentStatus||"Qeyd edilməyib")+"\n";
+
+    if(o.trackingCode){
+     result+="🔎 İzləmə kodu: "+o.trackingCode+"\n";
+    }
+
+    const date=dateText(o.createdAt||o.date);
+    if(date)result+="📅 Tarix: "+date+"\n";
+
+    result+="💰 Məbləğ: "+money(o.total)+"\n\n";
+   });
+
+   result+="📊 ÜMUMİ NƏTİCƏ\n";
+   result+="Sifariş sayı: "+orders.length+"\n";
+   result+="Məhsul sayı: "+totalProducts+"\n";
+   result+="Çatdırılmış sifariş: "+delivered+"\n";
+   result+="Digər statuslu sifariş: "+otherStatus+"\n";
+   result+="Sifarişlərin ümumi məbləği: "+money(totalMoney);
+
+   return result;
+  }catch(e){
+   console.error("Sifariş tarixçəsi oxunmadı:",e);
+   return "Sifariş tarixçəsi oxunmadı. Hesabınıza daxil olduğunuzu və Firebase oxuma icazələrini yoxlayın.";
+  }
+ }
+
  if(asksOrder||asksPayment||asksReturn||asksDelivery||asksAccount){
   if(!email){
    return "Sifariş və hesab məlumatlarını yoxlamaq üçün əvvəlcə saytınıza daxil olun. Sonra sualınızı yenidən yazın.";
@@ -213,32 +314,28 @@ async function answer(text){
    const returns=data.returns;
 
    if(asksReturn){
-    const matchingReturns=returns.filter(r=>{
-     const s=normalize((r.status||"")+" "+(r.returnStatus||""));
-     return s!=="";
-    });
+    const matchingReturns=returns.filter(r=>r.status||r.returnStatus);
 
     if(matchingReturns.length){
      return "Hesabınızdakı geri qaytarma məlumatları:\n\n"+
-      matchingReturns.map(returnSummary).join("\n\n")+
-      "\n\nBaşqa sifariş barədə soruşmaq istəyirsinizsə, sifariş nömrəsini yazın.";
+      matchingReturns.map(returnSummary).join("\n\n");
     }
 
     const withReturns=orders.filter(o=>o.returnRequest);
+
     if(withReturns.length){
-     return "Sifarişinizdəki geri qaytarma məlumatı:\n\n"+
+     return "Sifarişlərinizdəki geri qaytarma məlumatları:\n\n"+
       withReturns.map(o=>orderSummary(o,0)+"\nGeri qaytarma: "+
        (o.returnRequest.status||o.returnRequest.returnStatus||"Sorğu qeydi var")).join("\n\n");
     }
 
-    return "Hesabınızda geri qaytarma sorğusu tapılmadı. Əvvəlcə sifarişlər bölməsində məhsulunuz üçün geri qaytarma seçiminin aktiv olub-olmadığını yoxlayın.";
+    return "Hesabınızda geri qaytarma sorğusu tapılmadı. Sifarişlər bölməsində geri qaytarma seçimini yoxlayın.";
    }
 
    if(!orders.length){
-    return "Hesabınıza uyğun sifariş tapılmadı. Sayta daxil olduğunuz hesabın e-poçtunu və sifariş zamanı istifadə etdiyiniz hesabı yoxlayın.";
+    return "Hesabınıza uyğun sifariş tapılmadı. Sifariş zamanı istifadə etdiyiniz hesabla daxil olduğunuzu yoxlayın.";
    }
 
-   // Əgər müştəri sifariş nömrəsi yazıbsa, həmin sifarişi önə çıxarır.
    const orderIdMatch=text.match(/SIF-[A-Z0-9-]+/i);
    let chosen=orders;
 
@@ -249,32 +346,29 @@ async function answer(text){
     if(found.length)chosen=found;
    }
 
-   const sorted=chosen.slice().sort((a,b)=>{
-    const da=Number(a.createdAt||a.date||0);
-    const dbb=Number(b.createdAt||b.date||0);
-    return dbb-da;
-   });
+   const sorted=chosen.slice().sort((a,b)=>
+    (Number(b.createdAt)||0)-(Number(a.createdAt)||0)
+   );
 
    if(asksPayment){
     return "Hesabınızdakı sifarişlərin ödəniş məlumatları:\n\n"+
-     sorted.map((o,i)=>orderSummary(o,i)).join("\n\n")+
-     "\n\nÖdəniş statusu bazada necə qeyd olunubsa, yuxarıda elə göstərilib.";
+     sorted.map((o,i)=>orderSummary(o,i)).join("\n\n");
    }
 
    if(asksDelivery||asksStatus||asksOrder||asksAccount){
     return "Hesabınızdakı sifariş məlumatları:\n\n"+
      sorted.map((o,i)=>orderSummary(o,i)).join("\n\n")+
-     "\n\nBu məlumatlar sifariş bazasında saxlanılan statuslara əsaslanır. Dəqiq çatdırılma tarixi qeyd edilməyibsə, onu təxmin edə bilmirəm.";
+     "\n\nDəqiq çatdırılma tarixi bazada qeyd edilməyibsə, onu təxmin edə bilmirəm.";
    }
 
   }catch(e){
    console.error("Hesab məlumatları oxunmadı:",e);
-   return "Hesab məlumatlarını oxumaq mümkün olmadı. Firebase oxuma icazələrini və orders/returnRequests bölmələrində e-poçt sahəsinin mövcudluğunu yoxlamaq lazımdır.";
+   return "Hesab məlumatlarını oxumaq mümkün olmadı. Firebase oxuma icazələrini və sifarişlərdə e-poçt sahəsinin mövcudluğunu yoxlamaq lazımdır.";
   }
  }
 
  if(asksProduct){
-  return "Məhsul və qiymət haqqında kömək edim. 😊 Zəhmət olmasa, məhsulun dəqiq adını yazın. Məhsulun qiyməti məhsul səhifəsində göstərilən məlumatla yoxlanmalıdır.";
+  return "Məhsul və qiymət haqqında kömək edim. 😊 Zəhmət olmasa, məhsulun dəqiq adını yazın. Qiyməti məhsul səhifəsində göstərilən məlumatla yoxlayın.";
  }
 
  if(/(sağ ol|sag ol|təşəkkür|tesekkur|çox sağ ol|cox sag ol)/.test(t)){
@@ -329,8 +423,9 @@ async function sendMessage(){
     time:Date.now(),
     createdAt:Date.now()
    });
+
    requestSent=true;
-   show("⏳ Sizi operatora bağlayırıq. Zəhmət olmasa, gözləyin. Operatorumuz ən qısa zamanda sizinlə əlaqə saxlayacaq.");
+   show("⏳ Sizi operatora bağlamaq üçün sorğunuz göndərildi. Zəhmət olmasa, gözləyin.");
   }catch(e){
    console.error(e);
    show("Sorğu göndərilmədi. Firebase bağlantısını yoxlayın və yenidən cəhd edin.");
@@ -356,6 +451,7 @@ async function sendMessage(){
  busy=true;
  send.disabled=true;
  send.textContent="...";
+
  try{
   const reply=await answer(text);
   show(reply);
@@ -370,6 +466,7 @@ async function sendMessage(){
 }
 
 send.onclick=sendMessage;
+
 input.addEventListener("keydown",e=>{
  if(e.key==="Enter")sendMessage();
 });
@@ -379,6 +476,10 @@ onChildAdded(messagesRef,snap=>{
  if(!d||!email)return;
  if(String(d.email||"").toLowerCase().trim()!==email)return;
  if(d.sender!=="agent"&&d.sender!=="operator")return;
+
+ const key=snap.key;
+ if(displayedOperatorMessages.has(key))return;
+ displayedOperatorMessages.add(key);
 
  const msg=String(d.message||d.text||"");
  if(!msg||msg===lastOperatorMessage)return;
