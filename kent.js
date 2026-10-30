@@ -2,20 +2,62 @@ const wrapper = document.querySelector(".wrapper");
 const signupHeader = document.querySelector(".signup header");
 const loginHeader = document.querySelector(".login header");
 
-/* İDARƏÇİ */
-const ADMIN_EMAIL = "amidh365@gmail.com";
-const ADMIN_PASSWORD = "a1m2i3d42006";
+/* FIREBASE */
+let auth;
+let db;
+let firebaseHazir = false;
 
-/* OPERATOR HESABLARI */
-const operators = {
-    "ttik66006@gmail.com": "a1m2i3d42006",
-    "ttiktok66006@gmail.com": "a1m2i3d42006",
-    "amallizad72@gmail.com": "amal2005"
-};
+const firebaseHazirOl = (async function () {
+    try {
+        const { initializeApp, getApps } =
+            await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
 
-function accountKey(email) {
-    return email.toLowerCase().trim().replace(/[^a-z0-9]/g, "_");
-}
+        const {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            updateProfile,
+            sendPasswordResetEmail
+        } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+
+        const {
+            getDatabase,
+            ref,
+            set
+        } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+
+        const config = {
+            apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+            authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+            databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+            projectId: "kendmehsullari-6a53d",
+            storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
+            messagingSenderId: "551607499773",
+            appId: "1:551607499773:web:a84aa63dc5b55c38687794"
+        };
+
+        const app = getApps().length
+            ? getApps()[0]
+            : initializeApp(config);
+
+        auth = getAuth(app);
+        db = getDatabase(app);
+        firebaseHazir = true;
+
+        return {
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            updateProfile,
+            sendPasswordResetEmail,
+            ref,
+            set
+        };
+
+    } catch (error) {
+        console.error("Firebase xətası:", error);
+        throw error;
+    }
+})();
 
 /* QEYDİYYAT / GİRİŞ KEÇİDİ */
 if (loginHeader && wrapper) {
@@ -48,18 +90,15 @@ function setLogin(email, name, isOperator, photo = "") {
 
     if (isOperator) {
         localStorage.setItem("operatorEmail", email);
-
-        // DÜZƏLİŞ: Operator səhifəsinə birbaşa keçid
         window.location.href = "https://amidh556-ship-it.github.io/k-nd-m-hsullari/operator.html";
     } else {
         localStorage.removeItem("operatorEmail");
-
         window.location.href = "./index.html";
     }
 }
 
 /* QEYDİYYAT */
-function qeydiyyat(e) {
+async function qeydiyyat(e) {
     e.preventDefault();
 
     const name = document.getElementById("signupName").value.trim();
@@ -71,33 +110,58 @@ function qeydiyyat(e) {
         return;
     }
 
-    if (email === ADMIN_EMAIL || Object.hasOwn(operators, email)) {
-        alert("Bu idarəçi və ya operator hesabıdır. Qeydiyyat etmə, giriş bölməsindən daxil ol.");
+    if (password.length < 6) {
+        alert("Parol ən azı 6 simvol olmalıdır.");
         return;
     }
 
-    const key = accountKey(email);
+    try {
+        const f = await firebaseHazirOl;
 
-    if (localStorage.getItem("account_" + key)) {
-        alert("Bu Gmail artıq qeydiyyatdan keçib. Hesaba daxil ol.");
-        return;
+        const result = await f.createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        await f.updateProfile(result.user, {
+            displayName: name
+        });
+
+        await f.set(
+            f.ref(db, "users/" + result.user.uid),
+            {
+                name: name,
+                email: email,
+                createdAt: Date.now()
+            }
+        );
+
+        setLogin(email, name, false);
+
+    } catch (error) {
+        console.error(error);
+
+        if (error.code === "auth/email-already-in-use") {
+            alert("Bu Gmail artıq qeydiyyatdan keçib.");
+        } else if (error.code === "auth/weak-password") {
+            alert("Parol ən azı 6 simvol olmalıdır.");
+        } else {
+            alert("Qeydiyyat xətası: " + error.message);
+        }
     }
-
-    localStorage.setItem("account_" + key, JSON.stringify({
-        name: name,
-        email: email,
-        password: password
-    }));
-
-    localStorage.setItem("cart_" + key, JSON.stringify([]));
-    localStorage.setItem("orders_" + key, JSON.stringify([]));
-
-    alert("Qeydiyyat uğurludur. İndi hesabına daxil ol.");
-    document.querySelector(".login header")?.click();
 }
 
+/* İDARƏÇİ VƏ OPERATOR HESABLARI */
+const ADMIN_EMAIL = "amidh365@gmail.com";
+const operators = {
+    "ttik66006@gmail.com": "a1m2i3d42006",
+    "ttiktok66006@gmail.com": "a1m2i3d42006",
+    "amallizad72@gmail.com": "amal2005"
+};
+
 /* EMAIL VƏ PAROL İLƏ GİRİŞ */
-function login(e) {
+async function login(e) {
     e.preventDefault();
 
     const email = document.getElementById("loginEmail").value.trim().toLowerCase();
@@ -110,23 +174,11 @@ function login(e) {
 
     /* İDARƏÇİ */
     if (email === ADMIN_EMAIL) {
-        if (password !== ADMIN_PASSWORD) {
-            alert("İdarəçi parolu səhvdir.");
-            return;
-        }
-
-        localStorage.setItem("login", "true");
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userName", "İdarəçi");
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("operator", "false");
-        localStorage.removeItem("operatorEmail");
-
-        window.location.href = "./admin.html";
+        alert("İdarəçi hesabı hələ köhnə giriş sistemindədir. Köhnə giriş məlumatlarını təhlükəsizləşdirməliyik.");
         return;
     }
 
-    /* OPERATOR HESABLARI */
+    /* OPERATOR */
     if (Object.prototype.hasOwnProperty.call(operators, email)) {
         if (password !== operators[email]) {
             alert("Operator parolu səhvdir.");
@@ -141,37 +193,62 @@ function login(e) {
         return;
     }
 
-    /* MÜŞTƏRİ GİRİŞİ */
-    const key = accountKey(email);
-    const saved = localStorage.getItem("account_" + key);
+    /* MÜŞTƏRİ */
+    try {
+        const f = await firebaseHazirOl;
 
-    if (!saved) {
-        alert("Bu Gmail ilə əvvəlcə qeydiyyatdan keç.");
+        const result = await f.signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+        const user = result.user;
+
+        localStorage.setItem("login", "true");
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userName", user.displayName || "Müştəri");
+        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("operator", "false");
+
+        window.location.href = "./index.html";
+
+    } catch (error) {
+        console.error(error);
+        alert("Email və ya parol səhvdir, yaxud Firebase hesabı yoxdur.");
+    }
+}
+
+/* PAROLU UNUTDUM */
+async function forgotPassword() {
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+
+    if (!email) {
+        alert("Əvvəlcə emailini yaz.");
         return;
     }
-
-    let account;
 
     try {
-        account = JSON.parse(saved);
+        const f = await firebaseHazirOl;
+        await f.sendPasswordResetEmail(auth, email);
+        alert("Parolun bərpası üçün email göndərildi.");
     } catch (error) {
-        alert("Hesab məlumatında xəta var.");
-        return;
+        alert("Email göndərilmədi: " + error.message);
     }
-
-    if (
-        account.email?.toLowerCase() !== email ||
-        account.password !== password
-    ) {
-        alert("Email və ya parol səhvdir.");
-        return;
-    }
-
-    setLogin(email, account.name || "Müştəri", false);
 }
 
 /* ÇIXIŞ */
-function logout() {
+async function logout() {
+    try {
+        const { signOut } = await import(
+            "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"
+        );
+
+        if (auth) await signOut(auth);
+    } catch (error) {
+        console.error(error);
+    }
+
     [
         "login",
         "isLoggedIn",
@@ -185,78 +262,14 @@ function logout() {
     window.location.href = "./index.html";
 }
 
-/* GOOGLE İLƏ GİRİŞ */
+/* GOOGLE GİRİŞİ — HƏLƏ KÖHNƏ SİSTEM */
 function handleCredentialResponse(response) {
-    try {
-        if (typeof jwt_decode !== "function") {
-            alert("Google giriş kitabxanası yüklənməyib. Səhifəni yenilə.");
-            return;
-        }
-
-        const data = jwt_decode(response.credential);
-        const email = (data.email || "").toLowerCase().trim();
-
-        if (!email) {
-            alert("Google hesabının emaili tapılmadı.");
-            return;
-        }
-
-        /* İDARƏÇİ */
-        if (email === ADMIN_EMAIL) {
-            localStorage.setItem("login", "true");
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userName", data.name || "İdarəçi");
-            localStorage.setItem("userEmail", email);
-            localStorage.setItem("operator", "false");
-            localStorage.removeItem("operatorEmail");
-
-            window.location.href = "./admin.html";
-            return;
-        }
-
-        /* OPERATOR */
-        if (Object.prototype.hasOwnProperty.call(operators, email)) {
-            const name = email === "amallizad72@gmail.com"
-                ? "Operator Amal"
-                : "Operator";
-
-            setLogin(email, name, true, data.picture || "");
-            return;
-        }
-
-        /* MÜŞTƏRİ */
-        const key = accountKey(email);
-        let saved = localStorage.getItem("account_" + key);
-
-        if (!saved) {
-            localStorage.setItem("account_" + key, JSON.stringify({
-                name: data.name || "Müştəri",
-                email: email,
-                password: ""
-            }));
-
-            localStorage.setItem("cart_" + key, JSON.stringify([]));
-            localStorage.setItem("orders_" + key, JSON.stringify([]));
-        }
-
-        localStorage.setItem("login", "true");
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userName", data.name || "Müştəri");
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userPhoto", data.picture || "");
-        localStorage.setItem("operator", "false");
-        localStorage.removeItem("operatorEmail");
-
-        window.location.href = "./index.html";
-
-    } catch (error) {
-        console.error("Google giriş xətası:", error);
-        alert("Google ilə giriş alınmadı. Səhifəni yenilə.");
-    }
+    alert("Google girişi hələ əvvəlki sistemdədir. Onu da Firebase-ə ayrıca keçirəcəyik.");
 }
 
 /* HTML-DƏN ÇAĞIRILAN FUNKSİYALAR */
 window.qeydiyyat = qeydiyyat;
 window.login = login;
 window.logout = logout;
+window.forgotPassword = forgotPassword;
 window.handleCredentialResponse = handleCredentialResponse;
