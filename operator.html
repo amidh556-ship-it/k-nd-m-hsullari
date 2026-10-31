@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kənd məhsulları — Operator</title>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#222}
@@ -39,12 +38,10 @@ button{cursor:pointer;font-size:16px}
 .empty{text-align:center;background:white;padding:20px;border-radius:12px}
 </style>
 </head>
-
 <body>
 <header>💬 Kənd məhsulları — Operator</header>
 
 <div class="container">
-
 <div id="loginBox" class="box">
 <h2>Operator hesabına daxil olun</h2>
 <form id="loginForm">
@@ -62,14 +59,12 @@ button{cursor:pointer;font-size:16px}
 <div id="operatorEmail" class="email"></div>
 <button id="logout" class="logout">Çıxış</button>
 </div>
-
 <div class="box">
 <h3>💬 Müştərilərlə yazışma</h3>
 <input id="search" placeholder="Müştəri adı və ya emaili ilə axtar">
 <div id="customerList" style="margin-top:12px">Yazışmalar yüklənir...</div>
 </div>
 </div>
-
 </div>
 
 <div id="conversation" class="hidden">
@@ -101,9 +96,10 @@ const firebaseConfig={
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
 
+// ƏVVƏLKİ OPERATOR GİRİŞLƏRİ
 const operators={
- "ttik66006@gmail.com":"ÖZ_ƏVVƏLKİ_PAROLUNU_YAZ",
- "amallizad72@gmail.com":"ÖZ_ƏVVƏLKİ_PAROLUNU_YAZ"
+ "ttik66006@gmail.com":"a1m2i3d42006",
+ "amallizad72@gmail.com":"amal2005"
 };
 
 const $=id=>document.getElementById(id);
@@ -112,37 +108,6 @@ let selectedEmail="";
 let allMessages={};
 let stopMessages=null;
 let customerNames={};
-
-// Müştəri adlarını Firebase-dən yüklə
-async function loadCustomerNames(){
- customerNames={};
-
- try{
-  const snap=await get(ref(db,"users"));
-
-  if(snap.exists()){
-   const users=snap.val();
-
-   Object.values(users).forEach(user=>{
-    if(!user||!user.email)return;
-
-    const email=String(user.email).trim().toLowerCase();
-    const name=user.name||user.displayName||user.fullName;
-
-    if(name){
-     customerNames[email]=String(name);
-    }
-   });
-  }
- }catch(error){
-  console.error("Müştəri adları yüklənmədi:",error);
- }
-}
-
-// Emailə uyğun müştəri adını tap
-function getCustomerName(email){
- return customerNames[String(email).trim().toLowerCase()]||email;
-}
 
 function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
@@ -154,15 +119,35 @@ function customerEmail(m){
  return String(m.email||m.userEmail||m.customerEmail||"").trim().toLowerCase();
 }
 
+function customerName(email){
+ return customerNames[email]||email;
+}
+
+async function loadCustomerNames(){
+ customerNames={};
+ try{
+  const snap=await get(ref(db,"users"));
+  if(snap.exists()){
+   Object.values(snap.val()).forEach(user=>{
+    if(!user||!user.email)return;
+    const email=String(user.email).trim().toLowerCase();
+    const name=user.name||user.displayName||user.fullName;
+    if(name)customerNames[email]=String(name);
+   });
+  }
+ }catch(error){
+  console.error("Adlar yüklənmədi:",error);
+ }
+}
+
 function isOperator(m){
  return ["operator","agent","admin"].includes(
- String(m.sender||m.from||"").toLowerCase()
+  String(m.sender||m.from||"").toLowerCase()
  );
 }
 
 $("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();
-
  const email=$("loginEmail").value.trim().toLowerCase();
  const password=$("loginPassword").value;
 
@@ -170,7 +155,6 @@ $("loginForm").addEventListener("submit",async e=>{
   $("loginError").textContent="Bu email operator hesabı deyil.";
   return;
  }
-
  if(operators[email]!==password){
   $("loginError").textContent="Parol yanlışdır.";
   return;
@@ -213,7 +197,6 @@ $("logout").addEventListener("click",()=>{
 
 function groupedMessages(){
  const groups={};
-
  Object.entries(allMessages).forEach(([id,m])=>{
   if(!m||typeof m!=="object")return;
   const email=customerEmail(m);
@@ -221,7 +204,6 @@ function groupedMessages(){
   if(!groups[email])groups[email]=[];
   groups[email].push({id,...m});
  });
-
  for(const email in groups){
   groups[email].sort((a,b)=>
    Number(a.time||a.timestamp||a.createdAt||0)-
@@ -239,7 +221,7 @@ function renderList(){
  const emails=Object.keys(groups)
   .filter(email=>
    email.includes(filter)||
-   getCustomerName(email).toLowerCase().includes(filter)
+   customerName(email).toLowerCase().includes(filter)
   )
   .sort((a,b)=>{
    const aa=groups[a],bb=groups[b];
@@ -257,10 +239,9 @@ function renderList(){
   const text=last.message??last.text??last.content??"";
   const time=Number(last.time||last.timestamp||last.createdAt||0);
   const date=time?new Date(time).toLocaleString("az-AZ"):"";
-
   return `
    <div class="customer-row" data-email="${esc(email)}">
-    <div class="email">👤 ${esc(getCustomerName(email))}</div>
+    <div class="email">👤 ${esc(customerName(email))}</div>
     <div class="preview">${isOperator(last)?"Siz: ":""}${esc(text||"Mesaj")}</div>
     <div class="row-time">${esc(date)} · Söhbəti açmaq üçün basın</div>
    </div>`;
@@ -269,7 +250,7 @@ function renderList(){
  list.querySelectorAll(".customer-row").forEach(row=>{
   row.addEventListener("click",()=>{
    selectedEmail=row.dataset.email;
-   $("chatEmail").textContent=getCustomerName(selectedEmail);
+   $("chatEmail").textContent=customerName(selectedEmail);
    $("conversation").classList.remove("hidden");
    renderConversation();
   });
@@ -280,15 +261,13 @@ function renderConversation(){
  const groups=groupedMessages();
  const messages=groups[selectedEmail]||[];
  const box=$("messages");
-
- $("chatEmail").textContent=getCustomerName(selectedEmail);
+ $("chatEmail").textContent=customerName(selectedEmail);
 
  box.innerHTML=messages.map(m=>{
   const operator=isOperator(m);
   const text=m.message??m.text??m.content??"";
   const time=Number(m.time||m.timestamp||m.createdAt||0);
   const date=time?new Date(time).toLocaleString("az-AZ"):"";
-
   return `<div class="msg ${operator?"operator":"customer"}">
    <small>${operator?"Operator":"Müştəri"} ${esc(date)}</small>
    ${esc(text)}
@@ -308,16 +287,12 @@ $("search").addEventListener("input",renderList);
 
 $("sendForm").addEventListener("submit",async e=>{
  e.preventDefault();
-
  if(!currentOperator||!selectedEmail)return;
-
  const input=$("messageInput");
  const message=input.value.trim();
  if(!message)return;
-
  const button=e.submitter;
  button.disabled=true;
-
  const now=Date.now();
 
  try{
