@@ -1,623 +1,442 @@
+
 <!DOCTYPE html>
 <html lang="az">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profilim - Kənd məhsulları</title>
 
-    <meta charset="UTF-8">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+.profile-page{max-width:500px;margin:auto;min-height:100vh}
+.profile-top{background:white;padding:30px 20px 25px;text-align:center}
+#userPhoto{width:95px;height:95px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 12px;border:3px solid #eee}
+#userName{display:block;font-size:22px;font-weight:bold}
+#userEmail{display:block;margin-top:6px;color:#777;font-size:14px}
+.menu{background:white;margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #eee;border-bottom:1px solid #eee}
+.menu a{text-decoration:none;color:#222;text-align:center;padding:18px 5px;border-right:1px solid #eee;border-bottom:1px solid #eee}
+.menu a:nth-child(3n){border-right:none}
+.menu-icon{display:block;font-size:25px;margin-bottom:7px}
+.menu-text{font-size:13px}
+.information{background:white;margin-top:10px;padding:20px}
+.information h2,.extra-section h2{margin-top:0;font-size:19px}
+input{width:100%;padding:13px;margin-top:10px;border:1px solid #ddd;border-radius:8px;font-size:15px}
+#saveBtn{width:100%;margin-top:15px;padding:14px;border:none;border-radius:8px;background:#2e7d32;color:white;font-size:16px;font-weight:bold}
+#savedMessage{display:none;background:white;margin-top:10px;padding:18px;text-align:center;color:#2e7d32;font-weight:bold}
+#logoutBtn{width:calc(100% - 40px);margin:15px 20px;padding:14px;border:none;border-radius:8px;background:#e53935;color:white;font-size:16px;font-weight:bold}
+.back{display:block;text-align:center;padding:20px;color:#333;text-decoration:none}
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Profilim - Kənd məhsulları</title>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            color: #222;
-        }
-
-        .profile-page {
-            max-width: 500px;
-            margin: auto;
-            min-height: 100vh;
-        }
-
-        /* PROFİL */
-
-        .profile-top {
-            background: white;
-            padding: 30px 20px 25px;
-            text-align: center;
-        }
-
-        #userPhoto {
-            width: 95px;
-            height: 95px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 12px;
-            border: 3px solid #eee;
-        }
-
-        #userName {
-            display: block;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        #userEmail {
-            display: block;
-            margin-top: 6px;
-            color: #777;
-            font-size: 14px;
-        }
-
-        /* MENYU */
-
-        .menu {
-            background: white;
-            margin-top: 10px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-        }
-
-        .menu a {
-            text-decoration: none;
-            color: #222;
-            text-align: center;
-            padding: 18px 5px;
-            border-right: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-        }
-
-        .menu a:nth-child(3n) {
-            border-right: none;
-        }
-
-        .menu-icon {
-            display: block;
-            font-size: 25px;
-            margin-bottom: 7px;
-        }
-
-        .menu-text {
-            font-size: 13px;
-        }
-
-        /* ŞƏXSİ MƏLUMATLAR */
-
-        .information {
-            background: white;
-            margin-top: 10px;
-            padding: 20px;
-        }
-
-        .information h2 {
-            margin-top: 0;
-            font-size: 19px;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-        }
-
-        #saveBtn {
-            width: 100%;
-            margin-top: 15px;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #2e7d32;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        /* YADDA SAXLANILDI */
-
-        #savedMessage {
-            display: none;
-            background: white;
-            margin-top: 10px;
-            padding: 18px;
-            text-align: center;
-            color: #2e7d32;
-            font-weight: bold;
-        }
-
-        /* HESABDAN ÇIXIŞ */
-
-        #logoutBtn {
-            width: calc(100% - 40px);
-            margin: 15px 20px;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            background: #e53935;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .back {
-            display: block;
-            text-align: center;
-            padding: 20px;
-            color: #333;
-            text-decoration: none;
-        }
-
-    </style>
-
+/* ƏLAVƏ EDİLƏN BÖLMƏLƏR */
+.extra-section{background:white;margin-top:10px;padding:20px}
+.extra-section h2{margin-bottom:12px}
+.extra-btn{padding:10px 13px;border:0;border-radius:8px;background:#263b2b;color:white;margin-top:9px}
+.extra-delete{background:#e53935}
+.extra-edit{background:#e8b84b;color:#222}
+.extra-item{display:flex;gap:12px;align-items:center;border:1px solid #eee;border-radius:12px;padding:12px;margin-top:12px}
+.extra-item img{width:75px;height:75px;object-fit:contain;border-radius:8px;background:#f5f5f5}
+.extra-info{flex:1;min-width:0;overflow-wrap:anywhere}
+.extra-info small{display:block;color:#777;margin-top:5px}
+.empty-text{text-align:center;color:#888;padding:15px}
+.review-item{padding:13px;border-bottom:1px solid #eee;line-height:1.5;overflow-wrap:anywhere}
+.review-item img{display:block;max-width:100%;max-height:200px;object-fit:contain;margin-top:8px}
+</style>
 </head>
 
 <body>
-
 <div class="profile-page">
 
-
-    <!-- PROFİL ŞƏKİLİ + AD + GMAIL -->
-
-    <div class="profile-top">
-
-        <img
-            id="userPhoto"
-            src=""
-            alt="Profil şəkli"
-        >
-
-        <span id="userName">
-            Müştəri
-        </span>
-
-        <span id="userEmail"></span>
-
-    </div>
-
-
-    <!-- MENYU -->
-
-    <div class="menu">
-
-        <a href="orders.html">
-
-            <span class="menu-icon">
-                📦
-            </span>
-
-            <span class="menu-text">
-                Sifarişlərim
-            </span>
-
-        </a>
-
-
-        <a href="sebet.html">
-
-            <span class="menu-icon">
-                🛒
-            </span>
-
-            <span class="menu-text">
-                Səbətim
-            </span>
-
-        </a>
-
-
-        <a href="comments.html">
-
-            <span class="menu-icon">
-                💬
-            </span>
-
-            <span class="menu-text">
-                Yorumlarım
-            </span>
-
-        </a>
-
-
-        <a href="#address">
-
-            <span class="menu-icon">
-                📍
-            </span>
-
-            <span class="menu-text">
-                Ünvanlarım
-            </span>
-
-        </a>
-
-
-        <a href="#favorites">
-
-            <span class="menu-icon">
-                ❤️
-            </span>
-
-            <span class="menu-text">
-                Seçilmişlər
-            </span>
-
-        </a>
-
-
-        <a href="history.html">
-
-            <span class="menu-icon">
-                🕘
-            </span>
-
-            <span class="menu-text">
-                Tarixçə
-            </span>
-
-        </a>
-
-    </div>
-
-
-    <!-- ŞƏXSİ MƏLUMATLAR -->
-
-    <div
-        class="information"
-        id="informationBox"
-    >
-
-        <h2>
-            👤 Şəxsi məlumatlar
-        </h2>
-
-
-        <input
-            type="text"
-            id="firstName"
-            placeholder="Ad"
-        >
-
-
-        <input
-            type="text"
-            id="lastName"
-            placeholder="Soyad"
-        >
-
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="Telefon nömrəsi"
-        >
-
-
-        <input
-            type="text"
-            id="address"
-            placeholder="Çatdırılma ünvanı"
-        >
-
-
-        <input
-            type="text"
-            id="city"
-            placeholder="Şəhər / Rayon"
-        >
-
-
-        <button
-            id="saveBtn"
-            onclick="saveProfile()"
-        >
-            💾 Məlumatları yadda saxla
-        </button>
-
-    </div>
-
-
-    <!-- YADDA SAXLANILDI -->
-
-    <div id="savedMessage">
-
-        ✅ Profil məlumatların yadda saxlanılıb
-
-    </div>
-
-
-    <!-- HƏMİŞƏ GÖRÜNƏN ÇIXIŞ -->
-
-    <button
-        id="logoutBtn"
-        onclick="logout()"
-    >
-
-        🚪 Hesabdan çıxış et
-
-    </button>
-
-
-    <!-- ANA SƏHİFƏ -->
-
-    <a
-        class="back"
-        href="index.html"
-    >
-        ← Ana səhifəyə qayıt
-    </a>
+<!-- PROFİL ŞƏKİLİ + AD + GMAIL -->
+<div class="profile-top">
+<img id="userPhoto" src="" alt="Profil şəkli">
+<span id="userName">Müştəri</span>
+<span id="userEmail"></span>
+</div>
+
+<!-- MENYU -->
+<div class="menu">
+<a href="orders.html"><span class="menu-icon">📦</span><span class="menu-text">Sifarişlərim</span></a>
+<a href="sebet.html"><span class="menu-icon">🛒</span><span class="menu-text">Səbətim</span></a>
+<a href="#commentsSection"><span class="menu-icon">💬</span><span class="menu-text">Yorumlarım</span></a>
+<a href="#addressSection"><span class="menu-icon">📍</span><span class="menu-text">Ünvanlarım</span></a>
+<a href="#favoritesSection"><span class="menu-icon">❤️</span><span class="menu-text">Seçilmişlər</span></a>
+<a href="#historySection"><span class="menu-icon">🕘</span><span class="menu-text">Tarixçə</span></a>
+</div>
+
+<!-- ŞƏXSİ MƏLUMATLAR -->
+<div class="information" id="informationBox">
+<h2>👤 Şəxsi məlumatlar</h2>
+<input type="text" id="firstName" placeholder="Ad">
+<input type="text" id="lastName" placeholder="Soyad">
+<input type="tel" id="phone" placeholder="Telefon nömrəsi">
+<input type="text" id="address" placeholder="Çatdırılma ünvanı">
+<input type="text" id="city" placeholder="Şəhər / Rayon">
+<button id="saveBtn" onclick="saveProfile()">💾 Məlumatları yadda saxla</button>
+</div>
+
+<div id="savedMessage">✅ Profil məlumatların yadda saxlanılıb</div>
+
+<!-- YENİ: ÜNVANLARIM -->
+<div class="extra-section" id="addressSection">
+<h2>📍 Ünvanlarım</h2>
+<input id="extraAddress" placeholder="Çatdırılma ünvanı">
+<input id="extraCity" placeholder="Şəhər / Rayon">
+<input id="extraPhone" placeholder="Telefon nömrəsi">
+<button class="extra-btn" onclick="addAddress()">+ Ünvan əlavə et</button>
+<div id="addressList"></div>
+</div>
+
+<!-- YENİ: SEÇİLMİŞLƏR -->
+<div class="extra-section" id="favoritesSection">
+<h2>❤️ Seçilmişlər</h2>
+<div id="favoritesList" class="empty-text">Seçilmiş məhsul yoxdur.</div>
+</div>
+
+<!-- YENİ: TARİXÇƏ -->
+<div class="extra-section" id="historySection">
+<h2>🕘 Baxış tarixçəsi</h2>
+<div id="historyList" class="empty-text">Tarixçə boşdur.</div>
+</div>
+
+<!-- YENİ: YORUMLAR -->
+<div class="extra-section" id="commentsSection">
+<h2>💬 Yorumlarım</h2>
+<div id="commentsList" class="empty-text">Rəylər yüklənir...</div>
+</div>
+
+<!-- HƏMİŞƏ GÖRÜNƏN ÇIXIŞ -->
+<button id="logoutBtn" onclick="logout()">🚪 Hesabdan çıxış et</button>
+
+<!-- ANA SƏHİFƏ -->
+<a class="back" href="index.html">← Ana səhifəyə qayıt</a>
 
 </div>
 
-
 <script>
-
 let userKey = "";
-
-
-// SƏHİFƏ AÇILANDA
+let accountKey = "";
 
 window.onload = function () {
 
-    const login =
-        localStorage.getItem("login");
-
-    const name =
-        localStorage.getItem("userName");
-
-    const email =
-        localStorage.getItem("userEmail");
-
-    const photo =
-        localStorage.getItem("userPhoto");
-
-
-    // HESABA GİRİŞ YOXDURSA
-
-    if (login !== "true") {
-
-        window.location.href =
-            "kent.html";
-
-        return;
-    }
-
-
-    // AD
-
-    document.getElementById(
-        "userName"
-    ).innerText =
-        name || "Müştəri";
-
-
-    // GMAIL
-
-    document.getElementById(
-        "userEmail"
-    ).innerText =
-        email || "";
-
-
-    // ŞƏKİL
-
-    if (photo) {
-
-        document.getElementById(
-            "userPhoto"
-        ).src = photo;
-
-    }
-
-
-    /*
-       HƏR GMAIL ÜÇÜN AYRI YADDAŞ
-
-       Məsələn:
-       profile_amid_gmail_com
-    */
-
-    userKey =
-        "profile_" +
-        (email || "unknown")
-        .replace(/[.#$[\]]/g, "_");
-
-
-    // ƏVVƏLDƏN YADDA SAXLANIB?
-
-    const saved =
-        localStorage.getItem(
-            userKey
-        );
-
-
-    if (saved) {
-
-        /*
-           MƏLUMATLAR ƏVVƏLDƏN VARSA
-           FORM GÖRÜNMƏSİN
-        */
-
-        document.getElementById(
-            "informationBox"
-        ).style.display =
-            "none";
-
-
-        document.getElementById(
-            "savedMessage"
-        ).style.display =
-            "block";
-
-    }
-
-};
-
-
-// YADDA SAXLA
-
-function saveProfile() {
-
-    const firstName =
-        document.getElementById(
-            "firstName"
-        ).value.trim();
-
-
-    const lastName =
-        document.getElementById(
-            "lastName"
-        ).value.trim();
-
-
-    const phone =
-        document.getElementById(
-            "phone"
-        ).value.trim();
-
-
-    const address =
-        document.getElementById(
-            "address"
-        ).value.trim();
-
-
-    const city =
-        document.getElementById(
-            "city"
-        ).value.trim();
-
-
-    // BOŞ SAXLAMA
-
-    if (
-        !firstName ||
-        !lastName ||
-        !phone ||
-        !address ||
-        !city
-    ) {
-
-        alert(
-            "Zəhmət olmasa bütün məlumatları doldur."
-        );
-
-        return;
-    }
-
-
-    // MƏLUMATLAR
-
-    const profileData = {
-
-        firstName: firstName,
-
-        lastName: lastName,
-
-        phone: phone,
-
-        address: address,
-
-        city: city
-
-    };
-
-
-    /*
-       MƏLUMATI HƏMİN GMAIL-Ə BAĞLA
-    */
-
-    localStorage.setItem(
-        userKey,
-        JSON.stringify(
-            profileData
-        )
-    );
-
-
-    /*
-       FORMU GİZLƏT
-    */
-
-    document.getElementById(
-        "informationBox"
-    ).style.display =
-        "none";
-
-
-    /*
-       YADDA SAXLANILDI YAZISI
-    */
-
-    document.getElementById(
-        "savedMessage"
-    ).style.display =
-        "block";
-
-
-    alert(
-        "✅ Məlumatlar yadda saxlanıldı!"
-    );
-
-};
-
-
-// HESABDAN ÇIXIŞ
-
-function logout() {
-
-    localStorage.removeItem(
-        "login"
-    );
-
-    localStorage.removeItem(
-        "userName"
-    );
-
-    localStorage.removeItem(
-        "userEmail"
-    );
-
-    localStorage.removeItem(
-        "userPhoto"
-    );
-
-    localStorage.removeItem(
-        "operator"
-    );
-
-
-    /*
-       PROFİL MƏLUMATLARINA
-       TOXUNMURUQ.
-
-       Ona görə eyni Gmail ilə
-       yenidən girəndə məlumatlar
-       qalacaq.
-    */
-
-
-    window.location.href =
-        "index.html";
-
+const login=localStorage.getItem("login");
+const name=localStorage.getItem("userName");
+const email=localStorage.getItem("userEmail");
+const photo=localStorage.getItem("userPhoto");
+
+if(login!=="true"){
+window.location.href="kent.html";
+return;
 }
 
+document.getElementById("userName").innerText=name||"Müştəri";
+document.getElementById("userEmail").innerText=email||"";
+
+if(photo){
+document.getElementById("userPhoto").src=photo;
+}
+
+userKey="profile_"+(email||"unknown").replace(/[.#$[\]]/g,"_");
+accountKey=(email||"unknown").trim().toLowerCase().replace(/[^a-z0-9]/g,"_");
+
+const saved=localStorage.getItem(userKey);
+
+if(saved){
+try{
+const data=JSON.parse(saved);
+firstName.value=data.firstName||"";
+lastName.value=data.lastName||"";
+phone.value=data.phone||"";
+address.value=data.address||"";
+city.value=data.city||"";
+}catch(e){}
+document.getElementById("informationBox").style.display="none";
+document.getElementById("savedMessage").style.display="block";
+}
+
+renderAddresses();
+renderFavorites();
+renderHistory();
+loadComments();
+};
+
+// YADDA SAXLA
+function saveProfile(){
+
+const firstName=document.getElementById("firstName").value.trim();
+const lastName=document.getElementById("lastName").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const address=document.getElementById("address").value.trim();
+const city=document.getElementById("city").value.trim();
+
+if(!firstName||!lastName||!phone||!address||!city){
+alert("Zəhmət olmasa bütün məlumatları doldur.");
+return;
+}
+
+const profileData={firstName,lastName,phone,address,city};
+
+localStorage.setItem(userKey,JSON.stringify(profileData));
+localStorage.setItem("userName",firstName+" "+lastName);
+
+document.getElementById("userName").innerText=firstName+" "+lastName;
+document.getElementById("informationBox").style.display="none";
+document.getElementById("savedMessage").style.display="block";
+
+alert("✅ Məlumatlar yadda saxlanıldı!");
+}
+
+// HESAB ÜÇÜN YADDAŞ OXU
+function readList(key){
+try{
+const data=JSON.parse(localStorage.getItem(key)||"[]");
+return Array.isArray(data)?data:[];
+}catch(e){return [];}
+}
+
+// ÜNVAN ƏLAVƏ ET
+function addAddress(){
+
+const address=document.getElementById("extraAddress").value.trim();
+const city=document.getElementById("extraCity").value.trim();
+const phone=document.getElementById("extraPhone").value.trim();
+
+if(!address||!city||!phone){
+alert("Ünvan, şəhər və telefon nömrəsini yaz.");
+return;
+}
+
+const key="addresses_"+accountKey;
+const list=readList(key);
+list.push({address,city,phone});
+
+localStorage.setItem(key,JSON.stringify(list));
+
+document.getElementById("extraAddress").value="";
+document.getElementById("extraCity").value="";
+document.getElementById("extraPhone").value="";
+
+renderAddresses();
+}
+
+function renderAddresses(){
+
+const list=readList("addresses_"+accountKey);
+const box=document.getElementById("addressList");
+box.innerHTML="";
+
+if(!list.length){
+box.innerHTML='<div class="empty-text">Hələ ünvan əlavə edilməyib.</div>';
+return;
+}
+
+list.forEach((item,index)=>{
+
+const div=document.createElement("div");
+div.className="extra-item";
+
+const info=document.createElement("div");
+info.className="extra-info";
+
+const title=document.createElement("b");
+title.textContent=item.address;
+
+const details=document.createElement("small");
+details.textContent=item.city+" · "+item.phone;
+
+const edit=document.createElement("button");
+edit.className="extra-btn extra-edit";
+edit.textContent="Redaktə et";
+edit.onclick=()=>{
+const a=prompt("Ünvan:",item.address);
+if(a===null)return;
+const c=prompt("Şəhər:",item.city);
+if(c===null)return;
+const p=prompt("Telefon:",item.phone);
+if(p===null)return;
+const arr=readList("addresses_"+accountKey);
+arr[index]={address:a.trim(),city:c.trim(),phone:p.trim()};
+localStorage.setItem("addresses_"+accountKey,JSON.stringify(arr));
+renderAddresses();
+};
+
+const del=document.createElement("button");
+del.className="extra-btn extra-delete";
+del.textContent="Sil";
+del.onclick=()=>{
+const arr=readList("addresses_"+accountKey);
+arr.splice(index,1);
+localStorage.setItem("addresses_"+accountKey,JSON.stringify(arr));
+renderAddresses();
+};
+
+info.append(title,details,document.createElement("br"),edit,del);
+div.appendChild(info);
+box.appendChild(div);
+});
+}
+
+// SEÇİLMİŞLƏR
+function renderFavorites(){
+renderProductList("favorites_"+accountKey,"favoritesList","Seçilmiş məhsul yoxdur.",true);
+}
+
+// TARİXÇƏ
+function renderHistory(){
+renderProductList("history_"+accountKey,"historyList","Tarixçə boşdur.",false);
+}
+
+function renderProductList(key,id,empty,allowDelete){
+
+const list=readList(key);
+const box=document.getElementById(id);
+box.innerHTML="";
+
+if(!list.length){
+box.className="empty-text";
+box.textContent=empty;
+return;
+}
+
+box.className="";
+
+list.forEach((item,index)=>{
+
+const div=document.createElement("div");
+div.className="extra-item";
+
+const img=document.createElement("img");
+img.src=item.image||"";
+img.onerror=function(){this.style.display="none";};
+
+const info=document.createElement("div");
+info.className="extra-info";
+
+const title=document.createElement("b");
+title.textContent=item.name||"Məhsul";
+
+const price=document.createElement("small");
+price.textContent=(Number(item.price)||0).toFixed(2)+" AZN";
+
+const open=document.createElement("button");
+open.className="extra-btn";
+open.textContent="Məhsula bax";
+open.onclick=()=>location.href="al.html?id="+encodeURIComponent(item.productId||item.id);
+
+info.append(title,price,open);
+
+if(allowDelete){
+const del=document.createElement("button");
+del.className="extra-btn extra-delete";
+del.textContent="Sil";
+del.onclick=()=>{
+const arr=readList(key);
+arr.splice(index,1);
+localStorage.setItem(key,JSON.stringify(arr));
+renderFavorites();
+};
+info.appendChild(del);
+}
+
+div.append(img,info);
+box.appendChild(div);
+});
+}
+
+// YORUMLARI FIREBASE-DƏN OXU
+function loadComments(){
+
+const box=document.getElementById("commentsList");
+
+import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js")
+.then(async firebaseApp=>{
+
+const firebaseDB=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+
+const config={
+apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0",
+authDomain:"kendmehsullari-6a53d.firebaseapp.com",
+databaseURL:"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+projectId:"kendmehsullari-6a53d",
+storageBucket:"kendmehsullari-6a53d.appspot.com"
+};
+
+const app=firebaseApp.getApps().length?firebaseApp.getApps()[0]:firebaseApp.initializeApp(config);
+const db=firebaseDB.getDatabase(app);
+const root=firebaseDB.ref(db,"reviews");
+
+firebaseDB.onValue(root,snapshot=>{
+
+box.innerHTML="";
+let found=[];
+
+if(snapshot.exists()){
+snapshot.forEach(productNode=>{
+productNode.forEach(reviewNode=>{
+const r=reviewNode.val();
+if(r&&String(r.email||"").trim().toLowerCase()===accountEmail()){
+found.push({...r,productId:productNode.key});
+}
+});
+});
+}
+
+found.sort((a,b)=>(b.time||0)-(a.time||0));
+
+if(!found.length){
+box.className="empty-text";
+box.textContent="Hələ rəy yazmamısan.";
+return;
+}
+
+box.className="";
+
+found.forEach(r=>{
+const div=document.createElement("div");
+div.className="review-item";
+
+const title=document.createElement("b");
+title.textContent="⭐ "+r.stars+"/5 · "+r.productId;
+
+const text=document.createElement("p");
+text.textContent=r.text||"";
+
+div.append(title,text);
+
+if(r.image){
+const img=document.createElement("img");
+img.src=r.image;
+div.appendChild(img);
+}
+
+box.appendChild(div);
+});
+
+},error=>{
+box.textContent="Rəyləri yükləmək olmadı. Firebase qaydalarını yoxla.";
+});
+
+}).catch(error=>{
+console.error(error);
+box.textContent="Rəylər yüklənmədi.";
+});
+}
+
+function accountEmail(){
+return (localStorage.getItem("userEmail")||"").trim().toLowerCase();
+}
+
+// HESABDAN ÇIXIŞ
+function logout(){
+
+localStorage.removeItem("login");
+localStorage.removeItem("userName");
+localStorage.removeItem("userEmail");
+localStorage.removeItem("userPhoto");
+localStorage.removeItem("operator");
+
+window.location.href="index.html";
+}
 </script>
-
 </body>
-
 </html>
