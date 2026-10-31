@@ -1,7 +1,6 @@
 
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,8 +27,14 @@ input{width:100%;padding:13px;margin-top:10px;border:1px solid #ddd;border-radiu
 #logoutBtn{width:calc(100% - 40px);margin:15px 20px;padding:14px;border:none;border-radius:8px;background:#e53935;color:white;font-size:16px;font-weight:bold}
 .back{display:block;text-align:center;padding:20px;color:#333;text-decoration:none}
 
-/* ƏLAVƏ EDİLƏN BÖLMƏLƏR */
-.extra-section{background:white;margin-top:10px;padding:20px}
+/* BÖLMƏLƏR BAŞLANĞICDA GİZLİDİR */
+.extra-section{
+background:white;
+margin-top:10px;
+padding:20px;
+display:none;
+}
+.extra-section.active{display:block}
 .extra-section h2{margin-bottom:12px}
 .extra-btn{padding:10px 13px;border:0;border-radius:8px;background:#263b2b;color:white;margin-top:9px}
 .extra-delete{background:#e53935}
@@ -47,24 +52,33 @@ input{width:100%;padding:13px;margin-top:10px;border:1px solid #ddd;border-radiu
 <body>
 <div class="profile-page">
 
-<!-- PROFİL ŞƏKİLİ + AD + GMAIL -->
 <div class="profile-top">
 <img id="userPhoto" src="" alt="Profil şəkli">
 <span id="userName">Müştəri</span>
 <span id="userEmail"></span>
 </div>
 
-<!-- MENYU -->
 <div class="menu">
 <a href="orders.html"><span class="menu-icon">📦</span><span class="menu-text">Sifarişlərim</span></a>
 <a href="sebet.html"><span class="menu-icon">🛒</span><span class="menu-text">Səbətim</span></a>
-<a href="#commentsSection"><span class="menu-icon">💬</span><span class="menu-text">Yorumlarım</span></a>
-<a href="#addressSection"><span class="menu-icon">📍</span><span class="menu-text">Ünvanlarım</span></a>
-<a href="#favoritesSection"><span class="menu-icon">❤️</span><span class="menu-text">Seçilmişlər</span></a>
-<a href="#historySection"><span class="menu-icon">🕘</span><span class="menu-text">Tarixçə</span></a>
+
+<a href="#commentsSection" onclick="showSection('commentsSection');return false;">
+<span class="menu-icon">💬</span><span class="menu-text">Yorumlarım</span>
+</a>
+
+<a href="#addressSection" onclick="showSection('addressSection');return false;">
+<span class="menu-icon">📍</span><span class="menu-text">Ünvanlarım</span>
+</a>
+
+<a href="#favoritesSection" onclick="showSection('favoritesSection');return false;">
+<span class="menu-icon">❤️</span><span class="menu-text">Seçilmişlər</span>
+</a>
+
+<a href="#historySection" onclick="showSection('historySection');return false;">
+<span class="menu-icon">🕘</span><span class="menu-text">Tarixçə</span>
+</a>
 </div>
 
-<!-- ŞƏXSİ MƏLUMATLAR -->
 <div class="information" id="informationBox">
 <h2>👤 Şəxsi məlumatlar</h2>
 <input type="text" id="firstName" placeholder="Ad">
@@ -77,7 +91,6 @@ input{width:100%;padding:13px;margin-top:10px;border:1px solid #ddd;border-radiu
 
 <div id="savedMessage">✅ Profil məlumatların yadda saxlanılıb</div>
 
-<!-- YENİ: ÜNVANLARIM -->
 <div class="extra-section" id="addressSection">
 <h2>📍 Ünvanlarım</h2>
 <input id="extraAddress" placeholder="Çatdırılma ünvanı">
@@ -87,28 +100,22 @@ input{width:100%;padding:13px;margin-top:10px;border:1px solid #ddd;border-radiu
 <div id="addressList"></div>
 </div>
 
-<!-- YENİ: SEÇİLMİŞLƏR -->
 <div class="extra-section" id="favoritesSection">
 <h2>❤️ Seçilmişlər</h2>
 <div id="favoritesList" class="empty-text">Seçilmiş məhsul yoxdur.</div>
 </div>
 
-<!-- YENİ: TARİXÇƏ -->
 <div class="extra-section" id="historySection">
 <h2>🕘 Baxış tarixçəsi</h2>
 <div id="historyList" class="empty-text">Tarixçə boşdur.</div>
 </div>
 
-<!-- YENİ: YORUMLAR -->
 <div class="extra-section" id="commentsSection">
 <h2>💬 Yorumlarım</h2>
 <div id="commentsList" class="empty-text">Rəylər yüklənir...</div>
 </div>
 
-<!-- HƏMİŞƏ GÖRÜNƏN ÇIXIŞ -->
 <button id="logoutBtn" onclick="logout()">🚪 Hesabdan çıxış et</button>
-
-<!-- ANA SƏHİFƏ -->
 <a class="back" href="index.html">← Ana səhifəyə qayıt</a>
 
 </div>
@@ -116,6 +123,35 @@ input{width:100%;padding:13px;margin-top:10px;border:1px solid #ddd;border-radiu
 <script>
 let userKey = "";
 let accountKey = "";
+
+/* BÖLMƏLƏRİ AÇIB BAĞLAMA */
+function showSection(id){
+
+const sections=[
+"addressSection",
+"favoritesSection",
+"historySection",
+"commentsSection"
+];
+
+const selected=document.getElementById(id);
+const wasOpen=selected.classList.contains("active");
+
+sections.forEach(sectionId=>{
+document.getElementById(sectionId).classList.remove("active");
+});
+
+if(!wasOpen){
+selected.classList.add("active");
+
+setTimeout(()=>{
+selected.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+},100);
+}
+}
 
 window.onload = function () {
 
@@ -144,12 +180,13 @@ const saved=localStorage.getItem(userKey);
 if(saved){
 try{
 const data=JSON.parse(saved);
-firstName.value=data.firstName||"";
-lastName.value=data.lastName||"";
-phone.value=data.phone||"";
-address.value=data.address||"";
-city.value=data.city||"";
+document.getElementById("firstName").value=data.firstName||"";
+document.getElementById("lastName").value=data.lastName||"";
+document.getElementById("phone").value=data.phone||"";
+document.getElementById("address").value=data.address||"";
+document.getElementById("city").value=data.city||"";
 }catch(e){}
+
 document.getElementById("informationBox").style.display="none";
 document.getElementById("savedMessage").style.display="block";
 }
@@ -160,7 +197,6 @@ renderHistory();
 loadComments();
 };
 
-// YADDA SAXLA
 function saveProfile(){
 
 const firstName=document.getElementById("firstName").value.trim();
@@ -186,7 +222,6 @@ document.getElementById("savedMessage").style.display="block";
 alert("✅ Məlumatlar yadda saxlanıldı!");
 }
 
-// HESAB ÜÇÜN YADDAŞ OXU
 function readList(key){
 try{
 const data=JSON.parse(localStorage.getItem(key)||"[]");
@@ -194,7 +229,6 @@ return Array.isArray(data)?data:[];
 }catch(e){return [];}
 }
 
-// ÜNVAN ƏLAVƏ ET
 function addAddress(){
 
 const address=document.getElementById("extraAddress").value.trim();
@@ -254,6 +288,7 @@ const c=prompt("Şəhər:",item.city);
 if(c===null)return;
 const p=prompt("Telefon:",item.phone);
 if(p===null)return;
+
 const arr=readList("addresses_"+accountKey);
 arr[index]={address:a.trim(),city:c.trim(),phone:p.trim()};
 localStorage.setItem("addresses_"+accountKey,JSON.stringify(arr));
@@ -276,12 +311,10 @@ box.appendChild(div);
 });
 }
 
-// SEÇİLMİŞLƏR
 function renderFavorites(){
 renderProductList("favorites_"+accountKey,"favoritesList","Seçilmiş məhsul yoxdur.",true);
 }
 
-// TARİXÇƏ
 function renderHistory(){
 renderProductList("history_"+accountKey,"historyList","Tarixçə boşdur.",false);
 }
@@ -343,7 +376,6 @@ box.appendChild(div);
 });
 }
 
-// YORUMLARI FIREBASE-DƏN OXU
 function loadComments(){
 
 const box=document.getElementById("commentsList");
@@ -354,7 +386,7 @@ import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js")
 const firebaseDB=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
 
 const config={
-apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0",
+apiKey:"AIzaSyBDKe-57av_B_Oajvq7PemHcl4LIxIv0",
 authDomain:"kendmehsullari-6a53d.firebaseapp.com",
 databaseURL:"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
 projectId:"kendmehsullari-6a53d",
@@ -426,7 +458,6 @@ function accountEmail(){
 return (localStorage.getItem("userEmail")||"").trim().toLowerCase();
 }
 
-// HESABDAN ÇIXIŞ
 function logout(){
 
 localStorage.removeItem("login");
