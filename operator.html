@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -64,7 +65,7 @@ button{cursor:pointer;font-size:16px}
 
 <div class="box">
 <h3>💬 Müştərilərlə yazışma</h3>
-<input id="search" placeholder="Müştəri emaili ilə axtar">
+<input id="search" placeholder="Müştəri adı və ya emaili ilə axtar">
 <div id="customerList" style="margin-top:12px">Yazışmalar yüklənir...</div>
 </div>
 </div>
@@ -85,7 +86,7 @@ button{cursor:pointer;font-size:16px}
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getDatabase,ref,onValue,push} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {getDatabase,ref,onValue,push,get} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
@@ -101,8 +102,8 @@ const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
 
 const operators={
- "ttik66006@gmail.com":"a1m2i3d42006",
- "amallizad72@gmail.com":"amal2005"
+ "ttik66006@gmail.com":"ÖZ_ƏVVƏLKİ_PAROLUNU_YAZ",
+ "amallizad72@gmail.com":"ÖZ_ƏVVƏLKİ_PAROLUNU_YAZ"
 };
 
 const $=id=>document.getElementById(id);
@@ -110,6 +111,38 @@ let currentOperator="";
 let selectedEmail="";
 let allMessages={};
 let stopMessages=null;
+let customerNames={};
+
+// Müştəri adlarını Firebase-dən yüklə
+async function loadCustomerNames(){
+ customerNames={};
+
+ try{
+  const snap=await get(ref(db,"users"));
+
+  if(snap.exists()){
+   const users=snap.val();
+
+   Object.values(users).forEach(user=>{
+    if(!user||!user.email)return;
+
+    const email=String(user.email).trim().toLowerCase();
+    const name=user.name||user.displayName||user.fullName;
+
+    if(name){
+     customerNames[email]=String(name);
+    }
+   });
+  }
+ }catch(error){
+  console.error("Müştəri adları yüklənmədi:",error);
+ }
+}
+
+// Emailə uyğun müştəri adını tap
+function getCustomerName(email){
+ return customerNames[String(email).trim().toLowerCase()]||email;
+}
 
 function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
@@ -127,8 +160,9 @@ function isOperator(m){
  );
 }
 
-$("loginForm").addEventListener("submit",e=>{
+$("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();
+
  const email=$("loginEmail").value.trim().toLowerCase();
  const password=$("loginPassword").value;
 
@@ -136,6 +170,7 @@ $("loginForm").addEventListener("submit",e=>{
   $("loginError").textContent="Bu email operator hesabı deyil.";
   return;
  }
+
  if(operators[email]!==password){
   $("loginError").textContent="Parol yanlışdır.";
   return;
@@ -147,6 +182,8 @@ $("loginForm").addEventListener("submit",e=>{
  $("loginError").textContent="";
  $("loginBox").classList.add("hidden");
  $("panel").classList.remove("hidden");
+
+ await loadCustomerNames();
 
  if(!stopMessages){
   stopMessages=onValue(ref(db,"messages"),snap=>{
@@ -165,6 +202,7 @@ $("logout").addEventListener("click",()=>{
  currentOperator="";
  selectedEmail="";
  allMessages={};
+ customerNames={};
  $("panel").classList.add("hidden");
  $("loginBox").classList.remove("hidden");
  $("conversation").classList.add("hidden");
@@ -199,7 +237,10 @@ function renderList(){
  const filter=$("search").value.trim().toLowerCase();
 
  const emails=Object.keys(groups)
-  .filter(email=>email.includes(filter))
+  .filter(email=>
+   email.includes(filter)||
+   getCustomerName(email).toLowerCase().includes(filter)
+  )
   .sort((a,b)=>{
    const aa=groups[a],bb=groups[b];
    return Number(bb.at(-1)?.time||bb.at(-1)?.timestamp||0)-
@@ -219,7 +260,7 @@ function renderList(){
 
   return `
    <div class="customer-row" data-email="${esc(email)}">
-    <div class="email">👤 ${esc(email)}</div>
+    <div class="email">👤 ${esc(getCustomerName(email))}</div>
     <div class="preview">${isOperator(last)?"Siz: ":""}${esc(text||"Mesaj")}</div>
     <div class="row-time">${esc(date)} · Söhbəti açmaq üçün basın</div>
    </div>`;
@@ -228,7 +269,7 @@ function renderList(){
  list.querySelectorAll(".customer-row").forEach(row=>{
   row.addEventListener("click",()=>{
    selectedEmail=row.dataset.email;
-   $("chatEmail").textContent=selectedEmail;
+   $("chatEmail").textContent=getCustomerName(selectedEmail);
    $("conversation").classList.remove("hidden");
    renderConversation();
   });
@@ -239,6 +280,8 @@ function renderConversation(){
  const groups=groupedMessages();
  const messages=groups[selectedEmail]||[];
  const box=$("messages");
+
+ $("chatEmail").textContent=getCustomerName(selectedEmail);
 
  box.innerHTML=messages.map(m=>{
   const operator=isOperator(m);
