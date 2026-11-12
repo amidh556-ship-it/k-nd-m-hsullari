@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Məxfilik siyasəti - Kənd məhsulları</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7f4;
+      color: #263b2b;
+      line-height: 1.7;
+      padding: 20px;
+      max-width: 850px;
+      margin: auto;
+    }
+    h1, h2 { color: #263b2b; }
+    section {
+      background: white;
+      padding: 18px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kənd məhsulları – Məxfilik siyasəti</h1>
+  <p>Son yenilənmə: 12 noyabr 2026</p>
+
+  <section>
+    <h2>1. Ümumi məlumat</h2>
+    <p>Bu məxfilik siyasəti Kənd məhsulları tətbiqindən istifadə zamanı məlumatların necə toplandığını, istifadə edildiyini və qorunduğunu izah edir.</p>
+  </section>
+
+  <section>
+    <h2>2. Toplanan məlumatlar</h2>
+    <p>Tətbiqdən istifadə zamanı hesab məlumatları, ad, e-poçt ünvanı, telefon nömrəsi, çatdırılma ünvanı, sifariş məlumatları və istifadəçinin təqdim etdiyi ödəniş təsdiqi sənədləri toplana bilər.</p>
+  </section>
+
+  <section>
+    <h2>3. Məlumatlardan istifadə</h2>
+    <p>Məlumatlar hesabın idarə edilməsi, sifarişlərin qəbulu və çatdırılması, ödənişlərin yoxlanılması, müştəri dəstəyi və geri qaytarma müraciətlərinin işlənməsi üçün istifadə olunur.</p>
+  </section>
+
+  <section>
+    <h2>4. Məlumatların paylaşılması</h2>
+    <p>Məlumatlar sifarişlərin yerinə yetirilməsi üçün zəruri olduqda çatdırılma xidməti və istifadə etdiyimiz texniki xidmət təminatçıları ilə paylaşıla bilər. Məlumatlar satılmır.</p>
+  </section>
+
+  <section>
+    <h2>5. Məlumatların qorunması</h2>
+    <p>Məlumatların qorunması üçün texniki və təşkilati tədbirlər görülür. Bununla belə, internet üzərindən məlumat ötürülməsinin tam təhlükəsizliyinə zəmanət verilə bilməz.</p>
+  </section>
+
+  <section>
+    <h2>6. Məlumatların saxlanılması və silinməsi</h2>
+    <p>Məlumatlar xidmətin göstərilməsi və qanuni öhdəliklərin yerinə yetirilməsi üçün lazım olan müddətdə saxlanılır. İstifadəçi hesabının və şəxsi məlumatlarının silinməsi üçün tətbiqdə göstərilən dəstək kanalı ilə müraciət edə bilər.</p>
+  </section>
+
+  <section>
+    <h2>7. Uşaqların məxfiliyi</h2>
+    <p>Tətbiq uşaqlara xüsusi olaraq yönəldilməyib. Uşaqlara aid şəxsi məlumatlar qanuni tələblərə uyğun işlənməlidir.</p>
+  </section>
+
+  <section>
+    <h2>8. Əlaqə</h2>
+    <p>Məxfiliklə bağlı suallar üçün tətbiqin dəstək bölməsindən bizimlə əlaqə saxlaya bilərsiniz.</p>
+  </section>
+</body>
+</html>
