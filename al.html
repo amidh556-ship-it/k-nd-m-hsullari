@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -110,17 +111,18 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getDatabase,ref,push,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {getDatabase,ref,push,onValue,get} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig={
- apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0",
+ apiKey:"AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
  authDomain:"kendmehsullari-6a53d.firebaseapp.com",
  databaseURL:"https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
  projectId:"kendmehsullari-6a53d",
- storageBucket:"kendmehsullari-6a53d.appspot.com",
- messagingSenderId:"",
- appId:""
+ storageBucket:"kendmehsullari-6a53d.firebasestorage.app",
+ messagingSenderId:"551607499773",
+ appId:"1:551607499773:web:a84aa63dc5b55c38687794",
+ measurementId:"G-2JZ105RRPH"
 };
 
 const app=initializeApp(firebaseConfig);
@@ -129,21 +131,26 @@ const storage=getStorage(app);
 
 const products={
  masin:{
+  id:"masin",
   name:"Maşın oyuncaq",
   price:3.80,
   images:["foto.png","foto2.png","foto3.png","foto4.png"],
-  description:"Keyfiyyətli məhsul."
+  description:"Keyfiyyətli məhsul.",
+  image:"foto.png"
  },
  tato:{
+  id:"tato",
   name:"Tato",
   price:4.80,
   images:["1.png","2.png","3.png","4.png"],
-  description:"Təbii və keyfiyyətli məhsul."
+  description:"Təbii və keyfiyyətli məhsul.",
+  image:"1.png"
  }
 };
 
 const params=new URLSearchParams(window.location.search);
 const productId=params.get("id");
+
 let product=products[productId]||null;
 
 function getSavedProducts(){
@@ -156,7 +163,7 @@ function getSavedProducts(){
  return null;
 }
 
-/* Adminin əlavə etdiyi məhsulları və şəkillərini oxu */
+/* Əvvəl telefonda saxlanmış məhsulu yoxla */
 if(!product&&productId){
  const saved=getSavedProducts();
 
@@ -164,7 +171,9 @@ if(!product&&productId){
   let images=[];
 
   if(Array.isArray(saved.images)){
-   images=saved.images.filter(image=>typeof image==="string"&&image.length>0);
+   images=saved.images.filter(image=>
+    typeof image==="string"&&image.length>0
+   );
   }
 
   if(!images.length&&saved.image){
@@ -176,11 +185,51 @@ if(!product&&productId){
   }
 
   product={
+   id:productId,
    name:saved.name||saved.title||"Məhsul",
    price:Number(saved.price)||0,
    images:images,
+   image:images[0]||"",
    description:saved.description||saved.name||"Keyfiyyətli məhsul."
   };
+ }
+}
+
+/* Firebase-dəki məhsulu ID ilə tap */
+if(!product&&productId){
+ try{
+  const snapshot=await get(ref(database,"products/"+productId));
+
+  if(snapshot.exists()){
+   const data=snapshot.val();
+
+   let images=[];
+
+   if(Array.isArray(data.images)){
+    images=data.images.filter(image=>
+     typeof image==="string"&&image.length>0
+    );
+   }
+
+   if(!images.length&&data.image){
+    images=[data.image];
+   }
+
+   if(!images.length&&data.imageUrl){
+    images=[data.imageUrl];
+   }
+
+   product={
+    id:productId,
+    name:data.name||data.title||"Məhsul",
+    price:Number(data.price)||0,
+    images:images,
+    image:images[0]||"",
+    description:data.description||""
+   };
+  }
+ }catch(error){
+  console.error("Firebase məhsul xətası:",error);
  }
 }
 
@@ -196,8 +245,14 @@ function setupGallery(){
  currentImage=0;
 
  let images=product&&Array.isArray(product.images)
-  ?product.images.filter(image=>typeof image==="string"&&image.length>0)
+  ?product.images.filter(image=>
+   typeof image==="string"&&image.length>0
+  )
   :[];
+
+ if(!images.length&&product&&product.image){
+  images=[product.image];
+ }
 
  if(!images.length){
   images=["foto.png"];
@@ -211,7 +266,6 @@ function setupGallery(){
   img.src=image;
   img.alt=(product?product.name:"Məhsul")+" — şəkil "+(index+1);
 
-  /* Şəkil açıla bilməsə, ehtiyat şəkli yoxla */
   img.onerror=function(){
    this.onerror=null;
    this.src="foto.png";
@@ -291,13 +345,15 @@ function saveToHistory(){
   history=JSON.parse(localStorage.getItem("history_"+key)||"[]")||[];
  }catch(e){}
 
- history=history.filter(item=>String(item.productId)!==String(productId));
+ history=history.filter(item=>
+  String(item.productId)!==String(productId)
+ );
 
  history.unshift({
   productId:productId,
   name:product.name,
   price:product.price,
-  image:product.images[0]||"",
+  image:(product.images&&product.images[0])||product.image||"",
   time:Date.now()
  });
 
@@ -315,7 +371,8 @@ if(product){
 }else{
  document.getElementById("productName").innerText="Məhsul tapılmadı";
  document.getElementById("productError").className="error-message";
- document.getElementById("productError").innerText="Bu məhsul tapılmadı. Ana səhifəyə qayıdıb məhsulu yenidən seç.";
+ document.getElementById("productError").innerText=
+  "Bu məhsul tapılmadı. Ana səhifəyə qayıdıb məhsulu yenidən seç.";
  document.getElementById("productPrice").innerText="";
  document.getElementById("productDescription").innerText="";
  setupGallery();
@@ -331,7 +388,8 @@ window.selectStar=function(star){
 };
 
 document.getElementById("reviewPhoto").addEventListener("change",function(){
- document.getElementById("photoName").innerText=this.files.length?this.files[0].name:"";
+ document.getElementById("photoName").innerText=
+  this.files.length?this.files[0].name:"";
 });
 
 window.sendReview=async function(){
@@ -362,7 +420,11 @@ window.sendReview=async function(){
 
   if(photoInput.files.length){
    const file=photoInput.files[0];
-   const fileRef=storageRef(storage,"reviews/"+productId+"/"+Date.now()+"_"+file.name);
+   const fileRef=storageRef(
+    storage,
+    "reviews/"+productId+"/"+Date.now()+"_"+file.name
+   );
+
    await uploadBytes(fileRef,file);
    imageUrl=await getDownloadURL(fileRef);
   }
@@ -423,7 +485,9 @@ if(product){
     '<div class="review-user">'+escapeHtml(review.name||"Anonim")+'</div>'+
     '<div class="review-stars">'+stars+'</div>'+
     '<div class="review-text">'+escapeHtml(review.text||"")+'</div>'+
-    (review.image?'<img class="review-image" src="'+escapeHtml(review.image)+'" alt="Müştəri rəyi şəkli">':"");
+    (review.image?
+     '<img class="review-image" src="'+escapeHtml(review.image)+'" alt="Müştəri rəyi şəkli">':
+     "");
 
    list.appendChild(item);
   });
@@ -471,7 +535,7 @@ window.addCurrentProduct=function(){
    id:productId,
    name:product.name,
    price:Number(product.price),
-   image:product.images[0]||"",
+   image:(product.images&&product.images[0])||product.image||"",
    quantity:1
   });
  }
