@@ -1,27 +1,23 @@
-
 {
   "id": "/k-nd-m-hsullari/",
   "name": "Kənd məhsulları",
   "short_name": "Kənd",
   "description": "Kənd məhsulları onlayn alış-veriş tətbiqi",
-  "start_url": "/k-nd-m-hsullari/index.html",
-  "scope": "/k-nd-m-hsullari/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#f4f1ea",
   "theme_color": "#263b2b",
   "icons": [
     {
       "src": "icon.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     }
   ]
 }
