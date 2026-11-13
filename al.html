@@ -27,6 +27,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 .stars{letter-spacing:1px}
 .sold{color:#777;margin-left:5px}
 .product-price{font-size:28px;color:#263b2b;font-weight:bold;margin-top:15px}
+.old-product-price{color:#999;font-size:19px;text-decoration:line-through;margin-top:15px;margin-bottom:3px}
 .discount-text{margin-top:8px;color:#222;font-size:15px;font-weight:bold}
 .description{color:#666;margin-top:12px;line-height:1.5}
 .cart-button{position:fixed;bottom:15px;left:20px;right:20px;max-width:560px;margin:auto;padding:17px;border:none;border-radius:35px;background:#263b2b;color:white;font-size:20px;font-weight:bold;z-index:1000;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2)}
@@ -188,6 +189,7 @@ if(!product&&productId){
    id:productId,
    name:saved.name||saved.title||"Məhsul",
    price:Number(saved.price)||0,
+   discountPrice:saved.discountPrice??null,
    images:images,
    image:images[0]||"",
    description:saved.description||saved.name||"Keyfiyyətli məhsul."
@@ -223,6 +225,7 @@ if(!product&&productId){
     id:productId,
     name:data.name||data.title||"Məhsul",
     price:Number(data.price)||0,
+    discountPrice:data.discountPrice??null,
     images:images,
     image:images[0]||"",
     description:data.description||""
@@ -230,6 +233,47 @@ if(!product&&productId){
   }
  }catch(error){
   console.error("Firebase məhsul xətası:",error);
+ }
+}
+
+/* Məhsulun həqiqi satış qiymətini hesablayır */
+function getFinalPrice(item){
+ const oldPrice=Number(item.price);
+ const salePrice=Number(item.discountPrice);
+
+ if(
+  item.discountPrice!==null &&
+  item.discountPrice!==undefined &&
+  item.discountPrice!=="" &&
+  Number.isFinite(salePrice) &&
+  salePrice>0 &&
+  salePrice<oldPrice
+ ){
+  return salePrice;
+ }
+
+ return oldPrice;
+}
+
+/* Qiyməti göstərir */
+function showProductPrice(){
+ const priceElement=document.getElementById("productPrice");
+
+ if(!product){
+  priceElement.innerText="";
+  return;
+ }
+
+ const oldPrice=Number(product.price);
+ const finalPrice=getFinalPrice(product);
+
+ if(finalPrice<oldPrice){
+  priceElement.innerHTML=
+   '<div class="old-product-price">'+
+   oldPrice.toFixed(2)+' AZN</div>'+
+   '<div>'+finalPrice.toFixed(2)+' AZN</div>';
+ }else{
+  priceElement.innerText=oldPrice.toFixed(2)+" AZN";
  }
 }
 
@@ -352,7 +396,7 @@ function saveToHistory(){
  history.unshift({
   productId:productId,
   name:product.name,
-  price:product.price,
+  price:getFinalPrice(product),
   image:(product.images&&product.images[0])||product.image||"",
   time:Date.now()
  });
@@ -364,7 +408,7 @@ function saveToHistory(){
 
 if(product){
  document.getElementById("productName").innerText=product.name;
- document.getElementById("productPrice").innerText=Number(product.price).toFixed(2)+" AZN";
+ showProductPrice();
  document.getElementById("productDescription").innerText=product.description||"";
  setupGallery();
  saveToHistory();
@@ -523,18 +567,23 @@ window.addCurrentProduct=function(){
   cart=JSON.parse(localStorage.getItem("cart_"+key)||"[]")||[];
  }catch(e){}
 
+ const finalPrice=getFinalPrice(product);
+
  const existing=cart.find(item=>
   String(item.productId||item.id)===String(productId)
  );
 
  if(existing){
   existing.quantity=(Number(existing.quantity)||1)+1;
+  existing.name=product.name;
+  existing.price=finalPrice;
+  existing.image=(product.images&&product.images[0])||product.image||"";
  }else{
   cart.push({
    productId:productId,
    id:productId,
    name:product.name,
-   price:Number(product.price),
+   price:finalPrice,
    image:(product.images&&product.images[0])||product.image||"",
    quantity:1
   });
