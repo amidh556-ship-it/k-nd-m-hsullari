@@ -36,11 +36,15 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .price{font-size:21px;font-weight:bold;color:#263b2b;margin-top:9px}
 .price small{font-size:13px}
 .cart{display:block;width:calc(100% - 18px);background:#263b2b;color:white;text-align:center;padding:12px;margin:9px;border:0;border-radius:12px;font-size:13px;cursor:pointer}
-.delete-product{display:none;width:calc(100% - 18px);background:#c62828;color:white;text-align:center;padding:11px;margin:0 9px 10px;border:0;border-radius:12px;font-size:14px;font-weight:bold;cursor:pointer}
+.delete-product,.edit-product{display:none;width:calc(100% - 18px);color:white;text-align:center;padding:11px;margin:0 9px 10px;border:0;border-radius:12px;font-size:14px;font-weight:bold;cursor:pointer}
+.delete-product{background:#c62828}
+.edit-product{background:#1976d2}
 #admin{display:none;background:white;margin:16px 12px;padding:16px;border-radius:18px;box-shadow:0 3px 12px #0001}
 #admin h2{font-size:20px;color:#263b2b;margin-bottom:12px}
 #admin input,#admin textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:15px}
 #admin button{padding:12px 15px;background:#263b2b;color:white;border:0;border-radius:10px;font-weight:bold;margin:4px 0}
+#admin button:disabled{opacity:.6}
+#cancelEdit{background:#777!important}
 #preview{width:100%;max-height:230px;object-fit:contain;background:#f4f1ea;border-radius:10px}
 #status{font-size:13px;line-height:1.5;margin-top:8px}
 .bottom{position:fixed;bottom:0;left:0;right:0;height:70px;background:white;display:flex;justify-content:space-around;align-items:center;box-shadow:0 -2px 10px #0001}
@@ -84,7 +88,7 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 <div class="products" id="products"></div>
 
 <section id="admin">
-  <h2><i class="fa-solid fa-plus"></i> Yeni məhsul əlavə et</h2>
+  <h2 id="adminTitle"><i class="fa-solid fa-plus"></i> Yeni məhsul əlavə et</h2>
 
   <label>Məhsulun şəkilləri (bir neçə şəkil seçə bilərsən)</label>
   <input type="file" id="image" accept="image/*" multiple>
@@ -102,7 +106,8 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
   <label>Məhsul haqqında</label>
   <textarea id="description" placeholder="Məhsulun təsviri"></textarea>
 
-  <button type="button" onclick="addProduct()">Məhsulu əlavə et</button>
+  <button type="button" id="saveButton" onclick="saveProduct()">Məhsulu əlavə et</button>
+  <button type="button" id="cancelEdit" onclick="cancelEdit()" style="display:none">Redaktədən çıx</button>
   <div id="status"></div>
 </section>
 
@@ -144,6 +149,7 @@ const imageInput = document.getElementById("image");
 
 let selectedImages = [];
 let sharedProducts = [];
+let editingProductId = null;
 
 const defaultProducts = [
   {
@@ -210,7 +216,6 @@ function getAccountCartKey() {
   return "cart_" + email.replace(/[^a-z0-9]/g, "_");
 }
 
-/* Məhsulun real satış qiyməti */
 function getFinalPrice(product) {
   const oldPrice = Number(product.price);
   const salePrice = Number(product.discountPrice);
@@ -229,7 +234,7 @@ function getFinalPrice(product) {
   return oldPrice;
 }
 
-/* Şəkilləri oxuyur və önbaxış göstərir */
+/* Şəkil seçimi və önbaxış */
 imageInput.addEventListener("change", async function () {
   selectedImages = [];
 
@@ -238,7 +243,7 @@ imageInput.addEventListener("change", async function () {
   const preview = document.getElementById("preview");
 
   if (!files.length) {
-    preview.hidden = true;
+    if (!editingProductId) preview.hidden = true;
     return;
   }
 
@@ -305,8 +310,7 @@ imageInput.addEventListener("change", async function () {
 
     preview.src = selectedImages[0];
     preview.hidden = false;
-    status.textContent =
-      selectedImages.length + " şəkil seçildi.";
+    status.textContent = selectedImages.length + " şəkil seçildi.";
   } catch (error) {
     selectedImages = [];
     preview.hidden = true;
@@ -342,10 +346,10 @@ async function uploadImage(imageData) {
   return result.secure_url;
 }
 
-/* Firebase-ə yeni məhsul yazır */
-async function addProduct() {
+/* Yeni məhsul əlavə etmək və mövcud məhsulu redaktə etmək */
+async function saveProduct() {
   if (!isAdmin()) {
-    alert("İdarəçi hesabına daxil olmalısan.");
+    alert("Bu əməliyyat yalnız idarəçi üçündür.");
     return;
   }
 
@@ -360,50 +364,81 @@ async function addProduct() {
 
   const description =
     document.getElementById("description").value.trim();
+
   const status = document.getElementById("status");
-  const button = document.querySelector(
-    '#admin button[onclick="addProduct()"]'
-  );
+  const button = document.getElementById("saveButton");
 
   if (
     !name ||
     !Number.isFinite(price) ||
     price <= 0 ||
-    !selectedImages.length ||
     (discountPrice !== null &&
       (!Number.isFinite(discountPrice) ||
        discountPrice <= 0 ||
        discountPrice >= price))
   ) {
     status.textContent =
-      "Məhsulun adını, düzgün qiymətini və şəklini daxil et. Endirimli qiymət adi qiymətdən aşağı olmalıdır.";
+      "Adı və düzgün qiyməti daxil et. Endirimli qiymət adi qiymətdən aşağı olmalıdır.";
+    return;
+  }
+
+  const editingProduct = editingProductId
+    ? sharedProducts.find(p => p.id === editingProductId)
+    : null;
+
+  if (!editingProduct && !selectedImages.length) {
+    status.textContent = "Məhsulun şəklini seç.";
+    return;
+  }
+
+  if (editingProductId && !editingProduct) {
+    status.textContent = "Redaktə ediləcək məhsul tapılmadı.";
     return;
   }
 
   try {
     button.disabled = true;
-    status.textContent = "Şəkillər yüklənir...";
+    status.textContent = "Məhsul yadda saxlanılır...";
 
-    const imageUrls = [];
+    let imageUrls = editingProduct
+      ? (Array.isArray(editingProduct.images) &&
+         editingProduct.images.length
+          ? editingProduct.images
+          : [editingProduct.image].filter(Boolean))
+      : [];
 
-    for (const image of selectedImages) {
-      imageUrls.push(await uploadImage(image));
+    if (selectedImages.length) {
+      imageUrls = [];
+
+      for (const image of selectedImages) {
+        imageUrls.push(await uploadImage(image));
+      }
     }
 
-    status.textContent = "Məhsul bazaya yazılır...";
+    if (!imageUrls.length) {
+      throw new Error("Məhsul şəkli yoxdur.");
+    }
 
-    await productsRef.push({
+    const productData = {
       name: name,
       price: price,
       discountPrice: discountPrice,
       description: description,
       image: imageUrls[0],
       images: imageUrls,
-      createdAt: Date.now()
-    });
+      updatedAt: Date.now()
+    };
 
-    status.textContent =
-      "Məhsul Firebase-ə əlavə edildi.";
+    if (editingProductId) {
+      await productsRef.child(editingProductId).update(productData);
+      status.textContent = "Məhsul uğurla yeniləndi!";
+    } else {
+      productData.createdAt = Date.now();
+      await productsRef.push(productData);
+      status.textContent = "Məhsul Firebase-ə əlavə edildi.";
+    }
+
+    cancelEdit(false);
 
     document.getElementById("name").value = "";
     document.getElementById("price").value = "";
@@ -416,13 +451,89 @@ async function addProduct() {
   } catch (error) {
     console.error(error);
     status.textContent =
-      "Xəta: " + (error.message || "Məhsul əlavə olunmadı.");
+      "Xəta: " + (error.message || "Məhsul yadda saxlanmadı.");
   } finally {
     button.disabled = false;
   }
 }
 
-/* Firebase məhsulunu hamıdan silir */
+/* Redaktə formasını açır */
+function editProduct(productId) {
+  if (!isAdmin()) {
+    alert("Redaktə etmək yalnız idarəçi hesabına açıqdır.");
+    return;
+  }
+
+  const product = sharedProducts.find(
+    p => String(p.id) === String(productId)
+  );
+
+  if (!product) {
+    alert("Bu məhsulu redaktə etmək mümkün deyil.");
+    return;
+  }
+
+  editingProductId = product.id;
+  selectedImages = [];
+
+  document.getElementById("name").value = product.name || "";
+  document.getElementById("price").value = product.price || "";
+  document.getElementById("discountPrice").value =
+    product.discountPrice ?? "";
+  document.getElementById("description").value =
+    product.description || "";
+
+  imageInput.value = "";
+
+  const preview = document.getElementById("preview");
+
+  if (product.image) {
+    preview.src = product.image;
+    preview.hidden = false;
+  } else {
+    preview.hidden = true;
+  }
+
+  document.getElementById("adminTitle").innerHTML =
+    '<i class="fa-solid fa-pen"></i> Məhsulu redaktə et';
+
+  document.getElementById("saveButton").textContent =
+    "Dəyişiklikləri yadda saxla";
+
+  document.getElementById("cancelEdit").style.display =
+    "inline-block";
+
+  document.getElementById("status").textContent =
+    "Məhsul məlumatlarını dəyiş və yadda saxla.";
+
+  const box = document.getElementById("admin");
+  box.style.display = "block";
+  box.scrollIntoView({ behavior: "smooth" });
+}
+
+/* Redaktədən çıxır */
+function cancelEdit(clearStatus = true) {
+  editingProductId = null;
+  selectedImages = [];
+
+  document.getElementById("adminTitle").innerHTML =
+    '<i class="fa-solid fa-plus"></i> Yeni məhsul əlavə et';
+
+  document.getElementById("saveButton").textContent =
+    "Məhsulu əlavə et";
+
+  document.getElementById("cancelEdit").style.display =
+    "none";
+
+  document.getElementById("image").value = "";
+  document.getElementById("preview").hidden = true;
+
+  if (clearStatus) {
+    document.getElementById("status").textContent = "";
+  }
+}
+
+/* Firebase məhsulunu silir */
 async function deleteProduct(productId) {
   if (!isAdmin()) {
     alert("Məhsulu yalnız idarəçi silə bilər.");
@@ -444,6 +555,11 @@ async function deleteProduct(productId) {
 
   try {
     await productsRef.child(productId).remove();
+
+    if (editingProductId === productId) {
+      cancelEdit();
+    }
+
     document.getElementById("status").textContent =
       "Məhsul Firebase-dən silindi.";
   } catch (error) {
@@ -597,14 +713,23 @@ function renderProducts() {
 
     card.append(link, info, button);
 
+    /* İdarəetmə düymələri yalnız adminə görünür */
     if (isAdmin() && p.firebaseKey) {
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "edit-product";
+      edit.style.display = "block";
+      edit.textContent = "✏️ Redaktə et";
+      edit.addEventListener("click", () => editProduct(p.id));
+
       const del = document.createElement("button");
       del.type = "button";
       del.className = "delete-product";
       del.style.display = "block";
       del.textContent = "🗑️ Sil";
       del.addEventListener("click", () => deleteProduct(p.id));
-      card.appendChild(del);
+
+      card.append(edit, del);
     }
 
     container.appendChild(card);
