@@ -1,459 +1,214 @@
+
 <!DOCTYPE html>
 <html lang="az">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Axtarış</title>
 
 <style>
-
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    background:#f7f6f1;
-    font-family:Arial,sans-serif;
-}
-
-/* AXTARIŞ QUTUSU */
+*{box-sizing:border-box}
+body{margin:0;background:#f7f6f1;font-family:Arial,sans-serif}
 
 .search-box{
-    width:92%;
-    max-width:650px;
-    margin:35px auto 20px;
-
-    display:flex;
-    align-items:center;
-
-    background:white;
-
-    border:1px solid #ccc;
-
-    border-radius:30px;
-
-    padding:5px 10px;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+ width:92%;max-width:650px;margin:35px auto 20px;
+ display:flex;align-items:center;background:white;
+ border:1px solid #ccc;border-radius:30px;
+ padding:5px 10px;box-shadow:0 2px 8px #00000014
 }
-
 .search-box input{
-
-    flex:1;
-
-    border:none;
-
-    outline:none;
-
-    background:transparent;
-
-    font-size:18px;
-
-    padding:12px;
+ flex:1;border:none;outline:none;background:transparent;
+ font-size:18px;padding:12px
 }
-
-.search-box button{
-
-    border:none;
-
-    background:none;
-
-    font-size:25px;
-
-    cursor:pointer;
-
-}
-
-
-/* MƏHSULLAR */
+.search-box button{border:none;background:none;font-size:25px;cursor:pointer}
 
 #results{
-
-    width:94%;
-
-    max-width:700px;
-
-    margin:10px auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:12px;
+ width:94%;max-width:700px;margin:10px auto;
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px
 }
-
-
 .product{
-
-    background:white;
-
-    border-radius:18px;
-
-    overflow:hidden;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.10);
-
-    cursor:pointer;
+ background:white;border-radius:18px;overflow:hidden;
+ box-shadow:0 2px 8px #0000001a;cursor:pointer
 }
-
-
 .product img{
-
-    width:100%;
-
-    height:180px;
-
-    object-fit:contain;
-
-    background:#f5f5f5;
+ width:100%;height:180px;object-fit:contain;background:#f5f5f5
 }
-
-
-.product-info{
-
-    padding:12px;
-}
-
-
-.product-name{
-
-    font-size:18px;
-
-    font-weight:bold;
-
-    margin-bottom:8px;
-}
-
-
-.product-price{
-
-    font-size:18px;
-
-    font-weight:bold;
-
-    color:#263d31;
-}
-
-
-/* TAPILMADI */
-
+.product-info{padding:12px}
+.product-name{font-size:18px;font-weight:bold;margin-bottom:8px}
+.product-price{font-size:18px;font-weight:bold;color:#263d31}
 .not-found{
-
-    grid-column:1 / -1;
-
-    text-align:center;
-
-    font-size:18px;
-
-    color:#777;
-
-    padding:40px 10px;
+ grid-column:1/-1;text-align:center;font-size:18px;
+ color:#777;padding:40px 10px
 }
-
-
-/* TELEFON */
-
 @media(max-width:500px){
-
-    #results{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
-
-    .product img{
-
-        height:150px;
-
-    }
-
-    .product-name{
-
-        font-size:16px;
-
-    }
-
-    .product-price{
-
-        font-size:16px;
-
-    }
-
+ #results{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .product img{height:150px}
+ .product-name,.product-price{font-size:16px}
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- AXTARIŞ -->
-
 <div class="search-box">
-
-    <input
-        type="text"
-        id="searchInput"
-        placeholder="Məhsul axtar..."
-        autocomplete="off"
-    >
-
-    <button onclick="searchProducts()">
-        🔍
-    </button>
-
+ <input type="text" id="searchInput"
+ placeholder="Məhsul axtar..." autocomplete="off">
+ <button onclick="searchProducts()">🔍</button>
 </div>
-
-
-<!-- NƏTİCƏLƏR -->
 
 <div id="results"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <script>
+const firebaseConfig = {
+ apiKey: "AIzaSyBDKe-57avB_Oajvq7PemHcl4LIxIv0ziY",
+ authDomain: "kendmehsullari-6a53d.firebaseapp.com",
+ databaseURL: "https://kendmehsullari-6a53d-default-rtdb.firebaseio.com",
+ projectId: "kendmehsullari-6a53d",
+ storageBucket: "kendmehsullari-6a53d.firebasestorage.app",
+ messagingSenderId: "551607499773",
+ appId: "1:551607499773:web:a84aa63dc5b55c38687794",
+ measurementId: "G-2JZ105RRPH"
+};
 
+firebase.initializeApp(firebaseConfig);
 
-/* =========================
-   MƏHSULLAR
-========================= */
+const db = firebase.database();
+const productsRef = db.ref("products");
 
-const products = [
+let products = [];
 
-    {
-        name:"Maşın oyuncaq",
-
-        price:"3.80 AZN",
-
-        image:"https://raw.githubusercontent.com/amidh556-ship-it/k-nd-m-hsullari/main/file_00000000587c820a9a0c82fedaaa6d07.png",
-
-        keywords:[
-            "maşın",
-            "masin",
-            "oyuncaq",
-            "avtomobil",
-            "maşın oyuncaq"
-        ]
-    },
-
-
-    {
-        name:"Tato",
-
-        price:"4.80 AZN",
-
-        image:"",
-
-        keywords:[
-            "tato",
-            "tattoo",
-            "döymə",
-            "doyme"
-        ]
-    }
-
+const defaultProducts = [
+ {
+  id:"masin",
+  name:"Maşın oyuncaq",
+  price:3.80,
+  image:"foto.png",
+  description:"Oyuncaq maşın"
+ },
+ {
+  id:"tato",
+  name:"Tato",
+  price:4.80,
+  image:"1.png",
+  description:"Tato"
+ }
 ];
 
-
-
-/* =========================
-   AXTARIŞ FUNKSİYASI
-========================= */
-
-function searchProducts(){
-
-    const input =
-        document.getElementById("searchInput");
-
-    const text =
-        input.value.trim().toLowerCase();
-
-    const results =
-        document.getElementById("results");
-
-
-    results.innerHTML="";
-
-
-    /* BOŞDURSA HEÇ NƏ GÖSTƏRMƏ */
-
-    if(text===""){
-
-        return;
-
-    }
-
-
-    /* MƏHSULU TAP */
-
-    const found =
-        products.filter(function(product){
-
-            return (
-
-                product.name
-                .toLowerCase()
-                .includes(text)
-
-                ||
-
-                product.keywords.some(function(keyword){
-
-                    return keyword
-                    .toLowerCase()
-                    .includes(text);
-
-                })
-
-            );
-
-        });
-
-
-    /* MƏHSUL YOXDUR */
-
-    if(found.length===0){
-
-        results.innerHTML=`
-
-            <div class="not-found">
-
-                🔍 "<b>${text}</b>"
-                üçün məhsul tapılmadı.
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    /* MƏHSULLARI GÖSTƏR */
-
-    found.forEach(function(product){
-
-        const card =
-            document.createElement("div");
-
-
-        card.className="product";
-
-
-        card.innerHTML=`
-
-            ${
-                product.image
-                ?
-                `<img
-                    src="${product.image}"
-                    alt="${product.name}"
-                >`
-                :
-                `<div
-                    style="
-                    height:180px;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    background:#f5f5f5;
-                    font-size:50px;
-                    "
-                >
-                    🏷️
-                </div>`
-            }
-
-
-            <div class="product-info">
-
-                <div class="product-name">
-
-                    ${product.name}
-
-                </div>
-
-
-                <div class="product-price">
-
-                    ${product.price}
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        /* MƏHSULA BASANDA MƏHSUL SƏHİFƏSİ */
-
-        card.onclick=function(){
-
-            if(product.name==="Maşın oyuncaq"){
-                window.location.href="al.html?id=masin";
-            }
-            else if(product.name==="Tato"){
-                window.location.href="al.html?id=tato";
-            }
-
-        };
-
-
-        results.appendChild(card);
-
-    });
-
+function normalize(value){
+ return String(value || "")
+  .toLocaleLowerCase("az")
+  .replace(/ə/g,"e")
+  .replace(/ı/g,"i")
+  .replace(/ş/g,"s")
+  .replace(/ç/g,"c")
+  .replace(/ö/g,"o")
+  .replace(/ü/g,"u")
+  .replace(/ğ/g,"g")
+  .trim();
 }
 
+/* Firebase-dən məhsulları götür */
+productsRef.on("value", snapshot => {
+ products = [...defaultProducts];
 
+ snapshot.forEach(child => {
+  const p = child.val();
 
-/* =========================
-   ENTER İLƏ AXTAR
-========================= */
+  if(p && p.name){
+   products.push({
+    ...p,
+    id:child.key,
+    firebaseKey:true
+   });
+  }
+ });
 
-document
-.getElementById("searchInput")
-.addEventListener(
-    "keydown",
-    function(event){
+ searchProducts();
+}, error => {
+ console.error("Firebase xətası:",error);
+ document.getElementById("results").innerHTML =
+  '<div class="not-found">Məhsulları yükləmək olmadı. İnternet bağlantısını yoxla.</div>';
+});
 
-        if(event.key==="Enter"){
+function searchProducts(){
+ const text = normalize(
+  document.getElementById("searchInput").value
+ );
 
-            searchProducts();
+ const results = document.getElementById("results");
+ results.innerHTML = "";
 
-        }
+ if(!text) return;
 
-    }
-);
+ const found = products.filter(p =>
+  normalize(p.name).includes(text)
+ );
 
+ if(found.length === 0){
+  const empty = document.createElement("div");
+  empty.className = "not-found";
+  empty.textContent = '"' +
+   document.getElementById("searchInput").value +
+   '" üçün məhsul tapılmadı.';
+  results.appendChild(empty);
+  return;
+ }
 
+ found.forEach(product => {
+  const card = document.createElement("div");
+  card.className = "product";
 
-/* =========================
-   YAZDIQCA AXTAR
-========================= */
+  const img = document.createElement("img");
+  img.alt = product.name || "Məhsul";
 
-document
-.getElementById("searchInput")
-.addEventListener(
-    "input",
-    function(){
+  /* Yalnız məhsulun öz şəkil ünvanını göstər */
+  img.src = product.image || "";
 
-        searchProducts();
+  if(!product.image){
+   img.style.display = "none";
+  }
 
-    }
-);
+  img.onerror = function(){
+   this.style.display = "none";
+  };
 
+  const info = document.createElement("div");
+  info.className = "product-info";
 
+  const name = document.createElement("div");
+  name.className = "product-name";
+  name.textContent = product.name;
+
+  const price = document.createElement("div");
+  price.className = "product-price";
+  price.textContent =
+   Number(product.price || 0).toFixed(2) + " AZN";
+
+  info.append(name,price);
+
+  if(product.image) card.appendChild(img);
+  card.appendChild(info);
+
+  card.onclick = function(){
+   window.location.href =
+    "al.html?id=" + encodeURIComponent(product.id);
+  };
+
+  results.appendChild(card);
+ });
+}
+
+document.getElementById("searchInput")
+ .addEventListener("input",searchProducts);
+
+document.getElementById("searchInput")
+ .addEventListener("keydown",event=>{
+  if(event.key === "Enter") searchProducts();
+});
 </script>
 
-
 </body>
-
 </html>
