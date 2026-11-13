@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json">
 <title>Kənd məhsulları</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -93,7 +94,10 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
   <input id="name" placeholder="Məsələn: Oyuncaq maşın">
 
   <label>Qiymət (AZN)</label>
-  <input id="price" type="number" min="0.01" step="0.01" placeholder="3.80">
+  <input id="price" type="number" min="0.01" step="0.01" placeholder="5.00">
+
+  <label>Endirimli qiymət (AZN) — istəyə bağlı</label>
+  <input id="discountPrice" type="number" min="0.01" step="0.01" placeholder="Məsələn: 4.00">
 
   <label>Məhsul haqqında</label>
   <textarea id="description" placeholder="Məhsulun təsviri"></textarea>
@@ -111,7 +115,6 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
   <a href="profile.html"><i class="fa-regular fa-user"></i>Profil</a>
 </nav>
 
-<!-- Firebase bağlantısı -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
@@ -129,7 +132,6 @@ const firebaseConfig = {
   measurementId: "G-2JZ105RRPH"
 };
 
-/* Cloudinary şəkil parametrləri */
 const CLOUDINARY_NAME = "ikx7u2gf";
 const CLOUDINARY_PRESET = "kendmehsullari";
 
@@ -180,7 +182,6 @@ function openAdmin() {
   }
 }
 
-/* Əvvəllər bu telefonda saxlanmış məhsulları qoruyur */
 function getSavedProducts() {
   try {
     const data = JSON.parse(
@@ -207,6 +208,25 @@ function getAccountCartKey() {
   if (!email) return null;
 
   return "cart_" + email.replace(/[^a-z0-9]/g, "_");
+}
+
+/* Məhsulun real satış qiyməti */
+function getFinalPrice(product) {
+  const oldPrice = Number(product.price);
+  const salePrice = Number(product.discountPrice);
+
+  if (
+    product.discountPrice !== null &&
+    product.discountPrice !== undefined &&
+    product.discountPrice !== "" &&
+    Number.isFinite(salePrice) &&
+    salePrice > 0 &&
+    salePrice < oldPrice
+  ) {
+    return salePrice;
+  }
+
+  return oldPrice;
 }
 
 /* Şəkilləri oxuyur və önbaxış göstərir */
@@ -331,6 +351,13 @@ async function addProduct() {
 
   const name = document.getElementById("name").value.trim();
   const price = Number(document.getElementById("price").value);
+  const discountValue =
+    document.getElementById("discountPrice").value.trim();
+
+  const discountPrice = discountValue === ""
+    ? null
+    : Number(discountValue);
+
   const description =
     document.getElementById("description").value.trim();
   const status = document.getElementById("status");
@@ -342,10 +369,14 @@ async function addProduct() {
     !name ||
     !Number.isFinite(price) ||
     price <= 0 ||
-    !selectedImages.length
+    !selectedImages.length ||
+    (discountPrice !== null &&
+      (!Number.isFinite(discountPrice) ||
+       discountPrice <= 0 ||
+       discountPrice >= price))
   ) {
     status.textContent =
-      "Məhsulun adını, düzgün qiymətini və şəklini daxil et.";
+      "Məhsulun adını, düzgün qiymətini və şəklini daxil et. Endirimli qiymət adi qiymətdən aşağı olmalıdır.";
     return;
   }
 
@@ -364,6 +395,7 @@ async function addProduct() {
     await productsRef.push({
       name: name,
       price: price,
+      discountPrice: discountPrice,
       description: description,
       image: imageUrls[0],
       images: imageUrls,
@@ -375,6 +407,7 @@ async function addProduct() {
 
     document.getElementById("name").value = "";
     document.getElementById("price").value = "";
+    document.getElementById("discountPrice").value = "";
     document.getElementById("description").value = "";
     imageInput.value = "";
     selectedImages = [];
@@ -451,6 +484,8 @@ function addToCart(productId) {
     cart = [];
   }
 
+  const finalPrice = getFinalPrice(product);
+
   const existing = cart.find(
     item => String(item.id) === String(product.id)
   );
@@ -458,13 +493,13 @@ function addToCart(productId) {
   if (existing) {
     existing.quantity = (Number(existing.quantity) || 1) + 1;
     existing.name = product.name;
-    existing.price = Number(product.price);
+    existing.price = finalPrice;
     existing.image = product.image;
   } else {
     cart.push({
       id: product.id,
       name: product.name,
-      price: Number(product.price),
+      price: finalPrice,
       image: product.image,
       quantity: 1
     });
@@ -527,11 +562,30 @@ function renderProducts() {
 
     const price = document.createElement("div");
     price.className = "price";
-    price.textContent = Number(p.price).toFixed(2) + " ";
 
-    const small = document.createElement("small");
-    small.textContent = "AZN";
-    price.appendChild(small);
+    const finalPrice = getFinalPrice(p);
+
+    if (finalPrice < Number(p.price)) {
+      const oldPrice = document.createElement("span");
+      oldPrice.style.cssText =
+        "font-size:14px;color:#999;text-decoration:line-through";
+      oldPrice.textContent =
+        Number(p.price).toFixed(2) + " AZN";
+
+      const newPrice = document.createElement("span");
+      newPrice.style.cssText = "color:#d32f2f";
+      newPrice.textContent =
+        finalPrice.toFixed(2) + " AZN";
+
+      const badge = document.createElement("span");
+      badge.style.cssText =
+        "background:#d32f2f;color:white;border-radius:5px;padding:4px;font-size:10px;margin-left:5px";
+      badge.textContent = "ENDİRİM";
+
+      price.append(oldPrice, document.createElement("br"), newPrice, badge);
+    } else {
+      price.textContent = Number(p.price).toFixed(2) + " AZN";
+    }
 
     info.append(name, stars, price);
 
