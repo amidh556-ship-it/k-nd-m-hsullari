@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hesabın silinməsi - Kənd məhsulları</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f6f2;
+ color:#263b2b;
+ padding:20px;
+}
+.container{
+ max-width:450px;
+ margin:45px auto;
+ background:white;
+ padding:25px;
+ border-radius:16px;
+ box-shadow:0 4px 18px #0001;
+}
+h2{text-align:center}
+p{line-height:1.6;color:#555}
+input{
+ width:100%;
+ padding:14px;
+ border:1px solid #ccc;
+ border-radius:9px;
+ margin:12px 0;
+ font-size:16px;
+}
+button{
+ width:100%;
+ padding:14px;
+ background:#263b2b;
+ color:white;
+ border:0;
+ border-radius:9px;
+ font-size:16px;
+ cursor:pointer;
+}
+.note{
+ background:#f1f5ed;
+ padding:12px;
+ border-radius:9px;
+ font-size:13px;
+}
+#result{margin-top:15px;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Hesabın silinməsi</h2>
+
+<p>
+Kənd məhsulları tətbiqində hesabınızın və
+əlaqəli şəxsi məlumatlarınızın silinməsini
+tələb etmək üçün e-poçt ünvanınızı daxil edin.
+</p>
+
+<form action="mailto:amidh365@gmail.com"
+method="post" enctype="text/plain">
+<input type="email" name="email"
+placeholder="E-poçt ünvanınız" required>
+
+<textarea name="request"
+style="width:100%;padding:12px;border:1px solid #ccc;border-radius:9px"
+readonly>Hesabımın və əlaqəli məlumatlarımın silinməsini tələb edirəm.</textarea>
+
+<br><br>
+<button type="submit">Silinmə sorğusu göndər</button>
+</form>
+
+<div class="note">
+Sorğunuz qəbul edildikdən sonra hesabınızın
+və əlaqəli məlumatların silinməsi üçün müraciətiniz
+nəzərdən keçiriləcək.
+</div>
+
+<p id="result"></p>
+</div>
+</body>
+</html>
