@@ -19,8 +19,8 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .search{display:flex;gap:9px}
 .search a{background:white;color:#777;border-radius:13px;padding:15px;text-decoration:none;flex:1}
 .categories{display:flex;gap:8px;overflow:auto;padding-top:14px}
-.category{padding:9px 13px;border-radius:20px;background:#ffffff20;white-space:nowrap}
-.category:first-child{background:#e8b84b;color:#263b2b}
+.category{padding:9px 13px;border-radius:20px;background:#ffffff20;white-space:nowrap;cursor:pointer}
+.category.active{background:#e8b84b;color:#263b2b}
 .hero{background:#e8b84b;border-radius:22px;margin:15px;padding:22px}
 .hero h1{font-size:26px;color:#263b2b}
 .hero p{margin-top:9px;line-height:1.5}
@@ -41,7 +41,7 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 .edit-product{background:#1976d2}
 #admin{display:none;background:white;margin:16px 12px;padding:16px;border-radius:18px;box-shadow:0 3px 12px #0001}
 #admin h2{font-size:20px;color:#263b2b;margin-bottom:12px}
-#admin input,#admin textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:15px}
+#admin input,#admin textarea,#admin select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccc;border-radius:9px;font-size:15px}
 #admin button{padding:12px 15px;background:#263b2b;color:white;border:0;border-radius:10px;font-weight:bold;margin:4px 0}
 #admin button:disabled{opacity:.6}
 #cancelEdit{background:#777!important}
@@ -68,11 +68,11 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
   </div>
 
   <div class="categories">
-    <div class="category">Hamısı</div>
+    <div class="category active">Hamısı</div>
     <div class="category">Qadın</div>
     <div class="category">Kişi</div>
     <div class="category">Ev</div>
-    <div class="category">pultlar</div>
+    <div class="category">Pultlar</div>
     <div class="category">İdman</div>
   </div>
 </header>
@@ -96,6 +96,16 @@ header{background:#263b2b;padding:16px;color:white;border-radius:0 0 22px 22px}
 
   <label>Məhsulun adı</label>
   <input id="name" placeholder="Məsələn: Oyuncaq maşın">
+
+  <label>Kateqoriya seç</label>
+  <select id="categorySelect">
+    <option value="">Kateqoriya seç</option>
+    <option value="Qadın">Qadın</option>
+    <option value="Kişi">Kişi</option>
+    <option value="Ev">Ev</option>
+    <option value="Pultlar">Pultlar</option>
+    <option value="İdman">İdman</option>
+  </select>
 
   <label>Qiymət (AZN)</label>
   <input id="price" type="number" min="0.01" step="0.01" placeholder="5.00">
@@ -150,6 +160,21 @@ const imageInput = document.getElementById("image");
 let selectedImages = [];
 let sharedProducts = [];
 let editingProductId = null;
+let selectedCategory = "Hamısı";
+
+/* Kateqoriyalara basanda məhsulları süzür */
+document.querySelectorAll(".category").forEach(button => {
+  button.addEventListener("click", function () {
+    selectedCategory = this.textContent.trim();
+
+    document.querySelectorAll(".category").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    this.classList.add("active");
+    renderProducts();
+  });
+});
 
 const defaultProducts = [
   {
@@ -354,6 +379,7 @@ async function saveProduct() {
   }
 
   const name = document.getElementById("name").value.trim();
+  const category = document.getElementById("categorySelect").value;
   const price = Number(document.getElementById("price").value);
   const discountValue =
     document.getElementById("discountPrice").value.trim();
@@ -367,6 +393,11 @@ async function saveProduct() {
 
   const status = document.getElementById("status");
   const button = document.getElementById("saveButton");
+
+  if (!category) {
+    status.textContent = "Məhsul üçün kateqoriya seç.";
+    return;
+  }
 
   if (
     !name ||
@@ -421,6 +452,7 @@ async function saveProduct() {
 
     const productData = {
       name: name,
+      category: category,
       price: price,
       discountPrice: discountPrice,
       description: description,
@@ -441,6 +473,7 @@ async function saveProduct() {
     cancelEdit(false);
 
     document.getElementById("name").value = "";
+    document.getElementById("categorySelect").value = "";
     document.getElementById("price").value = "";
     document.getElementById("discountPrice").value = "";
     document.getElementById("description").value = "";
@@ -477,6 +510,8 @@ function editProduct(productId) {
   selectedImages = [];
 
   document.getElementById("name").value = product.name || "";
+  document.getElementById("categorySelect").value =
+    product.category || "";
   document.getElementById("price").value = product.price || "";
   document.getElementById("discountPrice").value =
     product.discountPrice ?? "";
@@ -634,7 +669,12 @@ function renderProducts() {
   const container = document.getElementById("products");
   container.innerHTML = "";
 
-  getAllProducts().forEach(p => {
+  const filteredProducts = getAllProducts().filter(p => {
+    if (selectedCategory === "Hamısı") return true;
+    return (p.category || "").trim() === selectedCategory;
+  });
+
+  filteredProducts.forEach(p => {
     const card = document.createElement("div");
     card.className = "card";
 
