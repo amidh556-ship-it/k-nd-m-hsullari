@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Məhsul - Kənd məhsulları</title>
+<title>Məhsul - MAVROX Mall</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding-bottom:100px}
@@ -53,12 +53,76 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 .review-image{width:100%;max-height:300px;object-fit:contain;margin-top:10px;border-radius:12px;background:#f5f5f5}
 .no-reviews{margin-top:15px;color:#777;text-align:center}
 .error-message{padding:30px 20px;text-align:center;color:#b42318;font-weight:bold}
-@media(max-width:380px){.gallery{height:380px}.product-name{font-size:23px}}
+
+/* BÜTÜN MƏHSULLAR */
+.all-products{
+ padding:20px;
+ background:white;
+ margin-top:12px;
+}
+.all-products-title{
+ font-size:23px;
+ font-weight:bold;
+ margin-bottom:15px;
+ color:#263b2b;
+}
+.all-products-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+}
+.other-card{
+ background:#f8f8f8;
+ border-radius:14px;
+ overflow:hidden;
+ text-decoration:none;
+ color:#222;
+ box-shadow:0 2px 8px #0001;
+ display:block;
+}
+.other-card img{
+ width:100%;
+ height:155px;
+ object-fit:contain;
+ background:white;
+ display:block;
+}
+.other-info{padding:10px}
+.other-name{
+ font-size:15px;
+ min-height:36px;
+ line-height:18px;
+}
+.other-price{
+ color:#263b2b;
+ font-size:19px;
+ font-weight:bold;
+ margin-top:8px;
+}
+.other-old-price{
+ color:#999;
+ font-size:12px;
+ text-decoration:line-through;
+ margin-top:5px;
+}
+.other-loading{
+ grid-column:1/-1;
+ text-align:center;
+ padding:20px;
+ color:#777;
+}
+@media(max-width:380px){
+ .gallery{height:380px}
+ .product-name{font-size:23px}
+ .other-card img{height:140px}
+}
 </style>
 </head>
 <body>
+
 <div class="product-page">
 <div class="product">
+
 <div class="gallery">
 <div class="gallery-track" id="galleryTrack"></div>
 <button class="gallery-btn gallery-left" id="prevButton" type="button" aria-label="Əvvəlki şəkil">‹</button>
@@ -85,6 +149,14 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding
 <div id="productError"></div>
 </div>
 </div>
+
+<!-- BÜTÜN MƏHSULLAR BÖLMƏSİ -->
+<section class="all-products">
+<div class="all-products-title">Bütün məhsullar</div>
+<div class="all-products-grid" id="allProductsGrid">
+<div class="other-loading">Məhsullar yüklənir...</div>
+</div>
+</section>
 
 <div class="reviews">
 <div class="reviews-title">Müştəri rəyləri</div>
@@ -422,6 +494,122 @@ if(product){
  setupGallery();
 }
 
+/* BÜTÜN MƏHSULLARI GÖSTƏR */
+const allProductsGrid=document.getElementById("allProductsGrid");
+
+function renderAllProducts(firebaseData){
+
+ const all=[];
+
+ // Əvvəldən olan məhsullar
+ Object.values(products).forEach(item=>{
+  all.push(item);
+ });
+
+ // Telefonda saxlanmış məhsullar
+ try{
+  const saved=JSON.parse(
+   localStorage.getItem("myProducts")||"[]"
+  );
+
+  if(Array.isArray(saved)){
+   saved.forEach(item=>{
+    if(item&&item.id){
+     all.push(item);
+    }
+   });
+  }
+ }catch(e){}
+
+ // Firebase-dəki bütün məhsullar
+ if(firebaseData){
+  Object.entries(firebaseData).forEach(([id,data])=>{
+   if(data&&typeof data==="object"){
+    all.push({
+     ...data,
+     id:id
+    });
+   }
+  });
+ }
+
+ // Təkrar məhsulları birləşdir
+ const unique=new Map();
+
+ all.forEach(item=>{
+  if(item.id){
+   unique.set(String(item.id),item);
+  }
+ });
+
+ allProductsGrid.innerHTML="";
+
+ if(unique.size===0){
+  allProductsGrid.innerHTML=
+   '<div class="other-loading">Hələ məhsul yoxdur.</div>';
+  return;
+ }
+
+ unique.forEach(item=>{
+
+  const image=
+   (Array.isArray(item.images)&&item.images.length
+    ?item.images[0]
+    :item.image||item.imageUrl||"foto.png");
+
+  const oldPrice=Number(item.price)||0;
+  const finalPrice=getFinalPrice(item);
+
+  const card=document.createElement("a");
+  card.className="other-card";
+  card.href="al.html?id="+encodeURIComponent(item.id);
+
+  const img=document.createElement("img");
+  img.src=image;
+  img.alt=item.name||item.title||"Məhsul";
+
+  img.onerror=function(){
+   this.onerror=null;
+   this.src="foto.png";
+  };
+
+  const info=document.createElement("div");
+  info.className="other-info";
+
+  const name=document.createElement("div");
+  name.className="other-name";
+  name.textContent=item.name||item.title||"Məhsul";
+
+  const priceElement=document.createElement("div");
+  priceElement.className="other-price";
+  priceElement.textContent=finalPrice.toFixed(2)+" AZN";
+
+  info.appendChild(name);
+
+  if(finalPrice<oldPrice){
+   const old=document.createElement("div");
+   old.className="other-old-price";
+   old.textContent=oldPrice.toFixed(2)+" AZN";
+   info.appendChild(old);
+  }
+
+  info.appendChild(priceElement);
+  card.append(img,info);
+  allProductsGrid.appendChild(card);
+ });
+}
+
+// Firebase-də məhsullar dəyişdikcə siyahını yenilə
+onValue(ref(database,"products"),snapshot=>{
+ renderAllProducts(
+  snapshot.exists()?snapshot.val():{}
+ );
+},error=>{
+ console.error("Məhsullar yüklənmədi:",error);
+ allProductsGrid.innerHTML=
+  '<div class="other-loading">Məhsulları yükləmək mümkün olmadı.</div>';
+});
+
 let selectedStar=0;
 
 window.selectStar=function(star){
@@ -530,72 +718,4 @@ if(product){
     '<div class="review-stars">'+stars+'</div>'+
     '<div class="review-text">'+escapeHtml(review.text||"")+'</div>'+
     (review.image?
-     '<img class="review-image" src="'+escapeHtml(review.image)+'" alt="Müştəri rəyi şəkli">':
-     "");
-
-   list.appendChild(item);
-  });
- });
-}else{
- document.getElementById("reviewsList").innerHTML=
-  '<div class="no-reviews">Məhsul tapılmadığı üçün rəylər göstərilmir.</div>';
-}
-
-function getAccountKey(){
- const email=localStorage.getItem("userEmail");
- if(!email)return null;
- return email.toLowerCase().trim().replace(/[^a-z0-9]/g,"_");
-}
-
-window.addCurrentProduct=function(){
- const key=getAccountKey();
-
- if(!key){
-  alert("Əvvəlcə hesabına daxil ol.");
-  window.location.href="kent.html";
-  return;
- }
-
- if(!product){
-  alert("Məhsul tapılmadı.");
-  return;
- }
-
- let cart=[];
-
- try{
-  cart=JSON.parse(localStorage.getItem("cart_"+key)||"[]")||[];
- }catch(e){}
-
- const finalPrice=getFinalPrice(product);
-
- const existing=cart.find(item=>
-  String(item.productId||item.id)===String(productId)
- );
-
- if(existing){
-  existing.quantity=(Number(existing.quantity)||1)+1;
-  existing.name=product.name;
-  existing.price=finalPrice;
-  existing.image=(product.images&&product.images[0])||product.image||"";
- }else{
-  cart.push({
-   productId:productId,
-   id:productId,
-   name:product.name,
-   price:finalPrice,
-   image:(product.images&&product.images[0])||product.image||"",
-   quantity:1
-  });
- }
-
- try{
-  localStorage.setItem("cart_"+key,JSON.stringify(cart));
-  alert("✅ "+product.name+" səbətə əlavə edildi!");
- }catch(e){
-  alert("Səbət yadda saxlanmadı. Brauzer yaddaşını yoxla.");
- }
-};
-</script>
-</body>
-</html>
+     '<img class="revi
